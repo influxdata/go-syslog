@@ -13,9 +13,11 @@ import (
 	"strings"
 	"unicode"
 	"unicode/utf8"
-
-	"github.com/davecgh/go-spew/spew"
 )
+
+const facilityMax int = 23
+const severityMax int = 7
+const privalMax int = facilityMax*8 + severityMax
 
 func toIfaceSlice(v interface{}) []interface{} {
 	if v == nil {
@@ -51,14 +53,12 @@ func toUint8Slice(v []interface{}) []uint8 {
 	return u
 }
 
-func concatUint8(v []uint8) uint8 {
-	var out uint8
-	var op uint8
-	out = 0
-	op = 1
-	for i := len(v) - 1; i >= 0; i-- {
-		out += v[i] * op
-		op *= 10
+func utf8ToNumber(bseq []uint8) int {
+	out := 0
+	ord := 1
+	for i := len(bseq) - 1; i >= 0; i-- {
+		out += (int(bseq[i]) - '0') * ord
+		ord *= 10
 	}
 	return out
 }
@@ -67,33 +67,33 @@ var g = &grammar{
 	rules: []*rule{
 		{
 			name: "Pri",
-			pos:  position{line: 55, col: 1, offset: 779},
+			pos:  position{line: 57, col: 1, offset: 880},
 			expr: &actionExpr{
-				pos: position{line: 55, col: 8, offset: 786},
+				pos: position{line: 57, col: 8, offset: 887},
 				run: (*parser).callonPri1,
 				expr: &seqExpr{
-					pos: position{line: 55, col: 8, offset: 786},
+					pos: position{line: 57, col: 8, offset: 887},
 					exprs: []interface{}{
 						&litMatcher{
-							pos:        position{line: 55, col: 8, offset: 786},
+							pos:        position{line: 57, col: 8, offset: 887},
 							val:        "<",
 							ignoreCase: false,
 						},
 						&labeledExpr{
-							pos:   position{line: 55, col: 12, offset: 790},
+							pos:   position{line: 57, col: 12, offset: 891},
 							label: "value",
 							expr: &ruleRefExpr{
-								pos:  position{line: 55, col: 18, offset: 796},
+								pos:  position{line: 57, col: 18, offset: 897},
 								name: "Prival",
 							},
 						},
 						&litMatcher{
-							pos:        position{line: 55, col: 25, offset: 803},
+							pos:        position{line: 57, col: 25, offset: 904},
 							val:        ">",
 							ignoreCase: false,
 						},
 						&ruleRefExpr{
-							pos:  position{line: 55, col: 29, offset: 807},
+							pos:  position{line: 57, col: 29, offset: 908},
 							name: "EOF",
 						},
 					},
@@ -102,23 +102,23 @@ var g = &grammar{
 		},
 		{
 			name: "Prival",
-			pos:  position{line: 59, col: 1, offset: 836},
+			pos:  position{line: 61, col: 1, offset: 937},
 			expr: &seqExpr{
-				pos: position{line: 59, col: 11, offset: 846},
+				pos: position{line: 61, col: 11, offset: 947},
 				exprs: []interface{}{
 					&labeledExpr{
-						pos:   position{line: 59, col: 11, offset: 846},
+						pos:   position{line: 61, col: 11, offset: 947},
 						label: "values",
 						expr: &oneOrMoreExpr{
-							pos: position{line: 59, col: 18, offset: 853},
+							pos: position{line: 61, col: 18, offset: 954},
 							expr: &ruleRefExpr{
-								pos:  position{line: 59, col: 18, offset: 853},
+								pos:  position{line: 61, col: 18, offset: 954},
 								name: "Digit",
 							},
 						},
 					},
 					&andCodeExpr{
-						pos: position{line: 59, col: 25, offset: 860},
+						pos: position{line: 61, col: 25, offset: 961},
 						run: (*parser).callonPrival5,
 					},
 				},
@@ -127,9 +127,9 @@ var g = &grammar{
 		{
 			name:        "Digit",
 			displayName: "\"digit\"",
-			pos:         position{line: 78, col: 1, offset: 1330},
+			pos:         position{line: 76, col: 1, offset: 1262},
 			expr: &charClassMatcher{
-				pos:        position{line: 78, col: 18, offset: 1347},
+				pos:        position{line: 76, col: 18, offset: 1279},
 				val:        "[0-9]",
 				ranges:     []rune{'0', '9'},
 				ignoreCase: false,
@@ -139,20 +139,20 @@ var g = &grammar{
 		{
 			name:        "Sp",
 			displayName: "\"whitespace\"",
-			pos:         position{line: 79, col: 1, offset: 1353},
+			pos:         position{line: 77, col: 1, offset: 1285},
 			expr: &litMatcher{
-				pos:        position{line: 79, col: 20, offset: 1372},
+				pos:        position{line: 77, col: 20, offset: 1304},
 				val:        " ",
 				ignoreCase: false,
 			},
 		},
 		{
 			name: "EOF",
-			pos:  position{line: 81, col: 1, offset: 1377},
+			pos:  position{line: 79, col: 1, offset: 1309},
 			expr: &notExpr{
-				pos: position{line: 81, col: 8, offset: 1384},
+				pos: position{line: 79, col: 8, offset: 1316},
 				expr: &anyMatcher{
-					line: 81, col: 9, offset: 1385,
+					line: 79, col: 9, offset: 1317,
 				},
 			},
 		},
@@ -170,20 +170,16 @@ func (p *parser) callonPri1() (interface{}, error) {
 }
 
 func (c *current) onPrival5(values interface{}) (bool, error) {
-	spew.Dump(values)
-	// valuesSlice := toUint8Slice(toIfaceSlice(values))
-	// if len(valuesSlice) > 3 {
-	//   return false, fmt.Errorf("more than 3 digits")
-	// }
-	// fmt.Printf("%#v\n%T\n", valuesSlice, valuesSlice)
-	// num, err := strconv.Atoi(strings.Join(valuesSlice, ""))
-	// if err != nil {
-	//   return false, err
-	// }
-	// fmt.Println(">>>", num)
-	// if num > 191 {
-	//   return false, fmt.Errorf("greater than 191")
-	// }
+	valuesSlice := toUint8Slice(toIfaceSlice(values))
+	if len(valuesSlice) > 3 {
+		return false, fmt.Errorf("more than 3 digits")
+	}
+
+	num := utf8ToNumber(valuesSlice)
+	fmt.Printf("%#v\n", num)
+	if num > privalMax {
+		return false, fmt.Errorf("greater than 191")
+	}
 
 	return true, nil
 }
