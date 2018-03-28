@@ -1,0 +1,81 @@
+{
+
+package syslog
+
+import "strings"
+
+func toIfaceSlice(v interface{}) []interface{} {
+  if v == nil {
+      return nil
+  }
+  return v.([]interface{})
+}
+
+func toStringSlice(v []interface{}) []string {
+  s := make([]string, len(v))
+  for i, c := range v {
+    s[i] = c.(string)
+  }
+  return s
+}
+
+type uint8Data struct {
+  data []uint8
+}
+
+func toUint8Slice(v []interface{}) []uint8 {
+	// u := []uint8{}
+	// for _, c := range v {
+  //   u = append(u, c.([]uint8)...)
+	// }
+	// return u
+
+  u := make([]uint8, len(v))
+  for i, c := range v {
+    uints := c.([]uint8)
+    u[i] = uints[0]
+  }
+  return u
+}
+
+func concatUint8(v []uint8) uint8 {
+  var out uint8
+  var op uint8
+  out = 0
+  op = 1
+  for i := len(v) - 1; i >= 0; i-- {
+    out += v[i] * op
+    op *= 10
+  }
+  return out
+}
+
+}
+
+Pri <- '<' value:Prival '>' EOF {
+  return value, nil
+}
+
+Prival <- values:Digit+ &{
+  spew.Dump(values)
+  // valuesSlice := toUint8Slice(toIfaceSlice(values))
+  // if len(valuesSlice) > 3 {
+  //   return false, fmt.Errorf("more than 3 digits")
+  // }
+  // fmt.Printf("%#v\n%T\n", valuesSlice, valuesSlice)
+  // num, err := strconv.Atoi(strings.Join(valuesSlice, ""))
+  // if err != nil {
+  //   return false, err
+  // }
+  // fmt.Println(">>>", num)
+  // if num > 191 {
+  //   return false, fmt.Errorf("greater than 191")
+  // }
+
+  return true, nil
+}
+
+Digit "digit" <- [0-9]
+Sp "whitespace" <- ' '
+
+EOF <- !.
