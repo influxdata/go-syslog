@@ -1,16 +1,14 @@
 
-//line syslog.rl:1
-package syslog
+//line rfc5424/parser.rl:1
+package rfc5424
 
 import (
   "fmt"
   "os"
-  "github.com/influxdata/go-syslog/syslog/rfc5424"
-  "github.com/davecgh/go-spew/spew"
 )
  
 
-//line syslog.go:14
+//line rfc5424/parser.go:12
 const rfc5424_start int = 1
 const rfc5424_first_final int = 7
 const rfc5424_error int = 0
@@ -18,7 +16,7 @@ const rfc5424_error int = 0
 const rfc5424_en_main int = 1
 
 
-//line syslog.rl:19
+//line rfc5424/parser.rl:11
 
 
 func utf8ToNum(bseq []uint8) int {
@@ -31,27 +29,19 @@ func utf8ToNum(bseq []uint8) int {
   return out
 }
 
-// RFC5424 is ...
-func RFC5424(data string) {
+func parse(data string) Message {
     cs, p, pe := 0, 0, len(data)
 
     privalChars := []uint8{}
-    var prival *rfc5424.Prival
+    var prival *Prival
 
     
-//line syslog.rl:45
-
-
-    
-    
-//line syslog.go:48
+//line rfc5424/parser.go:40
 	{
 	cs = rfc5424_start
 	}
 
-//line syslog.rl:49
-    
-//line syslog.go:55
+//line rfc5424/parser.go:45
 	{
 	if p == pe {
 		goto _test_eof
@@ -100,7 +90,7 @@ st_case_0:
 		}
 		goto st0
 tr2:
-//line syslog.rl:39
+//line rfc5424/machines.rl:7
  privalChars = append(privalChars, data[p]) 
 	goto st3
 	st3:
@@ -108,24 +98,24 @@ tr2:
 			goto _test_eof3
 		}
 	st_case_3:
-//line syslog.go:112
+//line rfc5424/parser.go:102
 		if data[p] == 62 {
 			goto tr5
 		}
 		goto st0
 tr5:
-//line syslog.rl:40
- prival = rfc5424.NewPrival(utf8ToNum(privalChars)) 
+//line rfc5424/machines.rl:8
+ prival = NewPrival(utf8ToNum(privalChars)) 
 	goto st7
 	st7:
 		if p++; p == pe {
 			goto _test_eof7
 		}
 	st_case_7:
-//line syslog.go:126
+//line rfc5424/parser.go:116
 		goto st0
 tr3:
-//line syslog.rl:39
+//line rfc5424/machines.rl:7
  privalChars = append(privalChars, data[p]) 
 	goto st4
 	st4:
@@ -133,7 +123,7 @@ tr3:
 			goto _test_eof4
 		}
 	st_case_4:
-//line syslog.go:137
+//line rfc5424/parser.go:127
 		switch data[p] {
 		case 57:
 			goto tr6
@@ -145,7 +135,7 @@ tr3:
 		}
 		goto st0
 tr4:
-//line syslog.rl:39
+//line rfc5424/machines.rl:7
  privalChars = append(privalChars, data[p]) 
 	goto st5
 	st5:
@@ -153,7 +143,7 @@ tr4:
 			goto _test_eof5
 		}
 	st_case_5:
-//line syslog.go:157
+//line rfc5424/parser.go:147
 		if data[p] == 62 {
 			goto tr5
 		}
@@ -162,7 +152,7 @@ tr4:
 		}
 		goto st0
 tr6:
-//line syslog.rl:39
+//line rfc5424/machines.rl:7
  privalChars = append(privalChars, data[p]) 
 	goto st6
 	st6:
@@ -170,7 +160,7 @@ tr6:
 			goto _test_eof6
 		}
 	st_case_6:
-//line syslog.go:174
+//line rfc5424/parser.go:164
 		if data[p] == 62 {
 			goto tr5
 		}
@@ -190,10 +180,14 @@ tr6:
 	_out: {}
 	}
 
-//line syslog.rl:50
+//line rfc5424/parser.rl:34
+
+
     if cs < rfc5424_first_final {
         fmt.Fprintln(os.Stderr, fmt.Errorf("error"))
     }
 
-    spew.Dump(prival)
+    return Message{
+      Prival: *prival,
+    }
 }

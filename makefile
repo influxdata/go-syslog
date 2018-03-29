@@ -1,14 +1,14 @@
 .PHONY: build graph test
 
-syslog.dot: syslog.rl
-	ragel -Vp syslog.rl -o $@
+docs/rfc5424_parser.dot: rfc5424/parser.rl
+	ragel -Vp rfc5424/parser.rl -o $@
 
-graph: syslog.dot
+graph: docs/rfc5424_parser.dot
 
-syslog.go: syslog.rl
-	ragel -Z -G2 -o $@ syslog.rl
+rfc5424/parser.go: rfc5424/parser.rl
+	ragel -Z -G2 -o $@ rfc5424/parser.rl
 
-build: syslog.go
+generate: rfc5424/parser.go
 
-test: build
+test: generate
 	go test -v ./...
