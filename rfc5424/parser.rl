@@ -2,7 +2,6 @@ package rfc5424
 
 import (
   "fmt"
-  "os"
 )
  
 %%{
@@ -20,24 +19,27 @@ func utf8ToNum(bseq []uint8) int {
   return out
 }
 
-func parse(data string) Message {
+func parse(data string) (*Message, error) {
     cs, p, pe := 0, 0, len(data)
 
     privalChars := []uint8{}
+    versionChars := []uint8{}
     var prival *Prival
+    var version *Version
 
     %%{
-      include rfc5424 "machines.rl";
-      main := pri;
+      include rfc5424 "machine.rl";
+      main := header;
       write init;
       write exec;
     }%%
 
     if cs < rfc5424_first_final {
-        fmt.Fprintln(os.Stderr, fmt.Errorf("error"))
-    }
+        return nil, fmt.Errorf("error")
+    } 
 
-    return Message{
+    return &Message{
       Prival: *prival,
-    }
+      Version: *version,
+    }, nil
 }
