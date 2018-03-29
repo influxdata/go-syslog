@@ -1,7 +1,5 @@
 package rfc5424
 
-//go:generate ragel -Z -G2 -o parser.go parser.rl
-
-func Parse(data string) Message {
+func Parse(data string) (*Message, error) {
 	return parse(data)
 }
