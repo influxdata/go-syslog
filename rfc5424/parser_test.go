@@ -7,38 +7,46 @@ import (
 )
 
 type testCase struct {
-	input string
-	valid bool
-	value *SyslogMessage
+	input       string
+	valid       bool
+	value       *SyslogMessage
+	errorString string
 }
 
 var testCases = []testCase{
+	// {
+	// 	"<101>122 201-11-22",
+	// 	false,
+	// 	nil,
+	// 	"errore generico",
+	// },
+	// {
+	// 	"<101>122 2018-11-22",
+	// 	true,
+	// 	&SyslogMessage{
+	// 		Header: Header{
+	// 			Pri: Pri{
+	// 				Prival: Prival{
+	// 					Facility: Facility{
+	// 						Code: 12,
+	// 					},
+	// 					Severity: Severity{
+	// 						Code: 5,
+	// 					},
+	// 					Value: 101,
+	// 				},
+	// 			},
+	// 			Version: Version{
+	// 				Value: 122,
+	// 			},
+	// 		},
+	// 	},
+	// },
 	{
-		"<101>122 201-11-22",
+		"<101>122 2018-02-29",
 		false,
 		nil,
-	},
-	{
-		"<101>122 2018-11-22",
-		true,
-		&SyslogMessage{
-			Header: Header{
-				Pri: Pri{
-					Prival: Prival{
-						Facility: Facility{
-							Code: 12,
-						},
-						Severity: Severity{
-							Code: 5,
-						},
-						Value: 101,
-					},
-				},
-				Version: Version{
-					Value: 122,
-				},
-			},
-		},
+		"error parsing time \"2018-02-29\": day out of range [col 9:19]",
 	},
 }
 
@@ -48,9 +56,11 @@ func TestParse(t *testing.T) {
 			t.Parallel()
 
 			msg, err := Parse(tc.input)
+
 			if !tc.valid {
 				assert.Nil(t, msg)
 				assert.Error(t, err)
+				assert.EqualError(t, err, tc.errorString)
 			}
 			if tc.valid {
 				assert.Nil(t, err)
