@@ -1,9 +1,14 @@
 package rfc5424
 
+// Pri represents the container of the priority value of a syslog message
+type Pri struct {
+	Prival
+}
+
 // Prival represents the priority value
 type Prival struct {
-	Facility *Facility
-	Severity *Severity
+	Facility Facility
+	Severity Severity
 	Value    int
 }
 
@@ -82,8 +87,8 @@ func (s *Severity) Message() string {
 // It assumes values is an utin8 in the range 0..191.
 func NewPrival(value int) *Prival {
 	return &Prival{
-		Facility: NewFacility(value),
-		Severity: NewSeverity(value),
+		Facility: *NewFacility(value),
+		Severity: *NewSeverity(value),
 		Value:    value,
 	}
 }
