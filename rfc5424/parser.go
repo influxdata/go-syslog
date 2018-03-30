@@ -10,7 +10,7 @@ import (
 
 //line rfc5424/parser.go:12
 const rfc5424_start int = 1
-const rfc5424_first_final int = 49
+const rfc5424_first_final int = 48
 const rfc5424_error int = 0
 
 const rfc5424_en_line int = 50
@@ -33,14 +33,15 @@ func Parse(data string) (*SyslogMessage, error) {
 
     var prival *Prival
     var version *Version
+    var timestamp *time.Time
 
     
-//line rfc5424/parser.go:39
+//line rfc5424/parser.go:40
 	{
 	cs = rfc5424_start
 	}
 
-//line rfc5424/parser.go:44
+//line rfc5424/parser.go:45
 	{
 	if p == pe {
 		goto _test_eof
@@ -60,8 +61,8 @@ func Parse(data string) (*SyslogMessage, error) {
 		goto st_case_5
 	case 6:
 		goto st_case_6
-	case 49:
-		goto st_case_49
+	case 48:
+		goto st_case_48
 	case 7:
 		goto st_case_7
 	case 8:
@@ -110,6 +111,8 @@ func Parse(data string) (*SyslogMessage, error) {
 		goto st_case_29
 	case 30:
 		goto st_case_30
+	case 49:
+		goto st_case_49
 	case 31:
 		goto st_case_31
 	case 32:
@@ -144,8 +147,6 @@ func Parse(data string) (*SyslogMessage, error) {
 		goto st_case_46
 	case 47:
 		goto st_case_47
-	case 48:
-		goto st_case_48
 	case 50:
 		goto st_case_50
 	}
@@ -160,12 +161,12 @@ func Parse(data string) (*SyslogMessage, error) {
 		}
 		goto st0
 tr9:
-//line rfc5424/machine.rl:27
+//line rfc5424/machine.rl:30
 
     err = fmt.Errorf("error parsing <nilvalue>");
 
 	goto st0
-//line rfc5424/parser.go:169
+//line rfc5424/parser.go:170
 st_case_0:
 	st0:
 		cs = 0
@@ -196,7 +197,7 @@ tr2:
 			goto _test_eof3
 		}
 	st_case_3:
-//line rfc5424/parser.go:200
+//line rfc5424/parser.go:201
 		if data[p] == 62 {
 			goto tr5
 		}
@@ -212,7 +213,7 @@ tr5:
 			goto _test_eof4
 		}
 	st_case_4:
-//line rfc5424/parser.go:216
+//line rfc5424/parser.go:217
 		if 49 <= data[p] && data[p] <= 57 {
 			goto tr6
 		}
@@ -228,7 +229,7 @@ tr6:
 			goto _test_eof5
 		}
 	st_case_5:
-//line rfc5424/parser.go:232
+//line rfc5424/parser.go:233
 		if data[p] == 32 {
 			goto tr7
 		}
@@ -247,32 +248,28 @@ tr7:
 			goto _test_eof6
 		}
 	st_case_6:
-//line rfc5424/parser.go:251
+//line rfc5424/parser.go:252
 		if data[p] == 45 {
-			goto st49
+			goto st48
 		}
 		if 48 <= data[p] && data[p] <= 57 {
 			goto tr11
 		}
 		goto tr9
-	st49:
+	st48:
 		if p++; p == pe {
-			goto _test_eof49
+			goto _test_eof48
 		}
-	st_case_49:
+	st_case_48:
 		goto st0
 tr11:
-//line rfc5424/machine.rl:27
+//line rfc5424/machine.rl:30
 
     err = fmt.Errorf("error parsing <nilvalue>");
 
 //line rfc5424/machine.rl:16
 
-    poss["fulldate:ini"] = p
-
-//line rfc5424/machine.rl:4
-
-    cr.Add(data[p])
+    poss["timestamp:ini"] = p
 
 	goto st7
 	st7:
@@ -280,55 +277,34 @@ tr11:
 			goto _test_eof7
 		}
 	st_case_7:
-//line rfc5424/parser.go:284
+//line rfc5424/parser.go:281
 		if 48 <= data[p] && data[p] <= 57 {
-			goto tr12
+			goto st8
 		}
 		goto st0
-tr12:
-//line rfc5424/machine.rl:4
-
-    cr.Add(data[p])
-
-	goto st8
 	st8:
 		if p++; p == pe {
 			goto _test_eof8
 		}
 	st_case_8:
-//line rfc5424/parser.go:300
 		if 48 <= data[p] && data[p] <= 57 {
-			goto tr13
+			goto st9
 		}
 		goto st0
-tr13:
-//line rfc5424/machine.rl:4
-
-    cr.Add(data[p])
-
-	goto st9
 	st9:
 		if p++; p == pe {
 			goto _test_eof9
 		}
 	st_case_9:
-//line rfc5424/parser.go:316
 		if 48 <= data[p] && data[p] <= 57 {
-			goto tr14
+			goto st10
 		}
 		goto st0
-tr14:
-//line rfc5424/machine.rl:4
-
-    cr.Add(data[p])
-
-	goto st10
 	st10:
 		if p++; p == pe {
 			goto _test_eof10
 		}
 	st_case_10:
-//line rfc5424/parser.go:332
 		if data[p] == 45 {
 			goto st11
 		}
@@ -340,39 +316,25 @@ tr14:
 	st_case_11:
 		switch data[p] {
 		case 48:
-			goto tr16
+			goto st12
 		case 49:
-			goto tr17
+			goto st42
 		}
 		goto st0
-tr16:
-//line rfc5424/machine.rl:4
-
-    cr.Add(data[p])
-
-	goto st12
 	st12:
 		if p++; p == pe {
 			goto _test_eof12
 		}
 	st_case_12:
-//line rfc5424/parser.go:360
 		if 49 <= data[p] && data[p] <= 57 {
-			goto tr18
+			goto st13
 		}
 		goto st0
-tr18:
-//line rfc5424/machine.rl:4
-
-    cr.Add(data[p])
-
-	goto st13
 	st13:
 		if p++; p == pe {
 			goto _test_eof13
 		}
 	st_case_13:
-//line rfc5424/parser.go:376
 		if data[p] == 45 {
 			goto st14
 		}
@@ -384,64 +346,39 @@ tr18:
 	st_case_14:
 		switch data[p] {
 		case 48:
-			goto tr20
+			goto st15
 		case 51:
-			goto tr22
+			goto st41
 		}
 		if 49 <= data[p] && data[p] <= 50 {
-			goto tr21
+			goto st40
 		}
 		goto st0
-tr20:
-//line rfc5424/machine.rl:4
-
-    cr.Add(data[p])
-
-	goto st15
 	st15:
 		if p++; p == pe {
 			goto _test_eof15
 		}
 	st_case_15:
-//line rfc5424/parser.go:407
 		if 49 <= data[p] && data[p] <= 57 {
-			goto tr23
+			goto st16
 		}
 		goto st0
-tr23:
-//line rfc5424/machine.rl:4
-
-    cr.Add(data[p])
-
-	goto st16
 	st16:
 		if p++; p == pe {
 			goto _test_eof16
 		}
 	st_case_16:
-//line rfc5424/parser.go:423
 		if data[p] == 84 {
-			goto tr24
+			goto st17
 		}
 		goto st0
-tr24:
-//line rfc5424/machine.rl:20
-
-    if _, e := time.Parse("2006-01-02", data[poss["fulldate:ini"]:p]); e != nil {
-        err = fmt.Errorf("error %s [col %d:%d]", e, poss["fulldate:ini"], p);
-        p--
- {goto st50 }
-    }
-
-	goto st17
 	st17:
 		if p++; p == pe {
 			goto _test_eof17
 		}
 	st_case_17:
-//line rfc5424/parser.go:443
 		if data[p] == 50 {
-			goto st40
+			goto st39
 		}
 		if 48 <= data[p] && data[p] <= 49 {
 			goto st18
@@ -516,10 +453,14 @@ tr24:
 		}
 	st_case_25:
 		switch data[p] {
-		case 46:
+		case 43:
 			goto st26
+		case 45:
+			goto st26
+		case 46:
+			goto st32
 		case 90:
-			goto st33
+			goto st49
 		}
 		goto st0
 	st26:
@@ -527,7 +468,10 @@ tr24:
 			goto _test_eof26
 		}
 	st_case_26:
-		if 48 <= data[p] && data[p] <= 57 {
+		if data[p] == 50 {
+			goto st31
+		}
+		if 48 <= data[p] && data[p] <= 49 {
 			goto st27
 		}
 		goto st0
@@ -536,9 +480,6 @@ tr24:
 			goto _test_eof27
 		}
 	st_case_27:
-		if data[p] == 90 {
-			goto st33
-		}
 		if 48 <= data[p] && data[p] <= 57 {
 			goto st28
 		}
@@ -548,10 +489,7 @@ tr24:
 			goto _test_eof28
 		}
 	st_case_28:
-		if data[p] == 90 {
-			goto st33
-		}
-		if 48 <= data[p] && data[p] <= 57 {
+		if data[p] == 58 {
 			goto st29
 		}
 		goto st0
@@ -560,10 +498,7 @@ tr24:
 			goto _test_eof29
 		}
 	st_case_29:
-		if data[p] == 90 {
-			goto st33
-		}
-		if 48 <= data[p] && data[p] <= 57 {
+		if 48 <= data[p] && data[p] <= 53 {
 			goto st30
 		}
 		goto st0
@@ -572,23 +507,23 @@ tr24:
 			goto _test_eof30
 		}
 	st_case_30:
-		if data[p] == 90 {
-			goto st33
-		}
 		if 48 <= data[p] && data[p] <= 57 {
-			goto st31
+			goto st49
 		}
+		goto st0
+	st49:
+		if p++; p == pe {
+			goto _test_eof49
+		}
+	st_case_49:
 		goto st0
 	st31:
 		if p++; p == pe {
 			goto _test_eof31
 		}
 	st_case_31:
-		if data[p] == 90 {
-			goto st33
-		}
-		if 48 <= data[p] && data[p] <= 57 {
-			goto st32
+		if 48 <= data[p] && data[p] <= 51 {
+			goto st28
 		}
 		goto st0
 	st32:
@@ -596,7 +531,7 @@ tr24:
 			goto _test_eof32
 		}
 	st_case_32:
-		if data[p] == 90 {
+		if 48 <= data[p] && data[p] <= 57 {
 			goto st33
 		}
 		goto st0
@@ -607,8 +542,13 @@ tr24:
 	st_case_33:
 		switch data[p] {
 		case 43:
-			goto st34
+			goto st26
 		case 45:
+			goto st26
+		case 90:
+			goto st49
+		}
+		if 48 <= data[p] && data[p] <= 57 {
 			goto st34
 		}
 		goto st0
@@ -617,10 +557,15 @@ tr24:
 			goto _test_eof34
 		}
 	st_case_34:
-		if data[p] == 50 {
-			goto st39
+		switch data[p] {
+		case 43:
+			goto st26
+		case 45:
+			goto st26
+		case 90:
+			goto st49
 		}
-		if 48 <= data[p] && data[p] <= 49 {
+		if 48 <= data[p] && data[p] <= 57 {
 			goto st35
 		}
 		goto st0
@@ -629,6 +574,14 @@ tr24:
 			goto _test_eof35
 		}
 	st_case_35:
+		switch data[p] {
+		case 43:
+			goto st26
+		case 45:
+			goto st26
+		case 90:
+			goto st49
+		}
 		if 48 <= data[p] && data[p] <= 57 {
 			goto st36
 		}
@@ -638,7 +591,15 @@ tr24:
 			goto _test_eof36
 		}
 	st_case_36:
-		if data[p] == 58 {
+		switch data[p] {
+		case 43:
+			goto st26
+		case 45:
+			goto st26
+		case 90:
+			goto st49
+		}
+		if 48 <= data[p] && data[p] <= 57 {
 			goto st37
 		}
 		goto st0
@@ -647,7 +608,15 @@ tr24:
 			goto _test_eof37
 		}
 	st_case_37:
-		if 48 <= data[p] && data[p] <= 53 {
+		switch data[p] {
+		case 43:
+			goto st26
+		case 45:
+			goto st26
+		case 90:
+			goto st49
+		}
+		if 48 <= data[p] && data[p] <= 57 {
 			goto st38
 		}
 		goto st0
@@ -656,7 +625,12 @@ tr24:
 			goto _test_eof38
 		}
 	st_case_38:
-		if 48 <= data[p] && data[p] <= 57 {
+		switch data[p] {
+		case 43:
+			goto st26
+		case 45:
+			goto st26
+		case 90:
 			goto st49
 		}
 		goto st0
@@ -666,7 +640,7 @@ tr24:
 		}
 	st_case_39:
 		if 48 <= data[p] && data[p] <= 51 {
-			goto st36
+			goto st19
 		}
 		goto st0
 	st40:
@@ -674,43 +648,29 @@ tr24:
 			goto _test_eof40
 		}
 	st_case_40:
-		if 48 <= data[p] && data[p] <= 51 {
-			goto st19
+		if 48 <= data[p] && data[p] <= 57 {
+			goto st16
 		}
 		goto st0
-tr21:
-//line rfc5424/machine.rl:4
-
-    cr.Add(data[p])
-
-	goto st41
 	st41:
 		if p++; p == pe {
 			goto _test_eof41
 		}
 	st_case_41:
-//line rfc5424/parser.go:693
-		if 48 <= data[p] && data[p] <= 57 {
-			goto tr23
+		if 48 <= data[p] && data[p] <= 49 {
+			goto st16
 		}
 		goto st0
-tr22:
-//line rfc5424/machine.rl:4
-
-    cr.Add(data[p])
-
-	goto st42
 	st42:
 		if p++; p == pe {
 			goto _test_eof42
 		}
 	st_case_42:
-//line rfc5424/parser.go:709
-		if 48 <= data[p] && data[p] <= 49 {
-			goto tr23
+		if 48 <= data[p] && data[p] <= 50 {
+			goto st13
 		}
 		goto st0
-tr17:
+tr8:
 //line rfc5424/machine.rl:4
 
     cr.Add(data[p])
@@ -721,23 +681,7 @@ tr17:
 			goto _test_eof43
 		}
 	st_case_43:
-//line rfc5424/parser.go:725
-		if 48 <= data[p] && data[p] <= 50 {
-			goto tr18
-		}
-		goto st0
-tr8:
-//line rfc5424/machine.rl:4
-
-    cr.Add(data[p])
-
-	goto st44
-	st44:
-		if p++; p == pe {
-			goto _test_eof44
-		}
-	st_case_44:
-//line rfc5424/parser.go:741
+//line rfc5424/parser.go:685
 		if data[p] == 32 {
 			goto tr7
 		}
@@ -750,13 +694,13 @@ tr48:
 
     cr.Add(data[p])
 
-	goto st45
-	st45:
+	goto st44
+	st44:
 		if p++; p == pe {
-			goto _test_eof45
+			goto _test_eof44
 		}
-	st_case_45:
-//line rfc5424/parser.go:760
+	st_case_44:
+//line rfc5424/parser.go:704
 		if data[p] == 32 {
 			goto tr7
 		}
@@ -766,13 +710,13 @@ tr3:
 
     cr.Add(data[p])
 
-	goto st46
-	st46:
+	goto st45
+	st45:
 		if p++; p == pe {
-			goto _test_eof46
+			goto _test_eof45
 		}
-	st_case_46:
-//line rfc5424/parser.go:776
+	st_case_45:
+//line rfc5424/parser.go:720
 		switch data[p] {
 		case 57:
 			goto tr49
@@ -788,13 +732,13 @@ tr4:
 
     cr.Add(data[p])
 
-	goto st47
-	st47:
+	goto st46
+	st46:
 		if p++; p == pe {
-			goto _test_eof47
+			goto _test_eof46
 		}
-	st_case_47:
-//line rfc5424/parser.go:798
+	st_case_46:
+//line rfc5424/parser.go:742
 		if data[p] == 62 {
 			goto tr5
 		}
@@ -807,13 +751,13 @@ tr49:
 
     cr.Add(data[p])
 
-	goto st48
-	st48:
+	goto st47
+	st47:
 		if p++; p == pe {
-			goto _test_eof48
+			goto _test_eof47
 		}
-	st_case_48:
-//line rfc5424/parser.go:817
+	st_case_47:
+//line rfc5424/parser.go:761
 		if data[p] == 62 {
 			goto tr5
 		}
@@ -822,7 +766,7 @@ tr49:
 		}
 		goto st0
 tr50:
-//line rfc5424/machine.rl:79
+//line rfc5424/machine.rl:82
  {goto st1 } 
 	goto st50
 	st50:
@@ -830,7 +774,7 @@ tr50:
 			goto _test_eof50
 		}
 	st_case_50:
-//line rfc5424/parser.go:834
+//line rfc5424/parser.go:778
 		switch data[p] {
 		case 10:
 			goto st0
@@ -845,7 +789,7 @@ tr50:
 	_test_eof4: cs = 4; goto _test_eof
 	_test_eof5: cs = 5; goto _test_eof
 	_test_eof6: cs = 6; goto _test_eof
-	_test_eof49: cs = 49; goto _test_eof
+	_test_eof48: cs = 48; goto _test_eof
 	_test_eof7: cs = 7; goto _test_eof
 	_test_eof8: cs = 8; goto _test_eof
 	_test_eof9: cs = 9; goto _test_eof
@@ -870,6 +814,7 @@ tr50:
 	_test_eof28: cs = 28; goto _test_eof
 	_test_eof29: cs = 29; goto _test_eof
 	_test_eof30: cs = 30; goto _test_eof
+	_test_eof49: cs = 49; goto _test_eof
 	_test_eof31: cs = 31; goto _test_eof
 	_test_eof32: cs = 32; goto _test_eof
 	_test_eof33: cs = 33; goto _test_eof
@@ -887,25 +832,36 @@ tr50:
 	_test_eof45: cs = 45; goto _test_eof
 	_test_eof46: cs = 46; goto _test_eof
 	_test_eof47: cs = 47; goto _test_eof
-	_test_eof48: cs = 48; goto _test_eof
 	_test_eof50: cs = 50; goto _test_eof
 
 	_test_eof: {}
 	if p == eof {
 		switch cs {
+		case 49:
+//line rfc5424/machine.rl:20
+
+    t, e := time.Parse(time.RFC3339Nano, data[poss["timestamp:ini"]:p])
+    if e != nil {
+        err = fmt.Errorf("error %s [col %d:%d]", e, poss["timestamp:ini"], p);
+        p--
+ {goto st50 }
+    } else {
+        timestamp = &t
+    }
+
 		case 6:
-//line rfc5424/machine.rl:27
+//line rfc5424/machine.rl:30
 
     err = fmt.Errorf("error parsing <nilvalue>");
 
-//line rfc5424/parser.go:902
+//line rfc5424/parser.go:858
 		}
 	}
 
 	_out: {}
 	}
 
-//line rfc5424/parser.rl:32
+//line rfc5424/parser.rl:33
 
 
     if cs < rfc5424_first_final {
@@ -918,6 +874,7 @@ tr50:
           Prival: *prival,
         },
         Version: *version,
+        Timestamp: timestamp,
       },
     }, nil
 }

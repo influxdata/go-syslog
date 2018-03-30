@@ -1,5 +1,7 @@
 package rfc5424
 
+import "time"
+
 // SyslogMessage represents a syslog message
 type SyslogMessage struct {
 	Header
@@ -11,7 +13,7 @@ type SyslogMessage struct {
 type Header struct {
 	Pri
 	Version
-	// Timestamp
+	Timestamp *time.Time
 	// Hostname
 }
 
