@@ -1,6 +1,7 @@
 package rfc5424
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -14,40 +15,66 @@ type testCase struct {
 }
 
 var testCases = []testCase{
+	{
+		"<101>122 201-11-22",
+		false,
+		nil,
+		"errore generico",
+	},
+	{
+		"<101>122 2018-11-22",
+		true,
+		&SyslogMessage{
+			Header: Header{
+				Pri: Pri{
+					Prival: Prival{
+						Facility: Facility{
+							Code: 12,
+						},
+						Severity: Severity{
+							Code: 5,
+						},
+						Value: 101,
+					},
+				},
+				Version: Version{
+					Value: 122,
+				},
+			},
+		},
+		"",
+	},
+	{
+		"<191>123 2018-02-29",
+		false,
+		nil,
+		"error parsing <nilvalue>",
+	},
 	// {
-	// 	"<101>122 201-11-22",
-	// 	false,
-	// 	nil,
-	// 	"errore generico",
-	// },
-	// {
-	// 	"<101>122 2018-11-22",
+	// 	"<187>222 1985-04-12T23:20:50.003Z",
 	// 	true,
 	// 	&SyslogMessage{
 	// 		Header: Header{
 	// 			Pri: Pri{
 	// 				Prival: Prival{
 	// 					Facility: Facility{
-	// 						Code: 12,
+	// 						Code: 23,
 	// 					},
 	// 					Severity: Severity{
-	// 						Code: 5,
+	// 						Code: 3,
 	// 					},
-	// 					Value: 101,
+	// 					Value: 187,
 	// 				},
 	// 			},
 	// 			Version: Version{
-	// 				Value: 122,
+	// 				Value: 222,
 	// 			},
+	// 			// (fixme)
+	// 			Timestamp: time.Parse(time.RFC3339Nano, "1985-04-12 23:20:50.003 +0000 UTC"),
 	// 		},
 	// 	},
+	// 	"",
 	// },
-	{
-		"<101>122 2018-02-29",
-		false,
-		nil,
-		"error parsing time \"2018-02-29\": day out of range [col 9:19]",
-	},
 }
 
 func TestParse(t *testing.T) {
@@ -56,6 +83,8 @@ func TestParse(t *testing.T) {
 			t.Parallel()
 
 			msg, err := Parse(tc.input)
+
+			fmt.Printf("%+v\n", msg)
 
 			if !tc.valid {
 				assert.Nil(t, msg)

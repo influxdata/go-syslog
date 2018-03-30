@@ -13,14 +13,17 @@ action set_version {
     version = NewVersion(*cr.Reduce())
 }
 
-action tag_fulldate {
-    poss["fulldate:ini"] = fpc
+action tag_rfc3339 {
+    poss["timestamp:ini"] = fpc
 }
 
-action set_fulldate {
-    if _, e := time.Parse("2006-01-02", data[poss["fulldate:ini"]:p]); e != nil {
-        err = fmt.Errorf("error %s [col %d:%d]", e, poss["fulldate:ini"], p);
+action set_rfc3339 {
+    t, e := time.Parse(time.RFC3339Nano, data[poss["timestamp:ini"]:p])
+    if e != nil {
+        err = fmt.Errorf("error %s [col %d:%d]", e, poss["timestamp:ini"], p);
         fhold; fgoto line;
+    } else {
+        timestamp = &t
     }
 }
 
@@ -39,15 +42,15 @@ sexagesimal = '0'..'5' . '0'..'9';
 
 printusascii = '!'..'~';
 
-version = (nonzerodigit . digit{0,2}) @add_char %set_version;
+version = (nonzerodigit . digit{0,2}) $add_char %set_version;
 
-datemday = ('0' . '1'..'9' | '1'..'2' . '0'..'9' | '3' . '0'..'1') $add_char;
+datemday = ('0' . '1'..'9' | '1'..'2' . '0'..'9' | '3' . '0'..'1');
 
-datemonth = ('0' . '1'..'9' | '1' . '0'..'2') $add_char;
+datemonth = ('0' . '1'..'9' | '1' . '0'..'2');
 
-datefullyear = digit{4} $add_char;
+datefullyear = digit{4};
 
-fulldate = datefullyear >tag_fulldate '-' datemonth  '-' datemday %set_fulldate;
+fulldate = datefullyear  '-' datemonth  '-' datemday;
 
 timehour = ('0'..'1' . '0'..'9' | '2' . '0'..'3');
 
@@ -59,20 +62,20 @@ timesecfrac = '.' . digit{1,6};
 
 timenumoffset = ('+' | '-') timehour ':' timeminute;
 
-timeoffset = 'Z' . timenumoffset;
+timeoffset = 'Z' | timenumoffset;
 
 partialtime = timehour ':'  timeminute ':' timesecond . timesecfrac?;
 
 fulltime = partialtime . timeoffset;
 
-timestamp = nilvalue | fulldate . 'T' . fulltime; 
+timestamp = nilvalue | (fulldate >tag_rfc3339 . 'T' . fulltime %set_rfc3339); 
 
 hostname = nilvalue | printusascii{1,255};
 
 # 1..191 or 0
 prival = (('1' ( '9' ( '0'..'1' ){,1} | '0'..'8' ( '0'..'9' ){,1} ){,1}) | ( '2'..'9' ('0'..'9'){,1} )) | '0';
 
-pri = '<' . prival @add_char %set_prival . '>';
+pri = '<' . prival $add_char %set_prival . '>';
 
 header = pri . version . sp . timestamp;
 

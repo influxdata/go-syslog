@@ -23,6 +23,7 @@ func Parse(data string) (*SyslogMessage, error) {
 
     var prival *Prival
     var version *Version
+    var timestamp *time.Time
 
     %%{
       include rfc5424 "machine.rl";
@@ -41,6 +42,7 @@ func Parse(data string) (*SyslogMessage, error) {
           Prival: *prival,
         },
         Version: *version,
+        Timestamp: timestamp,
       },
     }, nil
 }
