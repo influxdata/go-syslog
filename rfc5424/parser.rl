@@ -2,6 +2,7 @@ package rfc5424
 
 import (
   "fmt"
+  "time"
 )
  
 %%{
@@ -9,37 +10,37 @@ machine rfc5424;
 write data;
 }%%
 
-func utf8ToNum(bseq []uint8) int {
-  out := 0
-  ord := 1
-  for i := len(bseq) - 1; i >= 0; i-- {
-    out += (int(bseq[i]) - '0') * ord
-    ord *= 10
-  }
-  return out
-}
+func Parse(data string) (*SyslogMessage, error) {
+    cs, p, pe, eof := 0, 0, len(data), len(data)
 
-func parse(data string) (*Message, error) {
-    cs, p, pe := 0, 0, len(data)
+    _ = eof
 
-    privalChars := []uint8{}
-    versionChars := []uint8{}
+    cr := GetCharsRepo()
+
+    poss := make(map[string]int, 0)
+
+    err := fmt.Errorf("generic error")
+
     var prival *Prival
     var version *Version
 
     %%{
       include rfc5424 "machine.rl";
-      main := header;
+      
       write init;
       write exec;
     }%%
 
     if cs < rfc5424_first_final {
-        return nil, fmt.Errorf("error")
-    } 
+      return nil, err
+    }
 
-    return &Message{
-      Prival: *prival,
-      Version: *version,
+    return &SyslogMessage{
+      Header: Header{
+        Pri: Pri{
+          Prival: *prival,
+        },
+        Version: *version,
+      },
     }, nil
 }
