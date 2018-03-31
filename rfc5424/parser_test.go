@@ -1,8 +1,8 @@
 package rfc5424
 
 import (
-	"fmt"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -14,77 +14,60 @@ type testCase struct {
 	errorString string
 }
 
+func timeParse(layout, value string) *time.Time {
+	t, _ := time.Parse(layout, value)
+	return &t
+}
+
 var testCases = []testCase{
+	// Wrong date
 	{
 		"<101>122 201-11-22",
 		false,
 		nil,
-		"errore generico",
+		"error parsing <nilvalue>",
 	},
-	{
-		"<101>122 2018-11-22",
-		true,
-		&SyslogMessage{
-			Header: Header{
-				Pri: Pri{
-					Prival: Prival{
-						Facility: Facility{
-							Code: 12,
-						},
-						Severity: Severity{
-							Code: 5,
-						},
-						Value: 101,
-					},
-				},
-				Version: Version{
-					Value: 122,
-				},
-			},
-		},
-		"",
-	},
+	// Incomplete date
 	{
 		"<191>123 2018-02-29",
 		false,
 		nil,
 		"error parsing <nilvalue>",
 	},
-	// {
-	// 	"<187>222 1985-04-12T23:20:50.003Z",
-	// 	true,
-	// 	&SyslogMessage{
-	// 		Header: Header{
-	// 			Pri: Pri{
-	// 				Prival: Prival{
-	// 					Facility: Facility{
-	// 						Code: 23,
-	// 					},
-	// 					Severity: Severity{
-	// 						Code: 3,
-	// 					},
-	// 					Value: 187,
-	// 				},
-	// 			},
-	// 			Version: Version{
-	// 				Value: 222,
-	// 			},
-	// 			// (fixme)
-	// 			Timestamp: time.Parse(time.RFC3339Nano, "1985-04-12 23:20:50.003 +0000 UTC"),
-	// 		},
-	// 	},
-	// 	"",
-	// },
+	// Right date
+	{
+		"<187>222 1985-04-12T23:20:50.003Z",
+		true,
+		&SyslogMessage{
+			Header: Header{
+				Pri: Pri{
+					Prival: Prival{
+						Facility: Facility{
+							Code: 23,
+						},
+						Severity: Severity{
+							Code: 3,
+						},
+						Value: 187,
+					},
+				},
+				Version: Version{
+					Value: 222,
+				},
+				Timestamp: timeParse(time.RFC3339Nano, "1985-04-12T23:20:50.003Z"),
+			},
+		},
+		"",
+	},
 }
 
 func TestParse(t *testing.T) {
 	for _, tc := range testCases {
+		tc := tc
 		t.Run(tc.input, func(t *testing.T) {
 			t.Parallel()
 
 			msg, err := Parse(tc.input)
-
-			fmt.Printf("%+v\n", msg)
 
 			if !tc.valid {
 				assert.Nil(t, msg)
@@ -100,11 +83,17 @@ func TestParse(t *testing.T) {
 	}
 }
 
+// This is here to avoid compiler optimizations that
+// could remove the actual call we are benchmarking
+// during benchmarks
+var benchParseResult *SyslogMessage
+
 func BenchmarkParse(b *testing.B) {
 	for _, tc := range testCases {
+		tc := tc
 		b.Run(tc.input, func(b *testing.B) {
 			for i := 0; i < b.N; i++ {
-				Parse(tc.input)
+				benchParseResult, _ = Parse(tc.input)
 			}
 		})
 	}

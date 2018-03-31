@@ -15,5 +15,8 @@ generate: clean rfc5424/parser.go
 test: generate
 	go test -v ./...
 
+bench: generate
+	go test -bench=. ./...
+
 clean:
 	rm -f rfc5424/parser.go
