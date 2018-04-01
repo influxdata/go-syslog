@@ -5,10 +5,11 @@ package rfc5424
 import (
   "fmt"
   "time"
+  "github.com/influxdata/go-syslog/util"
 )
  
 
-//line rfc5424/parser.go:12
+//line rfc5424/parser.go:13
 const rfc5424_start int = 1
 const rfc5424_first_final int = 48
 const rfc5424_error int = 0
@@ -17,7 +18,7 @@ const rfc5424_en_line int = 50
 const rfc5424_en_main int = 1
 
 
-//line rfc5424/parser.rl:11
+//line rfc5424/parser.rl:12
 
 
 func Parse(data string) (*SyslogMessage, error) {
@@ -25,7 +26,7 @@ func Parse(data string) (*SyslogMessage, error) {
 
     _ = eof
 
-    cr := GetCharsRepo()
+    cr := util.NewCharsRepo()
 
     poss := make(map[string]int, 0)
 
@@ -36,12 +37,12 @@ func Parse(data string) (*SyslogMessage, error) {
     var timestamp *time.Time
 
     
-//line rfc5424/parser.go:40
+//line rfc5424/parser.go:41
 	{
 	cs = rfc5424_start
 	}
 
-//line rfc5424/parser.go:45
+//line rfc5424/parser.go:46
 	{
 	if p == pe {
 		goto _test_eof
@@ -166,7 +167,7 @@ tr9:
     err = fmt.Errorf("error parsing <nilvalue>");
 
 	goto st0
-//line rfc5424/parser.go:170
+//line rfc5424/parser.go:171
 st_case_0:
 	st0:
 		cs = 0
@@ -197,7 +198,7 @@ tr2:
 			goto _test_eof3
 		}
 	st_case_3:
-//line rfc5424/parser.go:201
+//line rfc5424/parser.go:202
 		if data[p] == 62 {
 			goto tr5
 		}
@@ -213,7 +214,7 @@ tr5:
 			goto _test_eof4
 		}
 	st_case_4:
-//line rfc5424/parser.go:217
+//line rfc5424/parser.go:218
 		if 49 <= data[p] && data[p] <= 57 {
 			goto tr6
 		}
@@ -229,7 +230,7 @@ tr6:
 			goto _test_eof5
 		}
 	st_case_5:
-//line rfc5424/parser.go:233
+//line rfc5424/parser.go:234
 		if data[p] == 32 {
 			goto tr7
 		}
@@ -248,7 +249,7 @@ tr7:
 			goto _test_eof6
 		}
 	st_case_6:
-//line rfc5424/parser.go:252
+//line rfc5424/parser.go:253
 		if data[p] == 45 {
 			goto st48
 		}
@@ -277,7 +278,7 @@ tr11:
 			goto _test_eof7
 		}
 	st_case_7:
-//line rfc5424/parser.go:281
+//line rfc5424/parser.go:282
 		if 48 <= data[p] && data[p] <= 57 {
 			goto st8
 		}
@@ -681,7 +682,7 @@ tr8:
 			goto _test_eof43
 		}
 	st_case_43:
-//line rfc5424/parser.go:685
+//line rfc5424/parser.go:686
 		if data[p] == 32 {
 			goto tr7
 		}
@@ -700,7 +701,7 @@ tr48:
 			goto _test_eof44
 		}
 	st_case_44:
-//line rfc5424/parser.go:704
+//line rfc5424/parser.go:705
 		if data[p] == 32 {
 			goto tr7
 		}
@@ -716,7 +717,7 @@ tr3:
 			goto _test_eof45
 		}
 	st_case_45:
-//line rfc5424/parser.go:720
+//line rfc5424/parser.go:721
 		switch data[p] {
 		case 57:
 			goto tr49
@@ -738,7 +739,7 @@ tr4:
 			goto _test_eof46
 		}
 	st_case_46:
-//line rfc5424/parser.go:742
+//line rfc5424/parser.go:743
 		if data[p] == 62 {
 			goto tr5
 		}
@@ -757,7 +758,7 @@ tr49:
 			goto _test_eof47
 		}
 	st_case_47:
-//line rfc5424/parser.go:761
+//line rfc5424/parser.go:762
 		if data[p] == 62 {
 			goto tr5
 		}
@@ -774,7 +775,7 @@ tr50:
 			goto _test_eof50
 		}
 	st_case_50:
-//line rfc5424/parser.go:778
+//line rfc5424/parser.go:779
 		switch data[p] {
 		case 10:
 			goto st0
@@ -854,14 +855,14 @@ tr50:
 
     err = fmt.Errorf("error parsing <nilvalue>");
 
-//line rfc5424/parser.go:858
+//line rfc5424/parser.go:859
 		}
 	}
 
 	_out: {}
 	}
 
-//line rfc5424/parser.rl:33
+//line rfc5424/parser.rl:34
 
 
     if cs < rfc5424_first_final {

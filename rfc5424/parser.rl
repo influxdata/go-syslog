@@ -3,6 +3,7 @@ package rfc5424
 import (
   "fmt"
   "time"
+  "github.com/influxdata/go-syslog/util"
 )
  
 %%{
@@ -15,7 +16,7 @@ func Parse(data string) (*SyslogMessage, error) {
 
     _ = eof
 
-    cr := GetCharsRepo()
+    cr := util.NewCharsRepo()
 
     poss := make(map[string]int, 0)
 
