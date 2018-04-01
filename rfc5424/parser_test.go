@@ -27,6 +27,20 @@ var testCases = []testCase{
 		nil,
 		"error parsing <nilvalue>",
 	},
+	// Prival too high
+	{
+		"<333>122 2018-11-22",
+		false,
+		nil,
+		"generic error",
+	},
+	// Missing version
+	{
+		"<100> 2018-11-22",
+		false,
+		nil,
+		"generic error",
+	},
 	// Incomplete date
 	{
 		"<191>123 2018-02-29",
@@ -34,7 +48,7 @@ var testCases = []testCase{
 		nil,
 		"error parsing <nilvalue>",
 	},
-	// Right date
+	// All Right with date
 	{
 		"<187>222 1985-04-12T23:20:50.003Z",
 		true,
@@ -58,6 +72,38 @@ var testCases = []testCase{
 			},
 		},
 		"",
+	},
+	// All Right with nilvalue (-) as date
+	{
+		"<187>222 -",
+		true,
+		&SyslogMessage{
+			Header: Header{
+				Pri: Pri{
+					Prival: Prival{
+						Facility: Facility{
+							Code: 23,
+						},
+						Severity: Severity{
+							Code: 3,
+						},
+						Value: 187,
+					},
+				},
+				Version: Version{
+					Value: 222,
+				},
+				Timestamp: nil,
+			},
+		},
+		"",
+	},
+	// All Right but prival too high
+	{
+		"<999>222 1985-04-12T23:20:50.003Z",
+		false,
+		nil,
+		"generic error",
 	},
 }
 
