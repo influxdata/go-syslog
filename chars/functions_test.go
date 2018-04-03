@@ -1,4 +1,4 @@
-package util
+package chars
 
 import (
 	"testing"
