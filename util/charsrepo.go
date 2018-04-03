@@ -25,8 +25,9 @@ func (cr *CharsRepo) clear() {
 // Reduce returns the integer representation of the UTF-8 characters added to the chars repo
 func (cr *CharsRepo) Reduce() *int {
 	cr.mu.Lock()
-	defer cr.mu.Unlock()
 	defer cr.clear()
+	defer cr.mu.Unlock()
+
 	res, _ := UTF8DecimalCodePointsToInt(cr.chars)
 	return res
 }

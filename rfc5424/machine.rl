@@ -1,6 +1,9 @@
 %%{
 machine rfc5424;
 
+# unsigned alphabet
+alphtype uint8;
+
 action add_char {
     cr.Add(fc)
 }
@@ -18,8 +21,7 @@ action tag_rfc3339 {
 }
 
 action set_rfc3339 {
-    t, e := time.Parse(time.RFC3339Nano, data[poss["timestamp:ini"]:p])
-    if e != nil {
+    if t, e := time.Parse(time.RFC3339Nano, data[poss["timestamp:ini"]:p]); e != nil {
         err = fmt.Errorf("error %s [col %d:%d]", e, poss["timestamp:ini"], p);
         fhold; fgoto line;
     } else {
@@ -41,6 +43,11 @@ nonzerodigit = '1'..'9';
 sexagesimal = '0'..'5' . '0'..'9';
 
 printusascii = '!'..'~';
+
+# 1..191 or 0
+prival = (('1' ( '9' ( '0'..'1' ){,1} | '0'..'8' ( '0'..'9' ){,1} ){,1}) | ( '2'..'9' ('0'..'9'){,1} )) | '0';
+
+pri = '<' . prival $add_char %set_prival . '>';
 
 version = (nonzerodigit . digit{0,2}) $add_char %set_version;
 
@@ -72,15 +79,36 @@ timestamp = nilvalue | (fulldate >tag_rfc3339 . 'T' . fulltime %set_rfc3339);
 
 hostname = nilvalue | printusascii{1,255};
 
-# 1..191 or 0
-prival = (('1' ( '9' ( '0'..'1' ){,1} | '0'..'8' ( '0'..'9' ){,1} ){,1}) | ( '2'..'9' ('0'..'9'){,1} )) | '0';
+appname = nilvalue | printusascii{1,48};
 
-pri = '<' . prival $add_char %set_prival . '>';
+procid = nilvalue | printusascii{1,128};
 
-header = pri . version . sp . timestamp;
+msgid = nilvalue | printusascii{1,32};
+
+header = pri . version . sp . timestamp . sp . hostname . sp . procid . sp . msgid;
+
+utf8string = any*; # (todo)
+
+sdname = printusascii{1,32} -- ('=' | sp | ']' | '"');
+
+paramvalue = utf8string; # (todo) > escape '"', '\' and ']'
+
+sdparam = paramname:sdname . '=' . '"' . paramvalue . '"';
+
+sdelement = '[' . sdid:sdname . (sp sdparam)* . ']';
+
+structureddata = nilvalue | sdelement+;
+
+bom = 0xEF . 0xBB . 0xBF;
+
+msgutf8 = bom . utf8string;
+
+msgany = any*;
+
+msg = msgany | msgutf8;
 
 line := (any - [\n\r])* @{ fgoto main; }; # [^\n]* '\n' @{ fgoto main; }; 
 
-main := header;
+main := header . sp . structureddata . (sp msg)?;
 
 }%%
