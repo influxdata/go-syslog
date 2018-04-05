@@ -3,7 +3,7 @@ package rfc5424
 import (
   "fmt"
   "time"
-  "github.com/influxdata/go-syslog/util"
+  "github.com/influxdata/go-syslog/chars"
 )
  
 %%{
@@ -16,7 +16,7 @@ func Parse(data string) (*SyslogMessage, error) {
 
     _ = eof
 
-    cr := util.NewCharsRepo()
+    cr := chars.NewRepo()
 
     poss := make(map[string]int, 0)
 
@@ -25,6 +25,10 @@ func Parse(data string) (*SyslogMessage, error) {
     var prival *Prival
     var version *Version
     var timestamp *time.Time
+    var hostname string
+    var appname string
+    var procid string
+    var msgid string
 
     %%{
       include rfc5424 "machine.rl";
@@ -44,6 +48,10 @@ func Parse(data string) (*SyslogMessage, error) {
         },
         Version: *version,
         Timestamp: timestamp,
+        Hostname: hostname,
+        Appname: appname,
+        ProcID: procid,
+        MsgID: msgid,
       },
     }, nil
 }

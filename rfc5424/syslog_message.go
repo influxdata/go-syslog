@@ -5,8 +5,8 @@ import "time"
 // SyslogMessage represents a syslog message
 type SyslogMessage struct {
 	Header
-	// StructuredData
-	// Message
+	StructuredData
+	Message string
 }
 
 // Header represents the header of a syslog message
@@ -14,8 +14,14 @@ type Header struct {
 	Pri
 	Version
 	Timestamp *time.Time
-	// Hostname
+	Hostname  string
+	Appname   string
+	ProcID    string
+	MsgID     string
 }
 
-// type StructuredData struct {
-// }
+// StructuredData representes the element described at https://tools.ietf.org/html/rfc5424#section-6.3
+type StructuredData struct {
+	Name   string
+	Params map[string]string
+}

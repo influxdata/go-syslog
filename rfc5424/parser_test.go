@@ -21,90 +21,100 @@ func timeParse(layout, value string) *time.Time {
 
 var testCases = []testCase{
 	// Wrong date
-	{
-		"<101>122 201-11-22",
-		false,
-		nil,
-		"error parsing <nilvalue>",
-	},
+	// {
+	// 	"<101>122 201-11-22",
+	// 	false,
+	// 	nil,
+	// 	"error parsing <nilvalue>",
+	// },
 	// Prival too high
-	{
-		"<333>122 2018-11-22",
-		false,
-		nil,
-		"generic error",
-	},
+	// {
+	// 	"<333>122 2018-11-22",
+	// 	false,
+	// 	nil,
+	// 	"generic error",
+	// },
 	// Missing version
-	{
-		"<100> 2018-11-22",
-		false,
-		nil,
-		"generic error",
-	},
+	// {
+	// 	"<100> 2018-11-22",
+	// 	false,
+	// 	nil,
+	// 	"generic error",
+	// },
 	// Incomplete date
+	// {
+	// 	"<191>123 2018-02-29",
+	// 	false,
+	// 	nil,
+	// 	"error parsing <nilvalue>",
+	// },
+	// All right but without structured data
 	{
-		"<191>123 2018-02-29",
-		false,
-		nil,
-		"error parsing <nilvalue>",
-	},
-	// All Right with date
-	{
-		"<187>222 1985-04-12T23:20:50.003Z",
+		"<34>1 2003-10-11T22:14:15.003Z mymachine.example.com su - ID47 - BOM'su root' failed for lonvick on /dev/pts/8", // need bom of utf8 encoded string
 		true,
 		&SyslogMessage{
 			Header: Header{
 				Pri: Pri{
 					Prival: Prival{
 						Facility: Facility{
-							Code: 23,
+							Code: 4,
 						},
 						Severity: Severity{
-							Code: 3,
+							Code: 2,
 						},
-						Value: 187,
+						Value: 34,
 					},
 				},
 				Version: Version{
-					Value: 222,
+					Value: 1,
 				},
-				Timestamp: timeParse(time.RFC3339Nano, "1985-04-12T23:20:50.003Z"),
+				Timestamp: timeParse(time.RFC3339Nano, "2003-10-11T22:14:15.003Z"),
+				Hostname:  "mymachine.example.com",
+				Appname:   "su",
+				ProcID:    "",
+				MsgID:     "ID47",
 			},
 		},
 		"",
 	},
-	// All Right with nilvalue (-) as date
-	{
-		"<187>222 -",
-		true,
-		&SyslogMessage{
-			Header: Header{
-				Pri: Pri{
-					Prival: Prival{
-						Facility: Facility{
-							Code: 23,
-						},
-						Severity: Severity{
-							Code: 3,
-						},
-						Value: 187,
-					},
-				},
-				Version: Version{
-					Value: 222,
-				},
-				Timestamp: nil,
-			},
-		},
-		"",
-	},
-	// All Right but prival too high
-	{
-		"<999>222 1985-04-12T23:20:50.003Z",
-		false,
-		nil,
-		"generic error",
-	},
+	// All right with nilvalue (-) as date
+	// {
+	// 	"<187>222 -",
+	// 	true,
+	// 	&SyslogMessage{
+	// 		Header: Header{
+	// 			Pri: Pri{
+	// 				Prival: Prival{
+	// 					Facility: Facility{
+	// 						Code: 23,
+	// 					},
+	// 					Severity: Severity{
+	// 						Code: 3,
+	// 					},
+	// 					Value: 187,
+	// 				},
+	// 			},
+	// 			Version: Version{
+	// 				Value: 222,
+	// 			},
+	// 			Timestamp: nil,
+	// 		},
+	// 	},
+	// 	"",
+	// },
+	// All right but prival too high
+	// {
+	// 	"<999>222 1985-04-12T23:20:50.003Z",
+	// 	false,
+	// 	nil,
+	// 	"generic error",
+	// },
+	// {
+	// 	"<999>222 1985-04-12T23:20:50.003Z hostname",
+	// 	false,
+	// 	nil,
+	// 	"generic error",
+	// },
 }
 
 func TestParse(t *testing.T) {

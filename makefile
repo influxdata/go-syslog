@@ -1,9 +1,10 @@
-.PHONY: generate graph test
+.PHONY: generate graph test clean bench
 
 docs/rfc5424_parser.dot: rfc5424/parser.rl
 	ragel -Vp rfc5424/parser.rl -o $@
 
-graph: docs/rfc5424_parser.dot
+graph: 
+	ragel -Z -Vp rfc5424/parser.rl -o docs/rfc5424_parser.dot
 
 rfc5424/parser.rl: rfc5424/machine.rl
 
@@ -20,3 +21,4 @@ bench: generate
 
 clean:
 	rm -f rfc5424/parser.go
+

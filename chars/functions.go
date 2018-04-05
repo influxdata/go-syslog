@@ -44,3 +44,14 @@ func UTF8DecimalCodePointsToString(chars []uint8) (*string, error) {
 
 	return &out, nil
 }
+
+func UnsafeUTF8DecimalCodePointsToInt(chars []uint8) int {
+	out := 0
+	ord := 1
+	for i := len(chars) - 1; i >= 0; i-- {
+		curchar := int(chars[i])
+		out += (curchar - '0') * ord
+		ord *= 10
+	}
+	return out
+}
