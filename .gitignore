@@ -3,3 +3,4 @@ debug.test
 .vscode/
 
 *.out
+*.dot
