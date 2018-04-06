@@ -197,9 +197,9 @@ sexagesimal = '0'..'5' . '0'..'9';
 printusascii = '!'..'~';
 
 # 1..191 or 0
-prival = (('1' ( '9' ( '0'..'1' ){,1} | '0'..'8' ( '0'..'9' ){,1} ){,1}) | ( '2'..'9' ('0'..'9'){,1} )) | '0' $err(err_prival);
+prival = ((('1' ( '9' ( '0'..'1' ){,1} | '0'..'8' ( '0'..'9' ){,1} ){,1}) | ( '2'..'9' ('0'..'9'){,1} )) | '0');
 
-pri = '<' prival >mark %set_prival '>' >err(err_pri);
+pri = ('<' (prival >mark %set_prival $lerr(err_prival)) '>') >err(err_pri); # try <>lerr(err_prival)
 
 version = (nonzerodigit digit{0,2}) >mark %set_version $err(err_version);
 
@@ -227,6 +227,7 @@ partialtime = timehour ':' timeminute ':' timesecond . timesecfrac?;
 
 fulltime = partialtime . timeoffset;
 
+# (todo) > use @err(...) and introduce a generic error to the root level?
 timestamp = nilvalue | (fulldate >mark 'T' fulltime %set_timestamp) $err(err_timestamp); 
 
 hostname = nilvalue | printusascii{1,255} >mark %set_hostname $err(err_hostname); 

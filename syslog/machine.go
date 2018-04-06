@@ -25,20 +25,20 @@ var (
 )
 
 
-//line syslog/machine.go.rl:285
+//line syslog/machine.go.rl:286
 
 
 
 //line syslog/machine.go:33
 const rfc5424_start int = 1
-const rfc5424_first_final int = 658
+const rfc5424_first_final int = 657
 const rfc5424_error int = 0
 
-const rfc5424_en_line int = 657
+const rfc5424_en_line int = 656
 const rfc5424_en_main int = 1
 
 
-//line syslog/machine.go.rl:288
+//line syslog/machine.go.rl:289
 
 type machine struct {
 	data       		[]byte
@@ -57,8 +57,6 @@ func NewMachine() *machine {
 	}
 
 	
-//line syslog/machine.go.rl:306
-	
 //line syslog/machine.go.rl:307
 	
 //line syslog/machine.go.rl:308
@@ -66,6 +64,8 @@ func NewMachine() *machine {
 //line syslog/machine.go.rl:309
 	
 //line syslog/machine.go.rl:310
+	
+//line syslog/machine.go.rl:311
 
 	return m
 }
@@ -100,7 +100,7 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
 	 m.cs = rfc5424_start
 	}
 
-//line syslog/machine.go.rl:339
+//line syslog/machine.go.rl:340
     
 //line syslog/machine.go:106
 	{
@@ -142,12 +142,12 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
 		goto st_case_15
 	case 16:
 		goto st_case_16
+	case 657:
+		goto st_case_657
 	case 658:
 		goto st_case_658
 	case 659:
 		goto st_case_659
-	case 660:
-		goto st_case_660
 	case 17:
 		goto st_case_17
 	case 18:
@@ -296,6 +296,8 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
 		goto st_case_89
 	case 90:
 		goto st_case_90
+	case 660:
+		goto st_case_660
 	case 661:
 		goto st_case_661
 	case 662:
@@ -440,8 +442,6 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
 		goto st_case_731
 	case 732:
 		goto st_case_732
-	case 733:
-		goto st_case_733
 	case 91:
 		goto st_case_91
 	case 92:
@@ -570,8 +570,8 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
 		goto st_case_153
 	case 154:
 		goto st_case_154
-	case 734:
-		goto st_case_734
+	case 733:
+		goto st_case_733
 	case 155:
 		goto st_case_155
 	case 156:
@@ -1576,10 +1576,8 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
 		goto st_case_655
 	case 656:
 		goto st_case_656
-	case 657:
-		goto st_case_657
-	case 735:
-		goto st_case_735
+	case 734:
+		goto st_case_734
 	}
 	goto st_out
 	st1:
@@ -1590,52 +1588,44 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
 		if ( m.data)[( m.p)] == 60 {
 			goto st2
 		}
-		goto st0
+		goto tr0
+tr0:
+//line syslog/machine.go.rl:111
+
+	m.err = fmt.Errorf(errPri, m.p)
+	( m.p)--
+
+    {goto st656 }
+    {( m.p)++;  m.cs = 0; goto _out }
+
+	goto st0
 tr2:
 //line syslog/machine.go.rl:104
 
 	m.err = fmt.Errorf(errPrival, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
-tr6:
-//line syslog/machine.go.rl:104
-
-	m.err = fmt.Errorf(errPrival, m.p)
-	( m.p)--
-
-    {goto st657 }
-    {( m.p)++;  m.cs = 0; goto _out }
-
-//line syslog/machine.go.rl:111
-
-	m.err = fmt.Errorf(errPri, m.p)
-	( m.p)--
-
-    {goto st657 }
-    {( m.p)++;  m.cs = 0; goto _out }
-
-	goto st0
-tr8:
+tr7:
 //line syslog/machine.go.rl:118
 
 	m.err = fmt.Errorf(errVersion, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
-tr12:
+tr11:
 //line syslog/machine.go.rl:125
 
 	m.err = fmt.Errorf(errTimestamp, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
@@ -1645,7 +1635,7 @@ tr16:
 	m.err = fmt.Errorf(errHostname, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
@@ -1655,7 +1645,7 @@ tr20:
 	m.err = fmt.Errorf(errAppname, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
@@ -1665,7 +1655,7 @@ tr24:
 	m.err = fmt.Errorf(errProcid, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
@@ -1675,7 +1665,7 @@ tr28:
 	m.err = fmt.Errorf(errMsgid, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
@@ -1685,7 +1675,7 @@ tr32:
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
@@ -1695,7 +1685,7 @@ tr35:
 	m.err = fmt.Errorf(errSdID, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 //line syslog/machine.go.rl:160
@@ -1703,7 +1693,7 @@ tr35:
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
@@ -1713,7 +1703,7 @@ tr40:
 	m.err = fmt.Errorf(errSdParam, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 //line syslog/machine.go.rl:160
@@ -1721,21 +1711,11 @@ tr40:
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
-tr674:
-//line syslog/machine.go.rl:111
-
-	m.err = fmt.Errorf(errPri, m.p)
-	( m.p)--
-
-    {goto st657 }
-    {( m.p)++;  m.cs = 0; goto _out }
-
-	goto st0
-//line syslog/machine.go:1739
+//line syslog/machine.go:1719
 st_case_0:
 	st0:
 		 m.cs = 0
@@ -1766,12 +1746,12 @@ tr3:
 			goto _test_eof3
 		}
 	st_case_3:
-//line syslog/machine.go:1770
+//line syslog/machine.go:1750
 		if ( m.data)[( m.p)] == 62 {
-			goto tr7
+			goto tr6
 		}
-		goto tr6
-tr7:
+		goto tr2
+tr6:
 //line syslog/machine.go.rl:35
 
 	m.repository["prival"] = uint8(chars.UnsafeUTF8DecimalCodePointsToInt(m.text()))
@@ -1782,12 +1762,12 @@ tr7:
 			goto _test_eof4
 		}
 	st_case_4:
-//line syslog/machine.go:1786
+//line syslog/machine.go:1766
 		if 49 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
-			goto tr9
+			goto tr8
 		}
-		goto tr8
-tr9:
+		goto tr7
+tr8:
 //line syslog/machine.go.rl:31
 
 	m.pb = m.p
@@ -1798,15 +1778,15 @@ tr9:
 			goto _test_eof5
 		}
 	st_case_5:
-//line syslog/machine.go:1802
+//line syslog/machine.go:1782
 		if ( m.data)[( m.p)] == 32 {
-			goto tr10
+			goto tr9
 		}
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st651
 		}
-		goto tr8
-tr10:
+		goto tr7
+tr9:
 //line syslog/machine.go.rl:39
 
 	m.repository["version"] = uint16(chars.UnsafeUTF8DecimalCodePointsToInt(m.text()))
@@ -1817,14 +1797,14 @@ tr10:
 			goto _test_eof6
 		}
 	st_case_6:
-//line syslog/machine.go:1821
+//line syslog/machine.go:1801
 		if ( m.data)[( m.p)] == 45 {
 			goto st7
 		}
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
-			goto tr14
+			goto tr13
 		}
-		goto tr12
+		goto tr11
 	st7:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof7
@@ -1841,7 +1821,7 @@ tr666:
         m.err = e
 		( m.p)--
 
-    	{goto st657 }
+    	{goto st656 }
     	{( m.p)++;  m.cs = 8; goto _out }
     } else {
         m.repository["timestamp"] = t
@@ -1853,7 +1833,7 @@ tr666:
 			goto _test_eof8
 		}
 	st_case_8:
-//line syslog/machine.go:1857
+//line syslog/machine.go:1837
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto tr17
 		}
@@ -1869,7 +1849,7 @@ tr17:
 			goto _test_eof9
 		}
 	st_case_9:
-//line syslog/machine.go:1873
+//line syslog/machine.go:1853
 		if ( m.data)[( m.p)] == 32 {
 			goto tr18
 		}
@@ -1890,7 +1870,7 @@ tr18:
 			goto _test_eof10
 		}
 	st_case_10:
-//line syslog/machine.go:1894
+//line syslog/machine.go:1874
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto tr21
 		}
@@ -1906,7 +1886,7 @@ tr21:
 			goto _test_eof11
 		}
 	st_case_11:
-//line syslog/machine.go:1910
+//line syslog/machine.go:1890
 		if ( m.data)[( m.p)] == 32 {
 			goto tr22
 		}
@@ -1927,7 +1907,7 @@ tr22:
 			goto _test_eof12
 		}
 	st_case_12:
-//line syslog/machine.go:1931
+//line syslog/machine.go:1911
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto tr25
 		}
@@ -1943,7 +1923,7 @@ tr25:
 			goto _test_eof13
 		}
 	st_case_13:
-//line syslog/machine.go:1947
+//line syslog/machine.go:1927
 		if ( m.data)[( m.p)] == 32 {
 			goto tr26
 		}
@@ -1964,7 +1944,7 @@ tr26:
 			goto _test_eof14
 		}
 	st_case_14:
-//line syslog/machine.go:1968
+//line syslog/machine.go:1948
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto tr29
 		}
@@ -1980,7 +1960,7 @@ tr29:
 			goto _test_eof15
 		}
 	st_case_15:
-//line syslog/machine.go:1984
+//line syslog/machine.go:1964
 		if ( m.data)[( m.p)] == 32 {
 			goto tr30
 		}
@@ -2001,42 +1981,42 @@ tr30:
 			goto _test_eof16
 		}
 	st_case_16:
-//line syslog/machine.go:2005
+//line syslog/machine.go:1985
 		switch ( m.data)[( m.p)] {
 		case 45:
-			goto st658
+			goto st657
 		case 91:
 			goto tr34
 		}
 		goto tr32
+	st657:
+		if ( m.p)++; ( m.p) == ( m.pe) {
+			goto _test_eof657
+		}
+	st_case_657:
+		if ( m.data)[( m.p)] == 32 {
+			goto st658
+		}
+		goto st0
 	st658:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof658
 		}
 	st_case_658:
-		if ( m.data)[( m.p)] == 32 {
-			goto st659
-		}
-		goto st0
+		goto tr680
+tr680:
+//line syslog/machine.go.rl:31
+
+	m.pb = m.p
+
+	goto st659
 	st659:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof659
 		}
 	st_case_659:
-		goto tr681
-tr681:
-//line syslog/machine.go.rl:31
-
-	m.pb = m.p
-
-	goto st660
-	st660:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof660
-		}
-	st_case_660:
-//line syslog/machine.go:2039
-		goto st660
+//line syslog/machine.go:2019
+		goto st659
 tr34:
 //line syslog/machine.go.rl:78
 
@@ -2048,7 +2028,7 @@ tr34:
 			goto _test_eof17
 		}
 	st_case_17:
-//line syslog/machine.go:2052
+//line syslog/machine.go:2032
 		if ( m.data)[( m.p)] == 33 {
 			goto tr36
 		}
@@ -2076,7 +2056,7 @@ tr36:
 			goto _test_eof18
 		}
 	st_case_18:
-//line syslog/machine.go:2080
+//line syslog/machine.go:2060
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto tr37
@@ -2109,7 +2089,7 @@ tr37:
 			goto _test_eof19
 		}
 	st_case_19:
-//line syslog/machine.go:2113
+//line syslog/machine.go:2093
 		if ( m.data)[( m.p)] == 33 {
 			goto tr41
 		}
@@ -2137,7 +2117,7 @@ tr41:
 			goto _test_eof20
 		}
 	st_case_20:
-//line syslog/machine.go:2141
+//line syslog/machine.go:2121
 		switch ( m.data)[( m.p)] {
 		case 33:
 			goto st21
@@ -2773,7 +2753,7 @@ tr43:
 			goto _test_eof52
 		}
 	st_case_52:
-//line syslog/machine.go:2777
+//line syslog/machine.go:2757
 		if ( m.data)[( m.p)] == 34 {
 			goto st53
 		}
@@ -2798,7 +2778,7 @@ tr75:
 			goto _test_eof54
 		}
 	st_case_54:
-//line syslog/machine.go:2802
+//line syslog/machine.go:2782
 		if ( m.data)[( m.p)] == 34 {
 			goto tr78
 		}
@@ -2828,14 +2808,14 @@ tr78:
 			goto _test_eof55
 		}
 	st_case_55:
-//line syslog/machine.go:2832
+//line syslog/machine.go:2812
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto st56
 		case 34:
 			goto tr78
 		case 93:
-			goto st661
+			goto st660
 		}
 		goto st54
 tr115:
@@ -2859,7 +2839,7 @@ tr118:
 			goto _test_eof56
 		}
 	st_case_56:
-//line syslog/machine.go:2863
+//line syslog/machine.go:2843
 		if ( m.data)[( m.p)] == 34 {
 			goto tr78
 		}
@@ -2887,7 +2867,7 @@ tr81:
 			goto _test_eof57
 		}
 	st_case_57:
-//line syslog/machine.go:2891
+//line syslog/machine.go:2871
 		switch ( m.data)[( m.p)] {
 		case 34:
 			goto tr78
@@ -3526,7 +3506,7 @@ tr83:
 			goto _test_eof89
 		}
 	st_case_89:
-//line syslog/machine.go:3530
+//line syslog/machine.go:3510
 		if ( m.data)[( m.p)] == 34 {
 			goto tr114
 		}
@@ -3544,7 +3524,7 @@ tr114:
 			goto _test_eof90
 		}
 	st_case_90:
-//line syslog/machine.go:3548
+//line syslog/machine.go:3528
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto tr115
@@ -3559,7 +3539,7 @@ tr116:
 
 	m.pb = m.p
 
-	goto st661
+	goto st660
 tr120:
 //line syslog/machine.go.rl:82
 
@@ -3569,32 +3549,74 @@ tr120:
 		m.currentelem = id
 	}
 
-	goto st661
-	st661:
+	goto st660
+	st660:
 		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof661
+			goto _test_eof660
 		}
-	st_case_661:
-//line syslog/machine.go:3579
+	st_case_660:
+//line syslog/machine.go:3559
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto st662
+			goto st661
 		case 34:
 			goto tr78
 		case 91:
 			goto st91
 		}
 		goto st54
+	st661:
+		if ( m.p)++; ( m.p) == ( m.pe) {
+			goto _test_eof661
+		}
+	st_case_661:
+		if ( m.data)[( m.p)] == 34 {
+			goto tr685
+		}
+		goto tr684
+tr684:
+//line syslog/machine.go.rl:31
+
+	m.pb = m.p
+
+	goto st662
 	st662:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof662
 		}
 	st_case_662:
+//line syslog/machine.go:3589
 		if ( m.data)[( m.p)] == 34 {
-			goto tr686
+			goto tr687
 		}
-		goto tr685
+		goto st662
+tr725:
+//line syslog/machine.go.rl:31
+
+	m.pb = m.p
+
+//line syslog/machine.go.rl:94
+
+	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
+		elements[m.currentelem][m.currentparam] = string(m.text())
+	}
+
+	goto st663
+tr687:
+//line syslog/machine.go.rl:94
+
+	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
+		elements[m.currentelem][m.currentparam] = string(m.text())
+	}
+
+	goto st663
 tr685:
+//line syslog/machine.go.rl:94
+
+	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
+		elements[m.currentelem][m.currentparam] = string(m.text())
+	}
+
 //line syslog/machine.go.rl:31
 
 	m.pb = m.p
@@ -3605,65 +3627,23 @@ tr685:
 			goto _test_eof663
 		}
 	st_case_663:
-//line syslog/machine.go:3609
-		if ( m.data)[( m.p)] == 34 {
-			goto tr688
-		}
-		goto st663
-tr726:
-//line syslog/machine.go.rl:31
-
-	m.pb = m.p
-
-//line syslog/machine.go.rl:94
-
-	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
-		elements[m.currentelem][m.currentparam] = string(m.text())
-	}
-
-	goto st664
-tr688:
-//line syslog/machine.go.rl:94
-
-	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
-		elements[m.currentelem][m.currentparam] = string(m.text())
-	}
-
-	goto st664
-tr686:
-//line syslog/machine.go.rl:94
-
-	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
-		elements[m.currentelem][m.currentparam] = string(m.text())
-	}
-
-//line syslog/machine.go.rl:31
-
-	m.pb = m.p
-
-	goto st664
-	st664:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof664
-		}
-	st_case_664:
-//line syslog/machine.go:3651
+//line syslog/machine.go:3631
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto st665
+			goto st664
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto st700
+			goto st699
 		}
-		goto st663
-tr725:
+		goto st662
+tr724:
 //line syslog/machine.go.rl:31
 
 	m.pb = m.p
 
-	goto st665
-tr730:
+	goto st664
+tr729:
 //line syslog/machine.go.rl:82
 
 	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
@@ -3672,46 +3652,66 @@ tr730:
 		m.currentelem = id
 	}
 
+	goto st664
+	st664:
+		if ( m.p)++; ( m.p) == ( m.pe) {
+			goto _test_eof664
+		}
+	st_case_664:
+//line syslog/machine.go:3662
+		if ( m.data)[( m.p)] == 34 {
+			goto tr687
+		}
+		switch {
+		case ( m.data)[( m.p)] < 62:
+			if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 60 {
+				goto tr690
+			}
+		case ( m.data)[( m.p)] > 92:
+			if 94 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto tr690
+			}
+		default:
+			goto tr690
+		}
+		goto st662
+tr690:
+//line syslog/machine.go.rl:31
+
+	m.pb = m.p
+
 	goto st665
 	st665:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof665
 		}
 	st_case_665:
-//line syslog/machine.go:3682
-		if ( m.data)[( m.p)] == 34 {
-			goto tr688
+//line syslog/machine.go:3690
+		switch ( m.data)[( m.p)] {
+		case 34:
+			goto tr687
+		case 61:
+			goto tr692
 		}
 		switch {
-		case ( m.data)[( m.p)] < 62:
-			if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 60 {
-				goto tr691
-			}
 		case ( m.data)[( m.p)] > 92:
 			if 94 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto tr691
+				goto st666
 			}
-		default:
-			goto tr691
+		case ( m.data)[( m.p)] >= 33:
+			goto st666
 		}
-		goto st663
-tr691:
-//line syslog/machine.go.rl:31
-
-	m.pb = m.p
-
-	goto st666
+		goto st662
 	st666:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof666
 		}
 	st_case_666:
-//line syslog/machine.go:3710
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -3721,7 +3721,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st667
 		}
-		goto st663
+		goto st662
 	st667:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof667
@@ -3729,9 +3729,9 @@ tr691:
 	st_case_667:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -3741,7 +3741,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st668
 		}
-		goto st663
+		goto st662
 	st668:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof668
@@ -3749,9 +3749,9 @@ tr691:
 	st_case_668:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -3761,7 +3761,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st669
 		}
-		goto st663
+		goto st662
 	st669:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof669
@@ -3769,9 +3769,9 @@ tr691:
 	st_case_669:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -3781,7 +3781,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st670
 		}
-		goto st663
+		goto st662
 	st670:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof670
@@ -3789,9 +3789,9 @@ tr691:
 	st_case_670:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -3801,7 +3801,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st671
 		}
-		goto st663
+		goto st662
 	st671:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof671
@@ -3809,9 +3809,9 @@ tr691:
 	st_case_671:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -3821,7 +3821,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st672
 		}
-		goto st663
+		goto st662
 	st672:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof672
@@ -3829,9 +3829,9 @@ tr691:
 	st_case_672:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -3841,7 +3841,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st673
 		}
-		goto st663
+		goto st662
 	st673:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof673
@@ -3849,9 +3849,9 @@ tr691:
 	st_case_673:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -3861,7 +3861,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st674
 		}
-		goto st663
+		goto st662
 	st674:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof674
@@ -3869,9 +3869,9 @@ tr691:
 	st_case_674:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -3881,7 +3881,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st675
 		}
-		goto st663
+		goto st662
 	st675:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof675
@@ -3889,9 +3889,9 @@ tr691:
 	st_case_675:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -3901,7 +3901,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st676
 		}
-		goto st663
+		goto st662
 	st676:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof676
@@ -3909,9 +3909,9 @@ tr691:
 	st_case_676:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -3921,7 +3921,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st677
 		}
-		goto st663
+		goto st662
 	st677:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof677
@@ -3929,9 +3929,9 @@ tr691:
 	st_case_677:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -3941,7 +3941,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st678
 		}
-		goto st663
+		goto st662
 	st678:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof678
@@ -3949,9 +3949,9 @@ tr691:
 	st_case_678:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -3961,7 +3961,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st679
 		}
-		goto st663
+		goto st662
 	st679:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof679
@@ -3969,9 +3969,9 @@ tr691:
 	st_case_679:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -3981,7 +3981,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st680
 		}
-		goto st663
+		goto st662
 	st680:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof680
@@ -3989,9 +3989,9 @@ tr691:
 	st_case_680:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -4001,7 +4001,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st681
 		}
-		goto st663
+		goto st662
 	st681:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof681
@@ -4009,9 +4009,9 @@ tr691:
 	st_case_681:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -4021,7 +4021,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st682
 		}
-		goto st663
+		goto st662
 	st682:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof682
@@ -4029,9 +4029,9 @@ tr691:
 	st_case_682:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -4041,7 +4041,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st683
 		}
-		goto st663
+		goto st662
 	st683:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof683
@@ -4049,9 +4049,9 @@ tr691:
 	st_case_683:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -4061,7 +4061,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st684
 		}
-		goto st663
+		goto st662
 	st684:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof684
@@ -4069,9 +4069,9 @@ tr691:
 	st_case_684:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -4081,7 +4081,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st685
 		}
-		goto st663
+		goto st662
 	st685:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof685
@@ -4089,9 +4089,9 @@ tr691:
 	st_case_685:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -4101,7 +4101,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st686
 		}
-		goto st663
+		goto st662
 	st686:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof686
@@ -4109,9 +4109,9 @@ tr691:
 	st_case_686:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -4121,7 +4121,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st687
 		}
-		goto st663
+		goto st662
 	st687:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof687
@@ -4129,9 +4129,9 @@ tr691:
 	st_case_687:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -4141,7 +4141,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st688
 		}
-		goto st663
+		goto st662
 	st688:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof688
@@ -4149,9 +4149,9 @@ tr691:
 	st_case_688:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -4161,7 +4161,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st689
 		}
-		goto st663
+		goto st662
 	st689:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof689
@@ -4169,9 +4169,9 @@ tr691:
 	st_case_689:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -4181,7 +4181,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st690
 		}
-		goto st663
+		goto st662
 	st690:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof690
@@ -4189,9 +4189,9 @@ tr691:
 	st_case_690:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -4201,7 +4201,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st691
 		}
-		goto st663
+		goto st662
 	st691:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof691
@@ -4209,9 +4209,9 @@ tr691:
 	st_case_691:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -4221,7 +4221,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st692
 		}
-		goto st663
+		goto st662
 	st692:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof692
@@ -4229,9 +4229,9 @@ tr691:
 	st_case_692:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -4241,7 +4241,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st693
 		}
-		goto st663
+		goto st662
 	st693:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof693
@@ -4249,9 +4249,9 @@ tr691:
 	st_case_693:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -4261,7 +4261,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st694
 		}
-		goto st663
+		goto st662
 	st694:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof694
@@ -4269,9 +4269,9 @@ tr691:
 	st_case_694:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -4281,7 +4281,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st695
 		}
-		goto st663
+		goto st662
 	st695:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof695
@@ -4289,9 +4289,9 @@ tr691:
 	st_case_695:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
 		switch {
 		case ( m.data)[( m.p)] > 92:
@@ -4301,7 +4301,7 @@ tr691:
 		case ( m.data)[( m.p)] >= 33:
 			goto st696
 		}
-		goto st663
+		goto st662
 	st696:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof696
@@ -4309,35 +4309,33 @@ tr691:
 	st_case_696:
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr688
+			goto tr687
 		case 61:
-			goto tr693
+			goto tr692
 		}
-		switch {
-		case ( m.data)[( m.p)] > 92:
-			if 94 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st697
-			}
-		case ( m.data)[( m.p)] >= 33:
-			goto st697
-		}
-		goto st663
+		goto st662
+tr692:
+//line syslog/machine.go.rl:90
+
+	m.currentparam = string(m.text())
+
+	goto st697
 	st697:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof697
 		}
 	st_case_697:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr688
-		case 61:
-			goto tr693
+//line syslog/machine.go:4329
+		if ( m.data)[( m.p)] == 34 {
+			goto tr723
 		}
-		goto st663
-tr693:
-//line syslog/machine.go.rl:90
+		goto st662
+tr723:
+//line syslog/machine.go.rl:94
 
-	m.currentparam = string(m.text())
+	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
+		elements[m.currentelem][m.currentparam] = string(m.text())
+	}
 
 	goto st698
 	st698:
@@ -4345,41 +4343,23 @@ tr693:
 			goto _test_eof698
 		}
 	st_case_698:
-//line syslog/machine.go:4349
-		if ( m.data)[( m.p)] == 34 {
-			goto tr724
-		}
-		goto st663
-tr724:
-//line syslog/machine.go.rl:94
-
-	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
-		elements[m.currentelem][m.currentparam] = string(m.text())
-	}
-
-	goto st699
-	st699:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof699
-		}
-	st_case_699:
-//line syslog/machine.go:4367
+//line syslog/machine.go:4347
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr725
+			goto tr724
 		case 34:
-			goto tr726
+			goto tr725
 		case 93:
-			goto tr727
+			goto tr726
 		}
-		goto tr685
-tr727:
+		goto tr684
+tr726:
 //line syslog/machine.go.rl:31
 
 	m.pb = m.p
 
-	goto st700
-tr732:
+	goto st699
+tr731:
 //line syslog/machine.go.rl:82
 
 	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
@@ -4388,62 +4368,84 @@ tr732:
 		m.currentelem = id
 	}
 
-	goto st700
+	goto st699
+	st699:
+		if ( m.p)++; ( m.p) == ( m.pe) {
+			goto _test_eof699
+		}
+	st_case_699:
+//line syslog/machine.go:4378
+		switch ( m.data)[( m.p)] {
+		case 32:
+			goto st661
+		case 34:
+			goto tr687
+		case 91:
+			goto st700
+		}
+		goto st662
 	st700:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof700
 		}
 	st_case_700:
-//line syslog/machine.go:4398
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto st662
-		case 34:
-			goto tr688
-		case 91:
-			goto st701
+		if ( m.data)[( m.p)] == 34 {
+			goto tr687
 		}
-		goto st663
+		switch {
+		case ( m.data)[( m.p)] < 62:
+			if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 60 {
+				goto tr728
+			}
+		case ( m.data)[( m.p)] > 92:
+			if 94 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto tr728
+			}
+		default:
+			goto tr728
+		}
+		goto st662
+tr728:
+//line syslog/machine.go.rl:31
+
+	m.pb = m.p
+
+	goto st701
 	st701:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof701
 		}
 	st_case_701:
-		if ( m.data)[( m.p)] == 34 {
-			goto tr688
+//line syslog/machine.go:4420
+		switch ( m.data)[( m.p)] {
+		case 32:
+			goto tr729
+		case 34:
+			goto tr687
+		case 93:
+			goto tr731
 		}
 		switch {
-		case ( m.data)[( m.p)] < 62:
-			if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 60 {
-				goto tr729
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st702
 			}
-		case ( m.data)[( m.p)] > 92:
-			if 94 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto tr729
-			}
-		default:
-			goto tr729
+		case ( m.data)[( m.p)] >= 33:
+			goto st702
 		}
-		goto st663
-tr729:
-//line syslog/machine.go.rl:31
-
-	m.pb = m.p
-
-	goto st702
+		goto st662
 	st702:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof702
 		}
 	st_case_702:
-//line syslog/machine.go:4440
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4453,7 +4455,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st703
 		}
-		goto st663
+		goto st662
 	st703:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof703
@@ -4461,11 +4463,11 @@ tr729:
 	st_case_703:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4475,7 +4477,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st704
 		}
-		goto st663
+		goto st662
 	st704:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof704
@@ -4483,11 +4485,11 @@ tr729:
 	st_case_704:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4497,7 +4499,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st705
 		}
-		goto st663
+		goto st662
 	st705:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof705
@@ -4505,11 +4507,11 @@ tr729:
 	st_case_705:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4519,7 +4521,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st706
 		}
-		goto st663
+		goto st662
 	st706:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof706
@@ -4527,11 +4529,11 @@ tr729:
 	st_case_706:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4541,7 +4543,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st707
 		}
-		goto st663
+		goto st662
 	st707:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof707
@@ -4549,11 +4551,11 @@ tr729:
 	st_case_707:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4563,7 +4565,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st708
 		}
-		goto st663
+		goto st662
 	st708:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof708
@@ -4571,11 +4573,11 @@ tr729:
 	st_case_708:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4585,7 +4587,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st709
 		}
-		goto st663
+		goto st662
 	st709:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof709
@@ -4593,11 +4595,11 @@ tr729:
 	st_case_709:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4607,7 +4609,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st710
 		}
-		goto st663
+		goto st662
 	st710:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof710
@@ -4615,11 +4617,11 @@ tr729:
 	st_case_710:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4629,7 +4631,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st711
 		}
-		goto st663
+		goto st662
 	st711:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof711
@@ -4637,11 +4639,11 @@ tr729:
 	st_case_711:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4651,7 +4653,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st712
 		}
-		goto st663
+		goto st662
 	st712:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof712
@@ -4659,11 +4661,11 @@ tr729:
 	st_case_712:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4673,7 +4675,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st713
 		}
-		goto st663
+		goto st662
 	st713:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof713
@@ -4681,11 +4683,11 @@ tr729:
 	st_case_713:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4695,7 +4697,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st714
 		}
-		goto st663
+		goto st662
 	st714:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof714
@@ -4703,11 +4705,11 @@ tr729:
 	st_case_714:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4717,7 +4719,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st715
 		}
-		goto st663
+		goto st662
 	st715:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof715
@@ -4725,11 +4727,11 @@ tr729:
 	st_case_715:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4739,7 +4741,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st716
 		}
-		goto st663
+		goto st662
 	st716:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof716
@@ -4747,11 +4749,11 @@ tr729:
 	st_case_716:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4761,7 +4763,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st717
 		}
-		goto st663
+		goto st662
 	st717:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof717
@@ -4769,11 +4771,11 @@ tr729:
 	st_case_717:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4783,7 +4785,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st718
 		}
-		goto st663
+		goto st662
 	st718:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof718
@@ -4791,11 +4793,11 @@ tr729:
 	st_case_718:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4805,7 +4807,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st719
 		}
-		goto st663
+		goto st662
 	st719:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof719
@@ -4813,11 +4815,11 @@ tr729:
 	st_case_719:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4827,7 +4829,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st720
 		}
-		goto st663
+		goto st662
 	st720:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof720
@@ -4835,11 +4837,11 @@ tr729:
 	st_case_720:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4849,7 +4851,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st721
 		}
-		goto st663
+		goto st662
 	st721:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof721
@@ -4857,11 +4859,11 @@ tr729:
 	st_case_721:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4871,7 +4873,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st722
 		}
-		goto st663
+		goto st662
 	st722:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof722
@@ -4879,11 +4881,11 @@ tr729:
 	st_case_722:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4893,7 +4895,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st723
 		}
-		goto st663
+		goto st662
 	st723:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof723
@@ -4901,11 +4903,11 @@ tr729:
 	st_case_723:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4915,7 +4917,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st724
 		}
-		goto st663
+		goto st662
 	st724:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof724
@@ -4923,11 +4925,11 @@ tr729:
 	st_case_724:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4937,7 +4939,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st725
 		}
-		goto st663
+		goto st662
 	st725:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof725
@@ -4945,11 +4947,11 @@ tr729:
 	st_case_725:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4959,7 +4961,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st726
 		}
-		goto st663
+		goto st662
 	st726:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof726
@@ -4967,11 +4969,11 @@ tr729:
 	st_case_726:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -4981,7 +4983,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st727
 		}
-		goto st663
+		goto st662
 	st727:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof727
@@ -4989,11 +4991,11 @@ tr729:
 	st_case_727:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -5003,7 +5005,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st728
 		}
-		goto st663
+		goto st662
 	st728:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof728
@@ -5011,11 +5013,11 @@ tr729:
 	st_case_728:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -5025,7 +5027,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st729
 		}
-		goto st663
+		goto st662
 	st729:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof729
@@ -5033,11 +5035,11 @@ tr729:
 	st_case_729:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -5047,7 +5049,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st730
 		}
-		goto st663
+		goto st662
 	st730:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof730
@@ -5055,11 +5057,11 @@ tr729:
 	st_case_730:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -5069,7 +5071,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st731
 		}
-		goto st663
+		goto st662
 	st731:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof731
@@ -5077,11 +5079,11 @@ tr729:
 	st_case_731:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
@@ -5091,7 +5093,7 @@ tr729:
 		case ( m.data)[( m.p)] >= 33:
 			goto st732
 		}
-		goto st663
+		goto st662
 	st732:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof732
@@ -5099,35 +5101,13 @@ tr729:
 	st_case_732:
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto tr730
+			goto tr729
 		case 34:
-			goto tr688
+			goto tr687
 		case 93:
-			goto tr732
+			goto tr731
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st733
-			}
-		case ( m.data)[( m.p)] >= 33:
-			goto st733
-		}
-		goto st663
-	st733:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof733
-		}
-	st_case_733:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr730
-		case 34:
-			goto tr688
-		case 93:
-			goto tr732
-		}
-		goto st663
+		goto st662
 	st91:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof91
@@ -5160,7 +5140,7 @@ tr117:
 			goto _test_eof92
 		}
 	st_case_92:
-//line syslog/machine.go:5164
+//line syslog/machine.go:5144
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto tr118
@@ -6533,16 +6513,16 @@ tr39:
 		m.currentelem = id
 	}
 
-	goto st734
-	st734:
+	goto st733
+	st733:
 		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof734
+			goto _test_eof733
 		}
-	st_case_734:
-//line syslog/machine.go:6543
+	st_case_733:
+//line syslog/machine.go:6523
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto st659
+			goto st658
 		case 91:
 			goto st17
 		}
@@ -12043,7 +12023,7 @@ tr39:
 			goto tr18
 		}
 		goto tr16
-tr14:
+tr13:
 //line syslog/machine.go.rl:31
 
 	m.pb = m.p
@@ -12054,11 +12034,11 @@ tr14:
 			goto _test_eof614
 		}
 	st_case_614:
-//line syslog/machine.go:12058
+//line syslog/machine.go:12038
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st615
 		}
-		goto tr12
+		goto tr11
 	st615:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof615
@@ -12067,7 +12047,7 @@ tr14:
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st616
 		}
-		goto tr12
+		goto tr11
 	st616:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof616
@@ -12076,7 +12056,7 @@ tr14:
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st617
 		}
-		goto tr12
+		goto tr11
 	st617:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof617
@@ -12085,7 +12065,7 @@ tr14:
 		if ( m.data)[( m.p)] == 45 {
 			goto st618
 		}
-		goto tr12
+		goto tr11
 	st618:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof618
@@ -12097,7 +12077,7 @@ tr14:
 		case 49:
 			goto st650
 		}
-		goto tr12
+		goto tr11
 	st619:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof619
@@ -12106,7 +12086,7 @@ tr14:
 		if 49 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st620
 		}
-		goto tr12
+		goto tr11
 	st620:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof620
@@ -12115,7 +12095,7 @@ tr14:
 		if ( m.data)[( m.p)] == 45 {
 			goto st621
 		}
-		goto tr12
+		goto tr11
 	st621:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof621
@@ -12130,7 +12110,7 @@ tr14:
 		if 49 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 50 {
 			goto st648
 		}
-		goto tr12
+		goto tr11
 	st622:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof622
@@ -12139,7 +12119,7 @@ tr14:
 		if 49 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st623
 		}
-		goto tr12
+		goto tr11
 	st623:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof623
@@ -12148,7 +12128,7 @@ tr14:
 		if ( m.data)[( m.p)] == 84 {
 			goto st624
 		}
-		goto tr12
+		goto tr11
 	st624:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof624
@@ -12160,7 +12140,7 @@ tr14:
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 49 {
 			goto st625
 		}
-		goto tr12
+		goto tr11
 	st625:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof625
@@ -12169,7 +12149,7 @@ tr14:
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st626
 		}
-		goto tr12
+		goto tr11
 	st626:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof626
@@ -12178,7 +12158,7 @@ tr14:
 		if ( m.data)[( m.p)] == 58 {
 			goto st627
 		}
-		goto tr12
+		goto tr11
 	st627:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof627
@@ -12187,7 +12167,7 @@ tr14:
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 53 {
 			goto st628
 		}
-		goto tr12
+		goto tr11
 	st628:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof628
@@ -12196,7 +12176,7 @@ tr14:
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st629
 		}
-		goto tr12
+		goto tr11
 	st629:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof629
@@ -12205,7 +12185,7 @@ tr14:
 		if ( m.data)[( m.p)] == 58 {
 			goto st630
 		}
-		goto tr12
+		goto tr11
 	st630:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof630
@@ -12214,7 +12194,7 @@ tr14:
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 53 {
 			goto st631
 		}
-		goto tr12
+		goto tr11
 	st631:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof631
@@ -12223,7 +12203,7 @@ tr14:
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st632
 		}
-		goto tr12
+		goto tr11
 	st632:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof632
@@ -12239,7 +12219,7 @@ tr14:
 		case 90:
 			goto st638
 		}
-		goto tr12
+		goto tr11
 	st633:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof633
@@ -12251,7 +12231,7 @@ tr14:
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 49 {
 			goto st634
 		}
-		goto tr12
+		goto tr11
 	st634:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof634
@@ -12260,7 +12240,7 @@ tr14:
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st635
 		}
-		goto tr12
+		goto tr11
 	st635:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof635
@@ -12269,7 +12249,7 @@ tr14:
 		if ( m.data)[( m.p)] == 58 {
 			goto st636
 		}
-		goto tr12
+		goto tr11
 	st636:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof636
@@ -12278,7 +12258,7 @@ tr14:
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 53 {
 			goto st637
 		}
-		goto tr12
+		goto tr11
 	st637:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof637
@@ -12287,7 +12267,7 @@ tr14:
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st638
 		}
-		goto tr12
+		goto tr11
 	st638:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof638
@@ -12296,7 +12276,7 @@ tr14:
 		if ( m.data)[( m.p)] == 32 {
 			goto tr666
 		}
-		goto tr12
+		goto tr11
 	st639:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof639
@@ -12305,7 +12285,7 @@ tr14:
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 51 {
 			goto st635
 		}
-		goto tr12
+		goto tr11
 	st640:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof640
@@ -12314,7 +12294,7 @@ tr14:
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st641
 		}
-		goto tr12
+		goto tr11
 	st641:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof641
@@ -12331,7 +12311,7 @@ tr14:
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st642
 		}
-		goto tr12
+		goto tr11
 	st642:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof642
@@ -12348,7 +12328,7 @@ tr14:
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st643
 		}
-		goto tr12
+		goto tr11
 	st643:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof643
@@ -12365,7 +12345,7 @@ tr14:
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st644
 		}
-		goto tr12
+		goto tr11
 	st644:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof644
@@ -12382,7 +12362,7 @@ tr14:
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st645
 		}
-		goto tr12
+		goto tr11
 	st645:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof645
@@ -12399,7 +12379,7 @@ tr14:
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st646
 		}
-		goto tr12
+		goto tr11
 	st646:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof646
@@ -12413,7 +12393,7 @@ tr14:
 		case 90:
 			goto st638
 		}
-		goto tr12
+		goto tr11
 	st647:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof647
@@ -12422,7 +12402,7 @@ tr14:
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 51 {
 			goto st626
 		}
-		goto tr12
+		goto tr11
 	st648:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof648
@@ -12431,7 +12411,7 @@ tr14:
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st623
 		}
-		goto tr12
+		goto tr11
 	st649:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof649
@@ -12440,7 +12420,7 @@ tr14:
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 49 {
 			goto st623
 		}
-		goto tr12
+		goto tr11
 	st650:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof650
@@ -12449,28 +12429,28 @@ tr14:
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 50 {
 			goto st620
 		}
-		goto tr12
+		goto tr11
 	st651:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof651
 		}
 	st_case_651:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr10
+			goto tr9
 		}
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st652
 		}
-		goto tr8
+		goto tr7
 	st652:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof652
 		}
 	st_case_652:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr10
+			goto tr9
 		}
-		goto tr8
+		goto tr7
 tr4:
 //line syslog/machine.go.rl:31
 
@@ -12482,17 +12462,17 @@ tr4:
 			goto _test_eof653
 		}
 	st_case_653:
-//line syslog/machine.go:12486
+//line syslog/machine.go:12466
 		switch ( m.data)[( m.p)] {
 		case 57:
-			goto st656
+			goto st655
 		case 62:
-			goto tr7
+			goto tr6
 		}
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 56 {
 			goto st654
 		}
-		goto tr674
+		goto tr2
 tr5:
 //line syslog/machine.go.rl:31
 
@@ -12504,58 +12484,49 @@ tr5:
 			goto _test_eof654
 		}
 	st_case_654:
-//line syslog/machine.go:12508
+//line syslog/machine.go:12488
 		if ( m.data)[( m.p)] == 62 {
-			goto tr7
+			goto tr6
 		}
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
-			goto st655
+			goto st3
 		}
-		goto tr674
+		goto tr2
 	st655:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof655
 		}
 	st_case_655:
 		if ( m.data)[( m.p)] == 62 {
-			goto tr7
+			goto tr6
 		}
-		goto tr674
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 49 {
+			goto st3
+		}
+		goto tr2
 	st656:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof656
 		}
 	st_case_656:
-		if ( m.data)[( m.p)] == 62 {
-			goto tr7
-		}
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 49 {
-			goto st655
-		}
-		goto tr674
-	st657:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof657
-		}
-	st_case_657:
 		switch ( m.data)[( m.p)] {
 		case 10:
-			goto tr679
+			goto tr678
 		case 13:
-			goto tr679
+			goto tr678
 		}
-		goto st657
-tr679:
-//line syslog/machine.go.rl:281
+		goto st656
+tr678:
+//line syslog/machine.go.rl:282
  ( m.p)--
  {goto st1 } 
-	goto st735
-	st735:
+	goto st734
+	st734:
 		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof735
+			goto _test_eof734
 		}
-	st_case_735:
-//line syslog/machine.go:12559
+	st_case_734:
+//line syslog/machine.go:12530
 		goto st0
 	st_out:
 	_test_eof1:  m.cs = 1; goto _test_eof
@@ -12574,9 +12545,9 @@ tr679:
 	_test_eof14:  m.cs = 14; goto _test_eof
 	_test_eof15:  m.cs = 15; goto _test_eof
 	_test_eof16:  m.cs = 16; goto _test_eof
+	_test_eof657:  m.cs = 657; goto _test_eof
 	_test_eof658:  m.cs = 658; goto _test_eof
 	_test_eof659:  m.cs = 659; goto _test_eof
-	_test_eof660:  m.cs = 660; goto _test_eof
 	_test_eof17:  m.cs = 17; goto _test_eof
 	_test_eof18:  m.cs = 18; goto _test_eof
 	_test_eof19:  m.cs = 19; goto _test_eof
@@ -12651,6 +12622,7 @@ tr679:
 	_test_eof88:  m.cs = 88; goto _test_eof
 	_test_eof89:  m.cs = 89; goto _test_eof
 	_test_eof90:  m.cs = 90; goto _test_eof
+	_test_eof660:  m.cs = 660; goto _test_eof
 	_test_eof661:  m.cs = 661; goto _test_eof
 	_test_eof662:  m.cs = 662; goto _test_eof
 	_test_eof663:  m.cs = 663; goto _test_eof
@@ -12723,7 +12695,6 @@ tr679:
 	_test_eof730:  m.cs = 730; goto _test_eof
 	_test_eof731:  m.cs = 731; goto _test_eof
 	_test_eof732:  m.cs = 732; goto _test_eof
-	_test_eof733:  m.cs = 733; goto _test_eof
 	_test_eof91:  m.cs = 91; goto _test_eof
 	_test_eof92:  m.cs = 92; goto _test_eof
 	_test_eof93:  m.cs = 93; goto _test_eof
@@ -12788,7 +12759,7 @@ tr679:
 	_test_eof152:  m.cs = 152; goto _test_eof
 	_test_eof153:  m.cs = 153; goto _test_eof
 	_test_eof154:  m.cs = 154; goto _test_eof
-	_test_eof734:  m.cs = 734; goto _test_eof
+	_test_eof733:  m.cs = 733; goto _test_eof
 	_test_eof155:  m.cs = 155; goto _test_eof
 	_test_eof156:  m.cs = 156; goto _test_eof
 	_test_eof157:  m.cs = 157; goto _test_eof
@@ -13291,33 +13262,32 @@ tr679:
 	_test_eof654:  m.cs = 654; goto _test_eof
 	_test_eof655:  m.cs = 655; goto _test_eof
 	_test_eof656:  m.cs = 656; goto _test_eof
-	_test_eof657:  m.cs = 657; goto _test_eof
-	_test_eof735:  m.cs = 735; goto _test_eof
+	_test_eof734:  m.cs = 734; goto _test_eof
 
 	_test_eof: {}
 	if ( m.p) == ( m.eof) {
 		switch  m.cs {
-		case 660, 663, 664, 665, 666, 667, 668, 669, 670, 671, 672, 673, 674, 675, 676, 677, 678, 679, 680, 681, 682, 683, 684, 685, 686, 687, 688, 689, 690, 691, 692, 693, 694, 695, 696, 697, 698, 699, 700, 701, 702, 703, 704, 705, 706, 707, 708, 709, 710, 711, 712, 713, 714, 715, 716, 717, 718, 719, 720, 721, 722, 723, 724, 725, 726, 727, 728, 729, 730, 731, 732, 733:
+		case 659, 662, 663, 664, 665, 666, 667, 668, 669, 670, 671, 672, 673, 674, 675, 676, 677, 678, 679, 680, 681, 682, 683, 684, 685, 686, 687, 688, 689, 690, 691, 692, 693, 694, 695, 696, 697, 698, 699, 700, 701, 702, 703, 704, 705, 706, 707, 708, 709, 710, 711, 712, 713, 714, 715, 716, 717, 718, 719, 720, 721, 722, 723, 724, 725, 726, 727, 728, 729, 730, 731, 732:
 //line syslog/machine.go.rl:100
 
 	m.repository["msg"] = string(m.text())
 
-		case 2:
+		case 2, 3, 653, 654, 655:
 //line syslog/machine.go.rl:104
 
 	m.err = fmt.Errorf(errPrival, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-		case 653, 654, 655, 656:
+		case 1:
 //line syslog/machine.go.rl:111
 
 	m.err = fmt.Errorf(errPri, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 4, 5, 651, 652:
@@ -13326,7 +13296,7 @@ tr679:
 	m.err = fmt.Errorf(errVersion, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 6, 614, 615, 616, 617, 618, 619, 620, 621, 622, 623, 624, 625, 626, 627, 628, 629, 630, 631, 632, 633, 634, 635, 636, 637, 638, 639, 640, 641, 642, 643, 644, 645, 646, 647, 648, 649, 650:
@@ -13335,7 +13305,7 @@ tr679:
 	m.err = fmt.Errorf(errTimestamp, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 8, 9, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545, 546, 547, 548, 549, 550, 551, 552, 553, 554, 555, 556, 557, 558, 559, 560, 561, 562, 563, 564, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 580, 581, 582, 583, 584, 585, 586, 587, 588, 589, 590, 591, 592, 593, 594, 595, 596, 597, 598, 599, 600, 601, 602, 603, 604, 605, 606, 607, 608, 609, 610, 611, 612, 613:
@@ -13344,7 +13314,7 @@ tr679:
 	m.err = fmt.Errorf(errHostname, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 10, 11, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359:
@@ -13353,7 +13323,7 @@ tr679:
 	m.err = fmt.Errorf(errAppname, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 12, 13, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312:
@@ -13362,7 +13332,7 @@ tr679:
 	m.err = fmt.Errorf(errProcid, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 14, 15, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185:
@@ -13371,7 +13341,7 @@ tr679:
 	m.err = fmt.Errorf(errMsgid, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 16:
@@ -13380,10 +13350,10 @@ tr679:
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-		case 659, 662:
+		case 658, 661:
 //line syslog/machine.go.rl:31
 
 	m.pb = m.p
@@ -13392,30 +13362,13 @@ tr679:
 
 	m.repository["msg"] = string(m.text())
 
-		case 3:
-//line syslog/machine.go.rl:104
-
-	m.err = fmt.Errorf(errPrival, m.p)
-	( m.p)--
-
-    {goto st657 }
-    {( m.p)++;  m.cs = 0; goto _out }
-
-//line syslog/machine.go.rl:111
-
-	m.err = fmt.Errorf(errPri, m.p)
-	( m.p)--
-
-    {goto st657 }
-    {( m.p)++;  m.cs = 0; goto _out }
-
 		case 17, 18, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154:
 //line syslog/machine.go.rl:167
 
 	m.err = fmt.Errorf(errSdID, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 //line syslog/machine.go.rl:160
@@ -13423,7 +13376,7 @@ tr679:
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90:
@@ -13432,7 +13385,7 @@ tr679:
 	m.err = fmt.Errorf(errSdParam, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 //line syslog/machine.go.rl:160
@@ -13440,7 +13393,7 @@ tr679:
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123:
@@ -13449,7 +13402,7 @@ tr679:
 	m.err = fmt.Errorf(errSdID, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 //line syslog/machine.go.rl:174
@@ -13457,7 +13410,7 @@ tr679:
 	m.err = fmt.Errorf(errSdParam, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 //line syslog/machine.go.rl:160
@@ -13465,17 +13418,17 @@ tr679:
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
 
-    {goto st657 }
+    {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line syslog/machine.go:13472
+//line syslog/machine.go:13425
 		}
 	}
 
 	_out: {}
 	}
 
-//line syslog/machine.go.rl:340
+//line syslog/machine.go.rl:341
 
     if m.cs < rfc5424_first_final {
         return nil, m.err
