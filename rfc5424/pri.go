@@ -1,4 +1,4 @@
-package syslog
+package rfc5424
 
 // Pri represents the container of the priority value of a syslog message
 type Pri struct {
