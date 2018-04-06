@@ -7,7 +7,7 @@ import (
 )
 
 func TestProva(t *testing.T) {
-	input := []byte("<22>1 2003-10-11T22:14:15.003Z mymachine.example.com evntslog - ID47 [id aaaa] freeformmessage?")
+	input := []byte("<22>1 2003-10-11T22:14:15.003Z mymachine.example.com evntslog - ID47 - ")
 	fsm := NewMachine()
 	res, err := fsm.Parse(input)
 

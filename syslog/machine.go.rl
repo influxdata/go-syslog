@@ -4,7 +4,6 @@ import (
 	"time"
 	"fmt"
     "github.com/influxdata/go-syslog/chars"
-	"github.com/davecgh/go-spew/spew"
 )
 
 var (
@@ -12,15 +11,15 @@ var (
 	errPrival = "expecting a priority value in the range 1-191 or equal to 0 [col %d]"
 	errPri = "expecting a priority value within angle brackets [col %d]"
 	errVersion = "expecting a version value in the range 1-999 [col %d]"
-	errTimestamp = "expecting a RFC3339 or a RFC3339NANO timestamp [col %d]"
-	errHostname = "expecting an hostname (from 1 to max 255 US-ASCII characters) [col %d]"
-	errAppname = "expecting an app-name (from 1 to max 48 US-ASCII characters) [col %d]"
-	errProcid = "expecting a procid (from 1 to max 128 US-ASCII characters) [col %d]"
+	errTimestamp = "expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col %d]"
+	errHostname = "expecting an hostname (from 1 to max 255 US-ASCII characters) or a nil value [col %d]"
+	errAppname = "expecting an app-name (from 1 to max 48 US-ASCII characters) or a nil value [col %d]"
+	errProcid = "expecting a procid (from 1 to max 128 US-ASCII characters) or a nil value [col %d]"
 	errMsgid = "expecting a msgid (from 1 to max 32 US-ASCII characters) [col %d]"
-	errStructuredData = "expecting a structured data section containing one or more elements [col %d]"
-	errSdElement = "expecting a structured data element (`[id ( key=\"value\")*]`) [col %d]"
+	errStructuredData = "expecting a structured data section containing one or more elements (`[id ( key=\"value\")*]+`) or a nil value [col %d]"
 	errSdID = "expecting a structured data element id (from 1 to max 32 US-ASCII characters, except `=`, ` `, `]`, and `\"`) [col %d]"
 	errSdParam = "expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters, except `=`, ` `, `]`, and `\"`) [col %d]"
+	errMsg = "expecting a free-form optional message in UTF-8 (starting with or without BOM) [col %d]"
 )
 
 %%{
@@ -165,13 +164,6 @@ action err_structureddata {
     fbreak;
 }
 
-action err_sdelement {
-	m.err = fmt.Errorf(errSdElement, m.p)
-	fhold;
-    fgoto line;
-    fbreak;
-}
-
 action err_sdid {
 	m.err = fmt.Errorf(errSdID, m.p)
 	fhold;
@@ -186,14 +178,12 @@ action err_sdparam {
     fbreak;
 }
 
-# (todo) > remove?
-action err_nilvalue {
-    m.err = fmt.Errorf(errNilValue, m.p)
-    fhold;
+action err_msg {
+	m.err = fmt.Errorf(errMsg, m.p)
+	fhold;
     fgoto line;
     fbreak;
 }
-
 
 nilvalue = '-';
 
@@ -272,11 +262,11 @@ paramvalue = utf8octets >mark %set_paramvalue; # (todo) > characters '"', '\' an
 
 paramname = sdname >mark %set_paramname;
 
-sdparam = paramname '=' '"' paramvalue '"' $err(err_sdparam);
+sdparam = (paramname '=' '"' paramvalue '"') $err(err_sdparam);
 
 sdid = sdname >mark %set_id $err(err_sdid);
 
-sdelement = '[' sdid (sp sdparam)* ']' $err(err_sdelement); 
+sdelement = ('[' sdid (sp sdparam)* ']'); 
 
 structureddata = nilvalue | sdelement+ >ini_elements $err(err_structureddata);
 
@@ -284,9 +274,9 @@ bom = 0xEF 0xBB 0xBF;
 
 msgutf8 = bom utf8octets;
 
-msgany = any*;
+msgany = utf8octets;
 
-msg = (msgany | msgutf8) >mark %set_msg;
+msg = (msgany | msgutf8) >mark %set_msg $err(err_msg);
 
 line := (any - [\n\r])* [\n\r] @{ fhold; fgoto main; };
 
@@ -347,8 +337,6 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
 
     %% write init;
     %% write exec;
-
-	spew.Dump(m)
 
     if m.cs < rfc5424_first_final {
         return nil, m.err
