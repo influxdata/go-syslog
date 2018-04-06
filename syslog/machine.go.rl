@@ -1,15 +1,26 @@
 package syslog
 
 import (
-    "errors"
 	"time"
-    "github.com/davecgh/go-spew/spew"
+	"fmt"
     "github.com/influxdata/go-syslog/chars"
+	"github.com/davecgh/go-spew/spew"
 )
 
 var (
-    errNilValue = errors.New("expected nilvalue>")
-	errTimestamp = errors.New("expected <timestamp>")
+    errNilValue = "expecting a dash indicating the nil value [col %d]"
+	errPrival = "expecting a priority value in the range 1-191 or equal to 0 [col %d]"
+	errPri = "expecting a priority value within angle brackets [col %d]"
+	errVersion = "expecting a version value in the range 1-999 [col %d]"
+	errTimestamp = "expecting a RFC3339 or a RFC3339NANO timestamp [col %d]"
+	errHostname = "expecting an hostname (from 1 to max 255 US-ASCII characters) [col %d]"
+	errAppname = "expecting an app-name (from 1 to max 48 US-ASCII characters) [col %d]"
+	errProcid = "expecting a procid (from 1 to max 128 US-ASCII characters) [col %d]"
+	errMsgid = "expecting a msgid (from 1 to max 32 US-ASCII characters) [col %d]"
+	errStructuredData = "expecting a structured data section containing one or more elements [col %d]"
+	errSdElement = "expecting a structured data element (`[id ( key=\"value\")*]`) [col %d]"
+	errSdID = "expecting a structured data element id (from 1 to max 32 US-ASCII characters, except `=`, ` `, `]`, and `\"`) [col %d]"
+	errSdParam = "expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters, except `=`, ` `, `]`, and `\"`) [col %d]"
 )
 
 %%{
@@ -23,11 +34,11 @@ action mark {
 }
 
 action set_prival {
-	m.repository["prival"] = chars.UnsafeUTF8DecimalCodePointsToInt(m.text())
+	m.repository["prival"] = uint8(chars.UnsafeUTF8DecimalCodePointsToInt(m.text()))
 }
 
 action set_version {
-	m.repository["version"] = chars.UnsafeUTF8DecimalCodePointsToInt(m.text())
+	m.repository["version"] = uint16(chars.UnsafeUTF8DecimalCodePointsToInt(m.text()))
 }
 
 action set_timestamp {
@@ -91,15 +102,93 @@ action set_msg {
 	m.repository["msg"] = string(m.text())
 }
 
-action err_timestamp {
-	m.err = errTimestamp
+action err_prival {
+	m.err = fmt.Errorf(errPrival, m.p)
 	fhold;
     fgoto line;
     fbreak;
 }
 
+action err_pri {
+	m.err = fmt.Errorf(errPri, m.p)
+	fhold;
+    fgoto line;
+    fbreak;
+}
+
+action err_version {
+	m.err = fmt.Errorf(errVersion, m.p)
+	fhold;
+    fgoto line;
+    fbreak;
+}
+
+action err_timestamp {
+	m.err = fmt.Errorf(errTimestamp, m.p)
+	fhold;
+    fgoto line;
+    fbreak;
+}
+
+action err_hostname {
+	m.err = fmt.Errorf(errHostname, m.p)
+	fhold;
+    fgoto line;
+    fbreak;
+}
+
+action err_appname {
+	m.err = fmt.Errorf(errAppname, m.p)
+	fhold;
+    fgoto line;
+    fbreak;
+}
+
+action err_procid {
+	m.err = fmt.Errorf(errProcid, m.p)
+	fhold;
+    fgoto line;
+    fbreak;
+}
+
+action err_msgid {
+	m.err = fmt.Errorf(errMsgid, m.p)
+	fhold;
+    fgoto line;
+    fbreak;
+}
+
+action err_structureddata {
+	m.err = fmt.Errorf(errStructuredData, m.p)
+	fhold;
+    fgoto line;
+    fbreak;
+}
+
+action err_sdelement {
+	m.err = fmt.Errorf(errSdElement, m.p)
+	fhold;
+    fgoto line;
+    fbreak;
+}
+
+action err_sdid {
+	m.err = fmt.Errorf(errSdID, m.p)
+	fhold;
+    fgoto line;
+    fbreak;
+}
+
+action err_sdparam {
+	m.err = fmt.Errorf(errSdParam, m.p)
+	fhold;
+    fgoto line;
+    fbreak;
+}
+
+# (todo) > remove?
 action err_nilvalue {
-    m.err = errNilValue
+    m.err = fmt.Errorf(errNilValue, m.p)
     fhold;
     fgoto line;
     fbreak;
@@ -118,11 +207,11 @@ sexagesimal = '0'..'5' . '0'..'9';
 printusascii = '!'..'~';
 
 # 1..191 or 0
-prival = (('1' ( '9' ( '0'..'1' ){,1} | '0'..'8' ( '0'..'9' ){,1} ){,1}) | ( '2'..'9' ('0'..'9'){,1} )) | '0';
+prival = (('1' ( '9' ( '0'..'1' ){,1} | '0'..'8' ( '0'..'9' ){,1} ){,1}) | ( '2'..'9' ('0'..'9'){,1} )) | '0' $err(err_prival);
 
-pri = '<'  prival >mark %set_prival '>';
+pri = '<' prival >mark %set_prival '>' >err(err_pri);
 
-version = (nonzerodigit digit{0,2}) >mark %set_version;
+version = (nonzerodigit digit{0,2}) >mark %set_version $err(err_version);
 
 datemday = ('0' . '1'..'9' | '1'..'2' . '0'..'9' | '3' . '0'..'1');
 
@@ -150,17 +239,18 @@ fulltime = partialtime . timeoffset;
 
 timestamp = nilvalue | (fulldate >mark 'T' fulltime %set_timestamp) $err(err_timestamp); 
 
-hostname = nilvalue | printusascii{1,255} >mark %set_hostname; 
+hostname = nilvalue | printusascii{1,255} >mark %set_hostname $err(err_hostname); 
 
-appname = nilvalue | printusascii{1,48} >mark %set_appname;
+appname = nilvalue | printusascii{1,48} >mark %set_appname $err(err_appname);
 
-procid = nilvalue | printusascii{1,128} >mark %set_procid;
+procid = nilvalue | printusascii{1,128} >mark %set_procid $err(err_procid);
 
-msgid = nilvalue | printusascii{1,32} >mark %set_msgid;
+msgid = nilvalue | printusascii{1,32} >mark %set_msgid $err(err_msgid);
 
 header = pri version sp timestamp sp hostname sp appname sp procid sp msgid;
 
-utf8octets = any*; # (todo) > substitute with correct ranges/rules (see below, rfc 3629)
+# (todo) > substitute with correct ranges/rules (see below, rfc 3629) or leave as is and check match is a valid UTF-8 via golang
+utf8octets = any*; 
 
 #utf8octets = utf8char*;
 
@@ -182,13 +272,13 @@ paramvalue = utf8octets >mark %set_paramvalue; # (todo) > characters '"', '\' an
 
 paramname = sdname >mark %set_paramname;
 
-sdparam = paramname '=' '"' paramvalue '"';
+sdparam = paramname '=' '"' paramvalue '"' $err(err_sdparam);
 
-sdid = sdname >mark %set_id;
+sdid = sdname >mark %set_id $err(err_sdid);
 
-sdelement = '[' sdid (sp sdparam)* ']'; 
+sdelement = '[' sdid (sp sdparam)* ']' $err(err_sdelement); 
 
-structureddata = nilvalue | sdelement+ >ini_elements;
+structureddata = nilvalue | sdelement+ >ini_elements $err(err_structureddata);
 
 bom = 0xEF 0xBB 0xBF;
 
@@ -198,7 +288,7 @@ msgany = any*;
 
 msg = (msgany | msgutf8) >mark %set_msg;
 
-line := (any - [\n\r])* @{ fgoto main; };
+line := (any - [\n\r])* [\n\r] @{ fhold; fgoto main; };
 
 main := header sp structureddata (sp msg)?;
 
@@ -227,7 +317,6 @@ func NewMachine() *machine {
 	%% variable pe m.pe;
 	%% variable eof m.eof;
 	%% variable data m.data;
-	%% write init;
 
 	return m
 }
@@ -248,7 +337,7 @@ func (m *machine) text() []byte {
 	return m.data[m.pb:m.p]
 }
 
-func (m *machine) Parse(input []byte) (bool, error) {
+func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
     m.data = input
 	m.p = 0
 	m.pb = 0
@@ -261,10 +350,12 @@ func (m *machine) Parse(input []byte) (bool, error) {
 
 	spew.Dump(m)
 
-    // m.cs == rfc5424_error
     if m.cs < rfc5424_first_final {
-        return false, m.err
+        return nil, m.err
     }
 
-    return true, nil
+	res := &SyslogMessage{}
+	res.fromMap(m.repository)
+
+    return res, nil
 }
