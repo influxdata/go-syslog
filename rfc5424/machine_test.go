@@ -1,4 +1,4 @@
-package syslog
+package rfc5424
 
 import (
 	"testing"

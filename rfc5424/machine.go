@@ -1,6 +1,6 @@
 
-//line syslog/machine.go.rl:1
-package syslog
+//line rfc5424/machine.go.rl:1
+package rfc5424
 
 import (
 	"time"
@@ -25,11 +25,11 @@ var (
 )
 
 
-//line syslog/machine.go.rl:286
+//line rfc5424/machine.go.rl:286
 
 
 
-//line syslog/machine.go:33
+//line rfc5424/machine.go:33
 const rfc5424_start int = 1
 const rfc5424_first_final int = 657
 const rfc5424_error int = 0
@@ -38,7 +38,7 @@ const rfc5424_en_line int = 656
 const rfc5424_en_main int = 1
 
 
-//line syslog/machine.go.rl:289
+//line rfc5424/machine.go.rl:289
 
 type machine struct {
 	data       		[]byte
@@ -57,15 +57,15 @@ func NewMachine() *machine {
 	}
 
 	
-//line syslog/machine.go.rl:307
+//line rfc5424/machine.go.rl:307
 	
-//line syslog/machine.go.rl:308
+//line rfc5424/machine.go.rl:308
 	
-//line syslog/machine.go.rl:309
+//line rfc5424/machine.go.rl:309
 	
-//line syslog/machine.go.rl:310
+//line rfc5424/machine.go.rl:310
 	
-//line syslog/machine.go.rl:311
+//line rfc5424/machine.go.rl:311
 
 	return m
 }
@@ -95,14 +95,14 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
 	m.err = nil
 
     
-//line syslog/machine.go:99
+//line rfc5424/machine.go:99
 	{
 	 m.cs = rfc5424_start
 	}
 
-//line syslog/machine.go.rl:340
+//line rfc5424/machine.go.rl:340
     
-//line syslog/machine.go:106
+//line rfc5424/machine.go:106
 	{
 	if ( m.p) == ( m.pe) {
 		goto _test_eof
@@ -1590,7 +1590,7 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
 		}
 		goto tr0
 tr0:
-//line syslog/machine.go.rl:111
+//line rfc5424/machine.go.rl:111
 
 	m.err = fmt.Errorf(errPri, m.p)
 	( m.p)--
@@ -1600,7 +1600,7 @@ tr0:
 
 	goto st0
 tr2:
-//line syslog/machine.go.rl:104
+//line rfc5424/machine.go.rl:104
 
 	m.err = fmt.Errorf(errPrival, m.p)
 	( m.p)--
@@ -1610,7 +1610,7 @@ tr2:
 
 	goto st0
 tr7:
-//line syslog/machine.go.rl:118
+//line rfc5424/machine.go.rl:118
 
 	m.err = fmt.Errorf(errVersion, m.p)
 	( m.p)--
@@ -1620,7 +1620,7 @@ tr7:
 
 	goto st0
 tr11:
-//line syslog/machine.go.rl:125
+//line rfc5424/machine.go.rl:125
 
 	m.err = fmt.Errorf(errTimestamp, m.p)
 	( m.p)--
@@ -1630,7 +1630,7 @@ tr11:
 
 	goto st0
 tr16:
-//line syslog/machine.go.rl:132
+//line rfc5424/machine.go.rl:132
 
 	m.err = fmt.Errorf(errHostname, m.p)
 	( m.p)--
@@ -1640,7 +1640,7 @@ tr16:
 
 	goto st0
 tr20:
-//line syslog/machine.go.rl:139
+//line rfc5424/machine.go.rl:139
 
 	m.err = fmt.Errorf(errAppname, m.p)
 	( m.p)--
@@ -1650,7 +1650,7 @@ tr20:
 
 	goto st0
 tr24:
-//line syslog/machine.go.rl:146
+//line rfc5424/machine.go.rl:146
 
 	m.err = fmt.Errorf(errProcid, m.p)
 	( m.p)--
@@ -1660,7 +1660,7 @@ tr24:
 
 	goto st0
 tr28:
-//line syslog/machine.go.rl:153
+//line rfc5424/machine.go.rl:153
 
 	m.err = fmt.Errorf(errMsgid, m.p)
 	( m.p)--
@@ -1670,7 +1670,7 @@ tr28:
 
 	goto st0
 tr32:
-//line syslog/machine.go.rl:160
+//line rfc5424/machine.go.rl:160
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -1680,7 +1680,7 @@ tr32:
 
 	goto st0
 tr35:
-//line syslog/machine.go.rl:167
+//line rfc5424/machine.go.rl:167
 
 	m.err = fmt.Errorf(errSdID, m.p)
 	( m.p)--
@@ -1688,7 +1688,7 @@ tr35:
     {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line syslog/machine.go.rl:160
+//line rfc5424/machine.go.rl:160
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -1698,7 +1698,7 @@ tr35:
 
 	goto st0
 tr40:
-//line syslog/machine.go.rl:174
+//line rfc5424/machine.go.rl:174
 
 	m.err = fmt.Errorf(errSdParam, m.p)
 	( m.p)--
@@ -1706,7 +1706,7 @@ tr40:
     {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line syslog/machine.go.rl:160
+//line rfc5424/machine.go.rl:160
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -1715,7 +1715,7 @@ tr40:
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
-//line syslog/machine.go:1719
+//line rfc5424/machine.go:1719
 st_case_0:
 	st0:
 		 m.cs = 0
@@ -1736,7 +1736,7 @@ st_case_0:
 		}
 		goto tr2
 tr3:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -1746,13 +1746,13 @@ tr3:
 			goto _test_eof3
 		}
 	st_case_3:
-//line syslog/machine.go:1750
+//line rfc5424/machine.go:1750
 		if ( m.data)[( m.p)] == 62 {
 			goto tr6
 		}
 		goto tr2
 tr6:
-//line syslog/machine.go.rl:35
+//line rfc5424/machine.go.rl:35
 
 	m.repository["prival"] = uint8(chars.UnsafeUTF8DecimalCodePointsToInt(m.text()))
 
@@ -1762,13 +1762,13 @@ tr6:
 			goto _test_eof4
 		}
 	st_case_4:
-//line syslog/machine.go:1766
+//line rfc5424/machine.go:1766
 		if 49 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto tr8
 		}
 		goto tr7
 tr8:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -1778,7 +1778,7 @@ tr8:
 			goto _test_eof5
 		}
 	st_case_5:
-//line syslog/machine.go:1782
+//line rfc5424/machine.go:1782
 		if ( m.data)[( m.p)] == 32 {
 			goto tr9
 		}
@@ -1787,7 +1787,7 @@ tr8:
 		}
 		goto tr7
 tr9:
-//line syslog/machine.go.rl:39
+//line rfc5424/machine.go.rl:39
 
 	m.repository["version"] = uint16(chars.UnsafeUTF8DecimalCodePointsToInt(m.text()))
 
@@ -1797,7 +1797,7 @@ tr9:
 			goto _test_eof6
 		}
 	st_case_6:
-//line syslog/machine.go:1801
+//line rfc5424/machine.go:1801
 		if ( m.data)[( m.p)] == 45 {
 			goto st7
 		}
@@ -1815,7 +1815,7 @@ tr9:
 		}
 		goto st0
 tr666:
-//line syslog/machine.go.rl:43
+//line rfc5424/machine.go.rl:43
 
 	if t, e := time.Parse(time.RFC3339Nano, string(m.text())); e != nil {
         m.err = e
@@ -1833,13 +1833,13 @@ tr666:
 			goto _test_eof8
 		}
 	st_case_8:
-//line syslog/machine.go:1837
+//line rfc5424/machine.go:1837
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto tr17
 		}
 		goto tr16
 tr17:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -1849,7 +1849,7 @@ tr17:
 			goto _test_eof9
 		}
 	st_case_9:
-//line syslog/machine.go:1853
+//line rfc5424/machine.go:1853
 		if ( m.data)[( m.p)] == 32 {
 			goto tr18
 		}
@@ -1858,7 +1858,7 @@ tr17:
 		}
 		goto tr16
 tr18:
-//line syslog/machine.go.rl:54
+//line rfc5424/machine.go.rl:54
 
 	if hostname := string(m.text()); hostname != "-" {
 		m.repository["hostname"] = hostname
@@ -1870,13 +1870,13 @@ tr18:
 			goto _test_eof10
 		}
 	st_case_10:
-//line syslog/machine.go:1874
+//line rfc5424/machine.go:1874
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto tr21
 		}
 		goto tr20
 tr21:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -1886,7 +1886,7 @@ tr21:
 			goto _test_eof11
 		}
 	st_case_11:
-//line syslog/machine.go:1890
+//line rfc5424/machine.go:1890
 		if ( m.data)[( m.p)] == 32 {
 			goto tr22
 		}
@@ -1895,7 +1895,7 @@ tr21:
 		}
 		goto tr20
 tr22:
-//line syslog/machine.go.rl:60
+//line rfc5424/machine.go.rl:60
 
 	if appname := string(m.text()); appname != "-" {
 		m.repository["appname"] = appname
@@ -1907,13 +1907,13 @@ tr22:
 			goto _test_eof12
 		}
 	st_case_12:
-//line syslog/machine.go:1911
+//line rfc5424/machine.go:1911
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto tr25
 		}
 		goto tr24
 tr25:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -1923,7 +1923,7 @@ tr25:
 			goto _test_eof13
 		}
 	st_case_13:
-//line syslog/machine.go:1927
+//line rfc5424/machine.go:1927
 		if ( m.data)[( m.p)] == 32 {
 			goto tr26
 		}
@@ -1932,7 +1932,7 @@ tr25:
 		}
 		goto tr24
 tr26:
-//line syslog/machine.go.rl:66
+//line rfc5424/machine.go.rl:66
 
 	if procid := string(m.text()); procid != "-" {
 		m.repository["procid"] = procid
@@ -1944,13 +1944,13 @@ tr26:
 			goto _test_eof14
 		}
 	st_case_14:
-//line syslog/machine.go:1948
+//line rfc5424/machine.go:1948
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto tr29
 		}
 		goto tr28
 tr29:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -1960,7 +1960,7 @@ tr29:
 			goto _test_eof15
 		}
 	st_case_15:
-//line syslog/machine.go:1964
+//line rfc5424/machine.go:1964
 		if ( m.data)[( m.p)] == 32 {
 			goto tr30
 		}
@@ -1969,7 +1969,7 @@ tr29:
 		}
 		goto tr28
 tr30:
-//line syslog/machine.go.rl:72
+//line rfc5424/machine.go.rl:72
 
 	if msgid := string(m.text()); msgid != "-" {
 		m.repository["msgid"] = msgid
@@ -1981,7 +1981,7 @@ tr30:
 			goto _test_eof16
 		}
 	st_case_16:
-//line syslog/machine.go:1985
+//line rfc5424/machine.go:1985
 		switch ( m.data)[( m.p)] {
 		case 45:
 			goto st657
@@ -2005,7 +2005,7 @@ tr30:
 	st_case_658:
 		goto tr680
 tr680:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -2015,10 +2015,10 @@ tr680:
 			goto _test_eof659
 		}
 	st_case_659:
-//line syslog/machine.go:2019
+//line rfc5424/machine.go:2019
 		goto st659
 tr34:
-//line syslog/machine.go.rl:78
+//line rfc5424/machine.go.rl:78
 
 	m.repository["elements"] = make(map[string]map[string]string)
 
@@ -2028,7 +2028,7 @@ tr34:
 			goto _test_eof17
 		}
 	st_case_17:
-//line syslog/machine.go:2032
+//line rfc5424/machine.go:2032
 		if ( m.data)[( m.p)] == 33 {
 			goto tr36
 		}
@@ -2046,7 +2046,7 @@ tr34:
 		}
 		goto tr35
 tr36:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -2056,7 +2056,7 @@ tr36:
 			goto _test_eof18
 		}
 	st_case_18:
-//line syslog/machine.go:2060
+//line rfc5424/machine.go:2060
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto tr37
@@ -2075,7 +2075,7 @@ tr36:
 		}
 		goto tr35
 tr37:
-//line syslog/machine.go.rl:82
+//line rfc5424/machine.go.rl:82
 
 	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
 		id := string(m.text())
@@ -2089,7 +2089,7 @@ tr37:
 			goto _test_eof19
 		}
 	st_case_19:
-//line syslog/machine.go:2093
+//line rfc5424/machine.go:2093
 		if ( m.data)[( m.p)] == 33 {
 			goto tr41
 		}
@@ -2107,7 +2107,7 @@ tr37:
 		}
 		goto tr40
 tr41:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -2117,7 +2117,7 @@ tr41:
 			goto _test_eof20
 		}
 	st_case_20:
-//line syslog/machine.go:2121
+//line rfc5424/machine.go:2121
 		switch ( m.data)[( m.p)] {
 		case 33:
 			goto st21
@@ -2743,7 +2743,7 @@ tr41:
 		}
 		goto tr40
 tr43:
-//line syslog/machine.go.rl:90
+//line rfc5424/machine.go.rl:90
 
 	m.currentparam = string(m.text())
 
@@ -2753,7 +2753,7 @@ tr43:
 			goto _test_eof52
 		}
 	st_case_52:
-//line syslog/machine.go:2757
+//line rfc5424/machine.go:2757
 		if ( m.data)[( m.p)] == 34 {
 			goto st53
 		}
@@ -2768,7 +2768,7 @@ tr43:
 		}
 		goto tr75
 tr75:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -2778,17 +2778,17 @@ tr75:
 			goto _test_eof54
 		}
 	st_case_54:
-//line syslog/machine.go:2782
+//line rfc5424/machine.go:2782
 		if ( m.data)[( m.p)] == 34 {
 			goto tr78
 		}
 		goto st54
 tr76:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
-//line syslog/machine.go.rl:94
+//line rfc5424/machine.go.rl:94
 
 	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
 		elements[m.currentelem][m.currentparam] = string(m.text())
@@ -2796,7 +2796,7 @@ tr76:
 
 	goto st55
 tr78:
-//line syslog/machine.go.rl:94
+//line rfc5424/machine.go.rl:94
 
 	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
 		elements[m.currentelem][m.currentparam] = string(m.text())
@@ -2808,7 +2808,7 @@ tr78:
 			goto _test_eof55
 		}
 	st_case_55:
-//line syslog/machine.go:2812
+//line rfc5424/machine.go:2812
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto st56
@@ -2819,13 +2819,13 @@ tr78:
 		}
 		goto st54
 tr115:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
 	goto st56
 tr118:
-//line syslog/machine.go.rl:82
+//line rfc5424/machine.go.rl:82
 
 	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
 		id := string(m.text())
@@ -2839,7 +2839,7 @@ tr118:
 			goto _test_eof56
 		}
 	st_case_56:
-//line syslog/machine.go:2843
+//line rfc5424/machine.go:2843
 		if ( m.data)[( m.p)] == 34 {
 			goto tr78
 		}
@@ -2857,7 +2857,7 @@ tr118:
 		}
 		goto st54
 tr81:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -2867,7 +2867,7 @@ tr81:
 			goto _test_eof57
 		}
 	st_case_57:
-//line syslog/machine.go:2871
+//line rfc5424/machine.go:2871
 		switch ( m.data)[( m.p)] {
 		case 34:
 			goto tr78
@@ -3496,7 +3496,7 @@ tr81:
 		}
 		goto st54
 tr83:
-//line syslog/machine.go.rl:90
+//line rfc5424/machine.go.rl:90
 
 	m.currentparam = string(m.text())
 
@@ -3506,13 +3506,13 @@ tr83:
 			goto _test_eof89
 		}
 	st_case_89:
-//line syslog/machine.go:3510
+//line rfc5424/machine.go:3510
 		if ( m.data)[( m.p)] == 34 {
 			goto tr114
 		}
 		goto st54
 tr114:
-//line syslog/machine.go.rl:94
+//line rfc5424/machine.go.rl:94
 
 	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
 		elements[m.currentelem][m.currentparam] = string(m.text())
@@ -3524,7 +3524,7 @@ tr114:
 			goto _test_eof90
 		}
 	st_case_90:
-//line syslog/machine.go:3528
+//line rfc5424/machine.go:3528
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto tr115
@@ -3535,13 +3535,13 @@ tr114:
 		}
 		goto tr75
 tr116:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
 	goto st660
 tr120:
-//line syslog/machine.go.rl:82
+//line rfc5424/machine.go.rl:82
 
 	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
 		id := string(m.text())
@@ -3555,7 +3555,7 @@ tr120:
 			goto _test_eof660
 		}
 	st_case_660:
-//line syslog/machine.go:3559
+//line rfc5424/machine.go:3559
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto st661
@@ -3575,7 +3575,7 @@ tr120:
 		}
 		goto tr684
 tr684:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -3585,17 +3585,17 @@ tr684:
 			goto _test_eof662
 		}
 	st_case_662:
-//line syslog/machine.go:3589
+//line rfc5424/machine.go:3589
 		if ( m.data)[( m.p)] == 34 {
 			goto tr687
 		}
 		goto st662
 tr725:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
-//line syslog/machine.go.rl:94
+//line rfc5424/machine.go.rl:94
 
 	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
 		elements[m.currentelem][m.currentparam] = string(m.text())
@@ -3603,7 +3603,7 @@ tr725:
 
 	goto st663
 tr687:
-//line syslog/machine.go.rl:94
+//line rfc5424/machine.go.rl:94
 
 	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
 		elements[m.currentelem][m.currentparam] = string(m.text())
@@ -3611,13 +3611,13 @@ tr687:
 
 	goto st663
 tr685:
-//line syslog/machine.go.rl:94
+//line rfc5424/machine.go.rl:94
 
 	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
 		elements[m.currentelem][m.currentparam] = string(m.text())
 	}
 
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -3627,7 +3627,7 @@ tr685:
 			goto _test_eof663
 		}
 	st_case_663:
-//line syslog/machine.go:3631
+//line rfc5424/machine.go:3631
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto st664
@@ -3638,13 +3638,13 @@ tr685:
 		}
 		goto st662
 tr724:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
 	goto st664
 tr729:
-//line syslog/machine.go.rl:82
+//line rfc5424/machine.go.rl:82
 
 	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
 		id := string(m.text())
@@ -3658,7 +3658,7 @@ tr729:
 			goto _test_eof664
 		}
 	st_case_664:
-//line syslog/machine.go:3662
+//line rfc5424/machine.go:3662
 		if ( m.data)[( m.p)] == 34 {
 			goto tr687
 		}
@@ -3676,7 +3676,7 @@ tr729:
 		}
 		goto st662
 tr690:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -3686,7 +3686,7 @@ tr690:
 			goto _test_eof665
 		}
 	st_case_665:
-//line syslog/machine.go:3690
+//line rfc5424/machine.go:3690
 		switch ( m.data)[( m.p)] {
 		case 34:
 			goto tr687
@@ -4315,7 +4315,7 @@ tr690:
 		}
 		goto st662
 tr692:
-//line syslog/machine.go.rl:90
+//line rfc5424/machine.go.rl:90
 
 	m.currentparam = string(m.text())
 
@@ -4325,13 +4325,13 @@ tr692:
 			goto _test_eof697
 		}
 	st_case_697:
-//line syslog/machine.go:4329
+//line rfc5424/machine.go:4329
 		if ( m.data)[( m.p)] == 34 {
 			goto tr723
 		}
 		goto st662
 tr723:
-//line syslog/machine.go.rl:94
+//line rfc5424/machine.go.rl:94
 
 	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
 		elements[m.currentelem][m.currentparam] = string(m.text())
@@ -4343,7 +4343,7 @@ tr723:
 			goto _test_eof698
 		}
 	st_case_698:
-//line syslog/machine.go:4347
+//line rfc5424/machine.go:4347
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto tr724
@@ -4354,13 +4354,13 @@ tr723:
 		}
 		goto tr684
 tr726:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
 	goto st699
 tr731:
-//line syslog/machine.go.rl:82
+//line rfc5424/machine.go.rl:82
 
 	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
 		id := string(m.text())
@@ -4374,7 +4374,7 @@ tr731:
 			goto _test_eof699
 		}
 	st_case_699:
-//line syslog/machine.go:4378
+//line rfc5424/machine.go:4378
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto st661
@@ -4406,7 +4406,7 @@ tr731:
 		}
 		goto st662
 tr728:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -4416,7 +4416,7 @@ tr728:
 			goto _test_eof701
 		}
 	st_case_701:
-//line syslog/machine.go:4420
+//line rfc5424/machine.go:4420
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto tr729
@@ -5130,7 +5130,7 @@ tr728:
 		}
 		goto st54
 tr117:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -5140,7 +5140,7 @@ tr117:
 			goto _test_eof92
 		}
 	st_case_92:
-//line syslog/machine.go:5144
+//line rfc5424/machine.go:5144
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto tr118
@@ -6505,7 +6505,7 @@ tr117:
 		}
 		goto tr35
 tr39:
-//line syslog/machine.go.rl:82
+//line rfc5424/machine.go.rl:82
 
 	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
 		id := string(m.text())
@@ -6519,7 +6519,7 @@ tr39:
 			goto _test_eof733
 		}
 	st_case_733:
-//line syslog/machine.go:6523
+//line rfc5424/machine.go:6523
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto st658
@@ -12024,7 +12024,7 @@ tr39:
 		}
 		goto tr16
 tr13:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -12034,7 +12034,7 @@ tr13:
 			goto _test_eof614
 		}
 	st_case_614:
-//line syslog/machine.go:12038
+//line rfc5424/machine.go:12038
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st615
 		}
@@ -12452,7 +12452,7 @@ tr13:
 		}
 		goto tr7
 tr4:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -12462,7 +12462,7 @@ tr4:
 			goto _test_eof653
 		}
 	st_case_653:
-//line syslog/machine.go:12466
+//line rfc5424/machine.go:12466
 		switch ( m.data)[( m.p)] {
 		case 57:
 			goto st655
@@ -12474,7 +12474,7 @@ tr4:
 		}
 		goto tr2
 tr5:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -12484,7 +12484,7 @@ tr5:
 			goto _test_eof654
 		}
 	st_case_654:
-//line syslog/machine.go:12488
+//line rfc5424/machine.go:12488
 		if ( m.data)[( m.p)] == 62 {
 			goto tr6
 		}
@@ -12517,7 +12517,7 @@ tr5:
 		}
 		goto st656
 tr678:
-//line syslog/machine.go.rl:282
+//line rfc5424/machine.go.rl:282
  ( m.p)--
  {goto st1 } 
 	goto st734
@@ -12526,7 +12526,7 @@ tr678:
 			goto _test_eof734
 		}
 	st_case_734:
-//line syslog/machine.go:12530
+//line rfc5424/machine.go:12530
 		goto st0
 	st_out:
 	_test_eof1:  m.cs = 1; goto _test_eof
@@ -13268,12 +13268,12 @@ tr678:
 	if ( m.p) == ( m.eof) {
 		switch  m.cs {
 		case 659, 662, 663, 664, 665, 666, 667, 668, 669, 670, 671, 672, 673, 674, 675, 676, 677, 678, 679, 680, 681, 682, 683, 684, 685, 686, 687, 688, 689, 690, 691, 692, 693, 694, 695, 696, 697, 698, 699, 700, 701, 702, 703, 704, 705, 706, 707, 708, 709, 710, 711, 712, 713, 714, 715, 716, 717, 718, 719, 720, 721, 722, 723, 724, 725, 726, 727, 728, 729, 730, 731, 732:
-//line syslog/machine.go.rl:100
+//line rfc5424/machine.go.rl:100
 
 	m.repository["msg"] = string(m.text())
 
 		case 2, 3, 653, 654, 655:
-//line syslog/machine.go.rl:104
+//line rfc5424/machine.go.rl:104
 
 	m.err = fmt.Errorf(errPrival, m.p)
 	( m.p)--
@@ -13282,7 +13282,7 @@ tr678:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 1:
-//line syslog/machine.go.rl:111
+//line rfc5424/machine.go.rl:111
 
 	m.err = fmt.Errorf(errPri, m.p)
 	( m.p)--
@@ -13291,7 +13291,7 @@ tr678:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 4, 5, 651, 652:
-//line syslog/machine.go.rl:118
+//line rfc5424/machine.go.rl:118
 
 	m.err = fmt.Errorf(errVersion, m.p)
 	( m.p)--
@@ -13300,7 +13300,7 @@ tr678:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 6, 614, 615, 616, 617, 618, 619, 620, 621, 622, 623, 624, 625, 626, 627, 628, 629, 630, 631, 632, 633, 634, 635, 636, 637, 638, 639, 640, 641, 642, 643, 644, 645, 646, 647, 648, 649, 650:
-//line syslog/machine.go.rl:125
+//line rfc5424/machine.go.rl:125
 
 	m.err = fmt.Errorf(errTimestamp, m.p)
 	( m.p)--
@@ -13309,7 +13309,7 @@ tr678:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 8, 9, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545, 546, 547, 548, 549, 550, 551, 552, 553, 554, 555, 556, 557, 558, 559, 560, 561, 562, 563, 564, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 580, 581, 582, 583, 584, 585, 586, 587, 588, 589, 590, 591, 592, 593, 594, 595, 596, 597, 598, 599, 600, 601, 602, 603, 604, 605, 606, 607, 608, 609, 610, 611, 612, 613:
-//line syslog/machine.go.rl:132
+//line rfc5424/machine.go.rl:132
 
 	m.err = fmt.Errorf(errHostname, m.p)
 	( m.p)--
@@ -13318,7 +13318,7 @@ tr678:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 10, 11, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359:
-//line syslog/machine.go.rl:139
+//line rfc5424/machine.go.rl:139
 
 	m.err = fmt.Errorf(errAppname, m.p)
 	( m.p)--
@@ -13327,7 +13327,7 @@ tr678:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 12, 13, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312:
-//line syslog/machine.go.rl:146
+//line rfc5424/machine.go.rl:146
 
 	m.err = fmt.Errorf(errProcid, m.p)
 	( m.p)--
@@ -13336,7 +13336,7 @@ tr678:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 14, 15, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185:
-//line syslog/machine.go.rl:153
+//line rfc5424/machine.go.rl:153
 
 	m.err = fmt.Errorf(errMsgid, m.p)
 	( m.p)--
@@ -13345,7 +13345,7 @@ tr678:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 16:
-//line syslog/machine.go.rl:160
+//line rfc5424/machine.go.rl:160
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -13354,16 +13354,16 @@ tr678:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 658, 661:
-//line syslog/machine.go.rl:31
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
-//line syslog/machine.go.rl:100
+//line rfc5424/machine.go.rl:100
 
 	m.repository["msg"] = string(m.text())
 
 		case 17, 18, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154:
-//line syslog/machine.go.rl:167
+//line rfc5424/machine.go.rl:167
 
 	m.err = fmt.Errorf(errSdID, m.p)
 	( m.p)--
@@ -13371,7 +13371,7 @@ tr678:
     {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line syslog/machine.go.rl:160
+//line rfc5424/machine.go.rl:160
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -13380,7 +13380,7 @@ tr678:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90:
-//line syslog/machine.go.rl:174
+//line rfc5424/machine.go.rl:174
 
 	m.err = fmt.Errorf(errSdParam, m.p)
 	( m.p)--
@@ -13388,7 +13388,7 @@ tr678:
     {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line syslog/machine.go.rl:160
+//line rfc5424/machine.go.rl:160
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -13397,7 +13397,7 @@ tr678:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123:
-//line syslog/machine.go.rl:167
+//line rfc5424/machine.go.rl:167
 
 	m.err = fmt.Errorf(errSdID, m.p)
 	( m.p)--
@@ -13405,7 +13405,7 @@ tr678:
     {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line syslog/machine.go.rl:174
+//line rfc5424/machine.go.rl:174
 
 	m.err = fmt.Errorf(errSdParam, m.p)
 	( m.p)--
@@ -13413,7 +13413,7 @@ tr678:
     {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line syslog/machine.go.rl:160
+//line rfc5424/machine.go.rl:160
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -13421,14 +13421,14 @@ tr678:
     {goto st656 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line syslog/machine.go:13425
+//line rfc5424/machine.go:13425
 		}
 	}
 
 	_out: {}
 	}
 
-//line syslog/machine.go.rl:341
+//line rfc5424/machine.go.rl:341
 
     if m.cs < rfc5424_first_final {
         return nil, m.err
