@@ -1,24 +1,23 @@
-.PHONY: generate graph test clean bench
+SHELL := /bin/bash
 
-docs/rfc5424_parser.dot: rfc5424/parser.rl
-	ragel -Vp rfc5424/parser.rl -o $@
+syslog/machine.go: syslog/machine.go.rl
+	ragel -Z -G2 -o $@ $<
 
-graph: 
-	ragel -Z -Vp rfc5424/parser.rl -o docs/rfc5424_parser.dot
+.PHONY: build
+build: syslog/machine.go
 
-rfc5424/parser.rl: rfc5424/machine.rl
+.PHONY: bench
+bench: syslog/*_test.go syslog/machine.go
+	go test -bench=. -benchmem -benchtime=10s ./...
 
-rfc5424/parser.go: rfc5424/parser.rl
-	ragel -Z -G2 -o $@ rfc5424/parser.rl
+.PHONY: tests
+tests: syslog/*_test.go syslog/machine.go
+	go test -v ./... # (todo) > test race conditions
 
-generate: clean rfc5424/parser.go
+.PHONY: graph
+graph: syslog/machine.go.rl
+	ragel -Z -Vp $< -o docs/rfc5424_parser.dot
 
-test: generate
-	go test -race -v ./...
-
-bench: generate
-	go test -race -bench=. ./...
-
-clean:
-	rm -f rfc5424/parser.go
-
+.PHONY: clean
+clean: syslog/machine.go
+	rm -f $?
