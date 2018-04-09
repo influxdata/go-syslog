@@ -5,11 +5,9 @@ package rfc5424
 import (
 	"time"
 	"fmt"
-    "github.com/influxdata/go-syslog/chars"
 )
 
 var (
-    errNilValue = "expecting a dash indicating the nil value [col %d]"
 	errPrival = "expecting a priority value in the range 1-191 or equal to 0 [col %d]"
 	errPri = "expecting a priority value within angle brackets [col %d]"
 	errVersion = "expecting a version value in the range 1-999 [col %d]"
@@ -25,11 +23,11 @@ var (
 )
 
 
-//line rfc5424/machine.go.rl:280
+//line rfc5424/machine.go.rl:283
 
 
 
-//line rfc5424/machine.go:33
+//line rfc5424/machine.go:31
 const rfc5424_start int = 1
 const rfc5424_first_final int = 678
 const rfc5424_error int = 0
@@ -38,7 +36,7 @@ const rfc5424_en_line int = 677
 const rfc5424_en_main int = 1
 
 
-//line rfc5424/machine.go.rl:283
+//line rfc5424/machine.go.rl:286
 
 type machine struct {
 	data       		[]byte
@@ -46,18 +44,14 @@ type machine struct {
 	p, pe, eof 		int
 	pb         		int
 	err        		error
-	repository  	map[string]interface{}
+	output 			*SyslogMessage
 	currentelem		string
 	currentparam	string
 }
 
 func NewMachine() *machine {
-	m := &machine{
-		repository: make(map[string]interface{}, 0),
-	}
+	m := &machine{}
 
-	
-//line rfc5424/machine.go.rl:301
 	
 //line rfc5424/machine.go.rl:302
 	
@@ -66,6 +60,8 @@ func NewMachine() *machine {
 //line rfc5424/machine.go.rl:304
 	
 //line rfc5424/machine.go.rl:305
+	
+//line rfc5424/machine.go.rl:306
 
 	return m
 }
@@ -93,16 +89,17 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
 	m.pe = len(input)
 	m.eof = len(input)
 	m.err = nil
+	m.output = &SyslogMessage{}
 
     
-//line rfc5424/machine.go:99
+//line rfc5424/machine.go:96
 	{
 	 m.cs = rfc5424_start
 	}
 
-//line rfc5424/machine.go.rl:334
+//line rfc5424/machine.go.rl:336
     
-//line rfc5424/machine.go:106
+//line rfc5424/machine.go:103
 	{
 	if ( m.p) == ( m.pe) {
 		goto _test_eof
@@ -1632,7 +1629,7 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
 		}
 		goto tr0
 tr0:
-//line rfc5424/machine.go.rl:111
+//line rfc5424/machine.go.rl:114
 
 	m.err = fmt.Errorf(errPri, m.p)
 	( m.p)--
@@ -1642,7 +1639,7 @@ tr0:
 
 	goto st0
 tr2:
-//line rfc5424/machine.go.rl:104
+//line rfc5424/machine.go.rl:107
 
 	m.err = fmt.Errorf(errPrival, m.p)
 	( m.p)--
@@ -1652,7 +1649,7 @@ tr2:
 
 	goto st0
 tr7:
-//line rfc5424/machine.go.rl:118
+//line rfc5424/machine.go.rl:121
 
 	m.err = fmt.Errorf(errVersion, m.p)
 	( m.p)--
@@ -1662,7 +1659,7 @@ tr7:
 
 	goto st0
 tr11:
-//line rfc5424/machine.go.rl:125
+//line rfc5424/machine.go.rl:128
 
 	m.err = fmt.Errorf(errTimestamp, m.p)
 	( m.p)--
@@ -1672,7 +1669,7 @@ tr11:
 
 	goto st0
 tr16:
-//line rfc5424/machine.go.rl:132
+//line rfc5424/machine.go.rl:135
 
 	m.err = fmt.Errorf(errHostname, m.p)
 	( m.p)--
@@ -1682,7 +1679,7 @@ tr16:
 
 	goto st0
 tr20:
-//line rfc5424/machine.go.rl:139
+//line rfc5424/machine.go.rl:142
 
 	m.err = fmt.Errorf(errAppname, m.p)
 	( m.p)--
@@ -1692,7 +1689,7 @@ tr20:
 
 	goto st0
 tr24:
-//line rfc5424/machine.go.rl:146
+//line rfc5424/machine.go.rl:149
 
 	m.err = fmt.Errorf(errProcid, m.p)
 	( m.p)--
@@ -1702,7 +1699,7 @@ tr24:
 
 	goto st0
 tr28:
-//line rfc5424/machine.go.rl:153
+//line rfc5424/machine.go.rl:156
 
 	m.err = fmt.Errorf(errMsgid, m.p)
 	( m.p)--
@@ -1712,7 +1709,7 @@ tr28:
 
 	goto st0
 tr32:
-//line rfc5424/machine.go.rl:160
+//line rfc5424/machine.go.rl:163
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -1722,7 +1719,7 @@ tr32:
 
 	goto st0
 tr35:
-//line rfc5424/machine.go.rl:181
+//line rfc5424/machine.go.rl:184
 
 	m.err = fmt.Errorf(errMsg, m.p)
 	( m.p)--
@@ -1732,7 +1729,7 @@ tr35:
 
 	goto st0
 tr39:
-//line rfc5424/machine.go.rl:167
+//line rfc5424/machine.go.rl:170
 
 	m.err = fmt.Errorf(errSdID, m.p)
 	( m.p)--
@@ -1740,7 +1737,7 @@ tr39:
     {goto st677 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:160
+//line rfc5424/machine.go.rl:163
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -1750,7 +1747,7 @@ tr39:
 
 	goto st0
 tr44:
-//line rfc5424/machine.go.rl:174
+//line rfc5424/machine.go.rl:177
 
 	m.err = fmt.Errorf(errSdParam, m.p)
 	( m.p)--
@@ -1758,7 +1755,7 @@ tr44:
     {goto st677 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:160
+//line rfc5424/machine.go.rl:163
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -1768,7 +1765,7 @@ tr44:
 
 	goto st0
 tr135:
-//line rfc5424/machine.go.rl:174
+//line rfc5424/machine.go.rl:177
 
 	m.err = fmt.Errorf(errSdParam, m.p)
 	( m.p)--
@@ -1776,7 +1773,7 @@ tr135:
     {goto st677 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:160
+//line rfc5424/machine.go.rl:163
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -1784,7 +1781,7 @@ tr135:
     {goto st677 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:181
+//line rfc5424/machine.go.rl:184
 
 	m.err = fmt.Errorf(errMsg, m.p)
 	( m.p)--
@@ -1794,7 +1791,7 @@ tr135:
 
 	goto st0
 tr140:
-//line rfc5424/machine.go.rl:167
+//line rfc5424/machine.go.rl:170
 
 	m.err = fmt.Errorf(errSdID, m.p)
 	( m.p)--
@@ -1802,7 +1799,7 @@ tr140:
     {goto st677 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:174
+//line rfc5424/machine.go.rl:177
 
 	m.err = fmt.Errorf(errSdParam, m.p)
 	( m.p)--
@@ -1810,7 +1807,7 @@ tr140:
     {goto st677 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:160
+//line rfc5424/machine.go.rl:163
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -1820,7 +1817,7 @@ tr140:
 
 	goto st0
 tr774:
-//line rfc5424/machine.go.rl:167
+//line rfc5424/machine.go.rl:170
 
 	m.err = fmt.Errorf(errSdID, m.p)
 	( m.p)--
@@ -1828,7 +1825,7 @@ tr774:
     {goto st677 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:174
+//line rfc5424/machine.go.rl:177
 
 	m.err = fmt.Errorf(errSdParam, m.p)
 	( m.p)--
@@ -1836,7 +1833,7 @@ tr774:
     {goto st677 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:160
+//line rfc5424/machine.go.rl:163
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -1844,7 +1841,7 @@ tr774:
     {goto st677 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:181
+//line rfc5424/machine.go.rl:184
 
 	m.err = fmt.Errorf(errMsg, m.p)
 	( m.p)--
@@ -1853,7 +1850,7 @@ tr774:
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
-//line rfc5424/machine.go:1857
+//line rfc5424/machine.go:1854
 st_case_0:
 	st0:
 		 m.cs = 0
@@ -1874,7 +1871,7 @@ st_case_0:
 		}
 		goto tr2
 tr3:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -1884,15 +1881,15 @@ tr3:
 			goto _test_eof3
 		}
 	st_case_3:
-//line rfc5424/machine.go:1888
+//line rfc5424/machine.go:1885
 		if ( m.data)[( m.p)] == 62 {
 			goto tr6
 		}
 		goto tr2
 tr6:
-//line rfc5424/machine.go.rl:35
+//line rfc5424/machine.go.rl:33
 
-	m.repository["prival"] = uint8(chars.UnsafeUTF8DecimalCodePointsToInt(m.text()))
+	m.output.SetPriority(uint8(unsafeUTF8DecimalCodePointsToInt(m.text())))
 
 	goto st4
 	st4:
@@ -1900,13 +1897,13 @@ tr6:
 			goto _test_eof4
 		}
 	st_case_4:
-//line rfc5424/machine.go:1904
+//line rfc5424/machine.go:1901
 		if 49 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto tr8
 		}
 		goto tr7
 tr8:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -1916,7 +1913,7 @@ tr8:
 			goto _test_eof5
 		}
 	st_case_5:
-//line rfc5424/machine.go:1920
+//line rfc5424/machine.go:1917
 		if ( m.data)[( m.p)] == 32 {
 			goto tr9
 		}
@@ -1925,9 +1922,9 @@ tr8:
 		}
 		goto tr7
 tr9:
-//line rfc5424/machine.go.rl:39
+//line rfc5424/machine.go.rl:37
 
-	m.repository["version"] = uint16(chars.UnsafeUTF8DecimalCodePointsToInt(m.text()))
+	m.output.Version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
 
 	goto st6
 	st6:
@@ -1935,7 +1932,7 @@ tr9:
 			goto _test_eof6
 		}
 	st_case_6:
-//line rfc5424/machine.go:1939
+//line rfc5424/machine.go:1936
 		if ( m.data)[( m.p)] == 45 {
 			goto st7
 		}
@@ -1953,7 +1950,7 @@ tr9:
 		}
 		goto st0
 tr689:
-//line rfc5424/machine.go.rl:43
+//line rfc5424/machine.go.rl:41
 
 	if t, e := time.Parse(time.RFC3339Nano, string(m.text())); e != nil {
         m.err = e
@@ -1962,7 +1959,7 @@ tr689:
     	{goto st677 }
     	{( m.p)++;  m.cs = 8; goto _out }
     } else {
-        m.repository["timestamp"] = t
+        m.output.Timestamp = &t
     }
 
 	goto st8
@@ -1971,13 +1968,13 @@ tr689:
 			goto _test_eof8
 		}
 	st_case_8:
-//line rfc5424/machine.go:1975
+//line rfc5424/machine.go:1972
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto tr17
 		}
 		goto tr16
 tr17:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -1987,7 +1984,7 @@ tr17:
 			goto _test_eof9
 		}
 	st_case_9:
-//line rfc5424/machine.go:1991
+//line rfc5424/machine.go:1988
 		if ( m.data)[( m.p)] == 32 {
 			goto tr18
 		}
@@ -1996,10 +1993,10 @@ tr17:
 		}
 		goto tr16
 tr18:
-//line rfc5424/machine.go.rl:54
+//line rfc5424/machine.go.rl:52
 
 	if hostname := string(m.text()); hostname != "-" {
-		m.repository["hostname"] = hostname
+		m.output.Hostname = &hostname
 	}
 
 	goto st10
@@ -2008,13 +2005,13 @@ tr18:
 			goto _test_eof10
 		}
 	st_case_10:
-//line rfc5424/machine.go:2012
+//line rfc5424/machine.go:2009
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto tr21
 		}
 		goto tr20
 tr21:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -2024,7 +2021,7 @@ tr21:
 			goto _test_eof11
 		}
 	st_case_11:
-//line rfc5424/machine.go:2028
+//line rfc5424/machine.go:2025
 		if ( m.data)[( m.p)] == 32 {
 			goto tr22
 		}
@@ -2033,10 +2030,10 @@ tr21:
 		}
 		goto tr20
 tr22:
-//line rfc5424/machine.go.rl:60
+//line rfc5424/machine.go.rl:58
 
 	if appname := string(m.text()); appname != "-" {
-		m.repository["appname"] = appname
+		m.output.Appname = &appname
 	}
 
 	goto st12
@@ -2045,13 +2042,13 @@ tr22:
 			goto _test_eof12
 		}
 	st_case_12:
-//line rfc5424/machine.go:2049
+//line rfc5424/machine.go:2046
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto tr25
 		}
 		goto tr24
 tr25:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -2061,7 +2058,7 @@ tr25:
 			goto _test_eof13
 		}
 	st_case_13:
-//line rfc5424/machine.go:2065
+//line rfc5424/machine.go:2062
 		if ( m.data)[( m.p)] == 32 {
 			goto tr26
 		}
@@ -2070,10 +2067,10 @@ tr25:
 		}
 		goto tr24
 tr26:
-//line rfc5424/machine.go.rl:66
+//line rfc5424/machine.go.rl:64
 
 	if procid := string(m.text()); procid != "-" {
-		m.repository["procid"] = procid
+		m.output.ProcID = &procid
 	}
 
 	goto st14
@@ -2082,13 +2079,13 @@ tr26:
 			goto _test_eof14
 		}
 	st_case_14:
-//line rfc5424/machine.go:2086
+//line rfc5424/machine.go:2083
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto tr29
 		}
 		goto tr28
 tr29:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -2098,7 +2095,7 @@ tr29:
 			goto _test_eof15
 		}
 	st_case_15:
-//line rfc5424/machine.go:2102
+//line rfc5424/machine.go:2099
 		if ( m.data)[( m.p)] == 32 {
 			goto tr30
 		}
@@ -2107,10 +2104,10 @@ tr29:
 		}
 		goto tr28
 tr30:
-//line rfc5424/machine.go.rl:72
+//line rfc5424/machine.go.rl:70
 
 	if msgid := string(m.text()); msgid != "-" {
-		m.repository["msgid"] = msgid
+		m.output.MsgID = &msgid
 	}
 
 	goto st16
@@ -2119,7 +2116,7 @@ tr30:
 			goto _test_eof16
 		}
 	st_case_16:
-//line rfc5424/machine.go:2123
+//line rfc5424/machine.go:2120
 		switch ( m.data)[( m.p)] {
 		case 45:
 			goto st678
@@ -2175,7 +2172,7 @@ tr30:
 		}
 		goto tr703
 tr703:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -2185,7 +2182,7 @@ tr703:
 			goto _test_eof680
 		}
 	st_case_680:
-//line rfc5424/machine.go:2189
+//line rfc5424/machine.go:2186
 		switch ( m.data)[( m.p)] {
 		case 224:
 			goto st18
@@ -2220,7 +2217,7 @@ tr703:
 		}
 		goto st680
 tr704:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -2230,13 +2227,13 @@ tr704:
 			goto _test_eof17
 		}
 	st_case_17:
-//line rfc5424/machine.go:2234
+//line rfc5424/machine.go:2231
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st680
 		}
 		goto tr35
 tr705:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -2246,13 +2243,13 @@ tr705:
 			goto _test_eof18
 		}
 	st_case_18:
-//line rfc5424/machine.go:2250
+//line rfc5424/machine.go:2247
 		if 160 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st17
 		}
 		goto tr35
 tr706:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -2262,13 +2259,13 @@ tr706:
 			goto _test_eof19
 		}
 	st_case_19:
-//line rfc5424/machine.go:2266
+//line rfc5424/machine.go:2263
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st17
 		}
 		goto tr35
 tr707:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -2278,13 +2275,13 @@ tr707:
 			goto _test_eof20
 		}
 	st_case_20:
-//line rfc5424/machine.go:2282
+//line rfc5424/machine.go:2279
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 159 {
 			goto st17
 		}
 		goto tr35
 tr708:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -2294,13 +2291,13 @@ tr708:
 			goto _test_eof21
 		}
 	st_case_21:
-//line rfc5424/machine.go:2298
+//line rfc5424/machine.go:2295
 		if 144 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st19
 		}
 		goto tr35
 tr709:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -2310,13 +2307,13 @@ tr709:
 			goto _test_eof22
 		}
 	st_case_22:
-//line rfc5424/machine.go:2314
+//line rfc5424/machine.go:2311
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st19
 		}
 		goto tr35
 tr710:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -2326,15 +2323,15 @@ tr710:
 			goto _test_eof23
 		}
 	st_case_23:
-//line rfc5424/machine.go:2330
+//line rfc5424/machine.go:2327
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 143 {
 			goto st19
 		}
 		goto tr35
 tr34:
-//line rfc5424/machine.go.rl:78
+//line rfc5424/machine.go.rl:76
 
-	m.repository["elements"] = make(map[string]map[string]string)
+	m.output.StructuredData = &(map[string]map[string]string{})
 
 	goto st24
 	st24:
@@ -2342,7 +2339,7 @@ tr34:
 			goto _test_eof24
 		}
 	st_case_24:
-//line rfc5424/machine.go:2346
+//line rfc5424/machine.go:2343
 		if ( m.data)[( m.p)] == 33 {
 			goto tr40
 		}
@@ -2360,7 +2357,7 @@ tr34:
 		}
 		goto tr39
 tr40:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -2370,7 +2367,7 @@ tr40:
 			goto _test_eof25
 		}
 	st_case_25:
-//line rfc5424/machine.go:2374
+//line rfc5424/machine.go:2371
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto tr41
@@ -2389,11 +2386,14 @@ tr40:
 		}
 		goto tr39
 tr41:
-//line rfc5424/machine.go.rl:82
+//line rfc5424/machine.go.rl:80
 
-	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
+	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
+		// (fixme) > what if two elements ID are equal? re-check RFC that seems to say nothing about it
+		// (todo) > impose a semantic constraint on uniquiness of elements ID?
+		// (todo) > or simply override subsequent duplicates?
 		id := string(m.text())
-		elements[id] = map[string]string{}
+		(*elements)[id] = map[string]string{}
 		m.currentelem = id
 	}
 
@@ -2421,7 +2421,7 @@ tr41:
 		}
 		goto tr44
 tr45:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -3057,7 +3057,7 @@ tr45:
 		}
 		goto tr44
 tr47:
-//line rfc5424/machine.go.rl:90
+//line rfc5424/machine.go.rl:91
 
 	m.currentparam = string(m.text())
 
@@ -3113,7 +3113,7 @@ tr47:
 		}
 		goto tr79
 tr79:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -3160,22 +3160,22 @@ tr79:
 		}
 		goto st61
 tr80:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
-//line rfc5424/machine.go.rl:94
+//line rfc5424/machine.go.rl:95
 
-	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
-		elements[m.currentelem][m.currentparam] = string(m.text())
+	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
+		(*elements)[m.currentelem][m.currentparam] = string(m.text())
 	}
 
 	goto st62
 tr89:
-//line rfc5424/machine.go.rl:94
+//line rfc5424/machine.go.rl:95
 
-	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
-		elements[m.currentelem][m.currentparam] = string(m.text())
+	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
+		(*elements)[m.currentelem][m.currentparam] = string(m.text())
 	}
 
 	goto st62
@@ -3225,17 +3225,20 @@ tr89:
 		}
 		goto st61
 tr133:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
 	goto st63
 tr141:
-//line rfc5424/machine.go.rl:82
+//line rfc5424/machine.go.rl:80
 
-	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
+	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
+		// (fixme) > what if two elements ID are equal? re-check RFC that seems to say nothing about it
+		// (todo) > impose a semantic constraint on uniquiness of elements ID?
+		// (todo) > or simply override subsequent duplicates?
 		id := string(m.text())
-		elements[id] = map[string]string{}
+		(*elements)[id] = map[string]string{}
 		m.currentelem = id
 	}
 
@@ -3245,7 +3248,7 @@ tr141:
 			goto _test_eof63
 		}
 	st_case_63:
-//line rfc5424/machine.go:3249
+//line rfc5424/machine.go:3252
 		switch ( m.data)[( m.p)] {
 		case 34:
 			goto tr89
@@ -3292,7 +3295,7 @@ tr141:
 		}
 		goto tr99
 tr99:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -3302,7 +3305,7 @@ tr99:
 			goto _test_eof64
 		}
 	st_case_64:
-//line rfc5424/machine.go:3306
+//line rfc5424/machine.go:3309
 		switch ( m.data)[( m.p)] {
 		case 34:
 			goto tr89
@@ -4891,7 +4894,7 @@ tr99:
 		}
 		goto st61
 tr101:
-//line rfc5424/machine.go.rl:90
+//line rfc5424/machine.go.rl:91
 
 	m.currentparam = string(m.text())
 
@@ -4901,7 +4904,7 @@ tr101:
 			goto _test_eof96
 		}
 	st_case_96:
-//line rfc5424/machine.go:4905
+//line rfc5424/machine.go:4908
 		switch ( m.data)[( m.p)] {
 		case 34:
 			goto tr132
@@ -4938,10 +4941,10 @@ tr101:
 		}
 		goto st61
 tr132:
-//line rfc5424/machine.go.rl:94
+//line rfc5424/machine.go.rl:95
 
-	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
-		elements[m.currentelem][m.currentparam] = string(m.text())
+	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
+		(*elements)[m.currentelem][m.currentparam] = string(m.text())
 	}
 
 	goto st97
@@ -4950,7 +4953,7 @@ tr132:
 			goto _test_eof97
 		}
 	st_case_97:
-//line rfc5424/machine.go:4954
+//line rfc5424/machine.go:4957
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto tr133
@@ -4991,17 +4994,20 @@ tr132:
 		}
 		goto tr79
 tr134:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
 	goto st681
 tr143:
-//line rfc5424/machine.go.rl:82
+//line rfc5424/machine.go.rl:80
 
-	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
+	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
+		// (fixme) > what if two elements ID are equal? re-check RFC that seems to say nothing about it
+		// (todo) > impose a semantic constraint on uniquiness of elements ID?
+		// (todo) > or simply override subsequent duplicates?
 		id := string(m.text())
-		elements[id] = map[string]string{}
+		(*elements)[id] = map[string]string{}
 		m.currentelem = id
 	}
 
@@ -5011,7 +5017,7 @@ tr143:
 			goto _test_eof681
 		}
 	st_case_681:
-//line rfc5424/machine.go:5015
+//line rfc5424/machine.go:5021
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto st682
@@ -5092,7 +5098,7 @@ tr143:
 		}
 		goto tr718
 tr718:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -5102,7 +5108,7 @@ tr718:
 			goto _test_eof683
 		}
 	st_case_683:
-//line rfc5424/machine.go:5106
+//line rfc5424/machine.go:5112
 		switch ( m.data)[( m.p)] {
 		case 34:
 			goto tr727
@@ -5139,33 +5145,33 @@ tr718:
 		}
 		goto st683
 tr770:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
-//line rfc5424/machine.go.rl:94
+//line rfc5424/machine.go.rl:95
 
-	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
-		elements[m.currentelem][m.currentparam] = string(m.text())
+	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
+		(*elements)[m.currentelem][m.currentparam] = string(m.text())
 	}
 
 	goto st684
 tr727:
-//line rfc5424/machine.go.rl:94
+//line rfc5424/machine.go.rl:95
 
-	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
-		elements[m.currentelem][m.currentparam] = string(m.text())
+	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
+		(*elements)[m.currentelem][m.currentparam] = string(m.text())
 	}
 
 	goto st684
 tr719:
-//line rfc5424/machine.go.rl:94
+//line rfc5424/machine.go.rl:95
 
-	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
-		elements[m.currentelem][m.currentparam] = string(m.text())
+	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
+		(*elements)[m.currentelem][m.currentparam] = string(m.text())
 	}
 
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -5175,7 +5181,7 @@ tr719:
 			goto _test_eof684
 		}
 	st_case_684:
-//line rfc5424/machine.go:5179
+//line rfc5424/machine.go:5185
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto st685
@@ -5216,17 +5222,20 @@ tr719:
 		}
 		goto st683
 tr769:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
 	goto st685
 tr775:
-//line rfc5424/machine.go.rl:82
+//line rfc5424/machine.go.rl:80
 
-	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
+	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
+		// (fixme) > what if two elements ID are equal? re-check RFC that seems to say nothing about it
+		// (todo) > impose a semantic constraint on uniquiness of elements ID?
+		// (todo) > or simply override subsequent duplicates?
 		id := string(m.text())
-		elements[id] = map[string]string{}
+		(*elements)[id] = map[string]string{}
 		m.currentelem = id
 	}
 
@@ -5236,7 +5245,7 @@ tr775:
 			goto _test_eof685
 		}
 	st_case_685:
-//line rfc5424/machine.go:5240
+//line rfc5424/machine.go:5249
 		switch ( m.data)[( m.p)] {
 		case 34:
 			goto tr727
@@ -5283,7 +5292,7 @@ tr775:
 		}
 		goto tr735
 tr735:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -5293,7 +5302,7 @@ tr735:
 			goto _test_eof686
 		}
 	st_case_686:
-//line rfc5424/machine.go:5297
+//line rfc5424/machine.go:5306
 		switch ( m.data)[( m.p)] {
 		case 34:
 			goto tr727
@@ -6882,7 +6891,7 @@ tr735:
 		}
 		goto st683
 tr737:
-//line rfc5424/machine.go.rl:90
+//line rfc5424/machine.go.rl:91
 
 	m.currentparam = string(m.text())
 
@@ -6892,7 +6901,7 @@ tr737:
 			goto _test_eof718
 		}
 	st_case_718:
-//line rfc5424/machine.go:6896
+//line rfc5424/machine.go:6905
 		switch ( m.data)[( m.p)] {
 		case 34:
 			goto tr768
@@ -6929,10 +6938,10 @@ tr737:
 		}
 		goto st683
 tr768:
-//line rfc5424/machine.go.rl:94
+//line rfc5424/machine.go.rl:95
 
-	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
-		elements[m.currentelem][m.currentparam] = string(m.text())
+	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
+		(*elements)[m.currentelem][m.currentparam] = string(m.text())
 	}
 
 	goto st719
@@ -6941,7 +6950,7 @@ tr768:
 			goto _test_eof719
 		}
 	st_case_719:
-//line rfc5424/machine.go:6945
+//line rfc5424/machine.go:6954
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto tr769
@@ -6982,17 +6991,20 @@ tr768:
 		}
 		goto tr718
 tr771:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
 	goto st720
 tr777:
-//line rfc5424/machine.go.rl:82
+//line rfc5424/machine.go.rl:80
 
-	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
+	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
+		// (fixme) > what if two elements ID are equal? re-check RFC that seems to say nothing about it
+		// (todo) > impose a semantic constraint on uniquiness of elements ID?
+		// (todo) > or simply override subsequent duplicates?
 		id := string(m.text())
-		elements[id] = map[string]string{}
+		(*elements)[id] = map[string]string{}
 		m.currentelem = id
 	}
 
@@ -7002,7 +7014,7 @@ tr777:
 			goto _test_eof720
 		}
 	st_case_720:
-//line rfc5424/machine.go:7006
+//line rfc5424/machine.go:7018
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto st682
@@ -7093,7 +7105,7 @@ tr777:
 		}
 		goto tr773
 tr773:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -7103,7 +7115,7 @@ tr773:
 			goto _test_eof722
 		}
 	st_case_722:
-//line rfc5424/machine.go:7107
+//line rfc5424/machine.go:7119
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto tr775
@@ -8756,7 +8768,7 @@ tr773:
 		}
 		goto st683
 tr720:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -8766,13 +8778,13 @@ tr720:
 			goto _test_eof98
 		}
 	st_case_98:
-//line rfc5424/machine.go:8770
+//line rfc5424/machine.go:8782
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st683
 		}
 		goto tr135
 tr721:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -8782,13 +8794,13 @@ tr721:
 			goto _test_eof99
 		}
 	st_case_99:
-//line rfc5424/machine.go:8786
+//line rfc5424/machine.go:8798
 		if 160 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st98
 		}
 		goto tr135
 tr722:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -8798,13 +8810,13 @@ tr722:
 			goto _test_eof100
 		}
 	st_case_100:
-//line rfc5424/machine.go:8802
+//line rfc5424/machine.go:8814
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st98
 		}
 		goto tr135
 tr723:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -8814,13 +8826,13 @@ tr723:
 			goto _test_eof101
 		}
 	st_case_101:
-//line rfc5424/machine.go:8818
+//line rfc5424/machine.go:8830
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 159 {
 			goto st98
 		}
 		goto tr135
 tr724:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -8830,13 +8842,13 @@ tr724:
 			goto _test_eof102
 		}
 	st_case_102:
-//line rfc5424/machine.go:8834
+//line rfc5424/machine.go:8846
 		if 144 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st100
 		}
 		goto tr135
 tr725:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -8846,13 +8858,13 @@ tr725:
 			goto _test_eof103
 		}
 	st_case_103:
-//line rfc5424/machine.go:8850
+//line rfc5424/machine.go:8862
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st100
 		}
 		goto tr135
 tr726:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -8862,7 +8874,7 @@ tr726:
 			goto _test_eof104
 		}
 	st_case_104:
-//line rfc5424/machine.go:8866
+//line rfc5424/machine.go:8878
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 143 {
 			goto st100
 		}
@@ -8918,7 +8930,7 @@ tr726:
 		}
 		goto tr139
 tr139:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -8928,7 +8940,7 @@ tr139:
 			goto _test_eof106
 		}
 	st_case_106:
-//line rfc5424/machine.go:8932
+//line rfc5424/machine.go:8944
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto tr141
@@ -10581,7 +10593,7 @@ tr139:
 		}
 		goto st61
 tr81:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -10591,13 +10603,13 @@ tr81:
 			goto _test_eof138
 		}
 	st_case_138:
-//line rfc5424/machine.go:10595
+//line rfc5424/machine.go:10607
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st61
 		}
 		goto tr44
 tr82:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -10607,13 +10619,13 @@ tr82:
 			goto _test_eof139
 		}
 	st_case_139:
-//line rfc5424/machine.go:10611
+//line rfc5424/machine.go:10623
 		if 160 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st138
 		}
 		goto tr44
 tr83:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -10623,13 +10635,13 @@ tr83:
 			goto _test_eof140
 		}
 	st_case_140:
-//line rfc5424/machine.go:10627
+//line rfc5424/machine.go:10639
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st138
 		}
 		goto tr44
 tr84:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -10639,13 +10651,13 @@ tr84:
 			goto _test_eof141
 		}
 	st_case_141:
-//line rfc5424/machine.go:10643
+//line rfc5424/machine.go:10655
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 159 {
 			goto st138
 		}
 		goto tr44
 tr85:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -10655,13 +10667,13 @@ tr85:
 			goto _test_eof142
 		}
 	st_case_142:
-//line rfc5424/machine.go:10659
+//line rfc5424/machine.go:10671
 		if 144 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st140
 		}
 		goto tr44
 tr86:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -10671,13 +10683,13 @@ tr86:
 			goto _test_eof143
 		}
 	st_case_143:
-//line rfc5424/machine.go:10675
+//line rfc5424/machine.go:10687
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st140
 		}
 		goto tr44
 tr87:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -10687,7 +10699,7 @@ tr87:
 			goto _test_eof144
 		}
 	st_case_144:
-//line rfc5424/machine.go:10691
+//line rfc5424/machine.go:10703
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 143 {
 			goto st140
 		}
@@ -11365,11 +11377,14 @@ tr87:
 		}
 		goto tr39
 tr43:
-//line rfc5424/machine.go.rl:82
+//line rfc5424/machine.go.rl:80
 
-	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
+	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
+		// (fixme) > what if two elements ID are equal? re-check RFC that seems to say nothing about it
+		// (todo) > impose a semantic constraint on uniquiness of elements ID?
+		// (todo) > or simply override subsequent duplicates?
 		id := string(m.text())
-		elements[id] = map[string]string{}
+		(*elements)[id] = map[string]string{}
 		m.currentelem = id
 	}
 
@@ -11379,7 +11394,7 @@ tr43:
 			goto _test_eof754
 		}
 	st_case_754:
-//line rfc5424/machine.go:11383
+//line rfc5424/machine.go:11398
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto st679
@@ -16884,7 +16899,7 @@ tr43:
 		}
 		goto tr16
 tr13:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -16894,7 +16909,7 @@ tr13:
 			goto _test_eof635
 		}
 	st_case_635:
-//line rfc5424/machine.go:16898
+//line rfc5424/machine.go:16913
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st636
 		}
@@ -17312,7 +17327,7 @@ tr13:
 		}
 		goto tr7
 tr4:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -17322,7 +17337,7 @@ tr4:
 			goto _test_eof674
 		}
 	st_case_674:
-//line rfc5424/machine.go:17326
+//line rfc5424/machine.go:17341
 		switch ( m.data)[( m.p)] {
 		case 57:
 			goto st676
@@ -17334,7 +17349,7 @@ tr4:
 		}
 		goto tr2
 tr5:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
@@ -17344,7 +17359,7 @@ tr5:
 			goto _test_eof675
 		}
 	st_case_675:
-//line rfc5424/machine.go:17348
+//line rfc5424/machine.go:17363
 		if ( m.data)[( m.p)] == 62 {
 			goto tr6
 		}
@@ -17377,7 +17392,7 @@ tr5:
 		}
 		goto st677
 tr701:
-//line rfc5424/machine.go.rl:276
+//line rfc5424/machine.go.rl:279
  ( m.p)--
  {goto st1 } 
 	goto st755
@@ -17386,7 +17401,7 @@ tr701:
 			goto _test_eof755
 		}
 	st_case_755:
-//line rfc5424/machine.go:17390
+//line rfc5424/machine.go:17405
 		goto st0
 	st_out:
 	_test_eof1:  m.cs = 1; goto _test_eof
@@ -18149,12 +18164,14 @@ tr701:
 	if ( m.p) == ( m.eof) {
 		switch  m.cs {
 		case 680, 683, 684, 685, 686, 687, 688, 689, 690, 691, 692, 693, 694, 695, 696, 697, 698, 699, 700, 701, 702, 703, 704, 705, 706, 707, 708, 709, 710, 711, 712, 713, 714, 715, 716, 717, 718, 719, 720, 721, 722, 723, 724, 725, 726, 727, 728, 729, 730, 731, 732, 733, 734, 735, 736, 737, 738, 739, 740, 741, 742, 743, 744, 745, 746, 747, 748, 749, 750, 751, 752, 753:
-//line rfc5424/machine.go.rl:100
+//line rfc5424/machine.go.rl:101
 
-	m.repository["msg"] = string(m.text())
+	if msg := string(m.text()); msg != "" {
+		m.output.Message = &msg
+	}
 
 		case 2, 3, 674, 675, 676:
-//line rfc5424/machine.go.rl:104
+//line rfc5424/machine.go.rl:107
 
 	m.err = fmt.Errorf(errPrival, m.p)
 	( m.p)--
@@ -18163,7 +18180,7 @@ tr701:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 1:
-//line rfc5424/machine.go.rl:111
+//line rfc5424/machine.go.rl:114
 
 	m.err = fmt.Errorf(errPri, m.p)
 	( m.p)--
@@ -18172,7 +18189,7 @@ tr701:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 4, 5, 672, 673:
-//line rfc5424/machine.go.rl:118
+//line rfc5424/machine.go.rl:121
 
 	m.err = fmt.Errorf(errVersion, m.p)
 	( m.p)--
@@ -18181,7 +18198,7 @@ tr701:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 6, 635, 636, 637, 638, 639, 640, 641, 642, 643, 644, 645, 646, 647, 648, 649, 650, 651, 652, 653, 654, 655, 656, 657, 658, 659, 660, 661, 662, 663, 664, 665, 666, 667, 668, 669, 670, 671:
-//line rfc5424/machine.go.rl:125
+//line rfc5424/machine.go.rl:128
 
 	m.err = fmt.Errorf(errTimestamp, m.p)
 	( m.p)--
@@ -18190,7 +18207,7 @@ tr701:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 8, 9, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545, 546, 547, 548, 549, 550, 551, 552, 553, 554, 555, 556, 557, 558, 559, 560, 561, 562, 563, 564, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 580, 581, 582, 583, 584, 585, 586, 587, 588, 589, 590, 591, 592, 593, 594, 595, 596, 597, 598, 599, 600, 601, 602, 603, 604, 605, 606, 607, 608, 609, 610, 611, 612, 613, 614, 615, 616, 617, 618, 619, 620, 621, 622, 623, 624, 625, 626, 627, 628, 629, 630, 631, 632, 633, 634:
-//line rfc5424/machine.go.rl:132
+//line rfc5424/machine.go.rl:135
 
 	m.err = fmt.Errorf(errHostname, m.p)
 	( m.p)--
@@ -18199,7 +18216,7 @@ tr701:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 10, 11, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380:
-//line rfc5424/machine.go.rl:139
+//line rfc5424/machine.go.rl:142
 
 	m.err = fmt.Errorf(errAppname, m.p)
 	( m.p)--
@@ -18208,7 +18225,7 @@ tr701:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 12, 13, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333:
-//line rfc5424/machine.go.rl:146
+//line rfc5424/machine.go.rl:149
 
 	m.err = fmt.Errorf(errProcid, m.p)
 	( m.p)--
@@ -18217,7 +18234,7 @@ tr701:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 14, 15, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206:
-//line rfc5424/machine.go.rl:153
+//line rfc5424/machine.go.rl:156
 
 	m.err = fmt.Errorf(errMsgid, m.p)
 	( m.p)--
@@ -18226,7 +18243,7 @@ tr701:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 16:
-//line rfc5424/machine.go.rl:160
+//line rfc5424/machine.go.rl:163
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -18235,7 +18252,7 @@ tr701:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 17, 18, 19, 20, 21, 22, 23:
-//line rfc5424/machine.go.rl:181
+//line rfc5424/machine.go.rl:184
 
 	m.err = fmt.Errorf(errMsg, m.p)
 	( m.p)--
@@ -18244,16 +18261,18 @@ tr701:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 679, 682:
-//line rfc5424/machine.go.rl:31
+//line rfc5424/machine.go.rl:29
 
 	m.pb = m.p
 
-//line rfc5424/machine.go.rl:100
+//line rfc5424/machine.go.rl:101
 
-	m.repository["msg"] = string(m.text())
+	if msg := string(m.text()); msg != "" {
+		m.output.Message = &msg
+	}
 
 		case 24, 25, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175:
-//line rfc5424/machine.go.rl:167
+//line rfc5424/machine.go.rl:170
 
 	m.err = fmt.Errorf(errSdID, m.p)
 	( m.p)--
@@ -18261,7 +18280,7 @@ tr701:
     {goto st677 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:160
+//line rfc5424/machine.go.rl:163
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -18270,7 +18289,7 @@ tr701:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 138, 139, 140, 141, 142, 143, 144:
-//line rfc5424/machine.go.rl:174
+//line rfc5424/machine.go.rl:177
 
 	m.err = fmt.Errorf(errSdParam, m.p)
 	( m.p)--
@@ -18278,7 +18297,7 @@ tr701:
     {goto st677 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:160
+//line rfc5424/machine.go.rl:163
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -18287,7 +18306,7 @@ tr701:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137:
-//line rfc5424/machine.go.rl:167
+//line rfc5424/machine.go.rl:170
 
 	m.err = fmt.Errorf(errSdID, m.p)
 	( m.p)--
@@ -18295,7 +18314,7 @@ tr701:
     {goto st677 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:174
+//line rfc5424/machine.go.rl:177
 
 	m.err = fmt.Errorf(errSdParam, m.p)
 	( m.p)--
@@ -18303,7 +18322,7 @@ tr701:
     {goto st677 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:160
+//line rfc5424/machine.go.rl:163
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -18312,7 +18331,7 @@ tr701:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 98, 99, 100, 101, 102, 103, 104:
-//line rfc5424/machine.go.rl:174
+//line rfc5424/machine.go.rl:177
 
 	m.err = fmt.Errorf(errSdParam, m.p)
 	( m.p)--
@@ -18320,7 +18339,7 @@ tr701:
     {goto st677 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:160
+//line rfc5424/machine.go.rl:163
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -18328,7 +18347,7 @@ tr701:
     {goto st677 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:181
+//line rfc5424/machine.go.rl:184
 
 	m.err = fmt.Errorf(errMsg, m.p)
 	( m.p)--
@@ -18336,21 +18355,18 @@ tr701:
     {goto st677 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go:18340
+//line rfc5424/machine.go:18359
 		}
 	}
 
 	_out: {}
 	}
 
-//line rfc5424/machine.go.rl:335
+//line rfc5424/machine.go.rl:337
 
     if m.cs < rfc5424_first_final {
         return nil, m.err
     }
 
-	res := &SyslogMessage{}
-	res.fromMap(m.repository)
-
-    return res, nil
+    return m.output, nil
 }
