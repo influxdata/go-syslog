@@ -12,7 +12,7 @@ bench: rfc5424/*_test.go rfc5424/machine.go
 
 .PHONY: tests
 tests: rfc5424/*_test.go rfc5424/machine.go
-	go test -v ./... # (todo) > test race conditions
+	go test -coverprofile cover.out -v ./... # (todo) > test race conditions
 
 .PHONY: graph
 graph: rfc5424/machine.go.rl
