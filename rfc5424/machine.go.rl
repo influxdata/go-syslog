@@ -7,7 +7,6 @@ import (
 )
 
 var (
-    errNilValue = "expecting a dash indicating the nil value [col %d]"
 	errPrival = "expecting a priority value in the range 1-191 or equal to 0 [col %d]"
 	errPri = "expecting a priority value within angle brackets [col %d]"
 	errVersion = "expecting a version value in the range 1-999 [col %d]"
@@ -240,22 +239,20 @@ msgid = nilvalue | printusascii{1,32} >mark %set_msgid $err(err_msgid);
 
 header = pri version sp timestamp sp hostname sp appname sp procid sp msgid;
 
-# (todo) > substitute with correct ranges/rules (see below, rfc 3629) or leave as is and check match is a valid UTF-8 via golang
-utf8octets = any*; 
+# rfc 3629
+utf8tail = 0x80..0xBF;
 
-#utf8octets = utf8char*;
+utf81 = 0x00..0x7F;
 
-#utf8char = utf81 | utf82 | utf83 | utf84;
+utf82 = 0xC2..0xDF utf8tail;
 
-#utf81 = 0x00..0x7F;
+utf83 = 0xE0 0xA0..0xBF utf8tail | 0xE1..0xEC utf8tail{2} | 0xED 0x80..0x9F utf8tail | 0xEE..0xEF utf8tail{2};
 
-#utf82 = 0xC2..0xDF utf8tail;
+utf84 = 0xF0 0x90..0xBF utf8tail{2} | 0xF1..0xF3 utf8tail{3} | 0xF4 0x80..0x8F utf8tail{2};
 
-#utf83 = 0xE0 0xA0..0xBF utf8tail | 0xE1..0xEC utf8tail{2} | 0xED 0x80..0x9F utf8tail | 0xEE..0xEF utf8tail{2};
+utf8char = utf81 | utf82 | utf83 | utf84;
 
-#utf84 = 0xF0 0x90..0xBF utf8tail{2} | 0xF1..0xF3 utf8tail{3} | 0xF4 0x80..0x8F utf8tail{2};
-
-#utf8tail = 0x80..0xBF;
+utf8octets = utf8char*;
 
 sdname = printusascii{1,32} -- ('=' | sp | ']' | '"');
 
@@ -273,11 +270,7 @@ structureddata = nilvalue | sdelement+ >ini_elements $err(err_structureddata);
 
 bom = 0xEF 0xBB 0xBF;
 
-msgutf8 = bom utf8octets;
-
-msgany = utf8octets;
-
-msg = (msgany | msgutf8) >mark %set_msg $err(err_msg);
+msg = (bom? utf8octets) >mark %set_msg $err(err_msg);
 
 line := (any - [\n\r])* [\n\r] @{ fhold; fgoto main; };
 
