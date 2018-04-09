@@ -16,6 +16,7 @@ var (
 	errMsgid = "expecting a msgid (from 1 to max 32 US-ASCII characters) [col %d]"
 	errStructuredData = "expecting a structured data section containing one or more elements (`[id ( key=\"value\")*]+`) or a nil value [col %d]"
 	errSdID = "expecting a structured data element id (from 1 to max 32 US-ASCII characters, except `=`, ` `, `]`, and `\"`) [col %d]"
+	errSdIDDuplicated = "duplicate structured data element id [col %d]"
 	errSdParam = "expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters, except `=`, ` `, `]`, and `\"`) [col %d]"
 	errMsg = "expecting a free-form optional message in UTF-8 (starting with or without BOM) [col %d]"
 )
@@ -79,12 +80,17 @@ action ini_elements {
 
 action set_id {
 	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
-		// (fixme) > what if two elements ID are equal? re-check RFC that seems to say nothing about it
-		// (todo) > impose a semantic constraint on uniquiness of elements ID?
-		// (todo) > or simply override subsequent duplicates?
 		id := string(m.text())
-		(*elements)[id] = map[string]string{}
-		m.currentelem = id
+		if _, ok := (*elements)[id]; ok {
+			// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
+			m.err = fmt.Errorf(errSdIDDuplicated, m.p)
+			fhold;
+			fgoto line;
+			fbreak;
+		} else {
+			(*elements)[id] = map[string]string{}
+			m.currentelem = id
+		}
 	}
 }
 
@@ -230,7 +236,7 @@ partialtime = timehour ':' timeminute ':' timesecond . timesecfrac?;
 
 fulltime = partialtime . timeoffset;
 
-# (todo) > use @err(...) and introduce a generic error to the root level?
+# (todo) > use @err(...) and introduce a generic error at the root level?
 timestamp = nilvalue | (fulldate >mark 'T' fulltime %set_timestamp) $err(err_timestamp); 
 
 hostname = nilvalue | printusascii{1,255} >mark %set_hostname $err(err_hostname); 
@@ -266,6 +272,7 @@ paramname = sdname >mark %set_paramname;
 
 sdparam = (paramname '=' '"' paramvalue '"') $err(err_sdparam);
 
+# (todo) > evaluate whether to incorporate finegrained details of section 6.3.2
 sdid = sdname >mark %set_id $err(err_sdid);
 
 sdelement = ('[' sdid (sp sdparam)* ']'); 
@@ -285,14 +292,14 @@ main := header sp structureddata (sp msg)?;
 %% write data;
 
 type machine struct {
-	data       		[]byte
-	cs         		int
-	p, pe, eof 		int
-	pb         		int
-	err        		error
-	output 			*SyslogMessage
-	currentelem		string
-	currentparam	string
+	data       	 []byte
+	cs         	 int
+	p, pe, eof 	 int
+	pb         	 int
+	err        	 error
+	output 		 *SyslogMessage
+	currentelem	 string
+	currentparam string
 }
 
 func NewMachine() *machine {
