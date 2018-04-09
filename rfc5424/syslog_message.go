@@ -6,64 +6,80 @@ import (
 
 // SyslogMessage represents a syslog message
 type SyslogMessage struct {
-	Header
+	Priority       uint8
+	facility       uint8
+	severity       uint8
+	Version        uint16
+	Timestamp      *time.Time
+	Hostname       *string
+	Appname        *string
+	ProcID         *string
+	MsgID          *string
 	StructuredData *map[string]map[string]string
 	Message        *string
 }
 
-func (sm *SyslogMessage) fromMap(data map[string]interface{}) {
-	sm.Header.fromMap(data)
-
-	if msg, ok := data["msg"].(string); ok {
-		sm.Message = &msg
-	}
-
-	if els, ok := data["elements"].(map[string]map[string]string); ok {
-		sm.StructuredData = &els
-	}
+// SetPriority set the priority values and the computed facility and severity codes accordingly.
+func (sm *SyslogMessage) SetPriority(value uint8) {
+	sm.Priority = value
+	sm.facility = uint8(value / 8)
+	sm.severity = uint8(value % 8)
 }
 
-// Header represents the header of a syslog message
-type Header struct {
-	Pri
-	Version   uint16
-	Timestamp *time.Time
-	Hostname  *string
-	Appname   *string
-	ProcID    *string
-	MsgID     *string
+// Facility returns the facility code.
+func (sm *SyslogMessage) Facility() uint8 {
+	return sm.facility
 }
 
-func (h *Header) fromMap(data map[string]interface{}) {
-	if prival, ok := data["prival"].(uint8); !ok {
-		panic("prival is a mandatory field")
-	} else {
-		h.Pri = *NewPri(prival)
-	}
+// Severity returns the severity code.
+func (sm *SyslogMessage) Severity() uint8 {
+	return sm.severity
+}
 
-	if version, ok := data["version"].(uint16); !ok {
-		panic("version is a mandatory field")
-	} else {
-		h.Version = version
-	}
+// FacilityMessage returns the text message for the current facility value.
+func (sm *SyslogMessage) FacilityMessage() string {
+	return facilities[sm.facility]
+}
 
-	if timestamp, ok := data["timestamp"].(time.Time); ok {
-		h.Timestamp = &timestamp
-	}
+// SeverityMessage returns the text message for the current severity value.
+func (sm *SyslogMessage) SeverityMessage() string {
+	return severities[sm.severity]
+}
 
-	if hostname, ok := data["hostname"].(string); ok {
-		h.Hostname = &hostname
-	}
+var severities = map[uint8]string{
+	0: "Emergency: system is unusable",
+	1: "Alert: action must be taken immediately",
+	2: "Critical: critical conditions",
+	3: "Error: error conditions",
+	4: "Warning: warning conditions",
+	5: "Notice: normal but significant condition",
+	6: "Informational: informational messages",
+	7: "Debug: debug-level messages",
+}
 
-	if appname, ok := data["appname"].(string); ok {
-		h.Appname = &appname
-	}
-
-	if procid, ok := data["procid"].(string); ok {
-		h.ProcID = &procid
-	}
-
-	if msgid, ok := data["msgid"].(string); ok {
-		h.MsgID = &msgid
-	}
+var facilities = map[uint8]string{
+	0:  "kernel messages",
+	1:  "user-level messages",
+	2:  "mail system",
+	3:  "system daemons",
+	4:  "security/authorization messages",
+	5:  "messages generated internally by syslogd",
+	6:  "line printer subsystem",
+	7:  "network news subsystem",
+	8:  "UUCP subsystem",
+	9:  "clock daemon",
+	10: "security/authorization messages",
+	11: "FTP daemon",
+	12: "NTP subsystem",
+	13: "log audit",
+	14: "log alert",
+	15: "clock daemon (note 2)",
+	16: "local use 0  (local0)",
+	17: "local use 1  (local1)",
+	18: "local use 2  (local2)",
+	19: "local use 3  (local3)",
+	20: "local use 4  (local4)",
+	21: "local use 5  (local5)",
+	22: "local use 6  (local6)",
+	23: "local use 7  (local7)",
 }

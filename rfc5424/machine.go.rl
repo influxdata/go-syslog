@@ -3,7 +3,6 @@ package rfc5424
 import (
 	"time"
 	"fmt"
-    "github.com/influxdata/go-syslog/chars"
 )
 
 var (
@@ -32,11 +31,11 @@ action mark {
 }
 
 action set_prival {
-	m.repository["prival"] = uint8(chars.UnsafeUTF8DecimalCodePointsToInt(m.text()))
+	m.output.SetPriority(uint8(unsafeUTF8DecimalCodePointsToInt(m.text())))
 }
 
 action set_version {
-	m.repository["version"] = uint16(chars.UnsafeUTF8DecimalCodePointsToInt(m.text()))
+	m.output.Version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
 }
 
 action set_timestamp {
@@ -46,42 +45,45 @@ action set_timestamp {
     	fgoto line;
     	fbreak;
     } else {
-        m.repository["timestamp"] = t
+        m.output.Timestamp = &t
     }
 }
 
 action set_hostname {
 	if hostname := string(m.text()); hostname != "-" {
-		m.repository["hostname"] = hostname
+		m.output.Hostname = &hostname
 	}
 }
 
 action set_appname {
 	if appname := string(m.text()); appname != "-" {
-		m.repository["appname"] = appname
+		m.output.Appname = &appname
 	}
 }
 
 action set_procid {
 	if procid := string(m.text()); procid != "-" {
-		m.repository["procid"] = procid
+		m.output.ProcID = &procid
 	}
 }
 
 action set_msgid {
 	if msgid := string(m.text()); msgid != "-" {
-		m.repository["msgid"] = msgid
+		m.output.MsgID = &msgid
 	}
 }
 
 action ini_elements {
-	m.repository["elements"] = make(map[string]map[string]string)
+	m.output.StructuredData = &(map[string]map[string]string{})
 }
 
 action set_id {
-	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
+	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
+		// (fixme) > what if two elements ID are equal? re-check RFC that seems to say nothing about it
+		// (todo) > impose a semantic constraint on uniquiness of elements ID?
+		// (todo) > or simply override subsequent duplicates?
 		id := string(m.text())
-		elements[id] = map[string]string{}
+		(*elements)[id] = map[string]string{}
 		m.currentelem = id
 	}
 }
@@ -91,13 +93,15 @@ action set_paramname {
 }
 
 action set_paramvalue {
-	if elements, ok := m.repository["elements"].(map[string]map[string]string); ok {
-		elements[m.currentelem][m.currentparam] = string(m.text())
+	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
+		(*elements)[m.currentelem][m.currentparam] = string(m.text())
 	}
 }
 
 action set_msg {
-	m.repository["msg"] = string(m.text())
+	if msg := string(m.text()); msg != "" {
+		m.output.Message = &msg
+	}
 }
 
 action err_prival {
@@ -272,7 +276,7 @@ bom = 0xEF 0xBB 0xBF;
 
 msg = (bom? utf8octets) >mark %set_msg $err(err_msg);
 
-line := (any - [\n\r])* [\n\r] @{ fhold; fgoto main; };
+line := (any - [\n\r])* [\n\r] @{ fhold; fgoto main; }; # (todo) > fhold necessary?
 
 main := header sp structureddata (sp msg)?;
 
@@ -286,15 +290,13 @@ type machine struct {
 	p, pe, eof 		int
 	pb         		int
 	err        		error
-	repository  	map[string]interface{}
+	output 			*SyslogMessage
 	currentelem		string
 	currentparam	string
 }
 
 func NewMachine() *machine {
-	m := &machine{
-		repository: make(map[string]interface{}, 0),
-	}
+	m := &machine{}
 
 	%% access m.;
 	%% variable p m.p;
@@ -328,6 +330,7 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
 	m.pe = len(input)
 	m.eof = len(input)
 	m.err = nil
+	m.output = &SyslogMessage{}
 
     %% write init;
     %% write exec;
@@ -336,8 +339,5 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
         return nil, m.err
     }
 
-	res := &SyslogMessage{}
-	res.fromMap(m.repository)
-
-    return res, nil
+    return m.output, nil
 }
