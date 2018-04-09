@@ -237,7 +237,7 @@ partialtime = timehour ':' timeminute ':' timesecond . timesecfrac?;
 fulltime = partialtime . timeoffset;
 
 # (todo) > use @err(...) and introduce a generic error at the root level?
-timestamp = nilvalue | (fulldate >mark 'T' fulltime %set_timestamp) $err(err_timestamp); 
+timestamp = nilvalue | (fulldate >mark 'T' fulltime %set_timestamp) <>err(err_timestamp); 
 
 hostname = nilvalue | printusascii{1,255} >mark %set_hostname $err(err_hostname); 
 
