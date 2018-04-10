@@ -15,3 +15,17 @@ func unsafeUTF8DecimalCodePointsToInt(chars []uint8) int {
 	}
 	return out
 }
+
+func stripSlashes(str string) string {
+	l := len(str)
+	buf := make([]byte, 0, l)
+
+	for i := 0; i < l; i++ {
+		buf = append(buf, str[i])
+		if l > i+1 && str[i+1] == 92 {
+			i++
+		}
+	}
+
+	return string(buf)
+}

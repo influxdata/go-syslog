@@ -101,7 +101,8 @@ action set_paramname {
 
 action set_paramvalue {
 	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
-		(*elements)[m.currentelem][m.currentparam] = string(m.text())
+		// (todo) > strip slashes only when there are ...
+		(*elements)[m.currentelem][m.currentparam] = stripSlashes(string(m.text()))
 	}
 }
 
@@ -282,6 +283,7 @@ escapes = (0x5C (0x22 | 0x5D | 0x5C)) $err(err_escape);
 
 # As per section 6.3.3 param value MUST NOT contain '"', '\' and ']', unless they are escaped.
 # A backslash '\' followed by none of the this three characters is an invalid escape sequence.
+# In this case, treat it as a regular backslash and the following character as a regular character (not altering the invalid sequence).
 paramvalue = utf8charwodelims* >mark escapes* utf8charwodelims* %set_paramvalue;
 
 paramname = sdname >mark %set_paramname;
