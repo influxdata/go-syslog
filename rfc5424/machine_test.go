@@ -241,7 +241,74 @@ var testCases = []testCase{
 		nil,
 		"expecting a msgid (from 1 to max 32 US-ASCII characters) [col 45]",
 	},
-	// valid
+	// Not print US-ASCII chars for hostname, appname, procid, and msgid
+	{
+		[]byte("<1>1 -   - - - -"),
+		false,
+		nil,
+		"expecting an hostname (from 1 to max 255 US-ASCII characters) or a nil value [col 7]",
+	},
+	{
+		[]byte("<1>1 - -   - - -"),
+		false,
+		nil,
+		"expecting an app-name (from 1 to max 48 US-ASCII characters) or a nil value [col 9]",
+	},
+	{
+		[]byte("<1>1 - - -   - -"),
+		false,
+		nil,
+		"expecting a procid (from 1 to max 128 US-ASCII characters) or a nil value [col 11]",
+	},
+	{
+		[]byte("<1>1 - - - -   -"),
+		false,
+		nil,
+		"expecting a msgid (from 1 to max 32 US-ASCII characters) [col 13]",
+	},
+	// Invalid, with empty structured data
+	{
+		[]byte("<1>1 - - - - - []"),
+		false,
+		nil,
+		"expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"` [col 16]",
+	},
+	// Invalid, with structured data id containing space
+	{
+		[]byte("<1>1 - - - - - [ ]"),
+		false,
+		nil,
+		"expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"` [col 16]",
+	},
+	// Invalid, with structured data id containing =
+	{
+		[]byte("<1>1 - - - - - [=]"),
+		false,
+		nil,
+		"expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"` [col 16]",
+	},
+	// Invalid, with structured data id containing ]
+	{
+		[]byte("<1>1 - - - - - []]"),
+		false,
+		nil,
+		"expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"` [col 16]",
+	},
+	// Invalid, with structured data id containing "
+	{
+		[]byte(`<1>1 - - - - - ["]`),
+		false,
+		nil,
+		"expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"` [col 16]",
+	},
+	// Invalid, too long structured data id
+	{
+		[]byte(`<1>1 - - - - - [abcdefghilmnopqrstuvzabcdefghilmX]`),
+		false,
+		nil,
+		"expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"` [col 48]",
+	},
+	// Valid
 	{
 		[]byte("<1>1 - - - - - -"),
 		true,
@@ -253,7 +320,7 @@ var testCases = []testCase{
 		},
 		"",
 	},
-	// valid, w/o structure data, w/0 procid
+	// Valid, w/o structure data, w/0 procid
 	{
 		[]byte("<34>1 2003-10-11T22:14:15.003Z mymachine.example.com su - ID47 - BOM'su root' failed for lonvick on /dev/pts/8"),
 		true,
@@ -272,7 +339,7 @@ var testCases = []testCase{
 		},
 		"",
 	},
-	// valid, w/o structure data, w/o timestamp
+	// Valid, w/o structure data, w/o timestamp
 	{
 		[]byte("<187>222 - mymachine.example.com su - ID47 - 'su root' failed for lonvick on /dev/pts/8"),
 		true,
@@ -291,7 +358,7 @@ var testCases = []testCase{
 		},
 		"",
 	},
-	// valid, w/o structure data, w/o msgid
+	// Valid, w/o structure data, w/o msgid
 	{
 		[]byte("<165>1 2003-08-24T05:14:15.000003-07:00 192.0.2.1 myproc 8710 - - %% Time to make the do-nuts."),
 		true,
@@ -310,7 +377,7 @@ var testCases = []testCase{
 		},
 		"",
 	},
-	// valid, w/o structure data, w/o hostname, w/o appname, w/o procid, w/o msgid, w/o msg
+	// Valid, w/o structure data, w/o hostname, w/o appname, w/o procid, w/o msgid, w/o msg
 	{
 		[]byte("<165>2 2003-08-24T05:14:15.000003-07:00 - - - - -"),
 		true,
@@ -329,7 +396,7 @@ var testCases = []testCase{
 		},
 		"",
 	},
-	// valid, w/o structure data, w/o hostname, w/o appname, w/o procid, w/o msgid, empty msg
+	// Valid, w/o structure data, w/o hostname, w/o appname, w/o procid, w/o msgid, empty msg
 	{
 		[]byte("<165>2 2003-08-24T05:14:15.000003-07:00 - - - - - "),
 		true,
@@ -348,7 +415,7 @@ var testCases = []testCase{
 		},
 		"",
 	},
-	// valid, with structured data is, w/o structured data params
+	// Valid, with structured data is, w/o structured data params
 	{
 		[]byte("<78>1 2016-01-15T00:04:01+00:00 host1 CROND 10391 - [sdid] some_message"),
 		true,
@@ -369,7 +436,7 @@ var testCases = []testCase{
 		},
 		"",
 	},
-	// valid, with structured data is, wit structured data params
+	// Valid, with structured data is, wit structured data params
 	{
 		[]byte(`<78>1 2016-01-15T00:04:01+00:00 host1 CROND 10391 - [sdid x="⌘"] some_message`),
 		true,
@@ -392,7 +459,7 @@ var testCases = []testCase{
 		},
 		"",
 	},
-	// valid, with structured data is, wit structured data params
+	// Valid, with structured data is, wit structured data params
 	{
 		[]byte(`<78>2 2016-01-15T00:04:01+00:00 host1 CROND 10391 - [sdid x="hey \\u2318 hey"] some_message`),
 		true,
@@ -415,7 +482,7 @@ var testCases = []testCase{
 		},
 		"",
 	},
-	// valid, with (escaped) backslash within structured data param value
+	// Valid, with (escaped) backslash within structured data param value
 	{
 		[]byte(`<29>50 2016-01-15T01:00:43Z hn S - - [meta es="\\valid"] 127.0.0.1 - - 1452819643 "GET"`),
 		true,
@@ -436,7 +503,7 @@ var testCases = []testCase{
 		},
 		"",
 	},
-	// valid, with control characters within structured data param value
+	// Valid, with control characters within structured data param value
 	{
 		[]byte("<29>50 2016-01-15T01:00:43Z hn S - - [meta es=\"\b5Ὂg̀9! ℃ᾭG\"] 127.0.0.1 - - 1452819643 \"GET\""),
 		true,
@@ -457,7 +524,7 @@ var testCases = []testCase{
 		},
 		"",
 	},
-	// valid, with structured data, w/o msg
+	// Valid, with structured data, w/o msg
 	{
 		[]byte("<165>3 2003-10-11T22:14:15.003Z example.com evnts - ID27 [exampleSDID@32473 iut=\"3\" eventSource=\"Application\" eventID=\"1011\"][examplePriority@32473 class=\"high\"]"),
 		true,
@@ -485,21 +552,21 @@ var testCases = []testCase{
 		},
 		"",
 	},
-	// invalid, with duplicated structured data id
+	// Invalid, with duplicated structured data id
 	{
 		[]byte("<165>3 2003-10-11T22:14:15.003Z example.com evnts - ID27 [id1][id1]"),
 		false,
 		nil,
 		"duplicate structured data element id [col 66]",
 	},
-	// invalid, with duplicated structured data id
+	// Invalid, with duplicated structured data id
 	{
 		[]byte("<165>3 2003-10-11T22:14:15.003Z example.com evnts - ID27 [dupe e=\"1\"][id1][dupe class=\"l\"]"),
 		false,
 		nil,
 		"duplicate structured data element id [col 79]",
 	},
-	// valid, with structured data w/o msg
+	// Valid, with structured data w/o msg
 	{
 		[]byte("<165>4 2003-10-11T22:14:15.003Z mymachine.it e - 1 [ex@32473 iut=\"3\" eventSource=\"A\"] An application event log entry..."),
 		true,
@@ -523,7 +590,7 @@ var testCases = []testCase{
 		},
 		"",
 	},
-	// valid, with double quotes in the message
+	// Valid, with double quotes in the message
 	{
 		[]byte(`<29>1 2016-01-15T01:00:43Z some-host-name SEKRETPROGRAM prg - [origin x-service="svcname"][meta sequenceId="1"] 127.0.0.1 - - 1452819643 "GET"`),
 		true,
@@ -549,7 +616,7 @@ var testCases = []testCase{
 		},
 		"",
 	},
-	// valid, with double quotes in the message and escaped character within param
+	// Valid, with double quotes in the message and escaped character within param
 	{
 		[]byte(`<29>2 2016-01-15T01:00:43Z some-host-name SEKRETPROGRAM prg - [meta escape="\]"] 127.0.0.1 - - 1452819643 "GET"`),
 		true,
@@ -572,7 +639,7 @@ var testCases = []testCase{
 		},
 		"",
 	},
-	// invalid, param value can not contain closing square bracket - ie., ]
+	// Invalid, param value can not contain closing square bracket - ie., ]
 	{
 		[]byte(`<29>3 2016-01-15T01:00:43Z hn S - - [meta escape="]"] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
@@ -591,7 +658,7 @@ var testCases = []testCase{
 		nil,
 		"expecting chars `]`, `\"`, and `\\` to be escaped within param value [col 51]",
 	},
-	// invalid, param value can not contain doublequote char - ie., ""
+	// Invalid, param value can not contain doublequote char - ie., ""
 	{
 		[]byte(`<29>4 2016-01-15T01:00:43Z hn S - - [meta escape="""] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
@@ -610,7 +677,7 @@ var testCases = []testCase{
 		nil,
 		"expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters; key cannot contain `=`, ` `, `]`, and `\"`, while value cannot contain `]`, backslash, and `\"` unless escaped) [col 51]",
 	},
-	// invalid, param value can not contain backslash - ie., \
+	// Invalid, param value can not contain backslash - ie., \
 	{
 		[]byte(`<29>5 2016-01-15T01:00:43Z hn S - - [meta escape="\"] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
