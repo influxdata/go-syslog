@@ -84,6 +84,13 @@ var testCases = []testCase{
 		nil,
 		"expecting a priority value in the range 1-191 or equal to 0 [col 2]",
 	},
+	// Non numeric prival
+	{
+		[]byte("<aaa>122 2018-11-22"),
+		false,
+		nil,
+		"expecting a priority value in the range 1-191 or equal to 0 [col 1]",
+	},
 	// Missing version
 	{
 		[]byte("<100> 2018-11-22"),
@@ -94,6 +101,20 @@ var testCases = []testCase{
 	// 0 version
 	{
 		[]byte("<100>0 2018-11-22"),
+		false,
+		nil,
+		"expecting a version value in the range 1-999 [col 5]",
+	},
+	// Out of range version
+	{
+		[]byte("<100>1000 2018-11-22"),
+		false,
+		nil,
+		"expecting a version value in the range 1-999 [col 8]",
+	},
+	// Non numeric version
+	{
+		[]byte("<100>abc 2018-11-22"),
 		false,
 		nil,
 		"expecting a version value in the range 1-999 [col 5]",
@@ -119,6 +140,65 @@ var testCases = []testCase{
 		nil,
 		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 18]",
 	},
+	// Wrong hour
+	{
+		[]byte("<191>124 2018-02-01:25:15Z"),
+		false,
+		nil,
+		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 19]",
+	},
+	// Wrong minutes
+	{
+		[]byte("<191>125 2003-09-29T22:99:16Z"),
+		false,
+		nil,
+		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 23]",
+	},
+	// Wrong seconds
+	{
+		[]byte("<191>126 2003-09-29T22:09:99Z"),
+		false,
+		nil,
+		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 26]",
+	},
+	// Wrong sec fraction
+	{
+		[]byte("<191>127 2003-09-29T22:09:01.000000000009Z"),
+		false,
+		nil,
+		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 35]",
+	},
+	{
+		[]byte("<191>128 2003-09-29T22:09:01.Z"),
+		false,
+		nil,
+		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 29]",
+	},
+	// Wrong time offset
+	{
+		[]byte("<191>129 2003-09-29T22:09:01A"),
+		false,
+		nil,
+		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 28]",
+	},
+	{
+		[]byte("<191>129 2003-08-24T05:14:15.000003-24:00"),
+		false,
+		nil,
+		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 37]",
+	},
+	{
+		[]byte("<191>129 2003-08-24T05:14:15.000003-60:00"),
+		false,
+		nil,
+		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 36]",
+	},
+	{
+		[]byte("<191>129 2003-08-24T05:14:15.000003-07:61"),
+		false,
+		nil,
+		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 39]",
+	},
 	// Non existing date
 	// (fixme) > removing last space we get nil, not the parse timestamp error
 	{
@@ -126,6 +206,12 @@ var testCases = []testCase{
 		false,
 		nil,
 		"parsing time \"2003-09-31T22:14:15.003Z\": day out of range",
+	},
+	{
+		[]byte("<34>12 2003-09-31T22:14:16Z "),
+		false,
+		nil,
+		"parsing time \"2003-09-31T22:14:16Z\": day out of range",
 	},
 	// valid
 	{

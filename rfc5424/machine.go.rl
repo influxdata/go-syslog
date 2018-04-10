@@ -101,6 +101,7 @@ action set_paramname {
 
 action set_paramvalue {
 	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
+		// (fixme) > what if SD-PARAM-NAME already exist for the current element (ie., current SD-ID)?
 		// (todo) > strip slashes only when there are ...
 		(*elements)[m.currentelem][m.currentparam] = stripSlashes(string(m.text()))
 	}

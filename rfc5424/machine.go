@@ -25,7 +25,7 @@ var (
 )
 
 
-//line rfc5424/machine.go.rl:308
+//line rfc5424/machine.go.rl:309
 
 
 
@@ -38,7 +38,7 @@ const rfc5424_en_line int = 598
 const rfc5424_en_main int = 1
 
 
-//line rfc5424/machine.go.rl:311
+//line rfc5424/machine.go.rl:312
 
 type machine struct {
 	data       	 []byte
@@ -55,8 +55,6 @@ func NewMachine() *machine {
 	m := &machine{}
 
 	
-//line rfc5424/machine.go.rl:327
-	
 //line rfc5424/machine.go.rl:328
 	
 //line rfc5424/machine.go.rl:329
@@ -64,6 +62,8 @@ func NewMachine() *machine {
 //line rfc5424/machine.go.rl:330
 	
 //line rfc5424/machine.go.rl:331
+	
+//line rfc5424/machine.go.rl:332
 
 	return m
 }
@@ -99,7 +99,7 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
 	 m.cs = rfc5424_start
 	}
 
-//line rfc5424/machine.go.rl:361
+//line rfc5424/machine.go.rl:362
     
 //line rfc5424/machine.go:105
 	{
@@ -1327,7 +1327,7 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
 		}
 		goto tr0
 tr0:
-//line rfc5424/machine.go.rl:122
+//line rfc5424/machine.go.rl:123
 
 	m.err = fmt.Errorf(errPri, m.p)
 	( m.p)--
@@ -1337,7 +1337,7 @@ tr0:
 
 	goto st0
 tr2:
-//line rfc5424/machine.go.rl:115
+//line rfc5424/machine.go.rl:116
 
 	m.err = fmt.Errorf(errPrival, m.p)
 	( m.p)--
@@ -1347,7 +1347,7 @@ tr2:
 
 	goto st0
 tr7:
-//line rfc5424/machine.go.rl:129
+//line rfc5424/machine.go.rl:130
 
 	m.err = fmt.Errorf(errVersion, m.p)
 	( m.p)--
@@ -1357,7 +1357,7 @@ tr7:
 
 	goto st0
 tr15:
-//line rfc5424/machine.go.rl:143
+//line rfc5424/machine.go.rl:144
 
 	m.err = fmt.Errorf(errHostname, m.p)
 	( m.p)--
@@ -1367,7 +1367,7 @@ tr15:
 
 	goto st0
 tr19:
-//line rfc5424/machine.go.rl:150
+//line rfc5424/machine.go.rl:151
 
 	m.err = fmt.Errorf(errAppname, m.p)
 	( m.p)--
@@ -1377,7 +1377,7 @@ tr19:
 
 	goto st0
 tr23:
-//line rfc5424/machine.go.rl:157
+//line rfc5424/machine.go.rl:158
 
 	m.err = fmt.Errorf(errProcid, m.p)
 	( m.p)--
@@ -1387,7 +1387,7 @@ tr23:
 
 	goto st0
 tr27:
-//line rfc5424/machine.go.rl:164
+//line rfc5424/machine.go.rl:165
 
 	m.err = fmt.Errorf(errMsgid, m.p)
 	( m.p)--
@@ -1397,7 +1397,7 @@ tr27:
 
 	goto st0
 tr31:
-//line rfc5424/machine.go.rl:171
+//line rfc5424/machine.go.rl:172
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -1407,7 +1407,7 @@ tr31:
 
 	goto st0
 tr34:
-//line rfc5424/machine.go.rl:192
+//line rfc5424/machine.go.rl:193
 
 	m.err = fmt.Errorf(errMsg, m.p)
 	( m.p)--
@@ -1417,7 +1417,7 @@ tr34:
 
 	goto st0
 tr38:
-//line rfc5424/machine.go.rl:178
+//line rfc5424/machine.go.rl:179
 
 	m.err = fmt.Errorf(errSdID, m.p)
 	( m.p)--
@@ -1425,7 +1425,7 @@ tr38:
     {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:171
+//line rfc5424/machine.go.rl:172
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -1435,7 +1435,7 @@ tr38:
 
 	goto st0
 tr43:
-//line rfc5424/machine.go.rl:185
+//line rfc5424/machine.go.rl:186
 
 	m.err = fmt.Errorf(errSdParam, m.p)
 	( m.p)--
@@ -1443,7 +1443,7 @@ tr43:
     {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:171
+//line rfc5424/machine.go.rl:172
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -1453,7 +1453,7 @@ tr43:
 
 	goto st0
 tr81:
-//line rfc5424/machine.go.rl:199
+//line rfc5424/machine.go.rl:200
 
 	m.err = fmt.Errorf(errEscape, m.p)
 	( m.p)--
@@ -1461,7 +1461,7 @@ tr81:
     {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:185
+//line rfc5424/machine.go.rl:186
 
 	m.err = fmt.Errorf(errSdParam, m.p)
 	( m.p)--
@@ -1469,7 +1469,7 @@ tr81:
     {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:171
+//line rfc5424/machine.go.rl:172
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -1479,7 +1479,7 @@ tr81:
 
 	goto st0
 tr574:
-//line rfc5424/machine.go.rl:136
+//line rfc5424/machine.go.rl:137
 
 	m.err = fmt.Errorf(errTimestamp, m.p)
 	( m.p)--
@@ -2759,6 +2759,7 @@ tr79:
 //line rfc5424/machine.go.rl:102
 
 	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
+		// (fixme) > what if SD-PARAM-NAME already exist for the current element (ie., current SD-ID)?
 		// (todo) > strip slashes only when there are ...
 		(*elements)[m.currentelem][m.currentparam] = stripSlashes(string(m.text()))
 	}
@@ -2768,6 +2769,7 @@ tr83:
 //line rfc5424/machine.go.rl:102
 
 	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
+		// (fixme) > what if SD-PARAM-NAME already exist for the current element (ie., current SD-ID)?
 		// (todo) > strip slashes only when there are ...
 		(*elements)[m.currentelem][m.currentparam] = stripSlashes(string(m.text()))
 	}
@@ -2778,7 +2780,7 @@ tr83:
 			goto _test_eof62
 		}
 	st_case_62:
-//line rfc5424/machine.go:2782
+//line rfc5424/machine.go:2784
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto st26
@@ -2810,7 +2812,7 @@ tr42:
 			goto _test_eof602
 		}
 	st_case_602:
-//line rfc5424/machine.go:2814
+//line rfc5424/machine.go:2816
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto st600
@@ -2829,7 +2831,7 @@ tr80:
 			goto _test_eof63
 		}
 	st_case_63:
-//line rfc5424/machine.go:2833
+//line rfc5424/machine.go:2835
 		if ( m.data)[( m.p)] == 34 {
 			goto st64
 		}
@@ -9042,7 +9044,7 @@ tr13:
 			goto _test_eof556
 		}
 	st_case_556:
-//line rfc5424/machine.go:9046
+//line rfc5424/machine.go:9048
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st557
 		}
@@ -9470,7 +9472,7 @@ tr4:
 			goto _test_eof595
 		}
 	st_case_595:
-//line rfc5424/machine.go:9474
+//line rfc5424/machine.go:9476
 		switch ( m.data)[( m.p)] {
 		case 57:
 			goto st597
@@ -9492,7 +9494,7 @@ tr5:
 			goto _test_eof596
 		}
 	st_case_596:
-//line rfc5424/machine.go:9496
+//line rfc5424/machine.go:9498
 		if ( m.data)[( m.p)] == 62 {
 			goto tr6
 		}
@@ -9525,7 +9527,7 @@ tr5:
 		}
 		goto st598
 tr617:
-//line rfc5424/machine.go.rl:304
+//line rfc5424/machine.go.rl:305
  ( m.p)--
  {goto st1 } 
 	goto st603
@@ -9534,7 +9536,7 @@ tr617:
 			goto _test_eof603
 		}
 	st_case_603:
-//line rfc5424/machine.go:9538
+//line rfc5424/machine.go:9540
 		goto st0
 	st_out:
 	_test_eof1:  m.cs = 1; goto _test_eof
@@ -10145,14 +10147,14 @@ tr617:
 	if ( m.p) == ( m.eof) {
 		switch  m.cs {
 		case 601:
-//line rfc5424/machine.go.rl:109
+//line rfc5424/machine.go.rl:110
 
 	if msg := string(m.text()); msg != "" {
 		m.output.Message = &msg
 	}
 
 		case 2, 3, 595, 596, 597:
-//line rfc5424/machine.go.rl:115
+//line rfc5424/machine.go.rl:116
 
 	m.err = fmt.Errorf(errPrival, m.p)
 	( m.p)--
@@ -10161,7 +10163,7 @@ tr617:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 1:
-//line rfc5424/machine.go.rl:122
+//line rfc5424/machine.go.rl:123
 
 	m.err = fmt.Errorf(errPri, m.p)
 	( m.p)--
@@ -10170,7 +10172,7 @@ tr617:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 4, 5, 593, 594:
-//line rfc5424/machine.go.rl:129
+//line rfc5424/machine.go.rl:130
 
 	m.err = fmt.Errorf(errVersion, m.p)
 	( m.p)--
@@ -10179,7 +10181,7 @@ tr617:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 556, 557, 558, 559, 560, 561, 562, 563, 564, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 581, 582, 583, 584, 585, 586, 587, 588, 589, 590, 591, 592:
-//line rfc5424/machine.go.rl:136
+//line rfc5424/machine.go.rl:137
 
 	m.err = fmt.Errorf(errTimestamp, m.p)
 	( m.p)--
@@ -10188,7 +10190,7 @@ tr617:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 8, 9, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545, 546, 547, 548, 549, 550, 551, 552, 553, 554, 555:
-//line rfc5424/machine.go.rl:143
+//line rfc5424/machine.go.rl:144
 
 	m.err = fmt.Errorf(errHostname, m.p)
 	( m.p)--
@@ -10197,7 +10199,7 @@ tr617:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 10, 11, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301:
-//line rfc5424/machine.go.rl:150
+//line rfc5424/machine.go.rl:151
 
 	m.err = fmt.Errorf(errAppname, m.p)
 	( m.p)--
@@ -10206,7 +10208,7 @@ tr617:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 12, 13, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254:
-//line rfc5424/machine.go.rl:157
+//line rfc5424/machine.go.rl:158
 
 	m.err = fmt.Errorf(errProcid, m.p)
 	( m.p)--
@@ -10215,7 +10217,7 @@ tr617:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 14, 15, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127:
-//line rfc5424/machine.go.rl:164
+//line rfc5424/machine.go.rl:165
 
 	m.err = fmt.Errorf(errMsgid, m.p)
 	( m.p)--
@@ -10224,7 +10226,7 @@ tr617:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 16:
-//line rfc5424/machine.go.rl:171
+//line rfc5424/machine.go.rl:172
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -10233,7 +10235,7 @@ tr617:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 17, 18, 19, 20, 21, 22, 23:
-//line rfc5424/machine.go.rl:192
+//line rfc5424/machine.go.rl:193
 
 	m.err = fmt.Errorf(errMsg, m.p)
 	( m.p)--
@@ -10246,14 +10248,14 @@ tr617:
 
 	m.pb = m.p
 
-//line rfc5424/machine.go.rl:109
+//line rfc5424/machine.go.rl:110
 
 	if msg := string(m.text()); msg != "" {
 		m.output.Message = &msg
 	}
 
 		case 24, 25, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96:
-//line rfc5424/machine.go.rl:178
+//line rfc5424/machine.go.rl:179
 
 	m.err = fmt.Errorf(errSdID, m.p)
 	( m.p)--
@@ -10261,7 +10263,7 @@ tr617:
     {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:171
+//line rfc5424/machine.go.rl:172
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -10270,7 +10272,7 @@ tr617:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 62, 65:
-//line rfc5424/machine.go.rl:185
+//line rfc5424/machine.go.rl:186
 
 	m.err = fmt.Errorf(errSdParam, m.p)
 	( m.p)--
@@ -10278,7 +10280,7 @@ tr617:
     {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:171
+//line rfc5424/machine.go.rl:172
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -10287,7 +10289,7 @@ tr617:
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 60, 61, 63, 64:
-//line rfc5424/machine.go.rl:199
+//line rfc5424/machine.go.rl:200
 
 	m.err = fmt.Errorf(errEscape, m.p)
 	( m.p)--
@@ -10295,7 +10297,7 @@ tr617:
     {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:185
+//line rfc5424/machine.go.rl:186
 
 	m.err = fmt.Errorf(errSdParam, m.p)
 	( m.p)--
@@ -10303,7 +10305,7 @@ tr617:
     {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:171
+//line rfc5424/machine.go.rl:172
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
@@ -10311,14 +10313,14 @@ tr617:
     {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go:10315
+//line rfc5424/machine.go:10317
 		}
 	}
 
 	_out: {}
 	}
 
-//line rfc5424/machine.go.rl:362
+//line rfc5424/machine.go.rl:363
 
     if m.cs < rfc5424_first_final {
         return nil, m.err
