@@ -246,7 +246,6 @@ partialtime = timehour ':' timeminute ':' timesecond . timesecfrac?;
 
 fulltime = partialtime . timeoffset;
 
-# (todo) > use @err(...) and introduce a generic error at the root level?
 timestamp = nilvalue | (fulldate >mark 'T' fulltime %set_timestamp) <>err(err_timestamp); 
 
 hostname = nilvalue | printusascii{1,255} >mark %set_hostname $err(err_hostname); 
@@ -291,12 +290,13 @@ paramname = sdname >mark %set_paramname;
 
 sdparam = (paramname '=' '"' paramvalue '"') $err(err_sdparam);
 
-# (todo) > evaluate whether to incorporate finegrained details of section 6.3.2
+# (todo) > evaluate whether to incorporate finegrained semantics of section 6.3.2
 sdid = sdname >mark %set_id $err(err_sdid);
 
 sdelement = ('[' sdid (sp sdparam)* ']'); 
 
-structureddata = nilvalue | sdelement+ >ini_elements $err(err_structureddata);
+# (fixme) > err_structureddata seems to be never called (remove it?)
+structureddata = nilvalue | sdelement+ >ini_elements $err(err_structureddata); 
 
 bom = 0xEF 0xBB 0xBF;
 
