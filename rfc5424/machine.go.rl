@@ -20,6 +20,7 @@ var (
 	errSdParam = "expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters; key cannot contain `=`, ` `, `]`, and `\"`, while value cannot contain `]`, backslash, and `\"` unless escaped) [col %d]"
 	errMsg = "expecting a free-form optional message in UTF-8 (starting with or without BOM) [col %d]"
 	errEscape = "expecting chars `]`, `\"`, and `\\` to be escaped within param value [col %d]"
+	errParse = "parsing error [col %d]"
 )
 
 %%{
@@ -204,6 +205,14 @@ action err_escape {
     fbreak;
 }
 
+action err_parse {
+	m.err = fmt.Errorf(errParse, m.p)
+	fhold;
+    fgoto line;
+    fbreak;
+}
+
+
 nilvalue = '-';
 
 sp = ' ';
@@ -276,7 +285,7 @@ utf8octets = utf8char*;
 sdname = (printusascii - ('=' | sp | ']' | '"')){1,32};
 
 # utf8char except ", ], \
-utf8charwodelims = any - (0x22 | 0x5D | 0x5C);
+utf8charwodelims = utf8char - (0x22 | 0x5D | 0x5C);
 
 # \", \], \\
 escapes = (0x5C (0x22 | 0x5D | 0x5C)) $err(err_escape);
@@ -304,7 +313,7 @@ msg = (bom? utf8octets) >mark %set_msg $err(err_msg);
 
 line := (any - [\n\r])* [\n\r] @{ fhold; fgoto main; }; # (todo) > fhold necessary?
 
-main := header sp structureddata (sp msg)?;
+main := header sp structureddata (sp msg)? $err(err_parse);
 
 }%%
 
