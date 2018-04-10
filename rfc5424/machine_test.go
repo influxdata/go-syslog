@@ -308,6 +308,13 @@ var testCases = []testCase{
 		nil,
 		"expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"` [col 48]",
 	},
+	// Invalid, too long structured data param key
+	{
+		[]byte(`<1>1 - - - - - [id abcdefghilmnopqrstuvzabcdefghilmX=val]`),
+		false,
+		nil,
+		"expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters; key cannot contain `=`, ` `, `]`, and `\"`, while value cannot contain `]`, backslash, and `\"` unless escaped) [col 51]",
+	},
 	// Valid
 	{
 		[]byte("<1>1 - - - - - -"),
@@ -696,6 +703,94 @@ var testCases = []testCase{
 		nil,
 		"expecting chars `]`, `\"`, and `\\` to be escaped within param value [col 51]",
 	},
+	// Valid, message starting with byte order mark (BOM, \uFEFF)
+	{
+		[]byte("<1>1 - - - - - - \xEF\xBB\xBF"),
+		true,
+		&SyslogMessage{
+			Priority: 1,
+			facility: 0,
+			severity: 1,
+			Version:  1,
+			Message:  getStringAddress("\ufeff"),
+		},
+		"",
+	},
+	{
+		[]byte("<1>1 - - - - - - κόσμε"),
+		true,
+		&SyslogMessage{
+			Priority: 1,
+			facility: 0,
+			severity: 1,
+			Version:  1,
+			Message:  getStringAddress("κόσμε"),
+		},
+		"",
+	},
+	// Invalid, out of range code within message
+	{
+		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xC1"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 20]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xC1"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 17]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xc3\x28"), // invalid 2 octet sequence
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 21]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xc3\x28"), // invalid 2 octet sequence
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xa0\xa1"), // invalid sequence identifier
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 20]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xa0\xa1"), // invalid sequence identifier
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 17]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xe2\x28\xa1"), // invalid 3 octet sequence (2nd octet)
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 21]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xe2\x28\xa1"), // invalid 3 octet sequence (2nd octet)
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xe2\x82\x28"), // invalid 3 octet sequence (3nd octet)
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 22]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xe2\x82\x28"), // invalid 3 octet sequence (3nd octet)
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 19]",
+	},
+
+	// (fixme) > "<1>1 -letters- - - - -" gives nil (correct, since it's invalid, missing space) object but also no error
 }
 
 func TestParse(t *testing.T) {
