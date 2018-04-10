@@ -17,27 +17,28 @@ var (
 	errProcid = "expecting a procid (from 1 to max 128 US-ASCII characters) or a nil value [col %d]"
 	errMsgid = "expecting a msgid (from 1 to max 32 US-ASCII characters) [col %d]"
 	errStructuredData = "expecting a structured data section containing one or more elements (`[id ( key=\"value\")*]+`) or a nil value [col %d]"
-	errSdID = "expecting a structured data element id (from 1 to max 32 US-ASCII characters, except `=`, ` `, `]`, and `\"`) [col %d]"
+	errSdID = "expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"` [col %d]"
 	errSdIDDuplicated = "duplicate structured data element id [col %d]"
-	errSdParam = "expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters, except `=`, ` `, `]`, and `\"`) [col %d]"
+	errSdParam = "expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters; key cannot contain `=`, ` `, `]`, and `\"`, while value cannot contain `]`, backslash, and `\"` unless escaped) [col %d]"
 	errMsg = "expecting a free-form optional message in UTF-8 (starting with or without BOM) [col %d]"
+	errEscape = "expecting chars `]`, `\"`, and `\\` to be escaped within param value [col %d]"
 )
 
 
-//line rfc5424/machine.go.rl:290
+//line rfc5424/machine.go.rl:306
 
 
 
-//line rfc5424/machine.go:32
+//line rfc5424/machine.go:33
 const rfc5424_start int = 1
-const rfc5424_first_final int = 678
+const rfc5424_first_final int = 599
 const rfc5424_error int = 0
 
-const rfc5424_en_line int = 677
+const rfc5424_en_line int = 598
 const rfc5424_en_main int = 1
 
 
-//line rfc5424/machine.go.rl:293
+//line rfc5424/machine.go.rl:309
 
 type machine struct {
 	data       	 []byte
@@ -54,15 +55,15 @@ func NewMachine() *machine {
 	m := &machine{}
 
 	
-//line rfc5424/machine.go.rl:309
+//line rfc5424/machine.go.rl:325
 	
-//line rfc5424/machine.go.rl:310
+//line rfc5424/machine.go.rl:326
 	
-//line rfc5424/machine.go.rl:311
+//line rfc5424/machine.go.rl:327
 	
-//line rfc5424/machine.go.rl:312
+//line rfc5424/machine.go.rl:328
 	
-//line rfc5424/machine.go.rl:313
+//line rfc5424/machine.go.rl:329
 
 	return m
 }
@@ -93,14 +94,14 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
 	m.output = &SyslogMessage{}
 
     
-//line rfc5424/machine.go:97
+//line rfc5424/machine.go:98
 	{
 	 m.cs = rfc5424_start
 	}
 
-//line rfc5424/machine.go.rl:343
+//line rfc5424/machine.go.rl:359
     
-//line rfc5424/machine.go:104
+//line rfc5424/machine.go:105
 	{
 	if ( m.p) == ( m.pe) {
 		goto _test_eof
@@ -140,12 +141,12 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
 		goto st_case_15
 	case 16:
 		goto st_case_16
-	case 678:
-		goto st_case_678
-	case 679:
-		goto st_case_679
-	case 680:
-		goto st_case_680
+	case 599:
+		goto st_case_599
+	case 600:
+		goto st_case_600
+	case 601:
+		goto st_case_601
 	case 17:
 		goto st_case_17
 	case 18:
@@ -238,6 +239,8 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
 		goto st_case_61
 	case 62:
 		goto st_case_62
+	case 602:
+		goto st_case_602
 	case 63:
 		goto st_case_63
 	case 64:
@@ -308,152 +311,6 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
 		goto st_case_96
 	case 97:
 		goto st_case_97
-	case 681:
-		goto st_case_681
-	case 682:
-		goto st_case_682
-	case 683:
-		goto st_case_683
-	case 684:
-		goto st_case_684
-	case 685:
-		goto st_case_685
-	case 686:
-		goto st_case_686
-	case 687:
-		goto st_case_687
-	case 688:
-		goto st_case_688
-	case 689:
-		goto st_case_689
-	case 690:
-		goto st_case_690
-	case 691:
-		goto st_case_691
-	case 692:
-		goto st_case_692
-	case 693:
-		goto st_case_693
-	case 694:
-		goto st_case_694
-	case 695:
-		goto st_case_695
-	case 696:
-		goto st_case_696
-	case 697:
-		goto st_case_697
-	case 698:
-		goto st_case_698
-	case 699:
-		goto st_case_699
-	case 700:
-		goto st_case_700
-	case 701:
-		goto st_case_701
-	case 702:
-		goto st_case_702
-	case 703:
-		goto st_case_703
-	case 704:
-		goto st_case_704
-	case 705:
-		goto st_case_705
-	case 706:
-		goto st_case_706
-	case 707:
-		goto st_case_707
-	case 708:
-		goto st_case_708
-	case 709:
-		goto st_case_709
-	case 710:
-		goto st_case_710
-	case 711:
-		goto st_case_711
-	case 712:
-		goto st_case_712
-	case 713:
-		goto st_case_713
-	case 714:
-		goto st_case_714
-	case 715:
-		goto st_case_715
-	case 716:
-		goto st_case_716
-	case 717:
-		goto st_case_717
-	case 718:
-		goto st_case_718
-	case 719:
-		goto st_case_719
-	case 720:
-		goto st_case_720
-	case 721:
-		goto st_case_721
-	case 722:
-		goto st_case_722
-	case 723:
-		goto st_case_723
-	case 724:
-		goto st_case_724
-	case 725:
-		goto st_case_725
-	case 726:
-		goto st_case_726
-	case 727:
-		goto st_case_727
-	case 728:
-		goto st_case_728
-	case 729:
-		goto st_case_729
-	case 730:
-		goto st_case_730
-	case 731:
-		goto st_case_731
-	case 732:
-		goto st_case_732
-	case 733:
-		goto st_case_733
-	case 734:
-		goto st_case_734
-	case 735:
-		goto st_case_735
-	case 736:
-		goto st_case_736
-	case 737:
-		goto st_case_737
-	case 738:
-		goto st_case_738
-	case 739:
-		goto st_case_739
-	case 740:
-		goto st_case_740
-	case 741:
-		goto st_case_741
-	case 742:
-		goto st_case_742
-	case 743:
-		goto st_case_743
-	case 744:
-		goto st_case_744
-	case 745:
-		goto st_case_745
-	case 746:
-		goto st_case_746
-	case 747:
-		goto st_case_747
-	case 748:
-		goto st_case_748
-	case 749:
-		goto st_case_749
-	case 750:
-		goto st_case_750
-	case 751:
-		goto st_case_751
-	case 752:
-		goto st_case_752
-	case 753:
-		goto st_case_753
 	case 98:
 		goto st_case_98
 	case 99:
@@ -610,8 +467,6 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
 		goto st_case_174
 	case 175:
 		goto st_case_175
-	case 754:
-		goto st_case_754
 	case 176:
 		goto st_case_176
 	case 177:
@@ -1458,166 +1313,8 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
 		goto st_case_597
 	case 598:
 		goto st_case_598
-	case 599:
-		goto st_case_599
-	case 600:
-		goto st_case_600
-	case 601:
-		goto st_case_601
-	case 602:
-		goto st_case_602
 	case 603:
 		goto st_case_603
-	case 604:
-		goto st_case_604
-	case 605:
-		goto st_case_605
-	case 606:
-		goto st_case_606
-	case 607:
-		goto st_case_607
-	case 608:
-		goto st_case_608
-	case 609:
-		goto st_case_609
-	case 610:
-		goto st_case_610
-	case 611:
-		goto st_case_611
-	case 612:
-		goto st_case_612
-	case 613:
-		goto st_case_613
-	case 614:
-		goto st_case_614
-	case 615:
-		goto st_case_615
-	case 616:
-		goto st_case_616
-	case 617:
-		goto st_case_617
-	case 618:
-		goto st_case_618
-	case 619:
-		goto st_case_619
-	case 620:
-		goto st_case_620
-	case 621:
-		goto st_case_621
-	case 622:
-		goto st_case_622
-	case 623:
-		goto st_case_623
-	case 624:
-		goto st_case_624
-	case 625:
-		goto st_case_625
-	case 626:
-		goto st_case_626
-	case 627:
-		goto st_case_627
-	case 628:
-		goto st_case_628
-	case 629:
-		goto st_case_629
-	case 630:
-		goto st_case_630
-	case 631:
-		goto st_case_631
-	case 632:
-		goto st_case_632
-	case 633:
-		goto st_case_633
-	case 634:
-		goto st_case_634
-	case 635:
-		goto st_case_635
-	case 636:
-		goto st_case_636
-	case 637:
-		goto st_case_637
-	case 638:
-		goto st_case_638
-	case 639:
-		goto st_case_639
-	case 640:
-		goto st_case_640
-	case 641:
-		goto st_case_641
-	case 642:
-		goto st_case_642
-	case 643:
-		goto st_case_643
-	case 644:
-		goto st_case_644
-	case 645:
-		goto st_case_645
-	case 646:
-		goto st_case_646
-	case 647:
-		goto st_case_647
-	case 648:
-		goto st_case_648
-	case 649:
-		goto st_case_649
-	case 650:
-		goto st_case_650
-	case 651:
-		goto st_case_651
-	case 652:
-		goto st_case_652
-	case 653:
-		goto st_case_653
-	case 654:
-		goto st_case_654
-	case 655:
-		goto st_case_655
-	case 656:
-		goto st_case_656
-	case 657:
-		goto st_case_657
-	case 658:
-		goto st_case_658
-	case 659:
-		goto st_case_659
-	case 660:
-		goto st_case_660
-	case 661:
-		goto st_case_661
-	case 662:
-		goto st_case_662
-	case 663:
-		goto st_case_663
-	case 664:
-		goto st_case_664
-	case 665:
-		goto st_case_665
-	case 666:
-		goto st_case_666
-	case 667:
-		goto st_case_667
-	case 668:
-		goto st_case_668
-	case 669:
-		goto st_case_669
-	case 670:
-		goto st_case_670
-	case 671:
-		goto st_case_671
-	case 672:
-		goto st_case_672
-	case 673:
-		goto st_case_673
-	case 674:
-		goto st_case_674
-	case 675:
-		goto st_case_675
-	case 676:
-		goto st_case_676
-	case 677:
-		goto st_case_677
-	case 755:
-		goto st_case_755
 	}
 	goto st_out
 	st1:
@@ -1630,228 +1327,168 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
 		}
 		goto tr0
 tr0:
-//line rfc5424/machine.go.rl:120
+//line rfc5424/machine.go.rl:121
 
 	m.err = fmt.Errorf(errPri, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
 tr2:
-//line rfc5424/machine.go.rl:113
+//line rfc5424/machine.go.rl:114
 
 	m.err = fmt.Errorf(errPrival, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
 tr7:
-//line rfc5424/machine.go.rl:127
+//line rfc5424/machine.go.rl:128
 
 	m.err = fmt.Errorf(errVersion, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
 tr15:
-//line rfc5424/machine.go.rl:141
+//line rfc5424/machine.go.rl:142
 
 	m.err = fmt.Errorf(errHostname, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
 tr19:
-//line rfc5424/machine.go.rl:148
+//line rfc5424/machine.go.rl:149
 
 	m.err = fmt.Errorf(errAppname, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
 tr23:
-//line rfc5424/machine.go.rl:155
+//line rfc5424/machine.go.rl:156
 
 	m.err = fmt.Errorf(errProcid, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
 tr27:
-//line rfc5424/machine.go.rl:162
+//line rfc5424/machine.go.rl:163
 
 	m.err = fmt.Errorf(errMsgid, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
 tr31:
-//line rfc5424/machine.go.rl:169
+//line rfc5424/machine.go.rl:170
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
 tr34:
-//line rfc5424/machine.go.rl:190
+//line rfc5424/machine.go.rl:191
 
 	m.err = fmt.Errorf(errMsg, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
 tr38:
-//line rfc5424/machine.go.rl:176
+//line rfc5424/machine.go.rl:177
 
 	m.err = fmt.Errorf(errSdID, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:169
+//line rfc5424/machine.go.rl:170
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
 tr43:
-//line rfc5424/machine.go.rl:183
+//line rfc5424/machine.go.rl:184
 
 	m.err = fmt.Errorf(errSdParam, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:169
+//line rfc5424/machine.go.rl:170
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
-tr134:
-//line rfc5424/machine.go.rl:183
+tr81:
+//line rfc5424/machine.go.rl:198
+
+	m.err = fmt.Errorf(errEscape, m.p)
+	( m.p)--
+
+    {goto st598 }
+    {( m.p)++;  m.cs = 0; goto _out }
+
+//line rfc5424/machine.go.rl:184
 
 	m.err = fmt.Errorf(errSdParam, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:169
+//line rfc5424/machine.go.rl:170
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
 
-    {goto st677 }
-    {( m.p)++;  m.cs = 0; goto _out }
-
-//line rfc5424/machine.go.rl:190
-
-	m.err = fmt.Errorf(errMsg, m.p)
-	( m.p)--
-
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
-tr139:
-//line rfc5424/machine.go.rl:176
-
-	m.err = fmt.Errorf(errSdID, m.p)
-	( m.p)--
-
-    {goto st677 }
-    {( m.p)++;  m.cs = 0; goto _out }
-
-//line rfc5424/machine.go.rl:183
-
-	m.err = fmt.Errorf(errSdParam, m.p)
-	( m.p)--
-
-    {goto st677 }
-    {( m.p)++;  m.cs = 0; goto _out }
-
-//line rfc5424/machine.go.rl:169
-
-	m.err = fmt.Errorf(errStructuredData, m.p)
-	( m.p)--
-
-    {goto st677 }
-    {( m.p)++;  m.cs = 0; goto _out }
-
-	goto st0
-tr658:
-//line rfc5424/machine.go.rl:134
+tr574:
+//line rfc5424/machine.go.rl:135
 
 	m.err = fmt.Errorf(errTimestamp, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 	goto st0
-tr774:
-//line rfc5424/machine.go.rl:176
-
-	m.err = fmt.Errorf(errSdID, m.p)
-	( m.p)--
-
-    {goto st677 }
-    {( m.p)++;  m.cs = 0; goto _out }
-
-//line rfc5424/machine.go.rl:183
-
-	m.err = fmt.Errorf(errSdParam, m.p)
-	( m.p)--
-
-    {goto st677 }
-    {( m.p)++;  m.cs = 0; goto _out }
-
-//line rfc5424/machine.go.rl:169
-
-	m.err = fmt.Errorf(errStructuredData, m.p)
-	( m.p)--
-
-    {goto st677 }
-    {( m.p)++;  m.cs = 0; goto _out }
-
-//line rfc5424/machine.go.rl:190
-
-	m.err = fmt.Errorf(errMsg, m.p)
-	( m.p)--
-
-    {goto st677 }
-    {( m.p)++;  m.cs = 0; goto _out }
-
-	goto st0
-//line rfc5424/machine.go:1855
+//line rfc5424/machine.go:1492
 st_case_0:
 	st0:
 		 m.cs = 0
@@ -1872,7 +1509,7 @@ st_case_0:
 		}
 		goto tr2
 tr3:
-//line rfc5424/machine.go.rl:30
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -1882,13 +1519,13 @@ tr3:
 			goto _test_eof3
 		}
 	st_case_3:
-//line rfc5424/machine.go:1886
+//line rfc5424/machine.go:1523
 		if ( m.data)[( m.p)] == 62 {
 			goto tr6
 		}
 		goto tr2
 tr6:
-//line rfc5424/machine.go.rl:34
+//line rfc5424/machine.go.rl:35
 
 	m.output.SetPriority(uint8(unsafeUTF8DecimalCodePointsToInt(m.text())))
 
@@ -1898,13 +1535,13 @@ tr6:
 			goto _test_eof4
 		}
 	st_case_4:
-//line rfc5424/machine.go:1902
+//line rfc5424/machine.go:1539
 		if 49 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto tr8
 		}
 		goto tr7
 tr8:
-//line rfc5424/machine.go.rl:30
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -1914,16 +1551,16 @@ tr8:
 			goto _test_eof5
 		}
 	st_case_5:
-//line rfc5424/machine.go:1918
+//line rfc5424/machine.go:1555
 		if ( m.data)[( m.p)] == 32 {
 			goto tr9
 		}
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
-			goto st672
+			goto st593
 		}
 		goto tr7
 tr9:
-//line rfc5424/machine.go.rl:38
+//line rfc5424/machine.go.rl:39
 
 	m.output.Version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
 
@@ -1933,7 +1570,7 @@ tr9:
 			goto _test_eof6
 		}
 	st_case_6:
-//line rfc5424/machine.go:1937
+//line rfc5424/machine.go:1574
 		if ( m.data)[( m.p)] == 45 {
 			goto st7
 		}
@@ -1950,14 +1587,14 @@ tr9:
 			goto st8
 		}
 		goto st0
-tr689:
-//line rfc5424/machine.go.rl:42
+tr605:
+//line rfc5424/machine.go.rl:43
 
 	if t, e := time.Parse(time.RFC3339Nano, string(m.text())); e != nil {
         m.err = e
 		( m.p)--
 
-    	{goto st677 }
+    	{goto st598 }
     	{( m.p)++;  m.cs = 8; goto _out }
     } else {
         m.output.Timestamp = &t
@@ -1969,13 +1606,13 @@ tr689:
 			goto _test_eof8
 		}
 	st_case_8:
-//line rfc5424/machine.go:1973
+//line rfc5424/machine.go:1610
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto tr16
 		}
 		goto tr15
 tr16:
-//line rfc5424/machine.go.rl:30
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -1985,16 +1622,16 @@ tr16:
 			goto _test_eof9
 		}
 	st_case_9:
-//line rfc5424/machine.go:1989
+//line rfc5424/machine.go:1626
 		if ( m.data)[( m.p)] == 32 {
 			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st381
+			goto st302
 		}
 		goto tr15
 tr17:
-//line rfc5424/machine.go.rl:53
+//line rfc5424/machine.go.rl:54
 
 	if hostname := string(m.text()); hostname != "-" {
 		m.output.Hostname = &hostname
@@ -2006,13 +1643,13 @@ tr17:
 			goto _test_eof10
 		}
 	st_case_10:
-//line rfc5424/machine.go:2010
+//line rfc5424/machine.go:1647
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto tr20
 		}
 		goto tr19
 tr20:
-//line rfc5424/machine.go.rl:30
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -2022,16 +1659,16 @@ tr20:
 			goto _test_eof11
 		}
 	st_case_11:
-//line rfc5424/machine.go:2026
+//line rfc5424/machine.go:1663
 		if ( m.data)[( m.p)] == 32 {
 			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st334
+			goto st255
 		}
 		goto tr19
 tr21:
-//line rfc5424/machine.go.rl:59
+//line rfc5424/machine.go.rl:60
 
 	if appname := string(m.text()); appname != "-" {
 		m.output.Appname = &appname
@@ -2043,13 +1680,13 @@ tr21:
 			goto _test_eof12
 		}
 	st_case_12:
-//line rfc5424/machine.go:2047
+//line rfc5424/machine.go:1684
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto tr24
 		}
 		goto tr23
 tr24:
-//line rfc5424/machine.go.rl:30
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -2059,16 +1696,16 @@ tr24:
 			goto _test_eof13
 		}
 	st_case_13:
-//line rfc5424/machine.go:2063
+//line rfc5424/machine.go:1700
 		if ( m.data)[( m.p)] == 32 {
 			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st207
+			goto st128
 		}
 		goto tr23
 tr25:
-//line rfc5424/machine.go.rl:65
+//line rfc5424/machine.go.rl:66
 
 	if procid := string(m.text()); procid != "-" {
 		m.output.ProcID = &procid
@@ -2080,13 +1717,13 @@ tr25:
 			goto _test_eof14
 		}
 	st_case_14:
-//line rfc5424/machine.go:2084
+//line rfc5424/machine.go:1721
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto tr28
 		}
 		goto tr27
 tr28:
-//line rfc5424/machine.go.rl:30
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -2096,16 +1733,16 @@ tr28:
 			goto _test_eof15
 		}
 	st_case_15:
-//line rfc5424/machine.go:2100
+//line rfc5424/machine.go:1737
 		if ( m.data)[( m.p)] == 32 {
 			goto tr29
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st176
+			goto st97
 		}
 		goto tr27
 tr29:
-//line rfc5424/machine.go.rl:71
+//line rfc5424/machine.go.rl:72
 
 	if msgid := string(m.text()); msgid != "-" {
 		m.output.MsgID = &msgid
@@ -2117,44 +1754,44 @@ tr29:
 			goto _test_eof16
 		}
 	st_case_16:
-//line rfc5424/machine.go:2121
+//line rfc5424/machine.go:1758
 		switch ( m.data)[( m.p)] {
 		case 45:
-			goto st678
+			goto st599
 		case 91:
 			goto tr33
 		}
 		goto tr31
-	st678:
+	st599:
 		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof678
+			goto _test_eof599
 		}
-	st_case_678:
+	st_case_599:
 		if ( m.data)[( m.p)] == 32 {
-			goto st679
+			goto st600
 		}
 		goto st0
-	st679:
+	st600:
 		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof679
+			goto _test_eof600
 		}
-	st_case_679:
+	st_case_600:
 		switch ( m.data)[( m.p)] {
 		case 224:
-			goto tr705
+			goto tr621
 		case 237:
-			goto tr707
+			goto tr623
 		case 240:
-			goto tr708
+			goto tr624
 		case 244:
-			goto tr710
+			goto tr626
 		}
 		switch {
 		case ( m.data)[( m.p)] < 225:
 			switch {
 			case ( m.data)[( m.p)] > 193:
 				if 194 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 223 {
-					goto tr704
+					goto tr620
 				}
 			case ( m.data)[( m.p)] >= 128:
 				goto tr34
@@ -2166,24 +1803,24 @@ tr29:
 					goto tr34
 				}
 			case ( m.data)[( m.p)] >= 241:
-				goto tr709
+				goto tr625
 			}
 		default:
-			goto tr706
+			goto tr622
 		}
-		goto tr703
-tr703:
-//line rfc5424/machine.go.rl:30
+		goto tr619
+tr619:
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
-	goto st680
-	st680:
+	goto st601
+	st601:
 		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof680
+			goto _test_eof601
 		}
-	st_case_680:
-//line rfc5424/machine.go:2187
+	st_case_601:
+//line rfc5424/machine.go:1824
 		switch ( m.data)[( m.p)] {
 		case 224:
 			goto st18
@@ -2216,9 +1853,9 @@ tr703:
 		default:
 			goto st19
 		}
-		goto st680
-tr704:
-//line rfc5424/machine.go.rl:30
+		goto st601
+tr620:
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -2228,13 +1865,13 @@ tr704:
 			goto _test_eof17
 		}
 	st_case_17:
-//line rfc5424/machine.go:2232
+//line rfc5424/machine.go:1869
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
-			goto st680
+			goto st601
 		}
 		goto tr34
-tr705:
-//line rfc5424/machine.go.rl:30
+tr621:
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -2244,13 +1881,13 @@ tr705:
 			goto _test_eof18
 		}
 	st_case_18:
-//line rfc5424/machine.go:2248
+//line rfc5424/machine.go:1885
 		if 160 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st17
 		}
 		goto tr34
-tr706:
-//line rfc5424/machine.go.rl:30
+tr622:
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -2260,13 +1897,13 @@ tr706:
 			goto _test_eof19
 		}
 	st_case_19:
-//line rfc5424/machine.go:2264
+//line rfc5424/machine.go:1901
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st17
 		}
 		goto tr34
-tr707:
-//line rfc5424/machine.go.rl:30
+tr623:
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -2276,13 +1913,13 @@ tr707:
 			goto _test_eof20
 		}
 	st_case_20:
-//line rfc5424/machine.go:2280
+//line rfc5424/machine.go:1917
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 159 {
 			goto st17
 		}
 		goto tr34
-tr708:
-//line rfc5424/machine.go.rl:30
+tr624:
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -2292,13 +1929,13 @@ tr708:
 			goto _test_eof21
 		}
 	st_case_21:
-//line rfc5424/machine.go:2296
+//line rfc5424/machine.go:1933
 		if 144 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st19
 		}
 		goto tr34
-tr709:
-//line rfc5424/machine.go.rl:30
+tr625:
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -2308,13 +1945,13 @@ tr709:
 			goto _test_eof22
 		}
 	st_case_22:
-//line rfc5424/machine.go:2312
+//line rfc5424/machine.go:1949
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st19
 		}
 		goto tr34
-tr710:
-//line rfc5424/machine.go.rl:30
+tr626:
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -2324,13 +1961,13 @@ tr710:
 			goto _test_eof23
 		}
 	st_case_23:
-//line rfc5424/machine.go:2328
+//line rfc5424/machine.go:1965
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 143 {
 			goto st19
 		}
 		goto tr34
 tr33:
-//line rfc5424/machine.go.rl:77
+//line rfc5424/machine.go.rl:78
 
 	m.output.StructuredData = &(map[string]map[string]string{})
 
@@ -2340,7 +1977,7 @@ tr33:
 			goto _test_eof24
 		}
 	st_case_24:
-//line rfc5424/machine.go:2344
+//line rfc5424/machine.go:1981
 		if ( m.data)[( m.p)] == 33 {
 			goto tr39
 		}
@@ -2358,7 +1995,7 @@ tr33:
 		}
 		goto tr38
 tr39:
-//line rfc5424/machine.go.rl:30
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -2368,26 +2005,26 @@ tr39:
 			goto _test_eof25
 		}
 	st_case_25:
-//line rfc5424/machine.go:2372
+//line rfc5424/machine.go:2009
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto tr40
 		case 33:
-			goto st145
+			goto st66
 		case 93:
 			goto tr42
 		}
 		switch {
 		case ( m.data)[( m.p)] > 60:
 			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st145
+				goto st66
 			}
 		case ( m.data)[( m.p)] >= 35:
-			goto st145
+			goto st66
 		}
 		goto tr38
 tr40:
-//line rfc5424/machine.go.rl:81
+//line rfc5424/machine.go.rl:82
 
 	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
 		id := string(m.text())
@@ -2396,7 +2033,7 @@ tr40:
 			m.err = fmt.Errorf(errSdIDDuplicated, m.p)
 			( m.p)--
 
-			{goto st677 }
+			{goto st598 }
 			{( m.p)++;  m.cs = 26; goto _out }
 		} else {
 			(*elements)[id] = map[string]string{}
@@ -2410,7 +2047,7 @@ tr40:
 			goto _test_eof26
 		}
 	st_case_26:
-//line rfc5424/machine.go:2414
+//line rfc5424/machine.go:2051
 		if ( m.data)[( m.p)] == 33 {
 			goto tr44
 		}
@@ -2428,7 +2065,7 @@ tr40:
 		}
 		goto tr43
 tr44:
-//line rfc5424/machine.go.rl:30
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -2438,7 +2075,7 @@ tr44:
 			goto _test_eof27
 		}
 	st_case_27:
-//line rfc5424/machine.go:2442
+//line rfc5424/machine.go:2079
 		switch ( m.data)[( m.p)] {
 		case 33:
 			goto st28
@@ -3064,7 +2701,7 @@ tr44:
 		}
 		goto tr43
 tr46:
-//line rfc5424/machine.go.rl:97
+//line rfc5424/machine.go.rl:98
 
 	m.currentparam = string(m.text())
 
@@ -3074,7 +2711,7 @@ tr46:
 			goto _test_eof59
 		}
 	st_case_59:
-//line rfc5424/machine.go:3078
+//line rfc5424/machine.go:2715
 		if ( m.data)[( m.p)] == 34 {
 			goto st60
 		}
@@ -3087,40 +2724,14 @@ tr46:
 		switch ( m.data)[( m.p)] {
 		case 34:
 			goto tr79
-		case 224:
+		case 92:
+			goto tr80
+		case 93:
 			goto tr81
-		case 237:
-			goto tr83
-		case 240:
-			goto tr84
-		case 244:
-			goto tr86
-		}
-		switch {
-		case ( m.data)[( m.p)] < 225:
-			switch {
-			case ( m.data)[( m.p)] > 193:
-				if 194 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 223 {
-					goto tr80
-				}
-			case ( m.data)[( m.p)] >= 128:
-				goto tr43
-			}
-		case ( m.data)[( m.p)] > 239:
-			switch {
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			case ( m.data)[( m.p)] >= 241:
-				goto tr85
-			}
-		default:
-			goto tr82
 		}
 		goto tr78
 tr78:
-//line rfc5424/machine.go.rl:30
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
@@ -3130,56 +2741,30 @@ tr78:
 			goto _test_eof61
 		}
 	st_case_61:
-//line rfc5424/machine.go:3134
+//line rfc5424/machine.go:2745
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr88
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
-		}
-		switch {
-		case ( m.data)[( m.p)] < 225:
-			switch {
-			case ( m.data)[( m.p)] > 193:
-				if 194 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 223 {
-					goto st138
-				}
-			case ( m.data)[( m.p)] >= 128:
-				goto tr43
-			}
-		case ( m.data)[( m.p)] > 239:
-			switch {
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			case ( m.data)[( m.p)] >= 241:
-				goto st143
-			}
-		default:
-			goto st140
+			goto tr83
+		case 92:
+			goto st63
+		case 93:
+			goto tr81
 		}
 		goto st61
 tr79:
-//line rfc5424/machine.go.rl:30
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
-//line rfc5424/machine.go.rl:101
+//line rfc5424/machine.go.rl:102
 
 	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
 		(*elements)[m.currentelem][m.currentparam] = string(m.text())
 	}
 
 	goto st62
-tr88:
-//line rfc5424/machine.go.rl:101
+tr83:
+//line rfc5424/machine.go.rl:102
 
 	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
 		(*elements)[m.currentelem][m.currentparam] = string(m.text())
@@ -3191,54 +2776,16 @@ tr88:
 			goto _test_eof62
 		}
 	st_case_62:
-//line rfc5424/machine.go:3195
+//line rfc5424/machine.go:2780
 		switch ( m.data)[( m.p)] {
 		case 32:
-			goto st63
-		case 34:
-			goto tr88
+			goto st26
 		case 93:
-			goto st681
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto st602
 		}
-		switch {
-		case ( m.data)[( m.p)] < 225:
-			switch {
-			case ( m.data)[( m.p)] > 193:
-				if 194 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 223 {
-					goto st138
-				}
-			case ( m.data)[( m.p)] >= 128:
-				goto tr43
-			}
-		case ( m.data)[( m.p)] > 239:
-			switch {
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			case ( m.data)[( m.p)] >= 241:
-				goto st143
-			}
-		default:
-			goto st140
-		}
-		goto st61
-tr132:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st63
-tr140:
-//line rfc5424/machine.go.rl:81
+		goto tr43
+tr42:
+//line rfc5424/machine.go.rl:82
 
 	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
 		id := string(m.text())
@@ -3247,13 +2794,32 @@ tr140:
 			m.err = fmt.Errorf(errSdIDDuplicated, m.p)
 			( m.p)--
 
-			{goto st677 }
-			{( m.p)++;  m.cs = 63; goto _out }
+			{goto st598 }
+			{( m.p)++;  m.cs = 602; goto _out }
 		} else {
 			(*elements)[id] = map[string]string{}
 			m.currentelem = id
 		}
 	}
+
+	goto st602
+	st602:
+		if ( m.p)++; ( m.p) == ( m.pe) {
+			goto _test_eof602
+		}
+	st_case_602:
+//line rfc5424/machine.go:2812
+		switch ( m.data)[( m.p)] {
+		case 32:
+			goto st600
+		case 91:
+			goto st24
+		}
+		goto tr31
+tr80:
+//line rfc5424/machine.go.rl:31
+
+	m.pb = m.p
 
 	goto st63
 	st63:
@@ -3261,107 +2827,26 @@ tr140:
 			goto _test_eof63
 		}
 	st_case_63:
-//line rfc5424/machine.go:3265
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+//line rfc5424/machine.go:2831
+		if ( m.data)[( m.p)] == 34 {
+			goto st64
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 92 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 93 {
+			goto st64
 		}
-		goto tr98
-tr98:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st64
+		goto tr81
 	st64:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof64
 		}
 	st_case_64:
-//line rfc5424/machine.go:3322
 		switch ( m.data)[( m.p)] {
 		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+			goto tr83
+		case 92:
+			goto st63
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+			goto tr81
 		}
 		goto st65
 	st65:
@@ -3369,8445 +2854,2002 @@ tr98:
 			goto _test_eof65
 		}
 	st_case_65:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
-		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 34 {
+			goto tr83
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 92 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 93 {
+			goto tr43
 		}
-		goto st66
+		goto st65
 	st66:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof66
 		}
 	st_case_66:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st67
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st67
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st67
 		}
-		goto st67
+		goto tr38
 	st67:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof67
 		}
 	st_case_67:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st68
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st68
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st68
 		}
-		goto st68
+		goto tr38
 	st68:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof68
 		}
 	st_case_68:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st69
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st69
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st69
 		}
-		goto st69
+		goto tr38
 	st69:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof69
 		}
 	st_case_69:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st70
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st70
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st70
 		}
-		goto st70
+		goto tr38
 	st70:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof70
 		}
 	st_case_70:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st71
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st71
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st71
 		}
-		goto st71
+		goto tr38
 	st71:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof71
 		}
 	st_case_71:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st72
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st72
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st72
 		}
-		goto st72
+		goto tr38
 	st72:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof72
 		}
 	st_case_72:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st73
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st73
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st73
 		}
-		goto st73
+		goto tr38
 	st73:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof73
 		}
 	st_case_73:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st74
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st74
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st74
 		}
-		goto st74
+		goto tr38
 	st74:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof74
 		}
 	st_case_74:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st75
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st75
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st75
 		}
-		goto st75
+		goto tr38
 	st75:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof75
 		}
 	st_case_75:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st76
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st76
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st76
 		}
-		goto st76
+		goto tr38
 	st76:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof76
 		}
 	st_case_76:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st77
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st77
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st77
 		}
-		goto st77
+		goto tr38
 	st77:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof77
 		}
 	st_case_77:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st78
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st78
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st78
 		}
-		goto st78
+		goto tr38
 	st78:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof78
 		}
 	st_case_78:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st79
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st79
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st79
 		}
-		goto st79
+		goto tr38
 	st79:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof79
 		}
 	st_case_79:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st80
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st80
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st80
 		}
-		goto st80
+		goto tr38
 	st80:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof80
 		}
 	st_case_80:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st81
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st81
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st81
 		}
-		goto st81
+		goto tr38
 	st81:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof81
 		}
 	st_case_81:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st82
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st82
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st82
 		}
-		goto st82
+		goto tr38
 	st82:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof82
 		}
 	st_case_82:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st83
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st83
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st83
 		}
-		goto st83
+		goto tr38
 	st83:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof83
 		}
 	st_case_83:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st84
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st84
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st84
 		}
-		goto st84
+		goto tr38
 	st84:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof84
 		}
 	st_case_84:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st85
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st85
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st85
 		}
-		goto st85
+		goto tr38
 	st85:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof85
 		}
 	st_case_85:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st86
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st86
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st86
 		}
-		goto st86
+		goto tr38
 	st86:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof86
 		}
 	st_case_86:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st87
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st87
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st87
 		}
-		goto st87
+		goto tr38
 	st87:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof87
 		}
 	st_case_87:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st88
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st88
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st88
 		}
-		goto st88
+		goto tr38
 	st88:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof88
 		}
 	st_case_88:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st89
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st89
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st89
 		}
-		goto st89
+		goto tr38
 	st89:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof89
 		}
 	st_case_89:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st90
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st90
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st90
 		}
-		goto st90
+		goto tr38
 	st90:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof90
 		}
 	st_case_90:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st91
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st91
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st91
 		}
-		goto st91
+		goto tr38
 	st91:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof91
 		}
 	st_case_91:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st92
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st92
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st92
 		}
-		goto st92
+		goto tr38
 	st92:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof92
 		}
 	st_case_92:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st93
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st93
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st93
 		}
-		goto st93
+		goto tr38
 	st93:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof93
 		}
 	st_case_93:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st94
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st94
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st94
 		}
-		goto st94
+		goto tr38
 	st94:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof94
 		}
 	st_case_94:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
+		case 32:
+			goto tr40
+		case 33:
+			goto st95
 		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr43
-				}
-			default:
-				goto st61
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st95
 			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		case ( m.data)[( m.p)] >= 35:
+			goto st95
 		}
-		goto st95
+		goto tr38
 	st95:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof95
 		}
 	st_case_95:
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto tr100
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		case 32:
+			goto tr40
+		case 33:
+			goto st96
+		case 93:
+			goto tr42
 		}
 		switch {
-		case ( m.data)[( m.p)] < 225:
-			switch {
-			case ( m.data)[( m.p)] > 193:
-				if 194 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 223 {
-					goto st138
-				}
-			case ( m.data)[( m.p)] >= 128:
-				goto tr43
+		case ( m.data)[( m.p)] > 60:
+			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+				goto st96
 			}
-		case ( m.data)[( m.p)] > 239:
-			switch {
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			case ( m.data)[( m.p)] >= 241:
-				goto st143
-			}
-		default:
-			goto st140
+		case ( m.data)[( m.p)] >= 35:
+			goto st96
 		}
-		goto st61
-tr100:
-//line rfc5424/machine.go.rl:97
-
-	m.currentparam = string(m.text())
-
-	goto st96
+		goto tr38
 	st96:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof96
 		}
 	st_case_96:
-//line rfc5424/machine.go:4921
 		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr131
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		case 32:
+			goto tr40
+		case 93:
+			goto tr42
 		}
-		switch {
-		case ( m.data)[( m.p)] < 225:
-			switch {
-			case ( m.data)[( m.p)] > 193:
-				if 194 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 223 {
-					goto st138
-				}
-			case ( m.data)[( m.p)] >= 128:
-				goto tr43
-			}
-		case ( m.data)[( m.p)] > 239:
-			switch {
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			case ( m.data)[( m.p)] >= 241:
-				goto st143
-			}
-		default:
-			goto st140
-		}
-		goto st61
-tr131:
-//line rfc5424/machine.go.rl:101
-
-	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
-		(*elements)[m.currentelem][m.currentparam] = string(m.text())
-	}
-
-	goto st97
+		goto tr38
 	st97:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof97
 		}
 	st_case_97:
-//line rfc5424/machine.go:4970
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr132
-		case 34:
-			goto tr79
-		case 93:
-			goto tr133
-		case 224:
-			goto tr81
-		case 237:
-			goto tr83
-		case 240:
-			goto tr84
-		case 244:
-			goto tr86
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 225:
-			switch {
-			case ( m.data)[( m.p)] > 193:
-				if 194 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 223 {
-					goto tr80
-				}
-			case ( m.data)[( m.p)] >= 128:
-				goto tr43
-			}
-		case ( m.data)[( m.p)] > 239:
-			switch {
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			case ( m.data)[( m.p)] >= 241:
-				goto tr85
-			}
-		default:
-			goto tr82
-		}
-		goto tr78
-tr133:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st681
-tr142:
-//line rfc5424/machine.go.rl:81
-
-	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
-		id := string(m.text())
-		if _, ok := (*elements)[id]; ok {
-			// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
-			m.err = fmt.Errorf(errSdIDDuplicated, m.p)
-			( m.p)--
-
-			{goto st677 }
-			{( m.p)++;  m.cs = 681; goto _out }
-		} else {
-			(*elements)[id] = map[string]string{}
-			m.currentelem = id
-		}
-	}
-
-	goto st681
-	st681:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof681
-		}
-	st_case_681:
-//line rfc5424/machine.go:5040
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto st682
-		case 34:
-			goto tr88
-		case 91:
-			goto st105
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
-		}
-		switch {
-		case ( m.data)[( m.p)] < 225:
-			switch {
-			case ( m.data)[( m.p)] > 193:
-				if 194 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 223 {
-					goto st138
-				}
-			case ( m.data)[( m.p)] >= 128:
-				goto tr43
-			}
-		case ( m.data)[( m.p)] > 239:
-			switch {
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr43
-				}
-			case ( m.data)[( m.p)] >= 241:
-				goto st143
-			}
-		default:
-			goto st140
-		}
-		goto st61
-	st682:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof682
-		}
-	st_case_682:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr719
-		case 224:
-			goto tr721
-		case 237:
-			goto tr723
-		case 240:
-			goto tr724
-		case 244:
-			goto tr726
-		}
-		switch {
-		case ( m.data)[( m.p)] < 225:
-			switch {
-			case ( m.data)[( m.p)] > 193:
-				if 194 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 223 {
-					goto tr720
-				}
-			case ( m.data)[( m.p)] >= 128:
-				goto tr134
-			}
-		case ( m.data)[( m.p)] > 239:
-			switch {
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			case ( m.data)[( m.p)] >= 241:
-				goto tr725
-			}
-		default:
-			goto tr722
-		}
-		goto tr718
-tr718:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st683
-	st683:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof683
-		}
-	st_case_683:
-//line rfc5424/machine.go:5131
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 225:
-			switch {
-			case ( m.data)[( m.p)] > 193:
-				if 194 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 223 {
-					goto st98
-				}
-			case ( m.data)[( m.p)] >= 128:
-				goto tr134
-			}
-		case ( m.data)[( m.p)] > 239:
-			switch {
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			case ( m.data)[( m.p)] >= 241:
-				goto st103
-			}
-		default:
-			goto st100
-		}
-		goto st683
-tr770:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-//line rfc5424/machine.go.rl:101
-
-	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
-		(*elements)[m.currentelem][m.currentparam] = string(m.text())
-	}
-
-	goto st684
-tr727:
-//line rfc5424/machine.go.rl:101
-
-	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
-		(*elements)[m.currentelem][m.currentparam] = string(m.text())
-	}
-
-	goto st684
-tr719:
-//line rfc5424/machine.go.rl:101
-
-	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
-		(*elements)[m.currentelem][m.currentparam] = string(m.text())
-	}
-
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st684
-	st684:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof684
-		}
-	st_case_684:
-//line rfc5424/machine.go:5204
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto st685
-		case 34:
-			goto tr727
-		case 93:
-			goto st720
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 225:
-			switch {
-			case ( m.data)[( m.p)] > 193:
-				if 194 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 223 {
-					goto st98
-				}
-			case ( m.data)[( m.p)] >= 128:
-				goto tr134
-			}
-		case ( m.data)[( m.p)] > 239:
-			switch {
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			case ( m.data)[( m.p)] >= 241:
-				goto st103
-			}
-		default:
-			goto st100
-		}
-		goto st683
-tr769:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st685
-tr775:
-//line rfc5424/machine.go.rl:81
-
-	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
-		id := string(m.text())
-		if _, ok := (*elements)[id]; ok {
-			// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
-			m.err = fmt.Errorf(errSdIDDuplicated, m.p)
-			( m.p)--
-
-			{goto st677 }
-			{( m.p)++;  m.cs = 685; goto _out }
-		} else {
-			(*elements)[id] = map[string]string{}
-			m.currentelem = id
-		}
-	}
-
-	goto st685
-	st685:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof685
-		}
-	st_case_685:
-//line rfc5424/machine.go:5274
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto tr735
-tr735:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st686
-	st686:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof686
-		}
-	st_case_686:
-//line rfc5424/machine.go:5331
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st687
-	st687:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof687
-		}
-	st_case_687:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st688
-	st688:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof688
-		}
-	st_case_688:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st689
-	st689:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof689
-		}
-	st_case_689:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st690
-	st690:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof690
-		}
-	st_case_690:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st691
-	st691:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof691
-		}
-	st_case_691:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st692
-	st692:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof692
-		}
-	st_case_692:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st693
-	st693:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof693
-		}
-	st_case_693:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st694
-	st694:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof694
-		}
-	st_case_694:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st695
-	st695:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof695
-		}
-	st_case_695:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st696
-	st696:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof696
-		}
-	st_case_696:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st697
-	st697:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof697
-		}
-	st_case_697:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st698
-	st698:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof698
-		}
-	st_case_698:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st699
-	st699:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof699
-		}
-	st_case_699:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st700
-	st700:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof700
-		}
-	st_case_700:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st701
-	st701:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof701
-		}
-	st_case_701:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st702
-	st702:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof702
-		}
-	st_case_702:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st703
-	st703:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof703
-		}
-	st_case_703:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st704
-	st704:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof704
-		}
-	st_case_704:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st705
-	st705:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof705
-		}
-	st_case_705:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st706
-	st706:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof706
-		}
-	st_case_706:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st707
-	st707:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof707
-		}
-	st_case_707:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st708
-	st708:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof708
-		}
-	st_case_708:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st709
-	st709:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof709
-		}
-	st_case_709:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st710
-	st710:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof710
-		}
-	st_case_710:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st711
-	st711:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof711
-		}
-	st_case_711:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st712
-	st712:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof712
-		}
-	st_case_712:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st713
-	st713:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof713
-		}
-	st_case_713:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st714
-	st714:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof714
-		}
-	st_case_714:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st715
-	st715:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof715
-		}
-	st_case_715:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st716
-	st716:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof716
-		}
-	st_case_716:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr134
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st717
-	st717:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof717
-		}
-	st_case_717:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto tr737
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 225:
-			switch {
-			case ( m.data)[( m.p)] > 193:
-				if 194 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 223 {
-					goto st98
-				}
-			case ( m.data)[( m.p)] >= 128:
-				goto tr134
-			}
-		case ( m.data)[( m.p)] > 239:
-			switch {
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			case ( m.data)[( m.p)] >= 241:
-				goto st103
-			}
-		default:
-			goto st100
-		}
-		goto st683
-tr737:
-//line rfc5424/machine.go.rl:97
-
-	m.currentparam = string(m.text())
-
-	goto st718
-	st718:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof718
-		}
-	st_case_718:
-//line rfc5424/machine.go:6930
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr768
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 225:
-			switch {
-			case ( m.data)[( m.p)] > 193:
-				if 194 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 223 {
-					goto st98
-				}
-			case ( m.data)[( m.p)] >= 128:
-				goto tr134
-			}
-		case ( m.data)[( m.p)] > 239:
-			switch {
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			case ( m.data)[( m.p)] >= 241:
-				goto st103
-			}
-		default:
-			goto st100
-		}
-		goto st683
-tr768:
-//line rfc5424/machine.go.rl:101
-
-	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
-		(*elements)[m.currentelem][m.currentparam] = string(m.text())
-	}
-
-	goto st719
-	st719:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof719
-		}
-	st_case_719:
-//line rfc5424/machine.go:6979
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr769
-		case 34:
-			goto tr770
-		case 93:
-			goto tr771
-		case 224:
-			goto tr721
-		case 237:
-			goto tr723
-		case 240:
-			goto tr724
-		case 244:
-			goto tr726
-		}
-		switch {
-		case ( m.data)[( m.p)] < 225:
-			switch {
-			case ( m.data)[( m.p)] > 193:
-				if 194 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 223 {
-					goto tr720
-				}
-			case ( m.data)[( m.p)] >= 128:
-				goto tr134
-			}
-		case ( m.data)[( m.p)] > 239:
-			switch {
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			case ( m.data)[( m.p)] >= 241:
-				goto tr725
-			}
-		default:
-			goto tr722
-		}
-		goto tr718
-tr771:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st720
-tr777:
-//line rfc5424/machine.go.rl:81
-
-	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
-		id := string(m.text())
-		if _, ok := (*elements)[id]; ok {
-			// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
-			m.err = fmt.Errorf(errSdIDDuplicated, m.p)
-			( m.p)--
-
-			{goto st677 }
-			{( m.p)++;  m.cs = 720; goto _out }
-		} else {
-			(*elements)[id] = map[string]string{}
-			m.currentelem = id
-		}
-	}
-
-	goto st720
-	st720:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof720
-		}
-	st_case_720:
-//line rfc5424/machine.go:7049
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto st682
-		case 34:
-			goto tr727
-		case 91:
-			goto st721
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 225:
-			switch {
-			case ( m.data)[( m.p)] > 193:
-				if 194 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 223 {
-					goto st98
-				}
-			case ( m.data)[( m.p)] >= 128:
-				goto tr134
-			}
-		case ( m.data)[( m.p)] > 239:
-			switch {
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr134
-				}
-			case ( m.data)[( m.p)] >= 241:
-				goto st103
-			}
-		default:
-			goto st100
-		}
-		goto st683
-	st721:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof721
-		}
-	st_case_721:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto st683
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto tr773
-tr773:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st722
-	st722:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof722
-		}
-	st_case_722:
-//line rfc5424/machine.go:7150
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st723
-	st723:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof723
-		}
-	st_case_723:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st724
-	st724:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof724
-		}
-	st_case_724:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st725
-	st725:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof725
-		}
-	st_case_725:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st726
-	st726:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof726
-		}
-	st_case_726:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st727
-	st727:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof727
-		}
-	st_case_727:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st728
-	st728:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof728
-		}
-	st_case_728:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st729
-	st729:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof729
-		}
-	st_case_729:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st730
-	st730:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof730
-		}
-	st_case_730:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st731
-	st731:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof731
-		}
-	st_case_731:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st732
-	st732:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof732
-		}
-	st_case_732:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st733
-	st733:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof733
-		}
-	st_case_733:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st734
-	st734:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof734
-		}
-	st_case_734:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st735
-	st735:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof735
-		}
-	st_case_735:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st736
-	st736:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof736
-		}
-	st_case_736:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st737
-	st737:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof737
-		}
-	st_case_737:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st738
-	st738:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof738
-		}
-	st_case_738:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st739
-	st739:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof739
-		}
-	st_case_739:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st740
-	st740:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof740
-		}
-	st_case_740:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st741
-	st741:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof741
-		}
-	st_case_741:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st742
-	st742:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof742
-		}
-	st_case_742:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st743
-	st743:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof743
-		}
-	st_case_743:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st744
-	st744:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof744
-		}
-	st_case_744:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st745
-	st745:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof745
-		}
-	st_case_745:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st746
-	st746:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof746
-		}
-	st_case_746:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st747
-	st747:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof747
-		}
-	st_case_747:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st748
-	st748:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof748
-		}
-	st_case_748:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st749
-	st749:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof749
-		}
-	st_case_749:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st750
-	st750:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof750
-		}
-	st_case_750:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st751
-	st751:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof751
-		}
-	st_case_751:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
-			goto st98
-		}
-		goto st752
-	st752:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof752
-		}
-	st_case_752:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 61:
-			goto st683
-		case 93:
-			goto tr777
-		case 127:
-			goto st683
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr774
-				}
-			default:
-				goto st683
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st100
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			default:
-				goto st103
-			}
-		default:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st98
-		}
-		goto st753
-	st753:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof753
-		}
-	st_case_753:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr775
-		case 34:
-			goto tr727
-		case 93:
-			goto tr777
-		case 224:
-			goto st99
-		case 237:
-			goto st101
-		case 240:
-			goto st102
-		case 244:
-			goto st104
-		}
-		switch {
-		case ( m.data)[( m.p)] < 225:
-			switch {
-			case ( m.data)[( m.p)] > 193:
-				if 194 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 223 {
-					goto st98
-				}
-			case ( m.data)[( m.p)] >= 128:
-				goto tr774
-			}
-		case ( m.data)[( m.p)] > 239:
-			switch {
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr774
-				}
-			case ( m.data)[( m.p)] >= 241:
-				goto st103
-			}
-		default:
-			goto st100
 		}
-		goto st683
-tr720:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st98
+		goto tr27
 	st98:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof98
 		}
 	st_case_98:
-//line rfc5424/machine.go:8813
-		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
-			goto st683
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		goto tr134
-tr721:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st99
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st99
+		}
+		goto tr27
 	st99:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof99
 		}
 	st_case_99:
-//line rfc5424/machine.go:8829
-		if 160 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
-			goto st98
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		goto tr134
-tr722:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st100
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st100
+		}
+		goto tr27
 	st100:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof100
 		}
 	st_case_100:
-//line rfc5424/machine.go:8845
-		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
-			goto st98
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		goto tr134
-tr723:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st101
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st101
+		}
+		goto tr27
 	st101:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof101
 		}
 	st_case_101:
-//line rfc5424/machine.go:8861
-		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 159 {
-			goto st98
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		goto tr134
-tr724:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st102
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st102
+		}
+		goto tr27
 	st102:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof102
 		}
 	st_case_102:
-//line rfc5424/machine.go:8877
-		if 144 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
-			goto st100
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		goto tr134
-tr725:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st103
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st103
+		}
+		goto tr27
 	st103:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof103
 		}
 	st_case_103:
-//line rfc5424/machine.go:8893
-		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
-			goto st100
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		goto tr134
-tr726:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st104
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st104
+		}
+		goto tr27
 	st104:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof104
 		}
 	st_case_104:
-//line rfc5424/machine.go:8909
-		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 143 {
-			goto st100
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		goto tr134
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st105
+		}
+		goto tr27
 	st105:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof105
 		}
 	st_case_105:
-		switch ( m.data)[( m.p)] {
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto st61
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 32:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st106
 		}
-		goto tr138
-tr138:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st106
+		goto tr27
 	st106:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof106
 		}
 	st_case_106:
-//line rfc5424/machine.go:8975
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st107
 		}
-		goto st107
+		goto tr27
 	st107:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof107
 		}
 	st_case_107:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st108
 		}
-		goto st108
+		goto tr27
 	st108:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof108
 		}
 	st_case_108:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st109
 		}
-		goto st109
+		goto tr27
 	st109:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof109
 		}
 	st_case_109:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st110
 		}
-		goto st110
+		goto tr27
 	st110:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof110
 		}
 	st_case_110:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st111
 		}
-		goto st111
+		goto tr27
 	st111:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof111
 		}
 	st_case_111:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st112
 		}
-		goto st112
+		goto tr27
 	st112:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof112
 		}
 	st_case_112:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st113
 		}
-		goto st113
+		goto tr27
 	st113:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof113
 		}
 	st_case_113:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st114
 		}
-		goto st114
+		goto tr27
 	st114:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof114
 		}
 	st_case_114:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st115
 		}
-		goto st115
+		goto tr27
 	st115:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof115
 		}
 	st_case_115:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st116
 		}
-		goto st116
+		goto tr27
 	st116:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof116
 		}
 	st_case_116:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st117
 		}
-		goto st117
+		goto tr27
 	st117:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof117
 		}
 	st_case_117:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st118
 		}
-		goto st118
+		goto tr27
 	st118:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof118
 		}
 	st_case_118:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st119
 		}
-		goto st119
+		goto tr27
 	st119:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof119
 		}
 	st_case_119:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st120
 		}
-		goto st120
+		goto tr27
 	st120:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof120
 		}
 	st_case_120:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st121
 		}
-		goto st121
+		goto tr27
 	st121:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof121
 		}
 	st_case_121:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st122
 		}
-		goto st122
+		goto tr27
 	st122:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof122
 		}
 	st_case_122:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st123
 		}
-		goto st123
+		goto tr27
 	st123:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof123
 		}
 	st_case_123:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st124
 		}
-		goto st124
+		goto tr27
 	st124:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof124
 		}
 	st_case_124:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st125
 		}
-		goto st125
+		goto tr27
 	st125:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof125
 		}
 	st_case_125:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st126
 		}
-		goto st126
+		goto tr27
 	st126:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof126
 		}
 	st_case_126:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st127
 		}
-		goto st127
+		goto tr27
 	st127:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof127
 		}
 	st_case_127:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr29
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
-		}
-		goto st128
+		goto tr27
 	st128:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof128
 		}
 	st_case_128:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st129
 		}
-		goto st129
+		goto tr23
 	st129:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof129
 		}
 	st_case_129:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st130
 		}
-		goto st130
+		goto tr23
 	st130:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof130
 		}
 	st_case_130:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st131
 		}
-		goto st131
+		goto tr23
 	st131:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof131
 		}
 	st_case_131:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st132
 		}
-		goto st132
+		goto tr23
 	st132:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof132
 		}
 	st_case_132:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st133
 		}
-		goto st133
+		goto tr23
 	st133:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof133
 		}
 	st_case_133:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st134
 		}
-		goto st134
+		goto tr23
 	st134:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof134
 		}
 	st_case_134:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st135
 		}
-		goto st135
+		goto tr23
 	st135:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof135
 		}
 	st_case_135:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st136
 		}
-		goto st136
+		goto tr23
 	st136:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof136
 		}
 	st_case_136:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 61:
-			goto st61
-		case 93:
-			goto tr142
-		case 127:
-			goto st61
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] < 194:
-			switch {
-			case ( m.data)[( m.p)] > 31:
-				if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 193 {
-					goto tr139
-				}
-			default:
-				goto st61
-			}
-		case ( m.data)[( m.p)] > 223:
-			switch {
-			case ( m.data)[( m.p)] < 241:
-				if 225 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 239 {
-					goto st140
-				}
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			default:
-				goto st143
-			}
-		default:
-			goto st138
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st137
 		}
-		goto st137
+		goto tr23
 	st137:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof137
 		}
 	st_case_137:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr140
-		case 34:
-			goto tr88
-		case 93:
-			goto tr142
-		case 224:
-			goto st139
-		case 237:
-			goto st141
-		case 240:
-			goto st142
-		case 244:
-			goto st144
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] < 225:
-			switch {
-			case ( m.data)[( m.p)] > 193:
-				if 194 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 223 {
-					goto st138
-				}
-			case ( m.data)[( m.p)] >= 128:
-				goto tr139
-			}
-		case ( m.data)[( m.p)] > 239:
-			switch {
-			case ( m.data)[( m.p)] > 243:
-				if 245 <= ( m.data)[( m.p)] {
-					goto tr139
-				}
-			case ( m.data)[( m.p)] >= 241:
-				goto st143
-			}
-		default:
-			goto st140
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st138
 		}
-		goto st61
-tr80:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st138
+		goto tr23
 	st138:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof138
 		}
 	st_case_138:
-//line rfc5424/machine.go:10638
-		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
-			goto st61
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		goto tr43
-tr81:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st139
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st139
+		}
+		goto tr23
 	st139:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof139
 		}
 	st_case_139:
-//line rfc5424/machine.go:10654
-		if 160 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
-			goto st138
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		goto tr43
-tr82:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st140
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st140
+		}
+		goto tr23
 	st140:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof140
 		}
 	st_case_140:
-//line rfc5424/machine.go:10670
-		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
-			goto st138
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		goto tr43
-tr83:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st141
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st141
+		}
+		goto tr23
 	st141:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof141
 		}
 	st_case_141:
-//line rfc5424/machine.go:10686
-		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 159 {
-			goto st138
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		goto tr43
-tr84:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st142
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st142
+		}
+		goto tr23
 	st142:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof142
 		}
 	st_case_142:
-//line rfc5424/machine.go:10702
-		if 144 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
-			goto st140
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		goto tr43
-tr85:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st143
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st143
+		}
+		goto tr23
 	st143:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof143
 		}
 	st_case_143:
-//line rfc5424/machine.go:10718
-		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
-			goto st140
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		goto tr43
-tr86:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st144
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st144
+		}
+		goto tr23
 	st144:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof144
 		}
 	st_case_144:
-//line rfc5424/machine.go:10734
-		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 143 {
-			goto st140
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		goto tr43
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st145
+		}
+		goto tr23
 	st145:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof145
 		}
 	st_case_145:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st146
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st146
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st146
 		}
-		goto tr38
+		goto tr23
 	st146:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof146
 		}
 	st_case_146:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st147
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st147
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st147
 		}
-		goto tr38
+		goto tr23
 	st147:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof147
 		}
 	st_case_147:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st148
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st148
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st148
 		}
-		goto tr38
+		goto tr23
 	st148:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof148
 		}
 	st_case_148:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st149
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st149
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st149
 		}
-		goto tr38
+		goto tr23
 	st149:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof149
 		}
 	st_case_149:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st150
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st150
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st150
 		}
-		goto tr38
+		goto tr23
 	st150:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof150
 		}
 	st_case_150:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st151
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st151
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st151
 		}
-		goto tr38
+		goto tr23
 	st151:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof151
 		}
 	st_case_151:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st152
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st152
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st152
 		}
-		goto tr38
+		goto tr23
 	st152:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof152
 		}
 	st_case_152:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st153
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st153
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st153
 		}
-		goto tr38
+		goto tr23
 	st153:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof153
 		}
 	st_case_153:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st154
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st154
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st154
 		}
-		goto tr38
+		goto tr23
 	st154:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof154
 		}
 	st_case_154:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st155
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st155
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st155
 		}
-		goto tr38
+		goto tr23
 	st155:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof155
 		}
 	st_case_155:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st156
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st156
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st156
 		}
-		goto tr38
+		goto tr23
 	st156:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof156
 		}
 	st_case_156:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st157
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st157
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st157
 		}
-		goto tr38
+		goto tr23
 	st157:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof157
 		}
 	st_case_157:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st158
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st158
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st158
 		}
-		goto tr38
+		goto tr23
 	st158:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof158
 		}
 	st_case_158:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st159
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st159
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st159
 		}
-		goto tr38
+		goto tr23
 	st159:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof159
 		}
 	st_case_159:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st160
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st160
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st160
 		}
-		goto tr38
+		goto tr23
 	st160:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof160
 		}
 	st_case_160:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st161
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st161
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st161
 		}
-		goto tr38
+		goto tr23
 	st161:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof161
 		}
 	st_case_161:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st162
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st162
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st162
 		}
-		goto tr38
+		goto tr23
 	st162:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof162
 		}
 	st_case_162:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st163
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st163
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st163
 		}
-		goto tr38
+		goto tr23
 	st163:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof163
 		}
 	st_case_163:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st164
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st164
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st164
 		}
-		goto tr38
+		goto tr23
 	st164:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof164
 		}
 	st_case_164:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st165
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st165
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st165
 		}
-		goto tr38
+		goto tr23
 	st165:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof165
 		}
 	st_case_165:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st166
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st166
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st166
 		}
-		goto tr38
+		goto tr23
 	st166:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof166
 		}
 	st_case_166:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st167
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st167
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st167
 		}
-		goto tr38
+		goto tr23
 	st167:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof167
 		}
 	st_case_167:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st168
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st168
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st168
 		}
-		goto tr38
+		goto tr23
 	st168:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof168
 		}
 	st_case_168:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st169
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st169
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st169
 		}
-		goto tr38
+		goto tr23
 	st169:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof169
 		}
 	st_case_169:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st170
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st170
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st170
 		}
-		goto tr38
+		goto tr23
 	st170:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof170
 		}
 	st_case_170:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st171
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st171
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st171
 		}
-		goto tr38
+		goto tr23
 	st171:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof171
 		}
 	st_case_171:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st172
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st172
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st172
 		}
-		goto tr38
+		goto tr23
 	st172:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof172
 		}
 	st_case_172:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st173
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st173
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st173
 		}
-		goto tr38
+		goto tr23
 	st173:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof173
 		}
 	st_case_173:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st174
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st174
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st174
 		}
-		goto tr38
+		goto tr23
 	st174:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof174
 		}
 	st_case_174:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 33:
-			goto st175
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		switch {
-		case ( m.data)[( m.p)] > 60:
-			if 62 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-				goto st175
-			}
-		case ( m.data)[( m.p)] >= 35:
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st175
 		}
-		goto tr38
+		goto tr23
 	st175:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof175
 		}
 	st_case_175:
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto tr40
-		case 93:
-			goto tr42
+		if ( m.data)[( m.p)] == 32 {
+			goto tr25
 		}
-		goto tr38
-tr42:
-//line rfc5424/machine.go.rl:81
-
-	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
-		id := string(m.text())
-		if _, ok := (*elements)[id]; ok {
-			// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
-			m.err = fmt.Errorf(errSdIDDuplicated, m.p)
-			( m.p)--
-
-			{goto st677 }
-			{( m.p)++;  m.cs = 754; goto _out }
-		} else {
-			(*elements)[id] = map[string]string{}
-			m.currentelem = id
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st176
 		}
-	}
-
-	goto st754
-	st754:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof754
-		}
-	st_case_754:
-//line rfc5424/machine.go:11435
-		switch ( m.data)[( m.p)] {
-		case 32:
-			goto st679
-		case 91:
-			goto st24
-		}
-		goto tr31
+		goto tr23
 	st176:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof176
 		}
 	st_case_176:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st177
 		}
-		goto tr27
+		goto tr23
 	st177:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof177
 		}
 	st_case_177:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st178
 		}
-		goto tr27
+		goto tr23
 	st178:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof178
 		}
 	st_case_178:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st179
 		}
-		goto tr27
+		goto tr23
 	st179:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof179
 		}
 	st_case_179:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st180
 		}
-		goto tr27
+		goto tr23
 	st180:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof180
 		}
 	st_case_180:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st181
 		}
-		goto tr27
+		goto tr23
 	st181:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof181
 		}
 	st_case_181:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st182
 		}
-		goto tr27
+		goto tr23
 	st182:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof182
 		}
 	st_case_182:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st183
 		}
-		goto tr27
+		goto tr23
 	st183:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof183
 		}
 	st_case_183:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st184
 		}
-		goto tr27
+		goto tr23
 	st184:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof184
 		}
 	st_case_184:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st185
 		}
-		goto tr27
+		goto tr23
 	st185:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof185
 		}
 	st_case_185:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st186
 		}
-		goto tr27
+		goto tr23
 	st186:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof186
 		}
 	st_case_186:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st187
 		}
-		goto tr27
+		goto tr23
 	st187:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof187
 		}
 	st_case_187:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st188
 		}
-		goto tr27
+		goto tr23
 	st188:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof188
 		}
 	st_case_188:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st189
 		}
-		goto tr27
+		goto tr23
 	st189:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof189
 		}
 	st_case_189:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st190
 		}
-		goto tr27
+		goto tr23
 	st190:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof190
 		}
 	st_case_190:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st191
 		}
-		goto tr27
+		goto tr23
 	st191:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof191
 		}
 	st_case_191:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st192
 		}
-		goto tr27
+		goto tr23
 	st192:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof192
 		}
 	st_case_192:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st193
 		}
-		goto tr27
+		goto tr23
 	st193:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof193
 		}
 	st_case_193:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st194
 		}
-		goto tr27
+		goto tr23
 	st194:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof194
 		}
 	st_case_194:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st195
 		}
-		goto tr27
+		goto tr23
 	st195:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof195
 		}
 	st_case_195:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st196
 		}
-		goto tr27
+		goto tr23
 	st196:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof196
 		}
 	st_case_196:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st197
 		}
-		goto tr27
+		goto tr23
 	st197:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof197
 		}
 	st_case_197:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st198
 		}
-		goto tr27
+		goto tr23
 	st198:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof198
 		}
 	st_case_198:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st199
 		}
-		goto tr27
+		goto tr23
 	st199:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof199
 		}
 	st_case_199:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st200
 		}
-		goto tr27
+		goto tr23
 	st200:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof200
 		}
 	st_case_200:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st201
 		}
-		goto tr27
+		goto tr23
 	st201:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof201
 		}
 	st_case_201:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st202
 		}
-		goto tr27
+		goto tr23
 	st202:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof202
 		}
 	st_case_202:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st203
 		}
-		goto tr27
+		goto tr23
 	st203:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof203
 		}
 	st_case_203:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st204
 		}
-		goto tr27
+		goto tr23
 	st204:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof204
 		}
 	st_case_204:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st205
 		}
-		goto tr27
+		goto tr23
 	st205:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof205
 		}
 	st_case_205:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st206
 		}
-		goto tr27
+		goto tr23
 	st206:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof206
 		}
 	st_case_206:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr29
+			goto tr25
 		}
-		goto tr27
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st207
+		}
+		goto tr23
 	st207:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof207
@@ -12380,9 +5422,6 @@ tr42:
 		if ( m.data)[( m.p)] == 32 {
 			goto tr25
 		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st255
-		}
 		goto tr23
 	st255:
 		if ( m.p)++; ( m.p) == ( m.pe) {
@@ -12390,1506 +5429,1509 @@ tr42:
 		}
 	st_case_255:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st256
 		}
-		goto tr23
+		goto tr19
 	st256:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof256
 		}
 	st_case_256:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st257
 		}
-		goto tr23
+		goto tr19
 	st257:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof257
 		}
 	st_case_257:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st258
 		}
-		goto tr23
+		goto tr19
 	st258:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof258
 		}
 	st_case_258:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st259
 		}
-		goto tr23
+		goto tr19
 	st259:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof259
 		}
 	st_case_259:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st260
 		}
-		goto tr23
+		goto tr19
 	st260:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof260
 		}
 	st_case_260:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st261
 		}
-		goto tr23
+		goto tr19
 	st261:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof261
 		}
 	st_case_261:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st262
 		}
-		goto tr23
+		goto tr19
 	st262:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof262
 		}
 	st_case_262:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st263
 		}
-		goto tr23
+		goto tr19
 	st263:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof263
 		}
 	st_case_263:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st264
 		}
-		goto tr23
+		goto tr19
 	st264:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof264
 		}
 	st_case_264:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st265
 		}
-		goto tr23
+		goto tr19
 	st265:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof265
 		}
 	st_case_265:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st266
 		}
-		goto tr23
+		goto tr19
 	st266:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof266
 		}
 	st_case_266:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st267
 		}
-		goto tr23
+		goto tr19
 	st267:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof267
 		}
 	st_case_267:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st268
 		}
-		goto tr23
+		goto tr19
 	st268:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof268
 		}
 	st_case_268:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st269
 		}
-		goto tr23
+		goto tr19
 	st269:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof269
 		}
 	st_case_269:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st270
 		}
-		goto tr23
+		goto tr19
 	st270:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof270
 		}
 	st_case_270:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st271
 		}
-		goto tr23
+		goto tr19
 	st271:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof271
 		}
 	st_case_271:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st272
 		}
-		goto tr23
+		goto tr19
 	st272:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof272
 		}
 	st_case_272:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st273
 		}
-		goto tr23
+		goto tr19
 	st273:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof273
 		}
 	st_case_273:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st274
 		}
-		goto tr23
+		goto tr19
 	st274:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof274
 		}
 	st_case_274:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st275
 		}
-		goto tr23
+		goto tr19
 	st275:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof275
 		}
 	st_case_275:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st276
 		}
-		goto tr23
+		goto tr19
 	st276:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof276
 		}
 	st_case_276:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st277
 		}
-		goto tr23
+		goto tr19
 	st277:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof277
 		}
 	st_case_277:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st278
 		}
-		goto tr23
+		goto tr19
 	st278:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof278
 		}
 	st_case_278:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st279
 		}
-		goto tr23
+		goto tr19
 	st279:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof279
 		}
 	st_case_279:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st280
 		}
-		goto tr23
+		goto tr19
 	st280:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof280
 		}
 	st_case_280:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st281
 		}
-		goto tr23
+		goto tr19
 	st281:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof281
 		}
 	st_case_281:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st282
 		}
-		goto tr23
+		goto tr19
 	st282:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof282
 		}
 	st_case_282:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st283
 		}
-		goto tr23
+		goto tr19
 	st283:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof283
 		}
 	st_case_283:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st284
 		}
-		goto tr23
+		goto tr19
 	st284:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof284
 		}
 	st_case_284:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st285
 		}
-		goto tr23
+		goto tr19
 	st285:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof285
 		}
 	st_case_285:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st286
 		}
-		goto tr23
+		goto tr19
 	st286:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof286
 		}
 	st_case_286:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st287
 		}
-		goto tr23
+		goto tr19
 	st287:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof287
 		}
 	st_case_287:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st288
 		}
-		goto tr23
+		goto tr19
 	st288:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof288
 		}
 	st_case_288:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st289
 		}
-		goto tr23
+		goto tr19
 	st289:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof289
 		}
 	st_case_289:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st290
 		}
-		goto tr23
+		goto tr19
 	st290:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof290
 		}
 	st_case_290:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st291
 		}
-		goto tr23
+		goto tr19
 	st291:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof291
 		}
 	st_case_291:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st292
 		}
-		goto tr23
+		goto tr19
 	st292:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof292
 		}
 	st_case_292:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st293
 		}
-		goto tr23
+		goto tr19
 	st293:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof293
 		}
 	st_case_293:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st294
 		}
-		goto tr23
+		goto tr19
 	st294:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof294
 		}
 	st_case_294:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st295
 		}
-		goto tr23
+		goto tr19
 	st295:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof295
 		}
 	st_case_295:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st296
 		}
-		goto tr23
+		goto tr19
 	st296:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof296
 		}
 	st_case_296:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st297
 		}
-		goto tr23
+		goto tr19
 	st297:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof297
 		}
 	st_case_297:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st298
 		}
-		goto tr23
+		goto tr19
 	st298:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof298
 		}
 	st_case_298:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st299
 		}
-		goto tr23
+		goto tr19
 	st299:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof299
 		}
 	st_case_299:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st300
 		}
-		goto tr23
+		goto tr19
 	st300:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof300
 		}
 	st_case_300:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st301
 		}
-		goto tr23
+		goto tr19
 	st301:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof301
 		}
 	st_case_301:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr21
 		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st302
-		}
-		goto tr23
+		goto tr19
 	st302:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof302
 		}
 	st_case_302:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st303
 		}
-		goto tr23
+		goto tr15
 	st303:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof303
 		}
 	st_case_303:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st304
 		}
-		goto tr23
+		goto tr15
 	st304:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof304
 		}
 	st_case_304:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st305
 		}
-		goto tr23
+		goto tr15
 	st305:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof305
 		}
 	st_case_305:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st306
 		}
-		goto tr23
+		goto tr15
 	st306:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof306
 		}
 	st_case_306:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st307
 		}
-		goto tr23
+		goto tr15
 	st307:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof307
 		}
 	st_case_307:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st308
 		}
-		goto tr23
+		goto tr15
 	st308:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof308
 		}
 	st_case_308:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st309
 		}
-		goto tr23
+		goto tr15
 	st309:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof309
 		}
 	st_case_309:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st310
 		}
-		goto tr23
+		goto tr15
 	st310:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof310
 		}
 	st_case_310:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st311
 		}
-		goto tr23
+		goto tr15
 	st311:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof311
 		}
 	st_case_311:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st312
 		}
-		goto tr23
+		goto tr15
 	st312:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof312
 		}
 	st_case_312:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st313
 		}
-		goto tr23
+		goto tr15
 	st313:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof313
 		}
 	st_case_313:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st314
 		}
-		goto tr23
+		goto tr15
 	st314:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof314
 		}
 	st_case_314:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st315
 		}
-		goto tr23
+		goto tr15
 	st315:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof315
 		}
 	st_case_315:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st316
 		}
-		goto tr23
+		goto tr15
 	st316:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof316
 		}
 	st_case_316:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st317
 		}
-		goto tr23
+		goto tr15
 	st317:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof317
 		}
 	st_case_317:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st318
 		}
-		goto tr23
+		goto tr15
 	st318:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof318
 		}
 	st_case_318:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st319
 		}
-		goto tr23
+		goto tr15
 	st319:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof319
 		}
 	st_case_319:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st320
 		}
-		goto tr23
+		goto tr15
 	st320:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof320
 		}
 	st_case_320:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st321
 		}
-		goto tr23
+		goto tr15
 	st321:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof321
 		}
 	st_case_321:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st322
 		}
-		goto tr23
+		goto tr15
 	st322:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof322
 		}
 	st_case_322:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st323
 		}
-		goto tr23
+		goto tr15
 	st323:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof323
 		}
 	st_case_323:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st324
 		}
-		goto tr23
+		goto tr15
 	st324:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof324
 		}
 	st_case_324:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st325
 		}
-		goto tr23
+		goto tr15
 	st325:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof325
 		}
 	st_case_325:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st326
 		}
-		goto tr23
+		goto tr15
 	st326:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof326
 		}
 	st_case_326:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st327
 		}
-		goto tr23
+		goto tr15
 	st327:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof327
 		}
 	st_case_327:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st328
 		}
-		goto tr23
+		goto tr15
 	st328:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof328
 		}
 	st_case_328:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st329
 		}
-		goto tr23
+		goto tr15
 	st329:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof329
 		}
 	st_case_329:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st330
 		}
-		goto tr23
+		goto tr15
 	st330:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof330
 		}
 	st_case_330:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st331
 		}
-		goto tr23
+		goto tr15
 	st331:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof331
 		}
 	st_case_331:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st332
 		}
-		goto tr23
+		goto tr15
 	st332:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof332
 		}
 	st_case_332:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st333
 		}
-		goto tr23
+		goto tr15
 	st333:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof333
 		}
 	st_case_333:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr25
+			goto tr17
 		}
-		goto tr23
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st334
+		}
+		goto tr15
 	st334:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof334
 		}
 	st_case_334:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st335
 		}
-		goto tr19
+		goto tr15
 	st335:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof335
 		}
 	st_case_335:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st336
 		}
-		goto tr19
+		goto tr15
 	st336:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof336
 		}
 	st_case_336:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st337
 		}
-		goto tr19
+		goto tr15
 	st337:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof337
 		}
 	st_case_337:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st338
 		}
-		goto tr19
+		goto tr15
 	st338:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof338
 		}
 	st_case_338:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st339
 		}
-		goto tr19
+		goto tr15
 	st339:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof339
 		}
 	st_case_339:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st340
 		}
-		goto tr19
+		goto tr15
 	st340:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof340
 		}
 	st_case_340:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st341
 		}
-		goto tr19
+		goto tr15
 	st341:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof341
 		}
 	st_case_341:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st342
 		}
-		goto tr19
+		goto tr15
 	st342:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof342
 		}
 	st_case_342:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st343
 		}
-		goto tr19
+		goto tr15
 	st343:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof343
 		}
 	st_case_343:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st344
 		}
-		goto tr19
+		goto tr15
 	st344:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof344
 		}
 	st_case_344:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st345
 		}
-		goto tr19
+		goto tr15
 	st345:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof345
 		}
 	st_case_345:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st346
 		}
-		goto tr19
+		goto tr15
 	st346:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof346
 		}
 	st_case_346:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st347
 		}
-		goto tr19
+		goto tr15
 	st347:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof347
 		}
 	st_case_347:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st348
 		}
-		goto tr19
+		goto tr15
 	st348:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof348
 		}
 	st_case_348:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st349
 		}
-		goto tr19
+		goto tr15
 	st349:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof349
 		}
 	st_case_349:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st350
 		}
-		goto tr19
+		goto tr15
 	st350:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof350
 		}
 	st_case_350:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st351
 		}
-		goto tr19
+		goto tr15
 	st351:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof351
 		}
 	st_case_351:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st352
 		}
-		goto tr19
+		goto tr15
 	st352:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof352
 		}
 	st_case_352:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st353
 		}
-		goto tr19
+		goto tr15
 	st353:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof353
 		}
 	st_case_353:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st354
 		}
-		goto tr19
+		goto tr15
 	st354:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof354
 		}
 	st_case_354:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st355
 		}
-		goto tr19
+		goto tr15
 	st355:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof355
 		}
 	st_case_355:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st356
 		}
-		goto tr19
+		goto tr15
 	st356:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof356
 		}
 	st_case_356:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st357
 		}
-		goto tr19
+		goto tr15
 	st357:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof357
 		}
 	st_case_357:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st358
 		}
-		goto tr19
+		goto tr15
 	st358:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof358
 		}
 	st_case_358:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st359
 		}
-		goto tr19
+		goto tr15
 	st359:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof359
 		}
 	st_case_359:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st360
 		}
-		goto tr19
+		goto tr15
 	st360:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof360
 		}
 	st_case_360:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st361
 		}
-		goto tr19
+		goto tr15
 	st361:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof361
 		}
 	st_case_361:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st362
 		}
-		goto tr19
+		goto tr15
 	st362:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof362
 		}
 	st_case_362:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st363
 		}
-		goto tr19
+		goto tr15
 	st363:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof363
 		}
 	st_case_363:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st364
 		}
-		goto tr19
+		goto tr15
 	st364:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof364
 		}
 	st_case_364:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st365
 		}
-		goto tr19
+		goto tr15
 	st365:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof365
 		}
 	st_case_365:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st366
 		}
-		goto tr19
+		goto tr15
 	st366:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof366
 		}
 	st_case_366:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st367
 		}
-		goto tr19
+		goto tr15
 	st367:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof367
 		}
 	st_case_367:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st368
 		}
-		goto tr19
+		goto tr15
 	st368:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof368
 		}
 	st_case_368:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st369
 		}
-		goto tr19
+		goto tr15
 	st369:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof369
 		}
 	st_case_369:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st370
 		}
-		goto tr19
+		goto tr15
 	st370:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof370
 		}
 	st_case_370:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st371
 		}
-		goto tr19
+		goto tr15
 	st371:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof371
 		}
 	st_case_371:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st372
 		}
-		goto tr19
+		goto tr15
 	st372:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof372
 		}
 	st_case_372:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st373
 		}
-		goto tr19
+		goto tr15
 	st373:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof373
 		}
 	st_case_373:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st374
 		}
-		goto tr19
+		goto tr15
 	st374:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof374
 		}
 	st_case_374:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st375
 		}
-		goto tr19
+		goto tr15
 	st375:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof375
 		}
 	st_case_375:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st376
 		}
-		goto tr19
+		goto tr15
 	st376:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof376
 		}
 	st_case_376:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st377
 		}
-		goto tr19
+		goto tr15
 	st377:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof377
 		}
 	st_case_377:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st378
 		}
-		goto tr19
+		goto tr15
 	st378:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof378
 		}
 	st_case_378:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st379
 		}
-		goto tr19
+		goto tr15
 	st379:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof379
 		}
 	st_case_379:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto st380
 		}
-		goto tr19
+		goto tr15
 	st380:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof380
 		}
 	st_case_380:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr21
+			goto tr17
 		}
-		goto tr19
+		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+			goto st381
+		}
+		goto tr15
 	st381:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof381
@@ -15986,1459 +9028,511 @@ tr42:
 		if ( m.data)[( m.p)] == 32 {
 			goto tr17
 		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st556
-		}
 		goto tr15
+tr13:
+//line rfc5424/machine.go.rl:31
+
+	m.pb = m.p
+
+	goto st556
 	st556:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof556
 		}
 	st_case_556:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+//line rfc5424/machine.go:9044
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st557
 		}
-		goto tr15
+		goto tr574
 	st557:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof557
 		}
 	st_case_557:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st558
 		}
-		goto tr15
+		goto tr574
 	st558:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof558
 		}
 	st_case_558:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st559
 		}
-		goto tr15
+		goto tr574
 	st559:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof559
 		}
 	st_case_559:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if ( m.data)[( m.p)] == 45 {
 			goto st560
 		}
-		goto tr15
+		goto tr574
 	st560:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof560
 		}
 	st_case_560:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		switch ( m.data)[( m.p)] {
+		case 48:
 			goto st561
+		case 49:
+			goto st592
 		}
-		goto tr15
+		goto tr574
 	st561:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof561
 		}
 	st_case_561:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if 49 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st562
 		}
-		goto tr15
+		goto tr574
 	st562:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof562
 		}
 	st_case_562:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if ( m.data)[( m.p)] == 45 {
 			goto st563
 		}
-		goto tr15
+		goto tr574
 	st563:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof563
 		}
 	st_case_563:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		switch ( m.data)[( m.p)] {
+		case 48:
 			goto st564
+		case 51:
+			goto st591
 		}
-		goto tr15
+		if 49 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 50 {
+			goto st590
+		}
+		goto tr574
 	st564:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof564
 		}
 	st_case_564:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if 49 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st565
 		}
-		goto tr15
+		goto tr574
 	st565:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof565
 		}
 	st_case_565:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if ( m.data)[( m.p)] == 84 {
 			goto st566
 		}
-		goto tr15
+		goto tr574
 	st566:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof566
 		}
 	st_case_566:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
+		if ( m.data)[( m.p)] == 50 {
+			goto st589
 		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 49 {
 			goto st567
 		}
-		goto tr15
+		goto tr574
 	st567:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof567
 		}
 	st_case_567:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st568
 		}
-		goto tr15
+		goto tr574
 	st568:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof568
 		}
 	st_case_568:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if ( m.data)[( m.p)] == 58 {
 			goto st569
 		}
-		goto tr15
+		goto tr574
 	st569:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof569
 		}
 	st_case_569:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 53 {
 			goto st570
 		}
-		goto tr15
+		goto tr574
 	st570:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof570
 		}
 	st_case_570:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st571
 		}
-		goto tr15
+		goto tr574
 	st571:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof571
 		}
 	st_case_571:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if ( m.data)[( m.p)] == 58 {
 			goto st572
 		}
-		goto tr15
+		goto tr574
 	st572:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof572
 		}
 	st_case_572:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 53 {
 			goto st573
 		}
-		goto tr15
+		goto tr574
 	st573:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof573
 		}
 	st_case_573:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st574
 		}
-		goto tr15
+		goto tr574
 	st574:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof574
 		}
 	st_case_574:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		switch ( m.data)[( m.p)] {
+		case 43:
 			goto st575
+		case 45:
+			goto st575
+		case 46:
+			goto st582
+		case 90:
+			goto st580
 		}
-		goto tr15
+		goto tr574
 	st575:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof575
 		}
 	st_case_575:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
+		if ( m.data)[( m.p)] == 50 {
+			goto st581
 		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 49 {
 			goto st576
 		}
-		goto tr15
+		goto tr574
 	st576:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof576
 		}
 	st_case_576:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st577
 		}
-		goto tr15
+		goto tr574
 	st577:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof577
 		}
 	st_case_577:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if ( m.data)[( m.p)] == 58 {
 			goto st578
 		}
-		goto tr15
+		goto tr574
 	st578:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof578
 		}
 	st_case_578:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 53 {
 			goto st579
 		}
-		goto tr15
+		goto tr574
 	st579:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof579
 		}
 	st_case_579:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st580
 		}
-		goto tr15
+		goto tr574
 	st580:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof580
 		}
 	st_case_580:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr17
+			goto tr605
 		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st581
-		}
-		goto tr15
+		goto st0
 	st581:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof581
 		}
 	st_case_581:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 51 {
+			goto st577
 		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st582
-		}
-		goto tr15
+		goto tr574
 	st582:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof582
 		}
 	st_case_582:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st583
 		}
-		goto tr15
+		goto tr574
 	st583:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof583
 		}
 	st_case_583:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
+		switch ( m.data)[( m.p)] {
+		case 43:
+			goto st575
+		case 45:
+			goto st575
+		case 90:
+			goto st580
 		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st584
 		}
-		goto tr15
+		goto tr574
 	st584:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof584
 		}
 	st_case_584:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
+		switch ( m.data)[( m.p)] {
+		case 43:
+			goto st575
+		case 45:
+			goto st575
+		case 90:
+			goto st580
 		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st585
 		}
-		goto tr15
+		goto tr574
 	st585:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof585
 		}
 	st_case_585:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
+		switch ( m.data)[( m.p)] {
+		case 43:
+			goto st575
+		case 45:
+			goto st575
+		case 90:
+			goto st580
 		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st586
 		}
-		goto tr15
+		goto tr574
 	st586:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof586
 		}
 	st_case_586:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
+		switch ( m.data)[( m.p)] {
+		case 43:
+			goto st575
+		case 45:
+			goto st575
+		case 90:
+			goto st580
 		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st587
 		}
-		goto tr15
+		goto tr574
 	st587:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof587
 		}
 	st_case_587:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
+		switch ( m.data)[( m.p)] {
+		case 43:
+			goto st575
+		case 45:
+			goto st575
+		case 90:
+			goto st580
 		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st588
 		}
-		goto tr15
+		goto tr574
 	st588:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof588
 		}
 	st_case_588:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
+		switch ( m.data)[( m.p)] {
+		case 43:
+			goto st575
+		case 45:
+			goto st575
+		case 90:
+			goto st580
 		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st589
-		}
-		goto tr15
+		goto tr574
 	st589:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof589
 		}
 	st_case_589:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 51 {
+			goto st568
 		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st590
-		}
-		goto tr15
+		goto tr574
 	st590:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof590
 		}
 	st_case_590:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
+			goto st565
 		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st591
-		}
-		goto tr15
+		goto tr574
 	st591:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof591
 		}
 	st_case_591:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 49 {
+			goto st565
 		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st592
-		}
-		goto tr15
+		goto tr574
 	st592:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof592
 		}
 	st_case_592:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 50 {
+			goto st562
 		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st593
-		}
-		goto tr15
+		goto tr574
 	st593:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof593
 		}
 	st_case_593:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr17
+			goto tr9
 		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st594
 		}
-		goto tr15
+		goto tr7
 	st594:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof594
 		}
 	st_case_594:
 		if ( m.data)[( m.p)] == 32 {
-			goto tr17
+			goto tr9
 		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st595
-		}
-		goto tr15
+		goto tr7
+tr4:
+//line rfc5424/machine.go.rl:31
+
+	m.pb = m.p
+
+	goto st595
 	st595:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof595
 		}
 	st_case_595:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
+//line rfc5424/machine.go:9472
+		switch ( m.data)[( m.p)] {
+		case 57:
+			goto st597
+		case 62:
+			goto tr6
 		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 56 {
 			goto st596
 		}
-		goto tr15
+		goto tr2
+tr5:
+//line rfc5424/machine.go.rl:31
+
+	m.pb = m.p
+
+	goto st596
 	st596:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof596
 		}
 	st_case_596:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
+//line rfc5424/machine.go:9494
+		if ( m.data)[( m.p)] == 62 {
+			goto tr6
 		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st597
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
+			goto st3
 		}
-		goto tr15
+		goto tr2
 	st597:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof597
 		}
 	st_case_597:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
+		if ( m.data)[( m.p)] == 62 {
+			goto tr6
 		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st598
+		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 49 {
+			goto st3
 		}
-		goto tr15
+		goto tr2
 	st598:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof598
 		}
 	st_case_598:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
+		switch ( m.data)[( m.p)] {
+		case 10:
+			goto tr617
+		case 13:
+			goto tr617
 		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st599
-		}
-		goto tr15
-	st599:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof599
-		}
-	st_case_599:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st600
-		}
-		goto tr15
-	st600:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof600
-		}
-	st_case_600:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st601
-		}
-		goto tr15
-	st601:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof601
-		}
-	st_case_601:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st602
-		}
-		goto tr15
-	st602:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof602
-		}
-	st_case_602:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st603
-		}
-		goto tr15
+		goto st598
+tr617:
+//line rfc5424/machine.go.rl:302
+ ( m.p)--
+ {goto st1 } 
+	goto st603
 	st603:
 		if ( m.p)++; ( m.p) == ( m.pe) {
 			goto _test_eof603
 		}
 	st_case_603:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st604
-		}
-		goto tr15
-	st604:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof604
-		}
-	st_case_604:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st605
-		}
-		goto tr15
-	st605:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof605
-		}
-	st_case_605:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st606
-		}
-		goto tr15
-	st606:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof606
-		}
-	st_case_606:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st607
-		}
-		goto tr15
-	st607:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof607
-		}
-	st_case_607:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st608
-		}
-		goto tr15
-	st608:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof608
-		}
-	st_case_608:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st609
-		}
-		goto tr15
-	st609:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof609
-		}
-	st_case_609:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st610
-		}
-		goto tr15
-	st610:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof610
-		}
-	st_case_610:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st611
-		}
-		goto tr15
-	st611:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof611
-		}
-	st_case_611:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st612
-		}
-		goto tr15
-	st612:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof612
-		}
-	st_case_612:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st613
-		}
-		goto tr15
-	st613:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof613
-		}
-	st_case_613:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st614
-		}
-		goto tr15
-	st614:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof614
-		}
-	st_case_614:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st615
-		}
-		goto tr15
-	st615:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof615
-		}
-	st_case_615:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st616
-		}
-		goto tr15
-	st616:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof616
-		}
-	st_case_616:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st617
-		}
-		goto tr15
-	st617:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof617
-		}
-	st_case_617:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st618
-		}
-		goto tr15
-	st618:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof618
-		}
-	st_case_618:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st619
-		}
-		goto tr15
-	st619:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof619
-		}
-	st_case_619:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st620
-		}
-		goto tr15
-	st620:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof620
-		}
-	st_case_620:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st621
-		}
-		goto tr15
-	st621:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof621
-		}
-	st_case_621:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st622
-		}
-		goto tr15
-	st622:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof622
-		}
-	st_case_622:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st623
-		}
-		goto tr15
-	st623:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof623
-		}
-	st_case_623:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st624
-		}
-		goto tr15
-	st624:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof624
-		}
-	st_case_624:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st625
-		}
-		goto tr15
-	st625:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof625
-		}
-	st_case_625:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st626
-		}
-		goto tr15
-	st626:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof626
-		}
-	st_case_626:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st627
-		}
-		goto tr15
-	st627:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof627
-		}
-	st_case_627:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st628
-		}
-		goto tr15
-	st628:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof628
-		}
-	st_case_628:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st629
-		}
-		goto tr15
-	st629:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof629
-		}
-	st_case_629:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st630
-		}
-		goto tr15
-	st630:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof630
-		}
-	st_case_630:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st631
-		}
-		goto tr15
-	st631:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof631
-		}
-	st_case_631:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st632
-		}
-		goto tr15
-	st632:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof632
-		}
-	st_case_632:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st633
-		}
-		goto tr15
-	st633:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof633
-		}
-	st_case_633:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
-			goto st634
-		}
-		goto tr15
-	st634:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof634
-		}
-	st_case_634:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr17
-		}
-		goto tr15
-tr13:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st635
-	st635:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof635
-		}
-	st_case_635:
-//line rfc5424/machine.go:16950
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
-			goto st636
-		}
-		goto tr658
-	st636:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof636
-		}
-	st_case_636:
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
-			goto st637
-		}
-		goto tr658
-	st637:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof637
-		}
-	st_case_637:
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
-			goto st638
-		}
-		goto tr658
-	st638:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof638
-		}
-	st_case_638:
-		if ( m.data)[( m.p)] == 45 {
-			goto st639
-		}
-		goto tr658
-	st639:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof639
-		}
-	st_case_639:
-		switch ( m.data)[( m.p)] {
-		case 48:
-			goto st640
-		case 49:
-			goto st671
-		}
-		goto tr658
-	st640:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof640
-		}
-	st_case_640:
-		if 49 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
-			goto st641
-		}
-		goto tr658
-	st641:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof641
-		}
-	st_case_641:
-		if ( m.data)[( m.p)] == 45 {
-			goto st642
-		}
-		goto tr658
-	st642:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof642
-		}
-	st_case_642:
-		switch ( m.data)[( m.p)] {
-		case 48:
-			goto st643
-		case 51:
-			goto st670
-		}
-		if 49 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 50 {
-			goto st669
-		}
-		goto tr658
-	st643:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof643
-		}
-	st_case_643:
-		if 49 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
-			goto st644
-		}
-		goto tr658
-	st644:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof644
-		}
-	st_case_644:
-		if ( m.data)[( m.p)] == 84 {
-			goto st645
-		}
-		goto tr658
-	st645:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof645
-		}
-	st_case_645:
-		if ( m.data)[( m.p)] == 50 {
-			goto st668
-		}
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 49 {
-			goto st646
-		}
-		goto tr658
-	st646:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof646
-		}
-	st_case_646:
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
-			goto st647
-		}
-		goto tr658
-	st647:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof647
-		}
-	st_case_647:
-		if ( m.data)[( m.p)] == 58 {
-			goto st648
-		}
-		goto tr658
-	st648:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof648
-		}
-	st_case_648:
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 53 {
-			goto st649
-		}
-		goto tr658
-	st649:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof649
-		}
-	st_case_649:
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
-			goto st650
-		}
-		goto tr658
-	st650:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof650
-		}
-	st_case_650:
-		if ( m.data)[( m.p)] == 58 {
-			goto st651
-		}
-		goto tr658
-	st651:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof651
-		}
-	st_case_651:
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 53 {
-			goto st652
-		}
-		goto tr658
-	st652:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof652
-		}
-	st_case_652:
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
-			goto st653
-		}
-		goto tr658
-	st653:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof653
-		}
-	st_case_653:
-		switch ( m.data)[( m.p)] {
-		case 43:
-			goto st654
-		case 45:
-			goto st654
-		case 46:
-			goto st661
-		case 90:
-			goto st659
-		}
-		goto tr658
-	st654:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof654
-		}
-	st_case_654:
-		if ( m.data)[( m.p)] == 50 {
-			goto st660
-		}
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 49 {
-			goto st655
-		}
-		goto tr658
-	st655:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof655
-		}
-	st_case_655:
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
-			goto st656
-		}
-		goto tr658
-	st656:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof656
-		}
-	st_case_656:
-		if ( m.data)[( m.p)] == 58 {
-			goto st657
-		}
-		goto tr658
-	st657:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof657
-		}
-	st_case_657:
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 53 {
-			goto st658
-		}
-		goto tr658
-	st658:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof658
-		}
-	st_case_658:
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
-			goto st659
-		}
-		goto tr658
-	st659:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof659
-		}
-	st_case_659:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr689
-		}
-		goto st0
-	st660:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof660
-		}
-	st_case_660:
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 51 {
-			goto st656
-		}
-		goto tr658
-	st661:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof661
-		}
-	st_case_661:
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
-			goto st662
-		}
-		goto tr658
-	st662:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof662
-		}
-	st_case_662:
-		switch ( m.data)[( m.p)] {
-		case 43:
-			goto st654
-		case 45:
-			goto st654
-		case 90:
-			goto st659
-		}
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
-			goto st663
-		}
-		goto tr658
-	st663:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof663
-		}
-	st_case_663:
-		switch ( m.data)[( m.p)] {
-		case 43:
-			goto st654
-		case 45:
-			goto st654
-		case 90:
-			goto st659
-		}
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
-			goto st664
-		}
-		goto tr658
-	st664:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof664
-		}
-	st_case_664:
-		switch ( m.data)[( m.p)] {
-		case 43:
-			goto st654
-		case 45:
-			goto st654
-		case 90:
-			goto st659
-		}
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
-			goto st665
-		}
-		goto tr658
-	st665:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof665
-		}
-	st_case_665:
-		switch ( m.data)[( m.p)] {
-		case 43:
-			goto st654
-		case 45:
-			goto st654
-		case 90:
-			goto st659
-		}
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
-			goto st666
-		}
-		goto tr658
-	st666:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof666
-		}
-	st_case_666:
-		switch ( m.data)[( m.p)] {
-		case 43:
-			goto st654
-		case 45:
-			goto st654
-		case 90:
-			goto st659
-		}
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
-			goto st667
-		}
-		goto tr658
-	st667:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof667
-		}
-	st_case_667:
-		switch ( m.data)[( m.p)] {
-		case 43:
-			goto st654
-		case 45:
-			goto st654
-		case 90:
-			goto st659
-		}
-		goto tr658
-	st668:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof668
-		}
-	st_case_668:
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 51 {
-			goto st647
-		}
-		goto tr658
-	st669:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof669
-		}
-	st_case_669:
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
-			goto st644
-		}
-		goto tr658
-	st670:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof670
-		}
-	st_case_670:
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 49 {
-			goto st644
-		}
-		goto tr658
-	st671:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof671
-		}
-	st_case_671:
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 50 {
-			goto st641
-		}
-		goto tr658
-	st672:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof672
-		}
-	st_case_672:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr9
-		}
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
-			goto st673
-		}
-		goto tr7
-	st673:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof673
-		}
-	st_case_673:
-		if ( m.data)[( m.p)] == 32 {
-			goto tr9
-		}
-		goto tr7
-tr4:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st674
-	st674:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof674
-		}
-	st_case_674:
-//line rfc5424/machine.go:17378
-		switch ( m.data)[( m.p)] {
-		case 57:
-			goto st676
-		case 62:
-			goto tr6
-		}
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 56 {
-			goto st675
-		}
-		goto tr2
-tr5:
-//line rfc5424/machine.go.rl:30
-
-	m.pb = m.p
-
-	goto st675
-	st675:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof675
-		}
-	st_case_675:
-//line rfc5424/machine.go:17400
-		if ( m.data)[( m.p)] == 62 {
-			goto tr6
-		}
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
-			goto st3
-		}
-		goto tr2
-	st676:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof676
-		}
-	st_case_676:
-		if ( m.data)[( m.p)] == 62 {
-			goto tr6
-		}
-		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 49 {
-			goto st3
-		}
-		goto tr2
-	st677:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof677
-		}
-	st_case_677:
-		switch ( m.data)[( m.p)] {
-		case 10:
-			goto tr701
-		case 13:
-			goto tr701
-		}
-		goto st677
-tr701:
-//line rfc5424/machine.go.rl:286
- ( m.p)--
- {goto st1 } 
-	goto st755
-	st755:
-		if ( m.p)++; ( m.p) == ( m.pe) {
-			goto _test_eof755
-		}
-	st_case_755:
-//line rfc5424/machine.go:17442
+//line rfc5424/machine.go:9536
 		goto st0
 	st_out:
 	_test_eof1:  m.cs = 1; goto _test_eof
@@ -17457,9 +9551,9 @@ tr701:
 	_test_eof14:  m.cs = 14; goto _test_eof
 	_test_eof15:  m.cs = 15; goto _test_eof
 	_test_eof16:  m.cs = 16; goto _test_eof
-	_test_eof678:  m.cs = 678; goto _test_eof
-	_test_eof679:  m.cs = 679; goto _test_eof
-	_test_eof680:  m.cs = 680; goto _test_eof
+	_test_eof599:  m.cs = 599; goto _test_eof
+	_test_eof600:  m.cs = 600; goto _test_eof
+	_test_eof601:  m.cs = 601; goto _test_eof
 	_test_eof17:  m.cs = 17; goto _test_eof
 	_test_eof18:  m.cs = 18; goto _test_eof
 	_test_eof19:  m.cs = 19; goto _test_eof
@@ -17506,6 +9600,7 @@ tr701:
 	_test_eof60:  m.cs = 60; goto _test_eof
 	_test_eof61:  m.cs = 61; goto _test_eof
 	_test_eof62:  m.cs = 62; goto _test_eof
+	_test_eof602:  m.cs = 602; goto _test_eof
 	_test_eof63:  m.cs = 63; goto _test_eof
 	_test_eof64:  m.cs = 64; goto _test_eof
 	_test_eof65:  m.cs = 65; goto _test_eof
@@ -17541,79 +9636,6 @@ tr701:
 	_test_eof95:  m.cs = 95; goto _test_eof
 	_test_eof96:  m.cs = 96; goto _test_eof
 	_test_eof97:  m.cs = 97; goto _test_eof
-	_test_eof681:  m.cs = 681; goto _test_eof
-	_test_eof682:  m.cs = 682; goto _test_eof
-	_test_eof683:  m.cs = 683; goto _test_eof
-	_test_eof684:  m.cs = 684; goto _test_eof
-	_test_eof685:  m.cs = 685; goto _test_eof
-	_test_eof686:  m.cs = 686; goto _test_eof
-	_test_eof687:  m.cs = 687; goto _test_eof
-	_test_eof688:  m.cs = 688; goto _test_eof
-	_test_eof689:  m.cs = 689; goto _test_eof
-	_test_eof690:  m.cs = 690; goto _test_eof
-	_test_eof691:  m.cs = 691; goto _test_eof
-	_test_eof692:  m.cs = 692; goto _test_eof
-	_test_eof693:  m.cs = 693; goto _test_eof
-	_test_eof694:  m.cs = 694; goto _test_eof
-	_test_eof695:  m.cs = 695; goto _test_eof
-	_test_eof696:  m.cs = 696; goto _test_eof
-	_test_eof697:  m.cs = 697; goto _test_eof
-	_test_eof698:  m.cs = 698; goto _test_eof
-	_test_eof699:  m.cs = 699; goto _test_eof
-	_test_eof700:  m.cs = 700; goto _test_eof
-	_test_eof701:  m.cs = 701; goto _test_eof
-	_test_eof702:  m.cs = 702; goto _test_eof
-	_test_eof703:  m.cs = 703; goto _test_eof
-	_test_eof704:  m.cs = 704; goto _test_eof
-	_test_eof705:  m.cs = 705; goto _test_eof
-	_test_eof706:  m.cs = 706; goto _test_eof
-	_test_eof707:  m.cs = 707; goto _test_eof
-	_test_eof708:  m.cs = 708; goto _test_eof
-	_test_eof709:  m.cs = 709; goto _test_eof
-	_test_eof710:  m.cs = 710; goto _test_eof
-	_test_eof711:  m.cs = 711; goto _test_eof
-	_test_eof712:  m.cs = 712; goto _test_eof
-	_test_eof713:  m.cs = 713; goto _test_eof
-	_test_eof714:  m.cs = 714; goto _test_eof
-	_test_eof715:  m.cs = 715; goto _test_eof
-	_test_eof716:  m.cs = 716; goto _test_eof
-	_test_eof717:  m.cs = 717; goto _test_eof
-	_test_eof718:  m.cs = 718; goto _test_eof
-	_test_eof719:  m.cs = 719; goto _test_eof
-	_test_eof720:  m.cs = 720; goto _test_eof
-	_test_eof721:  m.cs = 721; goto _test_eof
-	_test_eof722:  m.cs = 722; goto _test_eof
-	_test_eof723:  m.cs = 723; goto _test_eof
-	_test_eof724:  m.cs = 724; goto _test_eof
-	_test_eof725:  m.cs = 725; goto _test_eof
-	_test_eof726:  m.cs = 726; goto _test_eof
-	_test_eof727:  m.cs = 727; goto _test_eof
-	_test_eof728:  m.cs = 728; goto _test_eof
-	_test_eof729:  m.cs = 729; goto _test_eof
-	_test_eof730:  m.cs = 730; goto _test_eof
-	_test_eof731:  m.cs = 731; goto _test_eof
-	_test_eof732:  m.cs = 732; goto _test_eof
-	_test_eof733:  m.cs = 733; goto _test_eof
-	_test_eof734:  m.cs = 734; goto _test_eof
-	_test_eof735:  m.cs = 735; goto _test_eof
-	_test_eof736:  m.cs = 736; goto _test_eof
-	_test_eof737:  m.cs = 737; goto _test_eof
-	_test_eof738:  m.cs = 738; goto _test_eof
-	_test_eof739:  m.cs = 739; goto _test_eof
-	_test_eof740:  m.cs = 740; goto _test_eof
-	_test_eof741:  m.cs = 741; goto _test_eof
-	_test_eof742:  m.cs = 742; goto _test_eof
-	_test_eof743:  m.cs = 743; goto _test_eof
-	_test_eof744:  m.cs = 744; goto _test_eof
-	_test_eof745:  m.cs = 745; goto _test_eof
-	_test_eof746:  m.cs = 746; goto _test_eof
-	_test_eof747:  m.cs = 747; goto _test_eof
-	_test_eof748:  m.cs = 748; goto _test_eof
-	_test_eof749:  m.cs = 749; goto _test_eof
-	_test_eof750:  m.cs = 750; goto _test_eof
-	_test_eof751:  m.cs = 751; goto _test_eof
-	_test_eof752:  m.cs = 752; goto _test_eof
-	_test_eof753:  m.cs = 753; goto _test_eof
 	_test_eof98:  m.cs = 98; goto _test_eof
 	_test_eof99:  m.cs = 99; goto _test_eof
 	_test_eof100:  m.cs = 100; goto _test_eof
@@ -17692,7 +9714,6 @@ tr701:
 	_test_eof173:  m.cs = 173; goto _test_eof
 	_test_eof174:  m.cs = 174; goto _test_eof
 	_test_eof175:  m.cs = 175; goto _test_eof
-	_test_eof754:  m.cs = 754; goto _test_eof
 	_test_eof176:  m.cs = 176; goto _test_eof
 	_test_eof177:  m.cs = 177; goto _test_eof
 	_test_eof178:  m.cs = 178; goto _test_eof
@@ -18116,290 +10137,186 @@ tr701:
 	_test_eof596:  m.cs = 596; goto _test_eof
 	_test_eof597:  m.cs = 597; goto _test_eof
 	_test_eof598:  m.cs = 598; goto _test_eof
-	_test_eof599:  m.cs = 599; goto _test_eof
-	_test_eof600:  m.cs = 600; goto _test_eof
-	_test_eof601:  m.cs = 601; goto _test_eof
-	_test_eof602:  m.cs = 602; goto _test_eof
 	_test_eof603:  m.cs = 603; goto _test_eof
-	_test_eof604:  m.cs = 604; goto _test_eof
-	_test_eof605:  m.cs = 605; goto _test_eof
-	_test_eof606:  m.cs = 606; goto _test_eof
-	_test_eof607:  m.cs = 607; goto _test_eof
-	_test_eof608:  m.cs = 608; goto _test_eof
-	_test_eof609:  m.cs = 609; goto _test_eof
-	_test_eof610:  m.cs = 610; goto _test_eof
-	_test_eof611:  m.cs = 611; goto _test_eof
-	_test_eof612:  m.cs = 612; goto _test_eof
-	_test_eof613:  m.cs = 613; goto _test_eof
-	_test_eof614:  m.cs = 614; goto _test_eof
-	_test_eof615:  m.cs = 615; goto _test_eof
-	_test_eof616:  m.cs = 616; goto _test_eof
-	_test_eof617:  m.cs = 617; goto _test_eof
-	_test_eof618:  m.cs = 618; goto _test_eof
-	_test_eof619:  m.cs = 619; goto _test_eof
-	_test_eof620:  m.cs = 620; goto _test_eof
-	_test_eof621:  m.cs = 621; goto _test_eof
-	_test_eof622:  m.cs = 622; goto _test_eof
-	_test_eof623:  m.cs = 623; goto _test_eof
-	_test_eof624:  m.cs = 624; goto _test_eof
-	_test_eof625:  m.cs = 625; goto _test_eof
-	_test_eof626:  m.cs = 626; goto _test_eof
-	_test_eof627:  m.cs = 627; goto _test_eof
-	_test_eof628:  m.cs = 628; goto _test_eof
-	_test_eof629:  m.cs = 629; goto _test_eof
-	_test_eof630:  m.cs = 630; goto _test_eof
-	_test_eof631:  m.cs = 631; goto _test_eof
-	_test_eof632:  m.cs = 632; goto _test_eof
-	_test_eof633:  m.cs = 633; goto _test_eof
-	_test_eof634:  m.cs = 634; goto _test_eof
-	_test_eof635:  m.cs = 635; goto _test_eof
-	_test_eof636:  m.cs = 636; goto _test_eof
-	_test_eof637:  m.cs = 637; goto _test_eof
-	_test_eof638:  m.cs = 638; goto _test_eof
-	_test_eof639:  m.cs = 639; goto _test_eof
-	_test_eof640:  m.cs = 640; goto _test_eof
-	_test_eof641:  m.cs = 641; goto _test_eof
-	_test_eof642:  m.cs = 642; goto _test_eof
-	_test_eof643:  m.cs = 643; goto _test_eof
-	_test_eof644:  m.cs = 644; goto _test_eof
-	_test_eof645:  m.cs = 645; goto _test_eof
-	_test_eof646:  m.cs = 646; goto _test_eof
-	_test_eof647:  m.cs = 647; goto _test_eof
-	_test_eof648:  m.cs = 648; goto _test_eof
-	_test_eof649:  m.cs = 649; goto _test_eof
-	_test_eof650:  m.cs = 650; goto _test_eof
-	_test_eof651:  m.cs = 651; goto _test_eof
-	_test_eof652:  m.cs = 652; goto _test_eof
-	_test_eof653:  m.cs = 653; goto _test_eof
-	_test_eof654:  m.cs = 654; goto _test_eof
-	_test_eof655:  m.cs = 655; goto _test_eof
-	_test_eof656:  m.cs = 656; goto _test_eof
-	_test_eof657:  m.cs = 657; goto _test_eof
-	_test_eof658:  m.cs = 658; goto _test_eof
-	_test_eof659:  m.cs = 659; goto _test_eof
-	_test_eof660:  m.cs = 660; goto _test_eof
-	_test_eof661:  m.cs = 661; goto _test_eof
-	_test_eof662:  m.cs = 662; goto _test_eof
-	_test_eof663:  m.cs = 663; goto _test_eof
-	_test_eof664:  m.cs = 664; goto _test_eof
-	_test_eof665:  m.cs = 665; goto _test_eof
-	_test_eof666:  m.cs = 666; goto _test_eof
-	_test_eof667:  m.cs = 667; goto _test_eof
-	_test_eof668:  m.cs = 668; goto _test_eof
-	_test_eof669:  m.cs = 669; goto _test_eof
-	_test_eof670:  m.cs = 670; goto _test_eof
-	_test_eof671:  m.cs = 671; goto _test_eof
-	_test_eof672:  m.cs = 672; goto _test_eof
-	_test_eof673:  m.cs = 673; goto _test_eof
-	_test_eof674:  m.cs = 674; goto _test_eof
-	_test_eof675:  m.cs = 675; goto _test_eof
-	_test_eof676:  m.cs = 676; goto _test_eof
-	_test_eof677:  m.cs = 677; goto _test_eof
-	_test_eof755:  m.cs = 755; goto _test_eof
 
 	_test_eof: {}
 	if ( m.p) == ( m.eof) {
 		switch  m.cs {
-		case 680, 683, 684, 685, 686, 687, 688, 689, 690, 691, 692, 693, 694, 695, 696, 697, 698, 699, 700, 701, 702, 703, 704, 705, 706, 707, 708, 709, 710, 711, 712, 713, 714, 715, 716, 717, 718, 719, 720, 721, 722, 723, 724, 725, 726, 727, 728, 729, 730, 731, 732, 733, 734, 735, 736, 737, 738, 739, 740, 741, 742, 743, 744, 745, 746, 747, 748, 749, 750, 751, 752, 753:
-//line rfc5424/machine.go.rl:107
+		case 601:
+//line rfc5424/machine.go.rl:108
 
 	if msg := string(m.text()); msg != "" {
 		m.output.Message = &msg
 	}
 
-		case 2, 3, 674, 675, 676:
-//line rfc5424/machine.go.rl:113
+		case 2, 3, 595, 596, 597:
+//line rfc5424/machine.go.rl:114
 
 	m.err = fmt.Errorf(errPrival, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 1:
-//line rfc5424/machine.go.rl:120
+//line rfc5424/machine.go.rl:121
 
 	m.err = fmt.Errorf(errPri, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-		case 4, 5, 672, 673:
-//line rfc5424/machine.go.rl:127
+		case 4, 5, 593, 594:
+//line rfc5424/machine.go.rl:128
 
 	m.err = fmt.Errorf(errVersion, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-		case 635, 636, 637, 638, 639, 640, 641, 642, 643, 644, 645, 646, 647, 648, 649, 650, 651, 652, 653, 654, 655, 656, 657, 658, 660, 661, 662, 663, 664, 665, 666, 667, 668, 669, 670, 671:
-//line rfc5424/machine.go.rl:134
+		case 556, 557, 558, 559, 560, 561, 562, 563, 564, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 581, 582, 583, 584, 585, 586, 587, 588, 589, 590, 591, 592:
+//line rfc5424/machine.go.rl:135
 
 	m.err = fmt.Errorf(errTimestamp, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-		case 8, 9, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545, 546, 547, 548, 549, 550, 551, 552, 553, 554, 555, 556, 557, 558, 559, 560, 561, 562, 563, 564, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 580, 581, 582, 583, 584, 585, 586, 587, 588, 589, 590, 591, 592, 593, 594, 595, 596, 597, 598, 599, 600, 601, 602, 603, 604, 605, 606, 607, 608, 609, 610, 611, 612, 613, 614, 615, 616, 617, 618, 619, 620, 621, 622, 623, 624, 625, 626, 627, 628, 629, 630, 631, 632, 633, 634:
-//line rfc5424/machine.go.rl:141
+		case 8, 9, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545, 546, 547, 548, 549, 550, 551, 552, 553, 554, 555:
+//line rfc5424/machine.go.rl:142
 
 	m.err = fmt.Errorf(errHostname, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-		case 10, 11, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380:
-//line rfc5424/machine.go.rl:148
+		case 10, 11, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301:
+//line rfc5424/machine.go.rl:149
 
 	m.err = fmt.Errorf(errAppname, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-		case 12, 13, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333:
-//line rfc5424/machine.go.rl:155
+		case 12, 13, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254:
+//line rfc5424/machine.go.rl:156
 
 	m.err = fmt.Errorf(errProcid, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-		case 14, 15, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206:
-//line rfc5424/machine.go.rl:162
+		case 14, 15, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127:
+//line rfc5424/machine.go.rl:163
 
 	m.err = fmt.Errorf(errMsgid, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 16:
-//line rfc5424/machine.go.rl:169
+//line rfc5424/machine.go.rl:170
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
 		case 17, 18, 19, 20, 21, 22, 23:
-//line rfc5424/machine.go.rl:190
+//line rfc5424/machine.go.rl:191
 
 	m.err = fmt.Errorf(errMsg, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-		case 679, 682:
-//line rfc5424/machine.go.rl:30
+		case 600:
+//line rfc5424/machine.go.rl:31
 
 	m.pb = m.p
 
-//line rfc5424/machine.go.rl:107
+//line rfc5424/machine.go.rl:108
 
 	if msg := string(m.text()); msg != "" {
 		m.output.Message = &msg
 	}
 
-		case 24, 25, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175:
-//line rfc5424/machine.go.rl:176
+		case 24, 25, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96:
+//line rfc5424/machine.go.rl:177
 
 	m.err = fmt.Errorf(errSdID, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:169
+//line rfc5424/machine.go.rl:170
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-		case 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 138, 139, 140, 141, 142, 143, 144:
-//line rfc5424/machine.go.rl:183
+		case 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 62, 65:
+//line rfc5424/machine.go.rl:184
 
 	m.err = fmt.Errorf(errSdParam, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:169
+//line rfc5424/machine.go.rl:170
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-		case 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137:
-//line rfc5424/machine.go.rl:176
+		case 60, 61, 63, 64:
+//line rfc5424/machine.go.rl:198
 
-	m.err = fmt.Errorf(errSdID, m.p)
+	m.err = fmt.Errorf(errEscape, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:183
+//line rfc5424/machine.go.rl:184
 
 	m.err = fmt.Errorf(errSdParam, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-//line rfc5424/machine.go.rl:169
+//line rfc5424/machine.go.rl:170
 
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	( m.p)--
 
-    {goto st677 }
+    {goto st598 }
     {( m.p)++;  m.cs = 0; goto _out }
 
-		case 98, 99, 100, 101, 102, 103, 104:
-//line rfc5424/machine.go.rl:183
-
-	m.err = fmt.Errorf(errSdParam, m.p)
-	( m.p)--
-
-    {goto st677 }
-    {( m.p)++;  m.cs = 0; goto _out }
-
-//line rfc5424/machine.go.rl:169
-
-	m.err = fmt.Errorf(errStructuredData, m.p)
-	( m.p)--
-
-    {goto st677 }
-    {( m.p)++;  m.cs = 0; goto _out }
-
-//line rfc5424/machine.go.rl:190
-
-	m.err = fmt.Errorf(errMsg, m.p)
-	( m.p)--
-
-    {goto st677 }
-    {( m.p)++;  m.cs = 0; goto _out }
-
-//line rfc5424/machine.go:18396
+//line rfc5424/machine.go:10313
 		}
 	}
 
 	_out: {}
 	}
 
-//line rfc5424/machine.go.rl:344
+//line rfc5424/machine.go.rl:360
 
     if m.cs < rfc5424_first_final {
         return nil, m.err
