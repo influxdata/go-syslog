@@ -213,6 +213,34 @@ var testCases = []testCase{
 		nil,
 		"parsing time \"2003-09-31T22:14:16Z\": day out of range",
 	},
+	// Too long hostname
+	{
+		[]byte("<1>1 - abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcX - - - -"),
+		false,
+		nil,
+		"expecting an hostname (from 1 to max 255 US-ASCII characters) or a nil value [col 262]",
+	},
+	// Too long appname
+	{
+		[]byte("<1>1 - - abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefX - - -"),
+		false,
+		nil,
+		"expecting an app-name (from 1 to max 48 US-ASCII characters) or a nil value [col 57]",
+	},
+	// Too long procid
+	{
+		[]byte("<1>1 - - - abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabX - -"),
+		false,
+		nil,
+		"expecting a procid (from 1 to max 128 US-ASCII characters) or a nil value [col 139]",
+	},
+	// Too long msgid
+	{
+		[]byte("<1>1 - - - - abcdefghilmnopqrstuvzabcdefghilmX -"),
+		false,
+		nil,
+		"expecting a msgid (from 1 to max 32 US-ASCII characters) [col 45]",
+	},
 	// valid
 	{
 		[]byte("<1>1 - - - - - -"),
