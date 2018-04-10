@@ -15,10 +15,11 @@ var (
 	errProcid = "expecting a procid (from 1 to max 128 US-ASCII characters) or a nil value [col %d]"
 	errMsgid = "expecting a msgid (from 1 to max 32 US-ASCII characters) [col %d]"
 	errStructuredData = "expecting a structured data section containing one or more elements (`[id ( key=\"value\")*]+`) or a nil value [col %d]"
-	errSdID = "expecting a structured data element id (from 1 to max 32 US-ASCII characters, except `=`, ` `, `]`, and `\"`) [col %d]"
+	errSdID = "expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"` [col %d]"
 	errSdIDDuplicated = "duplicate structured data element id [col %d]"
-	errSdParam = "expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters, except `=`, ` `, `]`, and `\"`) [col %d]"
+	errSdParam = "expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters; key cannot contain `=`, ` `, `]`, and `\"`, while value cannot contain `]`, backslash, and `\"` unless escaped) [col %d]"
 	errMsg = "expecting a free-form optional message in UTF-8 (starting with or without BOM) [col %d]"
+	errEscape = "expecting chars `]`, `\"`, and `\\` to be escaped within param value [col %d]"
 )
 
 %%{
@@ -194,6 +195,13 @@ action err_msg {
     fbreak;
 }
 
+action err_escape {
+	m.err = fmt.Errorf(errEscape, m.p)
+	fhold;
+    fgoto line;
+    fbreak;
+}
+
 nilvalue = '-';
 
 sp = ' ';
@@ -264,9 +272,17 @@ utf8char = utf81 | utf82 | utf83 | utf84;
 
 utf8octets = utf8char*;
 
-sdname = printusascii{1,32} -- ('=' | sp | ']' | '"');
+sdname = (printusascii - ('=' | sp | ']' | '"')){1,32};
 
-paramvalue = utf8octets >mark %set_paramvalue; # (todo) > characters '"', '\' and ']' must be escaped
+# utf8char except ", ], \
+utf8charwodelims = any - (0x22 | 0x5D | 0x5C);
+
+# \", \], \\
+escapes = (0x5C (0x22 | 0x5D | 0x5C)) $err(err_escape);
+
+# As per section 6.3.3 param value MUST NOT contain '"', '\' and ']', unless they are escaped.
+# A backslash '\' followed by none of the this three characters is an invalid escape sequence.
+paramvalue = utf8charwodelims* >mark escapes* utf8charwodelims* %set_paramvalue;
 
 paramname = sdname >mark %set_paramname;
 
