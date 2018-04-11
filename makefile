@@ -12,7 +12,7 @@ bench: rfc5424/*_test.go rfc5424/machine.go
 
 .PHONY: tests
 tests: rfc5424/*_test.go rfc5424/machine.go
-	go test -coverprofile cover.out -v ./... # (todo) > test race conditions
+	go test -race -coverprofile cover.out -v ./...
 
 docs/rfc5424_parser.dot: rfc5424/machine.go.rl
 	ragel -Z -Vp $< -o $@
