@@ -43,10 +43,15 @@ func (sm *SyslogMessage) FacilityMessage() string {
 
 // SeverityMessage returns the text message for the current severity value.
 func (sm *SyslogMessage) SeverityMessage() string {
-	return severities[sm.severity]
+	return severitiesMessage[sm.severity]
 }
 
-var severities = map[uint8]string{
+// SeverityLevel returns the text level for the current severity value.
+func (sm *SyslogMessage) SeverityLevel() string {
+	return severitiesLevel[sm.severity]
+}
+
+var severitiesMessage = map[uint8]string{
 	0: "Emergency: system is unusable",
 	1: "Alert: action must be taken immediately",
 	2: "Critical: critical conditions",
@@ -55,6 +60,17 @@ var severities = map[uint8]string{
 	5: "Notice: normal but significant condition",
 	6: "Informational: informational messages",
 	7: "Debug: debug-level messages",
+}
+
+var severitiesLevel = map[uint8]string{
+	0: "emergency",
+	1: "alert",
+	2: "critical",
+	3: "error",
+	4: "warning",
+	5: "notice",
+	6: "informational",
+	7: "debug",
 }
 
 var facilities = map[uint8]string{
