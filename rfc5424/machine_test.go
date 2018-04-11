@@ -443,7 +443,7 @@ var testCases = []testCase{
 		},
 		"",
 	},
-	// Valid, with structured data is, wit structured data params
+	// Valid, with structured data is, with structured data params
 	{
 		[]byte(`<78>1 2016-01-15T00:04:01+00:00 host1 CROND 10391 - [sdid x="⌘"] some_message`),
 		true,
@@ -525,6 +525,28 @@ var testCases = []testCase{
 			StructuredData: &map[string]map[string]string{
 				"meta": map[string]string{
 					"es": "\b5Ὂg̀9! ℃ᾭG",
+				},
+			},
+			Message: getStringAddress(`127.0.0.1 - - 1452819643 "GET"`),
+		},
+		"",
+	},
+	// Valid, with utf8 within structured data param value
+	{
+		[]byte(`<29>50 2016-01-15T01:00:43Z hn S - - [meta es="κόσμε" xx="ñ"] 127.0.0.1 - - 1452819643 "GET"`),
+		true,
+		&SyslogMessage{
+			Priority:  29,
+			facility:  3,
+			severity:  5,
+			Version:   50,
+			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Hostname:  getStringAddress("hn"),
+			Appname:   getStringAddress("S"),
+			StructuredData: &map[string]map[string]string{
+				"meta": map[string]string{
+					"es": "κόσμε",
+					"xx": "ñ",
 				},
 			},
 			Message: getStringAddress(`127.0.0.1 - - 1452819643 "GET"`),

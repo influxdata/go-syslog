@@ -299,7 +299,7 @@ paramname = sdname >mark %set_paramname;
 
 sdparam = (paramname '=' '"' paramvalue '"') $err(err_sdparam);
 
-# (todo) > evaluate whether to incorporate finegrained semantics of section 6.3.2
+# (note) > finegrained semantics of section 6.3.2 not represented here since not so useful for parsing goal
 sdid = sdname >mark %set_id $err(err_sdid);
 
 sdelement = ('[' sdid (sp sdparam)* ']');
