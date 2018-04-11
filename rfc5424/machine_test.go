@@ -716,6 +716,7 @@ var testCases = []testCase{
 		},
 		"",
 	},
+	// Valid, greek
 	{
 		[]byte("<1>1 - - - - - - κόσμε"),
 		true,
@@ -725,6 +726,265 @@ var testCases = []testCase{
 			severity: 1,
 			Version:  1,
 			Message:  getStringAddress("κόσμε"),
+		},
+		"",
+	},
+	// Valid, 2 octet sequence
+	{
+		[]byte("<1>1 - - - - - - "),
+		true,
+		&SyslogMessage{
+			Priority: 1,
+			facility: 0,
+			severity: 1,
+			Version:  1,
+			Message:  getStringAddress(""),
+		},
+		"",
+	},
+	// Valid, spanish (2 octet sequence)
+	{
+		[]byte("<1>1 - - - - - - \xc3\xb1"),
+		true,
+		&SyslogMessage{
+			Priority: 1,
+			facility: 0,
+			severity: 1,
+			Version:  1,
+			Message:  getStringAddress("ñ"),
+		},
+		"",
+	},
+	// Valid, colon currency sign (3 octet sequence)
+	{
+		[]byte("<1>1 - - - - - - \xe2\x82\xa1"),
+		true,
+		&SyslogMessage{
+			Priority: 1,
+			facility: 0,
+			severity: 1,
+			Version:  1,
+			Message:  getStringAddress("₡"),
+		},
+		"",
+	},
+	// Valid, gothic letter (4 octet sequence)
+	{
+		[]byte("<1>1 - - - - - - \xEF\xBB\xBF \xf0\x90\x8c\xbc"),
+		true,
+		&SyslogMessage{
+			Priority: 1,
+			facility: 0,
+			severity: 1,
+			Version:  1,
+			Message:  getStringAddress("\ufeff 𐌼"),
+		},
+		"",
+	},
+	// Valid, 5 octet sequence
+	{
+		[]byte("<1>1 - - - - - - \xC8\x80\x30\x30\x30"),
+		true,
+		&SyslogMessage{
+			Priority: 1,
+			facility: 0,
+			severity: 1,
+			Version:  1,
+			Message:  getStringAddress("Ȁ000"),
+		},
+		"",
+	},
+	// Valid, 6 octet sequence
+	{
+		[]byte("<1>1 - - - - - - \xE4\x80\x80\x30\x30\x30"),
+		true,
+		&SyslogMessage{
+			Priority: 1,
+			facility: 0,
+			severity: 1,
+			Version:  1,
+			Message:  getStringAddress("䀀000"),
+		},
+		"",
+	},
+	// Valid, UTF-8 boundary conditions
+	{
+		[]byte("<1>1 - - - - - - \xC4\x90\x30\x30\x30"),
+		true,
+		&SyslogMessage{
+			Priority: 1,
+			facility: 0,
+			severity: 1,
+			Version:  1,
+			Message:  getStringAddress("Đ000"),
+		},
+		"",
+	},
+	{
+		[]byte("<1>1 - - - - - - \x0D\x37\x46\x46"),
+		true,
+		&SyslogMessage{
+			Priority: 1,
+			facility: 0,
+			severity: 1,
+			Version:  1,
+			Message:  getStringAddress("\r7FF"),
+		},
+		"",
+	},
+	// Valid, Tamil poetry of Subramaniya Bharathiyar
+	{
+		[]byte("<1>1 - - - - - - யாமறிந்த மொழிகளிலே தமிழ்மொழி போல் இனிதாவது எங்கும் காணோம், பாமரராய் விலங்குகளாய், உலகனைத்தும் இகழ்ச்சிசொலப் பான்மை கெட்டு, நாமமது தமிழரெனக் கொண்டு இங்கு வாழ்ந்திடுதல் நன்றோ? சொல்லீர்! தேமதுரத் தமிழோசை உலகமெலாம் பரவும்வகை செய்தல் வேண்டும்."),
+		true,
+		&SyslogMessage{
+			Priority: 1,
+			facility: 0,
+			severity: 1,
+			Version:  1,
+			Message:  getStringAddress("யாமறிந்த மொழிகளிலே தமிழ்மொழி போல் இனிதாவது எங்கும் காணோம், பாமரராய் விலங்குகளாய், உலகனைத்தும் இகழ்ச்சிசொலப் பான்மை கெட்டு, நாமமது தமிழரெனக் கொண்டு இங்கு வாழ்ந்திடுதல் நன்றோ? சொல்லீர்! தேமதுரத் தமிழோசை உலகமெலாம் பரவும்வகை செய்தல் வேண்டும்."),
+		},
+		"",
+	},
+	// Valid, I Can Eat Glass (Milanese)
+	{
+		[]byte("<1>1 - - - - - - Sôn bôn de magnà el véder, el me fa minga mal."),
+		true,
+		&SyslogMessage{
+			Priority: 1,
+			facility: 0,
+			severity: 1,
+			Version:  1,
+			Message:  getStringAddress("Sôn bôn de magnà el véder, el me fa minga mal."),
+		},
+		"",
+	},
+	// Valid, I Can Eat Glass (Romano)
+	{
+		[]byte("<1>1 - - - - - - Me posso magna' er vetro, e nun me fa male."),
+		true,
+		&SyslogMessage{
+			Priority: 1,
+			facility: 0,
+			severity: 1,
+			Version:  1,
+			Message:  getStringAddress("Me posso magna' er vetro, e nun me fa male."),
+		},
+		"",
+	},
+	// Valid, I Can Eat Glass (Braille)
+	{
+		[]byte("<1>1 - - - - - - ⠊⠀⠉⠁⠝⠀⠑⠁⠞⠀⠛⠇⠁⠎⠎⠀⠁⠝⠙⠀⠊⠞⠀⠙⠕⠑⠎⠝⠞⠀⠓⠥⠗⠞⠀⠍⠑"),
+		true,
+		&SyslogMessage{
+			Priority: 1,
+			facility: 0,
+			severity: 1,
+			Version:  1,
+			Message:  getStringAddress("⠊⠀⠉⠁⠝⠀⠑⠁⠞⠀⠛⠇⠁⠎⠎⠀⠁⠝⠙⠀⠊⠞⠀⠙⠕⠑⠎⠝⠞⠀⠓⠥⠗⠞⠀⠍⠑"),
+		},
+		"",
+	},
+	// Valid, I Can Eat Glass (Sanskrit)
+	{
+		[]byte("<1>1 - - - - - - काचं शक्नोम्यत्तुम् । नोपहिनस्ति माम् ॥"),
+		true,
+		&SyslogMessage{
+			Priority: 1,
+			facility: 0,
+			severity: 1,
+			Version:  1,
+			Message:  getStringAddress("काचं शक्नोम्यत्तुम् । नोपहिनस्ति माम् ॥"),
+		},
+		"",
+	},
+	// Valid, I Can Eat Glass (Urdu)
+	{
+		[]byte("<1>1 - - - - - - میں کانچ کھا سکتا ہوں اور مجھے تکلیف نہیں ہوتی ۔"),
+		true,
+		&SyslogMessage{
+			Priority: 1,
+			facility: 0,
+			severity: 1,
+			Version:  1,
+			Message:  getStringAddress("میں کانچ کھا سکتا ہوں اور مجھے تکلیف نہیں ہوتی ۔"),
+		},
+		"",
+	},
+	// Valid, I Can Eat Glass (Yiddish)
+	{
+		[]byte("<1>1 - - - - - - איך קען עסן גלאָז און עס טוט מיר נישט װײ."),
+		true,
+		&SyslogMessage{
+			Priority: 1,
+			facility: 0,
+			severity: 1,
+			Version:  1,
+			Message:  getStringAddress("איך קען עסן גלאָז און עס טוט מיר נישט װײ."),
+		},
+		"",
+	},
+	// Valid, I Can Eat Glass (Polish)
+	{
+		[]byte("<1>1 - - - - - - Mogę jeść szkło, i mi nie szkodzi."),
+		true,
+		&SyslogMessage{
+			Priority: 1,
+			facility: 0,
+			severity: 1,
+			Version:  1,
+			Message:  getStringAddress("Mogę jeść szkło, i mi nie szkodzi."),
+		},
+		"",
+	},
+	// Valid, I Can Eat Glass (Japanese)
+	{
+		[]byte("<1>1 - - - - - - 私はガラスを食べられます。それは私を傷つけません。"),
+		true,
+		&SyslogMessage{
+			Priority: 1,
+			facility: 0,
+			severity: 1,
+			Version:  1,
+			Message:  getStringAddress("私はガラスを食べられます。それは私を傷つけません。"),
+		},
+		"",
+	},
+	// Valid, I Can Eat Glass (Arabic)
+	{
+		[]byte("<1>1 - - - - - - أنا قادر على أكل الزجاج و هذا لا يؤلمني."),
+		true,
+		&SyslogMessage{
+			Priority: 1,
+			facility: 0,
+			severity: 1,
+			Version:  1,
+			Message:  getStringAddress("أنا قادر على أكل الزجاج و هذا لا يؤلمني."),
+		},
+		"",
+	},
+	// Valid, russian alphabet
+	{
+		[]byte("<1>1 - - - - - - абвгдеёжзийклмнопрстуфхцчшщъыьэюя"),
+		true,
+		&SyslogMessage{
+			Priority: 1,
+			facility: 0,
+			severity: 1,
+			Version:  1,
+			Message:  getStringAddress("абвгдеёжзийклмнопрстуфхцчшщъыьэюя"),
+		},
+		"",
+	},
+	// Valid, armenian letters
+	{
+		[]byte("<1>1 - - - - - - ԰ԱԲԳԴԵԶԷԸԹԺԻԼԽԾԿՀՁՂՃՄՅՆՇՈՉՊՋՌՍՎՏՐՑՒՓՔՕՖ՗՘ՙ՚՛՜՝՞՟աբգդեզէըթիլխծկհձղճմյնշոչպջռսվտրցւփքօֆևֈ։֊֋֌֍֎֏"),
+		true,
+		&SyslogMessage{
+			Priority: 1,
+			facility: 0,
+			severity: 1,
+			Version:  1,
+			Message:  getStringAddress("\u0530ԱԲԳԴԵԶԷԸԹԺԻԼԽԾԿՀՁՂՃՄՅՆՇՈՉՊՋՌՍՎՏՐՑՒՓՔՕՖ\u0557\u0558ՙ՚՛՜՝՞՟աբգդեզէըթիլխծկհձղճմյնշոչպջռսվտրցւփքօֆև\u0588։֊\u058b\u058c֍֎֏"),
 		},
 		"",
 	},
@@ -789,7 +1049,181 @@ var testCases = []testCase{
 		nil,
 		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 19]",
 	},
+	{
+		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xf0\x28\x8c\xbc"), // invalid 4 octet sequence (2nd octet)
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 21]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xf0\x28\x8c\xbc"), // invalid 4 octet sequence (2nd octet)
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xf0\x90\x28\xbc"), // invalid 4 octet sequence (3nd octet)
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 22]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xf0\x90\x28\xbc"), // invalid 4 octet sequence (3nd octet)
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 19]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xf0\x28\x8c\x28"), // invalid 4 octet sequence (4nd octet)
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 21]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xf0\x28\x8c\x28"), // invalid 4 octet sequence (4nd octet)
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+	},
+	// Invalid, impossible bytes
+	{
+		[]byte("<1>1 - - - - - - \xfe\xfe\xff\xff"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 17]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xfe"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 17]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xff"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 17]",
+	},
+	// Invalid, overlong sequences
+	{
+		[]byte("<1>1 - - - - - - \xfc\x80\x80\x80\x80\xaf"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 17]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xf8\x80\x80\x80\xaf"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 17]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xf0\x80\x80\xaf"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xe0\x80\xaf"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xc0\xaf"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 17]",
+	},
+	// Invalid, maximum overlong sequences
+	{
+		[]byte("<1>1 - - - - - - \xfc\x83\xbf\xbf\xbf\xbf"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 17]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xf8\x87\xbf\xbf\xbf"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 17]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xf0\x8f\xbf\xbf"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xe0\x9f\xbf"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xc1\xbf"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 17]",
+	},
+	// Invalid, illegal code positions, single utf-16 surrogates
+	{
+		[]byte("<1>1 - - - - - - \xed\xa0\x80"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xed\xa0\x80"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xed\xad\xbf"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xed\xae\x80"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xed\xaf\xbf"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xed\xb0\x80"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xed\xbe\x80"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+	},
+	{
+		[]byte("<1>1 - - - - - - \xed\xbf\xbf"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+	},
+	// Invalid, illegal code positions, paired utf-16 surrogates
+	{
+		[]byte("<1>1 - - - - - - \xed\xa0\x80\xed\xb0\x80"),
+		false,
+		nil,
+		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+	},
 
+	// (fixme) > evaluate non characters for UTF-8 security concerns, eg. \xef\xbf\xbe
 	// (fixme) > "<1>1 -letters- - - - -" gives nil (correct, since it's invalid, missing space) object but also no error
 }
 
