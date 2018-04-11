@@ -8,21 +8,21 @@ import (
 )
 
 var (
-	errPrival = "expecting a priority value in the range 1-191 or equal to 0 [col %d]"
-	errPri = "expecting a priority value within angle brackets [col %d]"
-	errVersion = "expecting a version value in the range 1-999 [col %d]"
-	errTimestamp = "expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col %d]"
-	errHostname = "expecting an hostname (from 1 to max 255 US-ASCII characters) or a nil value [col %d]"
-	errAppname = "expecting an app-name (from 1 to max 48 US-ASCII characters) or a nil value [col %d]"
-	errProcid = "expecting a procid (from 1 to max 128 US-ASCII characters) or a nil value [col %d]"
-	errMsgid = "expecting a msgid (from 1 to max 32 US-ASCII characters) [col %d]"
+	errPrival         = "expecting a priority value in the range 1-191 or equal to 0 [col %d]"
+	errPri            = "expecting a priority value within angle brackets [col %d]"
+	errVersion        = "expecting a version value in the range 1-999 [col %d]"
+	errTimestamp      = "expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col %d]"
+	errHostname       = "expecting an hostname (from 1 to max 255 US-ASCII characters) or a nil value [col %d]"
+	errAppname        = "expecting an app-name (from 1 to max 48 US-ASCII characters) or a nil value [col %d]"
+	errProcid         = "expecting a procid (from 1 to max 128 US-ASCII characters) or a nil value [col %d]"
+	errMsgid          = "expecting a msgid (from 1 to max 32 US-ASCII characters) [col %d]"
 	errStructuredData = "expecting a structured data section containing one or more elements (`[id ( key=\"value\")*]+`) or a nil value [col %d]"
-	errSdID = "expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"` [col %d]"
+	errSdID           = "expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"` [col %d]"
 	errSdIDDuplicated = "duplicate structured data element id [col %d]"
-	errSdParam = "expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters; key cannot contain `=`, ` `, `]`, and `\"`, while value cannot contain `]`, backslash, and `\"` unless escaped) [col %d]"
-	errMsg = "expecting a free-form optional message in UTF-8 (starting with or without BOM) [col %d]"
-	errEscape = "expecting chars `]`, `\"`, and `\\` to be escaped within param value [col %d]"
-	errParse = "parsing error [col %d]"
+	errSdParam        = "expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters; key cannot contain `=`, ` `, `]`, and `\"`, while value cannot contain `]`, backslash, and `\"` unless escaped) [col %d]"
+	errMsg            = "expecting a free-form optional message in UTF-8 (starting with or without BOM) [col %d]"
+	errEscape         = "expecting chars `]`, `\"`, and `\\` to be escaped within param value [col %d]"
+	errParse          = "parsing error [col %d]"
 )
 
 
@@ -42,13 +42,13 @@ const rfc5424_en_main int = 1
 //line rfc5424/machine.go.rl:321
 
 type machine struct {
-	data       	 []byte
-	cs         	 int
-	p, pe, eof 	 int
-	pb         	 int
-	err        	 error
-	output 		 *SyslogMessage
-	currentelem	 string
+	data         []byte
+	cs           int
+	p, pe, eof   int
+	pb           int
+	err          error
+	output       *SyslogMessage
+	currentelem  string
 	currentparam string
 }
 
@@ -70,7 +70,7 @@ func NewMachine() *machine {
 }
 
 // Err returns the error that occurred on the last call to Parse.
-// 
+//
 // If the result is nil, then the line was parsed successfully.
 func (m *machine) Err() error {
 	return m.err
@@ -86,7 +86,7 @@ func (m *machine) text() []byte {
 }
 
 func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
-    m.data = input
+	m.data = input
 	m.p = 0
 	m.pb = 0
 	m.pe = len(input)
@@ -10706,9 +10706,9 @@ tr638:
 
 //line rfc5424/machine.go.rl:372
 
-    if m.cs < rfc5424_first_final {
-        return nil, m.err
-    }
+	if m.cs < rfc5424_first_final {
+		return nil, m.err
+	}
 
-    return m.output, nil
+	return m.output, nil
 }
