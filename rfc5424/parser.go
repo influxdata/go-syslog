@@ -18,11 +18,11 @@ func NewParser() *Parser {
 }
 
 // Parse parses the input syslog message using its FSM.
-func (p *Parser) Parse(input []byte) (*SyslogMessage, error) {
+func (p *Parser) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) {
 	p.Lock()
 	defer p.Unlock()
 
-	msg, err := p.machine.Parse(input)
+	msg, err := p.machine.Parse(input, bestEffort)
 	if err != nil {
 		return nil, err
 	}
