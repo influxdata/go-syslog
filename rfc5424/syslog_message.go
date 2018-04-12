@@ -6,10 +6,10 @@ import (
 
 // SyslogMessage represents a syslog message
 type SyslogMessage struct {
-	Priority       uint8
-	facility       uint8
-	severity       uint8
-	Version        uint16
+	Priority       *uint8
+	facility       *uint8
+	severity       *uint8
+	Version        uint16 // Grammar mandates that version cannot be 0, so we can use the 0 value of uint16 to signal nil
 	Timestamp      *time.Time
 	Hostname       *string
 	Appname        *string
@@ -21,48 +21,65 @@ type SyslogMessage struct {
 
 // SetPriority set the priority values and the computed facility and severity codes accordingly.
 func (sm *SyslogMessage) SetPriority(value uint8) {
-	sm.Priority = value
-	sm.facility = uint8(value / 8)
-	sm.severity = uint8(value % 8)
+	sm.Priority = &value
+	facility := uint8(value / 8)
+	severity := uint8(value % 8)
+	sm.facility = &facility
+	sm.severity = &severity
 }
 
 // Facility returns the facility code.
-func (sm *SyslogMessage) Facility() uint8 {
+func (sm *SyslogMessage) Facility() *uint8 {
 	return sm.facility
 }
 
 // Severity returns the severity code.
-func (sm *SyslogMessage) Severity() uint8 {
+func (sm *SyslogMessage) Severity() *uint8 {
 	return sm.severity
 }
 
 // FacilityMessage returns the text message for the current facility value.
-func (sm *SyslogMessage) FacilityMessage() string {
-	return facilities[sm.facility]
+func (sm *SyslogMessage) FacilityMessage() *string {
+	if sm.facility != nil {
+		msg := facilities[*sm.facility]
+		return &msg
+	}
+
+	return nil
 }
 
 // SeverityMessage returns the text message for the current severity value.
-func (sm *SyslogMessage) SeverityMessage() string {
-	return severitiesMessage[sm.severity]
+func (sm *SyslogMessage) SeverityMessage() *string {
+	if sm.severity != nil {
+		msg := severityMessages[*sm.severity]
+		return &msg
+	}
+
+	return nil
 }
 
 // SeverityLevel returns the text level for the current severity value.
-func (sm *SyslogMessage) SeverityLevel() string {
-	return severitiesLevel[sm.severity]
+func (sm *SyslogMessage) SeverityLevel() *string {
+	if sm.severity != nil {
+		msg := severityLevels[*sm.severity]
+		return &msg
+	}
+
+	return nil
 }
 
-var severitiesMessage = map[uint8]string{
-	0: "Emergency: system is unusable",
-	1: "Alert: action must be taken immediately",
-	2: "Critical: critical conditions",
-	3: "Error: error conditions",
-	4: "Warning: warning conditions",
-	5: "Notice: normal but significant condition",
-	6: "Informational: informational messages",
-	7: "Debug: debug-level messages",
+var severityMessages = map[uint8]string{
+	0: "system is unusable",
+	1: "action must be taken immediately",
+	2: "critical conditions",
+	3: "error conditions",
+	4: "warning conditions",
+	5: "normal but significant condition",
+	6: "informational messages",
+	7: "debug-level messages",
 }
 
-var severitiesLevel = map[uint8]string{
+var severityLevels = map[uint8]string{
 	0: "emergency",
 	1: "alert",
 	2: "critical",
@@ -90,12 +107,12 @@ var facilities = map[uint8]string{
 	13: "log audit",
 	14: "log alert",
 	15: "clock daemon (note 2)",
-	16: "local use 0  (local0)",
-	17: "local use 1  (local1)",
-	18: "local use 2  (local2)",
-	19: "local use 3  (local3)",
-	20: "local use 4  (local4)",
-	21: "local use 5  (local5)",
-	22: "local use 6  (local6)",
-	23: "local use 7  (local7)",
+	16: "local use 0 (local0)",
+	17: "local use 1 (local1)",
+	18: "local use 2 (local2)",
+	19: "local use 3 (local3)",
+	20: "local use 4 (local4)",
+	21: "local use 5 (local5)",
+	22: "local use 6 (local6)",
+	23: "local use 7 (local7)",
 }
