@@ -45,8 +45,7 @@ action set_timestamp {
 	if t, e := time.Parse(time.RFC3339Nano, string(m.text())); e != nil {
         m.err = e
 		fhold;
-    	fgoto line;
-    	fbreak;
+    	fgoto fail;
     } else {
         m.output.Timestamp = &t
     }
@@ -87,8 +86,7 @@ action set_id {
 			// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
 			m.err = fmt.Errorf(errSdIDDuplicated, m.p)
 			fhold;
-			fgoto line;
-			fbreak;
+			fgoto fail;
 		} else {
 			(*elements)[id] = map[string]string{}
 			m.currentelem = id
@@ -117,99 +115,85 @@ action set_msg {
 action err_prival {
 	m.err = fmt.Errorf(errPrival, m.p)
 	fhold;
-    fgoto line;
-    fbreak;
+    fgoto fail;
 }
 
 action err_pri {
 	m.err = fmt.Errorf(errPri, m.p)
 	fhold;
-    fgoto line;
-    fbreak;
+    fgoto fail;
 }
 
 action err_version {
 	m.err = fmt.Errorf(errVersion, m.p)
 	fhold;
-    fgoto line;
-    fbreak;
+    fgoto fail;
 }
 
 action err_timestamp {
 	m.err = fmt.Errorf(errTimestamp, m.p)
 	fhold;
-    fgoto line;
-    fbreak;
+    fgoto fail;
 }
 
 action err_hostname {
 	m.err = fmt.Errorf(errHostname, m.p)
 	fhold;
-    fgoto line;
-    fbreak;
+    fgoto fail;
 }
 
 action err_appname {
 	m.err = fmt.Errorf(errAppname, m.p)
 	fhold;
-    fgoto line;
-    fbreak;
+    fgoto fail;
 }
 
 action err_procid {
 	m.err = fmt.Errorf(errProcid, m.p)
 	fhold;
-    fgoto line;
-    fbreak;
+    fgoto fail;
 }
 
 action err_msgid {
 	m.err = fmt.Errorf(errMsgid, m.p)
 	fhold;
-    fgoto line;
-    fbreak;
+    fgoto fail;
 }
 
 action err_structureddata {
 	m.err = fmt.Errorf(errStructuredData, m.p)
 	fhold;
-    fgoto line;
-    fbreak;
+    fgoto fail;
 }
 
 action err_sdid {
 	m.err = fmt.Errorf(errSdID, m.p)
 	fhold;
-    fgoto line;
-    fbreak;
+    fgoto fail;
 }
 
 action err_sdparam {
 	m.err = fmt.Errorf(errSdParam, m.p)
 	fhold;
-    fgoto line;
-    fbreak;
+    fgoto fail;
 }
 
 action err_msg {
 	m.err = fmt.Errorf(errMsg, m.p)
 	fhold;
-    fgoto line;
-    fbreak;
+    fgoto fail;
 }
 
 action err_escape {
 	m.err = fmt.Errorf(errEscape, m.p)
 	fhold;
-    fgoto line;
-    fbreak;
+    fgoto fail;
 }
 
 action err_parse {
 	m.err = fmt.Errorf(errParse, m.p)
 	fhold;
-    fgoto line;
-    fbreak;
+    fgoto fail;
 }
 
 
@@ -224,10 +208,13 @@ sexagesimal = '0'..'5' . '0'..'9';
 
 printusascii = '!'..'~';
 
-# 1..191 or 0
-prival = ((('1' ( '9' ( '0'..'1' ){,1} | '0'..'8' ( '0'..'9' ){,1} ){,1}) | ( '2'..'9' ('0'..'9'){,1} )) | '0');
+# 1..191
+privalrange = (('1' ('9' ('0'..'1'){,1} | '0'..'8' ('0'..'9'){,1}){,1}) | ('2'..'9' ('0'..'9'){,1}));
 
-pri = ('<' (prival >mark %set_prival $lerr(err_prival)) '>') >err(err_pri); # try <>lerr(err_prival)
+# 1..191 or 0
+prival = (privalrange | '0') >mark %from(set_prival) $err(err_prival);
+
+pri = ('<'  prival '>') @err(err_pri);
 
 version = (nonzerodigit digit{0,2}) >mark %set_version $err(err_version);
 
@@ -255,7 +242,7 @@ partialtime = timehour ':' timeminute ':' timesecond . timesecfrac?;
 
 fulltime = partialtime . timeoffset;
 
-timestamp = nilvalue | (fulldate >mark 'T' fulltime %set_timestamp) <>err(err_timestamp);
+timestamp = (nilvalue | (fulldate >mark 'T' fulltime %set_timestamp %err(set_timestamp))) <>err(err_timestamp);
 
 hostname = nilvalue | printusascii{1,255} >mark %set_hostname $err(err_hostname);
 
@@ -265,7 +252,7 @@ procid = nilvalue | printusascii{1,128} >mark %set_procid $err(err_procid);
 
 msgid = nilvalue | printusascii{1,32} >mark %set_msgid $err(err_msgid);
 
-header = pri version sp timestamp sp hostname sp appname sp procid sp msgid;
+header = pri version sp timestamp sp @err(err_parse) hostname sp @err(err_parse) appname sp @err(err_parse) procid sp @err(err_parse) msgid ;
 
 # rfc 3629
 utf8tail = 0x80..0xBF;
@@ -300,7 +287,7 @@ paramname = sdname >mark %set_paramname;
 sdparam = (paramname '=' '"' paramvalue '"') $err(err_sdparam);
 
 # (note) > finegrained semantics of section 6.3.2 not represented here since not so useful for parsing goal
-sdid = sdname >mark %set_id $err(err_sdid);
+sdid = sdname >mark %set_id $err(err_sdid); # (fixme) > err(set_id) ?
 
 sdelement = ('[' sdid (sp sdparam)* ']');
 
@@ -311,7 +298,7 @@ bom = 0xEF 0xBB 0xBF;
 
 msg = (bom? utf8octets) >mark %set_msg $err(err_msg);
 
-line := (any - [\n\r])* [\n\r] @{ fhold; fgoto main; }; # (todo) > fhold necessary?
+fail := (any - [\n\r])* @err{ fgoto main; };  
 
 main := header sp structureddata (sp msg)? $err(err_parse);
 
@@ -349,11 +336,6 @@ func (m *machine) Err() error {
 	return m.err
 }
 
-// Position returns the current position into the input.
-func (m *machine) Position() int {
-	return m.p
-}
-
 func (m *machine) text() []byte {
 	return m.data[m.pb:m.p]
 }
@@ -370,7 +352,7 @@ func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
     %% write init;
     %% write exec;
 
-	if m.cs < rfc5424_first_final {
+	if m.cs < rfc5424_first_final || m.cs == rfc5424_en_fail {
 		return nil, m.err
 	}
 
