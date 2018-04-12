@@ -12,7 +12,7 @@ bench: rfc5424/*_test.go rfc5424/machine.go
 
 .PHONY: tests
 tests: rfc5424/*_test.go rfc5424/machine.go
-	go test -race -coverprofile cover.out -v ./...
+	go test -race -timeout 10s -coverprofile cover.out -v ./...
 
 docs/rfc5424_parser.dot: rfc5424/machine.go.rl
 	ragel -Z -Vp $< -o $@
