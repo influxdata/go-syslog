@@ -4,7 +4,7 @@ import (
 	"sync"
 )
 
-// Parser represent FSM with mutual exclusion capabilities.
+// Parser represent FSM with mutex capabilities.
 type Parser struct {
 	sync.Mutex
 	*machine
