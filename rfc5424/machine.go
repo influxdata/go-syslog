@@ -80,7 +80,7 @@ func (m *machine) text() []byte {
 	return m.data[m.pb:m.p]
 }
 
-func (m *machine) Parse(input []byte) (*SyslogMessage, error) {
+func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) {
 	m.data = input
 	m.p = 0
 	m.pb = 0
@@ -10804,6 +10804,9 @@ tr5:
 //line rfc5424/machine.go.rl:354
 
 	if m.cs < rfc5424_first_final || m.cs == rfc5424_en_fail {
+		if bestEffort != nil && *bestEffort != false && m.output.Valid() {
+			return m.output, m.err
+		}
 		return nil, m.err
 	}
 
