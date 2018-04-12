@@ -19,7 +19,20 @@ type SyslogMessage struct {
 	Message        *string
 }
 
-// SetPriority set the priority values and the computed facility and severity codes accordingly.
+// Valid tells whether the message is well-formed or not.
+//
+// A minimally well-formed syslog message contains at least a priority (in range) and the version (greater than 0).
+func (sm *SyslogMessage) Valid() bool {
+	// A nil priority or a 0 version means that the message is not valid
+	// Not checking the priority range since it's parser responsibility
+	if sm.Priority != nil || sm.Version > 0 {
+		return true
+	}
+
+	return false
+}
+
+// SetPriority set the priority value and the computed facility and severity codes accordingly.
 func (sm *SyslogMessage) SetPriority(value uint8) {
 	sm.Priority = &value
 	facility := uint8(value / 8)
