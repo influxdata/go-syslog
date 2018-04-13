@@ -3,6 +3,8 @@ package rfc5424
 import (
 	"time"
 	"fmt"
+
+	"github.com/davecgh/go-spew/spew"
 )
 
 var (
@@ -43,7 +45,7 @@ action set_version {
 
 action set_timestamp {
 	if t, e := time.Parse(time.RFC3339Nano, string(m.text())); e != nil {
-        m.err = e
+        m.err = fmt.Errorf("%s [col %d]", e, m.p)
 		fhold;
     	fgoto fail;
     } else {
@@ -252,7 +254,7 @@ procid = nilvalue | printusascii{1,128} >mark %set_procid $err(err_procid);
 
 msgid = nilvalue | printusascii{1,32} >mark %set_msgid $err(err_msgid);
 
-header = pri version sp timestamp sp @err(err_parse) hostname sp @err(err_parse) appname sp @err(err_parse) procid sp @err(err_parse) msgid ;
+header = pri version sp timestamp sp hostname sp appname sp procid sp msgid ;
 
 # rfc 3629
 utf8tail = 0x80..0xBF;
@@ -351,6 +353,8 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
     %% write init;
     %% write exec;
+
+	spew.Dump(m)
 
 	if m.cs < rfc5424_first_final || m.cs == rfc5424_en_fail {
 		if bestEffort != nil && *bestEffort != false && m.output.Valid() {
