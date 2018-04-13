@@ -3,8 +3,6 @@ package rfc5424
 import (
 	"time"
 	"fmt"
-
-	"github.com/davecgh/go-spew/spew"
 )
 
 var (
@@ -33,6 +31,10 @@ alphtype uint8;
 
 action mark {
 	m.pb = m.p
+}
+
+action markmsg {
+	m.msg_at = m.p
 }
 
 action set_prival {
@@ -169,18 +171,33 @@ action err_structureddata {
 }
 
 action err_sdid {
+	delete(*m.output.StructuredData, m.currentelem)
+	if len(*m.output.StructuredData) == 0 {
+		m.output.StructuredData = nil
+	}
 	m.err = fmt.Errorf(errSdID, m.p)
 	fhold;
     fgoto fail;
 }
 
 action err_sdparam {
+	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
+		delete((*elements)[m.currentelem], m.currentparam)
+	}
 	m.err = fmt.Errorf(errSdParam, m.p)
 	fhold;
     fgoto fail;
 }
 
 action err_msg {
+	// If error encountered within the message rule ...
+	if m.msg_at > 0 {
+		// Save the text until valid (m.p is where the parser has stopped)
+		if trunc := string(m.data[m.msg_at:m.p]); trunc != "" {
+			m.output.Message = &trunc
+		}
+	}
+
 	m.err = fmt.Errorf(errMsg, m.p)
 	fhold;
     fgoto fail;
@@ -254,7 +271,7 @@ procid = nilvalue | printusascii{1,128} >mark %set_procid $err(err_procid);
 
 msgid = nilvalue | printusascii{1,32} >mark %set_msgid $err(err_msgid);
 
-header = pri version sp timestamp sp hostname sp appname sp procid sp msgid ;
+header = pri version sp timestamp sp hostname sp appname sp procid sp msgid;
 
 # rfc 3629
 utf8tail = 0x80..0xBF;
@@ -289,16 +306,15 @@ paramname = sdname >mark %set_paramname;
 sdparam = (paramname '=' '"' paramvalue '"') $err(err_sdparam);
 
 # (note) > finegrained semantics of section 6.3.2 not represented here since not so useful for parsing goal
-sdid = sdname >mark %set_id $err(err_sdid); # (fixme) > err(set_id) ?
+sdid = sdname >mark %set_id %err(set_id) $err(err_sdid);
 
 sdelement = ('[' sdid (sp sdparam)* ']');
 
-# (fixme) > err_structureddata seems to be never called (remove it?)
 structureddata = nilvalue | sdelement+ >ini_elements $err(err_structureddata);
 
 bom = 0xEF 0xBB 0xBF;
 
-msg = (bom? utf8octets) >mark %set_msg $err(err_msg);
+msg = (bom? utf8octets) >mark >markmsg %set_msg $err(err_msg);
 
 fail := (any - [\n\r])* @err{ fgoto main; };  
 
@@ -317,6 +333,7 @@ type machine struct {
 	output       *SyslogMessage
 	currentelem  string
 	currentparam string
+	msg_at	 	 int
 }
 
 func NewMachine() *machine {
@@ -353,8 +370,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
     %% write init;
     %% write exec;
-
-	spew.Dump(m)
 
 	if m.cs < rfc5424_first_final || m.cs == rfc5424_en_fail {
 		if bestEffort != nil && *bestEffort != false && m.output.Valid() {
