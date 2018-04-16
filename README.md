@@ -48,7 +48,7 @@ This modality enables partial parsing.
 
 When the parsing process errors out it returns the message collected until that position, and the error that caused the parser to stop.
 
-Notice that in this modality the output is returned iff it represents a minimally valid message - ie., a message containg almost a priority field in `[1,191]` within angular brackets, follwed by a version in `]0,999]`.
+Notice that in this modality the output is returned iff it represents a minimally valid message - ie., a message containing almost a priority field in `[1,191]` within angular brackets, followed by a version in `]0,999]`.
 
 ```go
 bestEffort := true
