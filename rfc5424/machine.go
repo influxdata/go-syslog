@@ -16,7 +16,7 @@ var (
 	errAppname        = "expecting an app-name (from 1 to max 48 US-ASCII characters) or a nil value [col %d]"
 	errProcid         = "expecting a procid (from 1 to max 128 US-ASCII characters) or a nil value [col %d]"
 	errMsgid          = "expecting a msgid (from 1 to max 32 US-ASCII characters) [col %d]"
-	errStructuredData = "expecting a structured data section containing one or more elements (`[id ( key=\"value\")*]+`) or a nil value [col %d]"
+	errStructuredData = "expecting a structured data section containing one or more elements (`[id( key=\"value\")*]+`) or a nil value [col %d]"
 	errSdID           = "expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"` [col %d]"
 	errSdIDDuplicated = "duplicate structured data element id [col %d]"
 	errSdParam        = "expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters; key cannot contain `=`, ` `, `]`, and `\"`, while value cannot contain `]`, backslash, and `\"` unless escaped) [col %d]"
@@ -53,11 +53,10 @@ type machine struct {
 	msg_at	 	 int
 }
 
+// NewMachine creates a new FSM able to parse RFC5424 syslog messages.
 func NewMachine() *machine {
 	m := &machine{}
 
-	
-//line rfc5424/machine.go.rl:343
 	
 //line rfc5424/machine.go.rl:344
 	
@@ -66,6 +65,8 @@ func NewMachine() *machine {
 //line rfc5424/machine.go.rl:346
 	
 //line rfc5424/machine.go.rl:347
+	
+//line rfc5424/machine.go.rl:348
 
 	return m
 }
@@ -81,24 +82,32 @@ func (m *machine) text() []byte {
 	return m.data[m.pb:m.p]
 }
 
+// Parse parses the input byte array as a RFC5424 syslog message.
+//
+// When a valid RFC5424 syslog message is given it outputs its structured representation.
+// If the parsing detects an error it returns it with the position where the error occurred.
+//
+// It can also partially parse input messages returning a partially valid structured representation
+// and the error that stopped the parsing.
 func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) {
 	m.data = input
 	m.p = 0
 	m.pb = 0
+	m.msg_at = 0
 	m.pe = len(input)
 	m.eof = len(input)
 	m.err = nil
 	m.output = &SyslogMessage{}
 
     
-//line rfc5424/machine.go:95
+//line rfc5424/machine.go:104
 	{
 	 m.cs = rfc5424_start
 	}
 
-//line rfc5424/machine.go.rl:372
+//line rfc5424/machine.go.rl:381
     
-//line rfc5424/machine.go:102
+//line rfc5424/machine.go:111
 	{
 	if ( m.p) == ( m.pe) {
 		goto _test_eof
@@ -1596,7 +1605,7 @@ tr654:
     {goto st616 }
 
 	goto st0
-//line rfc5424/machine.go:1600
+//line rfc5424/machine.go:1609
 st_case_0:
 	st0:
 		 m.cs = 0
@@ -1631,7 +1640,7 @@ tr3:
 
 	m.output.SetPriority(uint8(unsafeUTF8DecimalCodePointsToInt(m.text())))
 
-//line rfc5424/machine.go:1635
+//line rfc5424/machine.go:1644
 		if ( m.data)[( m.p)] == 62 {
 			goto st4
 		}
@@ -1656,7 +1665,7 @@ tr8:
 			goto _test_eof5
 		}
 	st_case_5:
-//line rfc5424/machine.go:1660
+//line rfc5424/machine.go:1669
 		if ( m.data)[( m.p)] == 32 {
 			goto tr9
 		}
@@ -1675,7 +1684,7 @@ tr9:
 			goto _test_eof6
 		}
 	st_case_6:
-//line rfc5424/machine.go:1679
+//line rfc5424/machine.go:1688
 		if ( m.data)[( m.p)] == 45 {
 			goto st7
 		}
@@ -1710,7 +1719,7 @@ tr628:
 			goto _test_eof8
 		}
 	st_case_8:
-//line rfc5424/machine.go:1714
+//line rfc5424/machine.go:1723
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto tr16
 		}
@@ -1726,7 +1735,7 @@ tr16:
 			goto _test_eof9
 		}
 	st_case_9:
-//line rfc5424/machine.go:1730
+//line rfc5424/machine.go:1739
 		if ( m.data)[( m.p)] == 32 {
 			goto tr17
 		}
@@ -1747,7 +1756,7 @@ tr17:
 			goto _test_eof10
 		}
 	st_case_10:
-//line rfc5424/machine.go:1751
+//line rfc5424/machine.go:1760
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto tr20
 		}
@@ -1763,7 +1772,7 @@ tr20:
 			goto _test_eof11
 		}
 	st_case_11:
-//line rfc5424/machine.go:1767
+//line rfc5424/machine.go:1776
 		if ( m.data)[( m.p)] == 32 {
 			goto tr21
 		}
@@ -1784,7 +1793,7 @@ tr21:
 			goto _test_eof12
 		}
 	st_case_12:
-//line rfc5424/machine.go:1788
+//line rfc5424/machine.go:1797
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto tr24
 		}
@@ -1800,7 +1809,7 @@ tr24:
 			goto _test_eof13
 		}
 	st_case_13:
-//line rfc5424/machine.go:1804
+//line rfc5424/machine.go:1813
 		if ( m.data)[( m.p)] == 32 {
 			goto tr25
 		}
@@ -1821,7 +1830,7 @@ tr25:
 			goto _test_eof14
 		}
 	st_case_14:
-//line rfc5424/machine.go:1825
+//line rfc5424/machine.go:1834
 		if 33 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 126 {
 			goto tr28
 		}
@@ -1837,7 +1846,7 @@ tr28:
 			goto _test_eof15
 		}
 	st_case_15:
-//line rfc5424/machine.go:1841
+//line rfc5424/machine.go:1850
 		if ( m.data)[( m.p)] == 32 {
 			goto tr29
 		}
@@ -1858,7 +1867,7 @@ tr29:
 			goto _test_eof16
 		}
 	st_case_16:
-//line rfc5424/machine.go:1862
+//line rfc5424/machine.go:1871
 		switch ( m.data)[( m.p)] {
 		case 45:
 			goto st612
@@ -1928,7 +1937,7 @@ tr641:
 			goto _test_eof614
 		}
 	st_case_614:
-//line rfc5424/machine.go:1932
+//line rfc5424/machine.go:1941
 		switch ( m.data)[( m.p)] {
 		case 224:
 			goto st18
@@ -1977,7 +1986,7 @@ tr642:
 			goto _test_eof17
 		}
 	st_case_17:
-//line rfc5424/machine.go:1981
+//line rfc5424/machine.go:1990
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st614
 		}
@@ -1997,7 +2006,7 @@ tr643:
 			goto _test_eof18
 		}
 	st_case_18:
-//line rfc5424/machine.go:2001
+//line rfc5424/machine.go:2010
 		if 160 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st17
 		}
@@ -2017,7 +2026,7 @@ tr644:
 			goto _test_eof19
 		}
 	st_case_19:
-//line rfc5424/machine.go:2021
+//line rfc5424/machine.go:2030
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st17
 		}
@@ -2037,7 +2046,7 @@ tr645:
 			goto _test_eof20
 		}
 	st_case_20:
-//line rfc5424/machine.go:2041
+//line rfc5424/machine.go:2050
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 159 {
 			goto st17
 		}
@@ -2057,7 +2066,7 @@ tr646:
 			goto _test_eof21
 		}
 	st_case_21:
-//line rfc5424/machine.go:2061
+//line rfc5424/machine.go:2070
 		if 144 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st19
 		}
@@ -2077,7 +2086,7 @@ tr647:
 			goto _test_eof22
 		}
 	st_case_22:
-//line rfc5424/machine.go:2081
+//line rfc5424/machine.go:2090
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st19
 		}
@@ -2097,7 +2106,7 @@ tr648:
 			goto _test_eof23
 		}
 	st_case_23:
-//line rfc5424/machine.go:2101
+//line rfc5424/machine.go:2110
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 143 {
 			goto st19
 		}
@@ -2113,7 +2122,7 @@ tr33:
 			goto _test_eof24
 		}
 	st_case_24:
-//line rfc5424/machine.go:2117
+//line rfc5424/machine.go:2126
 		if ( m.data)[( m.p)] == 33 {
 			goto tr39
 		}
@@ -2141,7 +2150,7 @@ tr39:
 			goto _test_eof25
 		}
 	st_case_25:
-//line rfc5424/machine.go:2145
+//line rfc5424/machine.go:2154
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto tr41
@@ -2182,7 +2191,7 @@ tr41:
 			goto _test_eof26
 		}
 	st_case_26:
-//line rfc5424/machine.go:2186
+//line rfc5424/machine.go:2195
 		if ( m.data)[( m.p)] == 33 {
 			goto tr45
 		}
@@ -2210,7 +2219,7 @@ tr45:
 			goto _test_eof27
 		}
 	st_case_27:
-//line rfc5424/machine.go:2214
+//line rfc5424/machine.go:2223
 		switch ( m.data)[( m.p)] {
 		case 33:
 			goto st28
@@ -2846,7 +2855,7 @@ tr47:
 			goto _test_eof59
 		}
 	st_case_59:
-//line rfc5424/machine.go:2850
+//line rfc5424/machine.go:2859
 		if ( m.data)[( m.p)] == 34 {
 			goto st60
 		}
@@ -2906,7 +2915,7 @@ tr79:
 			goto _test_eof61
 		}
 	st_case_61:
-//line rfc5424/machine.go:2910
+//line rfc5424/machine.go:2919
 		switch ( m.data)[( m.p)] {
 		case 34:
 			goto tr91
@@ -2975,7 +2984,7 @@ tr91:
 			goto _test_eof62
 		}
 	st_case_62:
-//line rfc5424/machine.go:2979
+//line rfc5424/machine.go:2988
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto st26
@@ -3006,7 +3015,7 @@ tr43:
 			goto _test_eof615
 		}
 	st_case_615:
-//line rfc5424/machine.go:3010
+//line rfc5424/machine.go:3019
 		switch ( m.data)[( m.p)] {
 		case 32:
 			goto st613
@@ -3025,7 +3034,7 @@ tr81:
 			goto _test_eof63
 		}
 	st_case_63:
-//line rfc5424/machine.go:3029
+//line rfc5424/machine.go:3038
 		if ( m.data)[( m.p)] == 34 {
 			goto st64
 		}
@@ -3195,7 +3204,7 @@ tr83:
 			goto _test_eof73
 		}
 	st_case_73:
-//line rfc5424/machine.go:3199
+//line rfc5424/machine.go:3208
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st61
 		}
@@ -3211,7 +3220,7 @@ tr84:
 			goto _test_eof74
 		}
 	st_case_74:
-//line rfc5424/machine.go:3215
+//line rfc5424/machine.go:3224
 		if 160 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st73
 		}
@@ -3227,7 +3236,7 @@ tr85:
 			goto _test_eof75
 		}
 	st_case_75:
-//line rfc5424/machine.go:3231
+//line rfc5424/machine.go:3240
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st73
 		}
@@ -3243,7 +3252,7 @@ tr86:
 			goto _test_eof76
 		}
 	st_case_76:
-//line rfc5424/machine.go:3247
+//line rfc5424/machine.go:3256
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 159 {
 			goto st73
 		}
@@ -3259,7 +3268,7 @@ tr87:
 			goto _test_eof77
 		}
 	st_case_77:
-//line rfc5424/machine.go:3263
+//line rfc5424/machine.go:3272
 		if 144 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st75
 		}
@@ -3275,7 +3284,7 @@ tr88:
 			goto _test_eof78
 		}
 	st_case_78:
-//line rfc5424/machine.go:3279
+//line rfc5424/machine.go:3288
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 191 {
 			goto st75
 		}
@@ -3291,7 +3300,7 @@ tr89:
 			goto _test_eof79
 		}
 	st_case_79:
-//line rfc5424/machine.go:3295
+//line rfc5424/machine.go:3304
 		if 128 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 143 {
 			goto st75
 		}
@@ -9475,7 +9484,7 @@ tr13:
 			goto _test_eof570
 		}
 	st_case_570:
-//line rfc5424/machine.go:9479
+//line rfc5424/machine.go:9488
 		if 48 <= ( m.data)[( m.p)] && ( m.data)[( m.p)] <= 57 {
 			goto st571
 		}
@@ -9907,7 +9916,7 @@ tr4:
 
 	m.output.SetPriority(uint8(unsafeUTF8DecimalCodePointsToInt(m.text())))
 
-//line rfc5424/machine.go:9911
+//line rfc5424/machine.go:9920
 		switch ( m.data)[( m.p)] {
 		case 57:
 			goto st611
@@ -9933,7 +9942,7 @@ tr5:
 
 	m.output.SetPriority(uint8(unsafeUTF8DecimalCodePointsToInt(m.text())))
 
-//line rfc5424/machine.go:9937
+//line rfc5424/machine.go:9946
 		if ( m.data)[( m.p)] == 62 {
 			goto st4
 		}
@@ -9950,7 +9959,7 @@ tr5:
 
 	m.output.SetPriority(uint8(unsafeUTF8DecimalCodePointsToInt(m.text())))
 
-//line rfc5424/machine.go:9954
+//line rfc5424/machine.go:9963
 		if ( m.data)[( m.p)] == 62 {
 			goto st4
 		}
@@ -10823,17 +10832,18 @@ tr5:
 
     {goto st616 }
 
-//line rfc5424/machine.go:10827
+//line rfc5424/machine.go:10836
 		}
 	}
 
 	_out: {}
 	}
 
-//line rfc5424/machine.go.rl:373
+//line rfc5424/machine.go.rl:382
 
 	if m.cs < rfc5424_first_final || m.cs == rfc5424_en_fail {
 		if bestEffort != nil && *bestEffort != false && m.output.Valid() {
+			// An error occurred but partial parsing is on and partial message is minimally valid
 			return m.output, m.err
 		}
 		return nil, m.err

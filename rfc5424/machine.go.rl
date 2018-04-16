@@ -14,7 +14,7 @@ var (
 	errAppname        = "expecting an app-name (from 1 to max 48 US-ASCII characters) or a nil value [col %d]"
 	errProcid         = "expecting a procid (from 1 to max 128 US-ASCII characters) or a nil value [col %d]"
 	errMsgid          = "expecting a msgid (from 1 to max 32 US-ASCII characters) [col %d]"
-	errStructuredData = "expecting a structured data section containing one or more elements (`[id ( key=\"value\")*]+`) or a nil value [col %d]"
+	errStructuredData = "expecting a structured data section containing one or more elements (`[id( key=\"value\")*]+`) or a nil value [col %d]"
 	errSdID           = "expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"` [col %d]"
 	errSdIDDuplicated = "duplicate structured data element id [col %d]"
 	errSdParam        = "expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters; key cannot contain `=`, ` `, `]`, and `\"`, while value cannot contain `]`, backslash, and `\"` unless escaped) [col %d]"
@@ -336,6 +336,7 @@ type machine struct {
 	msg_at	 	 int
 }
 
+// NewMachine creates a new FSM able to parse RFC5424 syslog messages.
 func NewMachine() *machine {
 	m := &machine{}
 
@@ -359,10 +360,18 @@ func (m *machine) text() []byte {
 	return m.data[m.pb:m.p]
 }
 
+// Parse parses the input byte array as a RFC5424 syslog message.
+//
+// When a valid RFC5424 syslog message is given it outputs its structured representation.
+// If the parsing detects an error it returns it with the position where the error occurred.
+//
+// It can also partially parse input messages returning a partially valid structured representation
+// and the error that stopped the parsing.
 func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) {
 	m.data = input
 	m.p = 0
 	m.pb = 0
+	m.msg_at = 0
 	m.pe = len(input)
 	m.eof = len(input)
 	m.err = nil
@@ -373,6 +382,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 	if m.cs < rfc5424_first_final || m.cs == rfc5424_en_fail {
 		if bestEffort != nil && *bestEffort != false && m.output.Valid() {
+			// An error occurred but partial parsing is on and partial message is minimally valid
 			return m.output, m.err
 		}
 		return nil, m.err
