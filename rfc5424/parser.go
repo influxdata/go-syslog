@@ -4,7 +4,7 @@ import (
 	"sync"
 )
 
-// Parser represent FSM with mutex capabilities.
+// Parser represent a RFC5424 FSM with mutex capabilities.
 type Parser struct {
 	sync.Mutex
 	*machine
@@ -17,13 +17,18 @@ func NewParser() *Parser {
 	}
 }
 
-// Parse parses the input syslog message using its FSM.
+// Parse parses the input RFC5424 syslog message using its FSM.
+//
+// Best effort mode enables the partial parsing.
 func (p *Parser) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) {
 	p.Lock()
 	defer p.Unlock()
 
 	msg, err := p.machine.Parse(input, bestEffort)
 	if err != nil {
+		if bestEffort != nil && *bestEffort != false {
+			return msg, err
+		}
 		return nil, err
 	}
 
