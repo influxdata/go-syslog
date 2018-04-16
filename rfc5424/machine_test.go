@@ -528,7 +528,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - - - - - X"),
 		false,
 		nil,
-		"expecting a structured data section containing one or more elements (`[id ( key=\"value\")*]+`) or a nil value [col 15]",
+		"expecting a structured data section containing one or more elements (`[id( key=\"value\")*]+`) or a nil value [col 15]",
 		&SyslogMessage{
 			Priority: getUint8Address(1),
 			facility: getUint8Address(0),
@@ -993,7 +993,7 @@ var testCases = []testCase{
 	},
 	// Valid, with structured data w/o msg
 	{
-		[]byte("<165>4 2003-10-11T22:14:15.003Z mymachine.it e - 1 [ex@32473 iut=\"3\" eventSource=\"A\"] An application event log entry..."),
+		[]byte(`<165>4 2003-10-11T22:14:15.003Z mymachine.it e - 1 [ex@32473 iut="3" eventSource="A"] An application event log entry...`),
 		true,
 		&SyslogMessage{
 			facility:  getUint8Address(20),
@@ -2089,7 +2089,7 @@ y`),
 	// (fixme) > hostname & c. can contain dashes (eg. nil value), and spaces? it is correct?
 }
 
-func TestParse(t *testing.T) {
+func TestMachineParse(t *testing.T) {
 	for _, tc := range testCases {
 		tc := tc
 		t.Run(createName(tc.input), func(t *testing.T) {
@@ -2120,18 +2120,18 @@ func TestParse(t *testing.T) {
 	}
 }
 
-// // This is here to avoid compiler optimizations that
-// // could remove the actual call we are benchmarking
-// // during benchmarks
-// var benchParseResult *SyslogMessage
+// This is here to avoid compiler optimizations that
+// could remove the actual call we are benchmarking
+// during benchmarks
+var benchParseResult *SyslogMessage
 
-// func BenchmarkParse(b *testing.B) {
-// 	for _, tc := range testCases {
-// 		tc := tc
-// 		b.Run(createName(tc.input), func(b *testing.B) {
-// 			for i := 0; i < b.N; i++ {
-// 				benchParseResult, _ = NewMachine().Parse(tc.input)
-// 			}
-// 		})
-// 	}
-// }
+func BenchmarkParse(b *testing.B) {
+	for _, tc := range testCases {
+		tc := tc
+		b.Run(createName(tc.input), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				benchParseResult, _ = NewMachine().Parse(tc.input, nil)
+			}
+		})
+	}
+}
