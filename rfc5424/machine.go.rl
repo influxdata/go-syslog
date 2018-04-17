@@ -79,6 +79,7 @@ action set_msgid {
 	}
 }
 
+
 action ini_elements {
 	m.output.StructuredData = &(map[string]map[string]string{})
 }
@@ -98,6 +99,14 @@ action set_id {
 	}
 }
 
+action ini_sdparam {
+	m.backslash_at = []int{}
+}
+
+action add_slash {
+	m.backslash_at = append(m.backslash_at, m.p)
+}
+
 action set_paramname {
 	m.currentparam = string(m.text())
 }
@@ -105,8 +114,22 @@ action set_paramname {
 action set_paramvalue {
 	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
 		// (fixme) > what if SD-PARAM-NAME already exist for the current element (ie., current SD-ID)?
-		// (todo) > strip slashes only when there are ...
-		(*elements)[m.currentelem][m.currentparam] = stripSlashes(string(m.text()))
+
+		// Store text
+		text := m.text()
+		
+		// Strip backslashes only when there are ...
+		if len(m.backslash_at) > 0 {
+			// We need a copy here to not modify m.data
+			cp := append([]byte(nil), text...)
+			for _, pos := range m.backslash_at {
+				at := pos - m.pb
+				cp = append(cp[:at], cp[(at + 1):]...)
+			}
+			
+			text = cp
+		}
+		(*elements)[m.currentelem][m.currentparam] = string(text)
 	}
 }
 
@@ -294,16 +317,16 @@ sdname = (printusascii - ('=' | sp | ']' | '"')){1,32};
 utf8charwodelims = utf8char - (0x22 | 0x5D | 0x5C);
 
 # \", \], \\
-escapes = (0x5C (0x22 | 0x5D | 0x5C)) $err(err_escape);
+escapes = (0x5C >add_slash (0x22 | 0x5D | 0x5C)) $err(err_escape);
 
 # As per section 6.3.3 param value MUST NOT contain '"', '\' and ']', unless they are escaped.
 # A backslash '\' followed by none of the this three characters is an invalid escape sequence.
 # In this case, treat it as a regular backslash and the following character as a regular character (not altering the invalid sequence).
-paramvalue = utf8charwodelims* >mark escapes* utf8charwodelims* %set_paramvalue;
+paramvalue = (utf8charwodelims* escapes*)+ >mark %set_paramvalue;
 
 paramname = sdname >mark %set_paramname;
 
-sdparam = (paramname '=' '"' paramvalue '"') $err(err_sdparam);
+sdparam = (paramname '=' '"' paramvalue '"') >ini_sdparam $err(err_sdparam);
 
 # (note) > finegrained semantics of section 6.3.2 not represented here since not so useful for parsing goal
 sdid = sdname >mark %set_id %err(set_id) $err(err_sdid);
@@ -333,7 +356,8 @@ type machine struct {
 	output       *SyslogMessage
 	currentelem  string
 	currentparam string
-	msg_at	 	 int
+	msg_at       int
+	backslash_at []int
 }
 
 // NewMachine creates a new FSM able to parse RFC5424 syslog messages.
@@ -372,6 +396,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 	m.p = 0
 	m.pb = 0
 	m.msg_at = 0
+	m.backslash_at = []int{}
 	m.pe = len(input)
 	m.eof = len(input)
 	m.err = nil
