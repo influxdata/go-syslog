@@ -77,36 +77,33 @@ make bench
 On my machine<sup>[1](#mymachine)</sup> this are the results obtained in best effort mode.
 
 ```
-goos: linux
-goarch: amd64
-pkg: github.com/influxdata/go-syslog/rfc5424
-BenchmarkParse/[no]_empty_input__________________________________-4             30000000               250 ns/op             176 B/op          3 allocs/op
-BenchmarkParse/[no]_multiple_syslog_messages_on_multiple_lines___-4             20000000               478 ns/op             224 B/op         15 allocs/op
-BenchmarkParse/[no]_impossible_timestamp_________________________-4             10000000              1098 ns/op             424 B/op         17 allocs/op
-BenchmarkParse/[no]_malformed_structured_data____________________-4             20000000               560 ns/op             320 B/op         15 allocs/op
-BenchmarkParse/[no]_with_duplicated_structured_data_id___________-4              5000000              1435 ns/op             656 B/op         29 allocs/op
-BenchmarkParse/[ok]_minimal______________________________________-4             30000000               288 ns/op             167 B/op         12 allocs/op
-BenchmarkParse/[ok]_average_message______________________________-4              3000000              2212 ns/op            1544 B/op         37 allocs/op
-BenchmarkParse/[ok]_complicated_message__________________________-4              5000000              1852 ns/op            1272 B/op         37 allocs/op
-BenchmarkParse/[ok]_very_long_message____________________________-4              2000000              3978 ns/op            2472 B/op         43 allocs/op
-BenchmarkParse/[ok]_all_max_length_and_complete__________________-4              3000000              3014 ns/op            1880 B/op         43 allocs/op
-BenchmarkParse/[ok]_all_max_length_except_structured_data_and_mes-4              5000000              1934 ns/op             841 B/op         23 allocs/op
-BenchmarkParse/[ok]_minimal_with_message_containing_newline______-4             20000000               363 ns/op             186 B/op         14 allocs/op
-BenchmarkParse/[ok]_w/o_procid,_w/o_structured_data,_with_message-4             10000000              1075 ns/op             336 B/op         19 allocs/op
-BenchmarkParse/[ok]_minimal_with_UTF-8_message___________________-4             20000000               539 ns/op             295 B/op         14 allocs/op
-BenchmarkParse/[ok]_with_structured_data_id,_w/o_structured_data_-4             10000000              1024 ns/op             552 B/op         22 allocs/op
-BenchmarkParse/[ok]_with_multiple_structured_data________________-4              5000000              1757 ns/op            1197 B/op         32 allocs/op
-BenchmarkParse/[ok]_with_escaped_backslash_within_structured_data-4              5000000              1385 ns/op             888 B/op         28 allocs/op
-BenchmarkParse/[ok]_with_UTF-8_structured_data_param_value,_with_-4              5000000              1560 ns/op            1032 B/op         31 allocs/op
+BenchmarkParse/[no]_empty_input__________________________________-4             30000000               245 ns/op             176 B/op          3 allocs/op
+BenchmarkParse/[no]_multiple_syslog_messages_on_multiple_lines___-4             20000000               473 ns/op             224 B/op         15 allocs/op
+BenchmarkParse/[no]_impossible_timestamp_________________________-4             10000000              1115 ns/op             424 B/op         17 allocs/op
+BenchmarkParse/[no]_malformed_structured_data____________________-4             20000000               554 ns/op             320 B/op         15 allocs/op
+BenchmarkParse/[no]_with_duplicated_structured_data_id___________-4              5000000              1457 ns/op             656 B/op         29 allocs/op
+BenchmarkParse/[ok]_minimal______________________________________-4             30000000               292 ns/op             167 B/op         12 allocs/op
+BenchmarkParse/[ok]_average_message______________________________-4              3000000              2115 ns/op            1528 B/op         35 allocs/op
+BenchmarkParse/[ok]_complicated_message__________________________-4              5000000              1796 ns/op            1256 B/op         34 allocs/op
+BenchmarkParse/[ok]_very_long_message____________________________-4              2000000              4070 ns/op            2440 B/op         40 allocs/op
+BenchmarkParse/[ok]_all_max_length_and_complete__________________-4              3000000              2961 ns/op            1872 B/op         40 allocs/op
+BenchmarkParse/[ok]_all_max_length_except_structured_data_and_mes-4              5000000              1881 ns/op             841 B/op         23 allocs/op
+BenchmarkParse/[ok]_minimal_with_message_containing_newline______-4             20000000               351 ns/op             186 B/op         14 allocs/op
+BenchmarkParse/[ok]_w/o_procid,_w/o_structured_data,_with_message-4             10000000               987 ns/op             336 B/op         19 allocs/op
+BenchmarkParse/[ok]_minimal_with_UTF-8_message___________________-4             20000000               551 ns/op             295 B/op         14 allocs/op
+BenchmarkParse/[ok]_with_structured_data_id,_w/o_structured_data_-4             10000000              1011 ns/op             552 B/op         22 allocs/op
+BenchmarkParse/[ok]_with_multiple_structured_data________________-4              5000000              1525 ns/op            1192 B/op         30 allocs/op
+BenchmarkParse/[ok]_with_escaped_backslash_within_structured_data-4              5000000              1397 ns/op             896 B/op         29 allocs/op
+BenchmarkParse/[ok]_with_UTF-8_structured_data_param_value,_with_-4              5000000              1504 ns/op            1032 B/op         30 allocs/op
 ```
 
 As you can see it takes:
 
 * ~300ns to parse the smallest legal message
 
-* ~2.2µs to parse an average legal message
+* ~2µs to parse an average legal message
 
-* ~4.0µs to parse a very long legal message
+* ~4µs to parse a very long legal message
 
 Other RFC5424 implementations, like this [one](https://github.com/roguelazer/rust-syslog-rfc5424) in Rust, spend 8µs to parse an average legal message.
 
