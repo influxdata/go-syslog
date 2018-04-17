@@ -8,7 +8,7 @@ build: rfc5424/machine.go
 
 .PHONY: bench
 bench: rfc5424/*_test.go rfc5424/machine.go
-	go test -bench=. -benchmem -benchtime=10s ./...
+	go test -bench=. -benchmem -benchtime=5s ./...
 
 .PHONY: tests
 tests: rfc5424/*_test.go rfc5424/machine.go
