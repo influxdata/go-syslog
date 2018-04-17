@@ -10,7 +10,7 @@ func TestParserParse(t *testing.T) {
 	p := NewParser()
 	for _, tc := range testCases {
 		tc := tc
-		t.Run(createName(tc.input), func(t *testing.T) {
+		t.Run(rxpad(string(tc.input), 50), func(t *testing.T) {
 			t.Parallel()
 
 			bestEffort := true

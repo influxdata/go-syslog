@@ -1,6 +1,7 @@
 package rfc5424
 
 import (
+	"strings"
 	"testing"
 	"time"
 
@@ -20,13 +21,9 @@ func getUint8Address(x uint8) *uint8 {
 	return &x
 }
 
-func createName(x []byte) string {
-	str := string(x)
-	lim := 60
-	if len(str) > lim {
-		return string(str[0:lim])
-	}
-	return str
+func rxpad(str string, lim int) string {
+	str = str + strings.Repeat(" ", lim)
+	return str[:lim]
 }
 
 type testCase struct {
@@ -57,6 +54,103 @@ var testCases = []testCase{
 			Priority: getUint8Address(1),
 			severity: getUint8Address(1),
 			facility: getUint8Address(0),
+			Version:  1,
+		},
+	},
+	// Invalid, new lines allowed only within message part
+	{
+		[]byte("<1>1 - \nhostname - - - -"),
+		false,
+		nil,
+		"expecting an hostname (from 1 to max 255 US-ASCII characters) or a nil value [col 7]",
+		&SyslogMessage{
+			facility: getUint8Address(0),
+			severity: getUint8Address(1),
+			Priority: getUint8Address(1),
+			Version:  1,
+		},
+	},
+	{
+		[]byte("<1>1 - host\x0Aname - - - -"),
+		false,
+		nil,
+		"expecting an hostname (from 1 to max 255 US-ASCII characters) or a nil value [col 11]",
+		&SyslogMessage{
+			facility: getUint8Address(0),
+			severity: getUint8Address(1),
+			Priority: getUint8Address(1),
+			Version:  1,
+		},
+	},
+	{
+		[]byte("<1>1 - - \nan - - -"),
+		false,
+		nil,
+		"expecting an app-name (from 1 to max 48 US-ASCII characters) or a nil value [col 9]",
+		&SyslogMessage{
+			facility: getUint8Address(0),
+			severity: getUint8Address(1),
+			Priority: getUint8Address(1),
+			Version:  1,
+		},
+	},
+	{
+		[]byte("<1>1 - - a\x0An - - -"),
+		false,
+		nil,
+		"expecting an app-name (from 1 to max 48 US-ASCII characters) or a nil value [col 10]",
+		&SyslogMessage{
+			facility: getUint8Address(0),
+			severity: getUint8Address(1),
+			Priority: getUint8Address(1),
+			Version:  1,
+		},
+	},
+	{
+		[]byte("<1>1 - - - \npid - -"),
+		false,
+		nil,
+		"expecting a procid (from 1 to max 128 US-ASCII characters) or a nil value [col 11]",
+		&SyslogMessage{
+			facility: getUint8Address(0),
+			severity: getUint8Address(1),
+			Priority: getUint8Address(1),
+			Version:  1,
+		},
+	},
+	{
+		[]byte("<1>1 - - - p\x0Aid - -"),
+		false,
+		nil,
+		"expecting a procid (from 1 to max 128 US-ASCII characters) or a nil value [col 12]",
+		&SyslogMessage{
+			facility: getUint8Address(0),
+			severity: getUint8Address(1),
+			Priority: getUint8Address(1),
+			Version:  1,
+		},
+	},
+	{
+		[]byte("<1>1 - - - - \nmid -"),
+		false,
+		nil,
+		"expecting a msgid (from 1 to max 32 US-ASCII characters) or a nil value [col 13]",
+		&SyslogMessage{
+			facility: getUint8Address(0),
+			severity: getUint8Address(1),
+			Priority: getUint8Address(1),
+			Version:  1,
+		},
+	},
+	{
+		[]byte("<1>1 - - - - m\x0Aid -"),
+		false,
+		nil,
+		"expecting a msgid (from 1 to max 32 US-ASCII characters) or a nil value [col 14]",
+		&SyslogMessage{
+			facility: getUint8Address(0),
+			severity: getUint8Address(1),
+			Priority: getUint8Address(1),
 			Version:  1,
 		},
 	},
@@ -466,7 +560,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - - - - abcdefghilmnopqrstuvzabcdefghilmX -"),
 		false,
 		nil,
-		"expecting a msgid (from 1 to max 32 US-ASCII characters) [col 45]",
+		"expecting a msgid (from 1 to max 32 US-ASCII characters) or a nil value [col 45]",
 		&SyslogMessage{
 			Priority: getUint8Address(1),
 			facility: getUint8Address(0),
@@ -515,7 +609,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - - - -   -"),
 		false,
 		nil,
-		"expecting a msgid (from 1 to max 32 US-ASCII characters) [col 13]",
+		"expecting a msgid (from 1 to max 32 US-ASCII characters) or a nil value [col 13]",
 		&SyslogMessage{
 			Priority: getUint8Address(1),
 			facility: getUint8Address(0),
@@ -661,7 +755,91 @@ var testCases = []testCase{
 		"",
 		nil,
 	},
-	// Valid, with nil structured data and message, with other fields all max length
+	// Valid, average message
+	{
+		[]byte(`<29>1 2016-02-21T04:32:57+00:00 web1 someservice - - [origin x-service="someservice"][meta sequenceId="14125553"] 127.0.0.1 - - 1456029177 "GET /v1/ok HTTP/1.1" 200 145 "-" "hacheck 0.9.0" 24306 127.0.0.1:40124 575`),
+		true,
+		&SyslogMessage{
+			facility:  getUint8Address(3),
+			severity:  getUint8Address(5),
+			Priority:  getUint8Address(29),
+			Version:   1,
+			Timestamp: timeParse(time.RFC3339Nano, "2016-02-21T04:32:57+00:00"),
+			Hostname:  getStringAddress("web1"),
+			Appname:   getStringAddress("someservice"),
+			StructuredData: &map[string]map[string]string{
+				"origin": map[string]string{
+					"x-service": "someservice",
+				},
+				"meta": map[string]string{
+					"sequenceId": "14125553",
+				},
+			},
+			Message: getStringAddress(`127.0.0.1 - - 1456029177 "GET /v1/ok HTTP/1.1" 200 145 "-" "hacheck 0.9.0" 24306 127.0.0.1:40124 575`),
+		},
+		"",
+		nil,
+	},
+	// Valid, hostname, appname, procid, msgid can contain dashes
+	{
+		[]byte("<1>100 - host-name - - - -"),
+		true,
+		&SyslogMessage{
+			facility: getUint8Address(0),
+			severity: getUint8Address(1),
+			Priority: getUint8Address(1),
+			Version:  100,
+			Hostname: getStringAddress("host-name"),
+		},
+		"",
+		nil,
+	},
+	{
+		[]byte("<1>101 - host-name app-name - - -"),
+		true,
+		&SyslogMessage{
+			facility: getUint8Address(0),
+			severity: getUint8Address(1),
+			Priority: getUint8Address(1),
+			Version:  101,
+			Hostname: getStringAddress("host-name"),
+			Appname:  getStringAddress("app-name"),
+		},
+		"",
+		nil,
+	},
+	{
+		[]byte("<1>102 - host-name app-name proc-id - -"),
+		true,
+		&SyslogMessage{
+			facility: getUint8Address(0),
+			severity: getUint8Address(1),
+			Priority: getUint8Address(1),
+			Version:  102,
+			Hostname: getStringAddress("host-name"),
+			Appname:  getStringAddress("app-name"),
+			ProcID:   getStringAddress("proc-id"),
+		},
+		"",
+		nil,
+	},
+	{
+		[]byte("<1>103 - host-name app-name proc-id msg-id -"),
+		true,
+		&SyslogMessage{
+			facility: getUint8Address(0),
+			severity: getUint8Address(1),
+			Priority: getUint8Address(1),
+			Version:  103,
+			Hostname: getStringAddress("host-name"),
+			Appname:  getStringAddress("app-name"),
+			ProcID:   getStringAddress("proc-id"),
+			MsgID:    getStringAddress("msg-id"),
+		},
+		"",
+		nil,
+	},
+	// Valid, w/0 structured data and w/o message, with other fields all max length
 	{
 		[]byte("<191>999 2018-12-31T23:59:59.999999-23:59 abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabc abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdef abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzab abcdefghilmnopqrstuvzabcdefghilm -"),
 		true,
@@ -675,6 +853,34 @@ var testCases = []testCase{
 			Appname:   getStringAddress("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdef"),
 			ProcID:    getStringAddress("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzab"),
 			MsgID:     getStringAddress("abcdefghilmnopqrstuvzabcdefghilm"),
+		},
+		"",
+		nil,
+	},
+	// Valid, all fields max length, with structured data and message
+	{
+		[]byte(`<191>999 2018-12-31T23:59:59.999999-23:59 abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabc abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdef abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzab abcdefghilmnopqrstuvzabcdefghilm [an@id key1="val1" key2="val2"][another@id key1="val1"] Some message "GET"`),
+		true,
+		&SyslogMessage{
+			Priority:  getUint8Address(191),
+			facility:  getUint8Address(23),
+			severity:  getUint8Address(7),
+			Version:   999,
+			Timestamp: timeParse(time.RFC3339Nano, "2018-12-31T23:59:59.999999-23:59"),
+			Hostname:  getStringAddress("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabc"),
+			Appname:   getStringAddress("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdef"),
+			ProcID:    getStringAddress("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzab"),
+			MsgID:     getStringAddress("abcdefghilmnopqrstuvzabcdefghilm"),
+			StructuredData: &map[string]map[string]string{
+				"an@id": map[string]string{
+					"key1": "val1",
+					"key2": "val2",
+				},
+				"another@id": map[string]string{
+					"key1": "val1",
+				},
+			},
+			Message: getStringAddress(`Some message "GET"`),
 		},
 		"",
 		nil,
@@ -801,7 +1007,7 @@ var testCases = []testCase{
 		"",
 		nil,
 	},
-	// Valid, with structured data is, with structured data params
+	// Valid, with structured data id, with structured data params
 	{
 		[]byte(`<78>1 2016-01-15T00:04:01+00:00 host1 CROND 10391 - [sdid x="⌘"] some_message`),
 		true,
@@ -2086,13 +2292,12 @@ y`),
 	// },
 
 	// (fixme) > evaluate non characters for UTF-8 security concerns, eg. \xef\xbf\xbe
-	// (fixme) > hostname & c. can contain dashes (eg. nil value), and spaces? it is correct?
 }
 
 func TestMachineParse(t *testing.T) {
 	for _, tc := range testCases {
 		tc := tc
-		t.Run(createName(tc.input), func(t *testing.T) {
+		t.Run(rxpad(string(tc.input), 50), func(t *testing.T) {
 			t.Parallel()
 
 			bestEffort := true
@@ -2116,22 +2321,6 @@ func TestMachineParse(t *testing.T) {
 			}
 
 			assert.Equal(t, tc.value, message)
-		})
-	}
-}
-
-// This is here to avoid compiler optimizations that
-// could remove the actual call we are benchmarking
-// during benchmarks
-var benchParseResult *SyslogMessage
-
-func BenchmarkParse(b *testing.B) {
-	for _, tc := range testCases {
-		tc := tc
-		b.Run(createName(tc.input), func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
-				benchParseResult, _ = NewMachine().Parse(tc.input, nil)
-			}
 		})
 	}
 }
