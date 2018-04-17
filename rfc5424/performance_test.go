@@ -91,7 +91,7 @@ func BenchmarkParse(b *testing.B) {
 	for _, tc := range benchCases {
 		tc := tc
 		bestEffort := true
-		b.Run(rxpad("[besteffort] "+tc.label, 60), func(b *testing.B) {
+		b.Run(rxpad(tc.label, 50), func(b *testing.B) {
 			for i := 0; i < b.N; i++ {
 				benchParseResult, _ = NewMachine().Parse(tc.input, &bestEffort)
 			}
