@@ -716,7 +716,7 @@ var testCases = []testCase{
 	},
 	// Invalid, too long structured data param key
 	{
-		[]byte(`<1>1 - - - - - [id abcdefghilmnopqrstuvzabcdefghilmX=val]`),
+		[]byte(`<1>1 - - - - - [id abcdefghilmnopqrstuvzabcdefghilmX="val"]`),
 		false,
 		nil,
 		"expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters; key cannot contain `=`, ` `, `]`, and `\"`, while value cannot contain `]`, backslash, and `\"` unless escaped) [col 51]",
@@ -1031,7 +1031,7 @@ var testCases = []testCase{
 		"",
 		nil,
 	},
-	// Valid, with structured data is, wit structured data params
+	// Valid, with structured data is, with structured data params
 	{
 		[]byte(`<78>2 2016-01-15T00:04:01+00:00 host1 CROND 10391 - [sdid x="hey \\u2318 hey"] some_message`),
 		true,
@@ -1077,9 +1077,119 @@ var testCases = []testCase{
 		"",
 		nil,
 	},
+	{
+		[]byte(`<29>52 2016-01-15T01:00:43Z hn S - - [meta one="\\one" two="\\two"] 127.0.0.1 - - 1452819643 "GET"`),
+		true,
+		&SyslogMessage{
+			Priority:  getUint8Address(29),
+			facility:  getUint8Address(3),
+			severity:  getUint8Address(5),
+			Version:   52,
+			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Hostname:  getStringAddress("hn"),
+			Appname:   getStringAddress("S"),
+			StructuredData: &map[string]map[string]string{
+				"meta": map[string]string{
+					"one": `\one`,
+					"two": `\two`,
+				},
+			},
+			Message: getStringAddress(`127.0.0.1 - - 1452819643 "GET"`),
+		},
+		"",
+		nil,
+	},
+	{
+		[]byte(`<29>53 2016-01-15T01:00:43Z hn S - - [meta one="\\one"][other two="\\two" double="\\a\\b"] 127.0.0.1 - - 1452819643 "GET"`),
+		true,
+		&SyslogMessage{
+			Priority:  getUint8Address(29),
+			facility:  getUint8Address(3),
+			severity:  getUint8Address(5),
+			Version:   53,
+			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Hostname:  getStringAddress("hn"),
+			Appname:   getStringAddress("S"),
+			StructuredData: &map[string]map[string]string{
+				"meta": map[string]string{
+					"one": `\one`,
+				},
+				"other": map[string]string{
+					"two":    `\two`,
+					"double": `\a\b`,
+				},
+			},
+			Message: getStringAddress(`127.0.0.1 - - 1452819643 "GET"`),
+		},
+		"",
+		nil,
+	},
+	{
+		[]byte(`<29>51 2016-01-15T01:00:43Z hn S - - [meta es="\\double\\slash"] 127.0.0.1 - - 1452819643 "GET"`),
+		true,
+		&SyslogMessage{
+			Priority:  getUint8Address(29),
+			facility:  getUint8Address(3),
+			severity:  getUint8Address(5),
+			Version:   51,
+			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Hostname:  getStringAddress("hn"),
+			Appname:   getStringAddress("S"),
+			StructuredData: &map[string]map[string]string{
+				"meta": map[string]string{
+					"es": `\double\slash`,
+				},
+			},
+			Message: getStringAddress(`127.0.0.1 - - 1452819643 "GET"`),
+		},
+		"",
+		nil,
+	},
+	{
+		[]byte(`<29>54 2016-01-15T01:00:43Z hn S - - [meta es="in \\middle of the string"] 127.0.0.1 - - 1452819643 "GET"`),
+		true,
+		&SyslogMessage{
+			Priority:  getUint8Address(29),
+			facility:  getUint8Address(3),
+			severity:  getUint8Address(5),
+			Version:   54,
+			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Hostname:  getStringAddress("hn"),
+			Appname:   getStringAddress("S"),
+			StructuredData: &map[string]map[string]string{
+				"meta": map[string]string{
+					"es": `in \middle of the string`,
+				},
+			},
+			Message: getStringAddress(`127.0.0.1 - - 1452819643 "GET"`),
+		},
+		"",
+		nil,
+	},
+	{
+		[]byte(`<29>55 2016-01-15T01:00:43Z hn S - - [meta es="at the \\end"] 127.0.0.1 - - 1452819643 "GET"`),
+		true,
+		&SyslogMessage{
+			Priority:  getUint8Address(29),
+			facility:  getUint8Address(3),
+			severity:  getUint8Address(5),
+			Version:   55,
+			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Hostname:  getStringAddress("hn"),
+			Appname:   getStringAddress("S"),
+			StructuredData: &map[string]map[string]string{
+				"meta": map[string]string{
+					"es": `at the \end`,
+				},
+			},
+			Message: getStringAddress(`127.0.0.1 - - 1452819643 "GET"`),
+		},
+		"",
+		nil,
+	},
 	// Valid, with control characters within structured data param value
 	{
-		[]byte("<29>50 2016-01-15T01:00:43Z hn S - - [meta es=\"\b5Ὂg̀9! ℃ᾭG\"] 127.0.0.1 - - 1452819643 \"GET\""),
+		[]byte("<29>50 2016-01-15T01:00:43Z hn S - - [meta es=\"\t5Ὂg̀9!℃ᾭGa b\"] 127.0.0.1 - - 1452819643 \"GET\""),
 		true,
 		&SyslogMessage{
 			Priority:  getUint8Address(29),
@@ -1091,7 +1201,7 @@ var testCases = []testCase{
 			Appname:   getStringAddress("S"),
 			StructuredData: &map[string]map[string]string{
 				"meta": map[string]string{
-					"es": "\b5Ὂg̀9! ℃ᾭG",
+					"es": "\t5Ὂg̀9!℃ᾭGa b",
 				},
 			},
 			Message: getStringAddress(`127.0.0.1 - - 1452819643 "GET"`),
@@ -1249,9 +1359,27 @@ var testCases = []testCase{
 		"",
 		nil,
 	},
+	// Valid, with empty structured data param value
+	{
+		[]byte(`<1>1 - - - - - [id pk=""]`),
+		true,
+		&SyslogMessage{
+			Priority: getUint8Address(1),
+			facility: getUint8Address(0),
+			severity: getUint8Address(1),
+			Version:  1,
+			StructuredData: &map[string]map[string]string{
+				"id": map[string]string{
+					"pk": "",
+				},
+			},
+		},
+		"",
+		nil,
+	},
 	// Valid, with double quotes in the message and escaped character within param
 	{
-		[]byte(`<29>2 2016-01-15T01:00:43Z some-host-name SEKRETPROGRAM prg - [meta escape="\]"] 127.0.0.1 - - 1452819643 "GET"`),
+		[]byte(`<29>2 2016-01-15T01:00:43Z some-host-name SEKRETPROGRAM prg - [meta escape="\]"] some "mex"`),
 		true,
 		&SyslogMessage{
 			facility:  getUint8Address(3),
@@ -1265,10 +1393,55 @@ var testCases = []testCase{
 			MsgID:     nil,
 			StructuredData: &map[string]map[string]string{
 				"meta": map[string]string{
-					"escape": `\]`, // (todo) > verify output is correct wrt the input param value
+					"escape": "]",
 				},
 			},
-			Message: getStringAddress("127.0.0.1 - - 1452819643 \"GET\""),
+			Message: getStringAddress(`some "mex"`),
+		},
+		"",
+		nil,
+	},
+	// Valid, with escaped character within param
+	{
+		[]byte(`<29>2 2016-01-15T01:00:43Z some-host-name SEKRETPROGRAM prg - [meta escape="\\"]`),
+		true,
+		&SyslogMessage{
+			facility:  getUint8Address(3),
+			severity:  getUint8Address(5),
+			Priority:  getUint8Address(29),
+			Version:   2,
+			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Hostname:  getStringAddress("some-host-name"),
+			Appname:   getStringAddress("SEKRETPROGRAM"),
+			ProcID:    getStringAddress("prg"),
+			MsgID:     nil,
+			StructuredData: &map[string]map[string]string{
+				"meta": map[string]string{
+					"escape": `\`,
+				},
+			},
+		},
+		"",
+		nil,
+	},
+	{
+		[]byte(`<29>2 2016-01-15T01:00:43Z some-host-name SEKRETPROGRAM prg - [meta escape="\""]`),
+		true,
+		&SyslogMessage{
+			facility:  getUint8Address(3),
+			severity:  getUint8Address(5),
+			Priority:  getUint8Address(29),
+			Version:   2,
+			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Hostname:  getStringAddress("some-host-name"),
+			Appname:   getStringAddress("SEKRETPROGRAM"),
+			ProcID:    getStringAddress("prg"),
+			MsgID:     nil,
+			StructuredData: &map[string]map[string]string{
+				"meta": map[string]string{
+					"escape": `"`,
+				},
+			},
 		},
 		"",
 		nil,
@@ -2277,6 +2450,7 @@ y`),
 			Message:  getStringAddress("valid\ufeff"),
 		},
 	},
+
 	// Invalid, missing whitespace after nil timestamp
 	// {
 	// 	[]byte("<1>1 -- - - - -"),
