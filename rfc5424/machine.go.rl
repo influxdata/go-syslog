@@ -13,7 +13,7 @@ var (
 	errHostname       = "expecting an hostname (from 1 to max 255 US-ASCII characters) or a nil value [col %d]"
 	errAppname        = "expecting an app-name (from 1 to max 48 US-ASCII characters) or a nil value [col %d]"
 	errProcid         = "expecting a procid (from 1 to max 128 US-ASCII characters) or a nil value [col %d]"
-	errMsgid          = "expecting a msgid (from 1 to max 32 US-ASCII characters) [col %d]"
+	errMsgid          = "expecting a msgid (from 1 to max 32 US-ASCII characters) or a nil value [col %d]"
 	errStructuredData = "expecting a structured data section containing one or more elements (`[id( key=\"value\")*]+`) or a nil value [col %d]"
 	errSdID           = "expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"` [col %d]"
 	errSdIDDuplicated = "duplicate structured data element id [col %d]"
