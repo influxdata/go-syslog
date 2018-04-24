@@ -5,7 +5,7 @@ import "testing"
 // This is here to avoid compiler optimizations that
 // could remove the actual call we are benchmarking
 // during benchmarks
-var benchParseResult *SyslogMessage
+var benchParseResult SyslogMessage
 
 type benchCase struct {
 	input []byte
@@ -90,10 +90,9 @@ var benchCases = []benchCase{
 func BenchmarkParse(b *testing.B) {
 	for _, tc := range benchCases {
 		tc := tc
-		bestEffort := true
 		b.Run(rxpad(tc.label, 50), func(b *testing.B) {
 			for i := 0; i < b.N; i++ {
-				benchParseResult, _ = NewMachine().Parse(tc.input, &bestEffort)
+				benchParseResult, _ = NewMachine().Parse(tc.input, true)
 			}
 		})
 	}
