@@ -6,17 +6,17 @@ import (
 
 // SyslogMessage represents a syslog message
 type SyslogMessage struct {
-	Priority       *uint8
-	facility       *uint8
-	severity       *uint8
+	Priority       uint8
+	facility       uint8
+	severity       uint8
 	Version        uint16 // Grammar mandates that version cannot be 0, so we can use the 0 value of uint16 to signal nil
-	Timestamp      *time.Time
-	Hostname       *string
-	Appname        *string
-	ProcID         *string
-	MsgID          *string
-	StructuredData *map[string]map[string]string
-	Message        *string
+	Timestamp      time.Time
+	Hostname       string
+	Appname        string
+	ProcID         string
+	MsgID          string
+	StructuredData map[string]map[string]string
+	Message        string
 }
 
 // Valid tells whether the message is well-formed or not.
@@ -25,7 +25,7 @@ type SyslogMessage struct {
 func (sm *SyslogMessage) Valid() bool {
 	// A nil priority or a 0 version means that the message is not valid
 	// Not checking the priority range since it's parser responsibility
-	if sm.Priority != nil && *sm.Priority >= 0 && *sm.Priority <= 191 && sm.Version > 0 && sm.Version <= 999 {
+	if sm.Priority >= 0 && sm.Priority <= 191 && sm.Version > 0 && sm.Version <= 999 {
 		return true
 	}
 
@@ -34,51 +34,43 @@ func (sm *SyslogMessage) Valid() bool {
 
 // SetPriority set the priority value and the computed facility and severity codes accordingly.
 func (sm *SyslogMessage) SetPriority(value uint8) {
-	sm.Priority = &value
-	facility := uint8(value / 8)
-	severity := uint8(value % 8)
-	sm.facility = &facility
-	sm.severity = &severity
+	sm.Priority = value
+	sm.facility = uint8(value / 8)
+	sm.severity = uint8(value % 8)
 }
 
 // Facility returns the facility code.
-func (sm *SyslogMessage) Facility() *uint8 {
+func (sm *SyslogMessage) Facility() uint8 {
 	return sm.facility
 }
 
 // Severity returns the severity code.
-func (sm *SyslogMessage) Severity() *uint8 {
+func (sm *SyslogMessage) Severity() uint8 {
 	return sm.severity
 }
 
 // FacilityMessage returns the text message for the current facility value.
-func (sm *SyslogMessage) FacilityMessage() *string {
-	if sm.facility != nil {
-		msg := facilities[*sm.facility]
-		return &msg
+func (sm *SyslogMessage) FacilityMessage() (m string) {
+	if sm.facility >= uint8(0) && sm.facility < uint8(len(facilities)) {
+		m = facilities[sm.facility]
 	}
-
-	return nil
+	return
 }
 
 // SeverityMessage returns the text message for the current severity value.
-func (sm *SyslogMessage) SeverityMessage() *string {
-	if sm.severity != nil {
-		msg := severityMessages[*sm.severity]
-		return &msg
+func (sm *SyslogMessage) SeverityMessage() (m string) {
+	if sm.severity >= uint8(0) && sm.severity < uint8(len(severityMessages)) {
+		m = severityMessages[sm.severity]
 	}
-
-	return nil
+	return
 }
 
 // SeverityLevel returns the text level for the current severity value.
-func (sm *SyslogMessage) SeverityLevel() *string {
-	if sm.severity != nil {
-		msg := severityLevels[*sm.severity]
-		return &msg
+func (sm *SyslogMessage) SeverityLevel() (m string) {
+	if sm.severity >= uint8(0) && sm.severity < uint8(len(severityMessages)) {
+		m = severityLevels[sm.severity]
 	}
-
-	return nil
+	return
 }
 
 var severityMessages = map[uint8]string{
