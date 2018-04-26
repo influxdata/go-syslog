@@ -38,11 +38,11 @@ action markmsg {
 }
 
 action set_prival {
-	m.output.SetPriority(uint8(unsafeUTF8DecimalCodePointsToInt(m.text())))
+	output.SetPriority(uint8(unsafeUTF8DecimalCodePointsToInt(m.text())))
 }
 
 action set_version {
-	m.output.Version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
+	output.Version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
 }
 
 action set_timestamp {
@@ -51,41 +51,41 @@ action set_timestamp {
 		fhold;
     	fgoto fail;
     } else {
-        m.output.Timestamp = &t
+        output.Timestamp = &t
     }
 }
 
 action set_hostname {
 	if hostname := string(m.text()); hostname != "-" {
-		m.output.Hostname = &hostname
+		output.Hostname = &hostname
 	}
 }
 
 action set_appname {
 	if appname := string(m.text()); appname != "-" {
-		m.output.Appname = &appname
+		output.Appname = &appname
 	}
 }
 
 action set_procid {
 	if procid := string(m.text()); procid != "-" {
-		m.output.ProcID = &procid
+		output.ProcID = &procid
 	}
 }
 
 action set_msgid {
 	if msgid := string(m.text()); msgid != "-" {
-		m.output.MsgID = &msgid
+		output.MsgID = &msgid
 	}
 }
 
 
 action ini_elements {
-	m.output.StructuredData = &(map[string]map[string]string{})
+	output.StructuredData = &(map[string]map[string]string{})
 }
 
 action set_id {
-	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
+	if elements, ok := interface{}(output.StructuredData).(*map[string]map[string]string); ok {
 		id := string(m.text())
 		if _, ok := (*elements)[id]; ok {
 			// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
@@ -112,7 +112,7 @@ action set_paramname {
 }
 
 action set_paramvalue {
-	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
+	if elements, ok := interface{}(output.StructuredData).(*map[string]map[string]string); ok {
 		// (fixme) > what if SD-PARAM-NAME already exist for the current element (ie., current SD-ID)?
 
 		// Store text
@@ -135,7 +135,7 @@ action set_paramvalue {
 
 action set_msg {
 	if msg := string(m.text()); msg != "" {
-		m.output.Message = &msg
+		output.Message = &msg
 	}
 }
 
@@ -194,9 +194,9 @@ action err_structureddata {
 }
 
 action err_sdid {
-	delete(*m.output.StructuredData, m.currentelem)
-	if len(*m.output.StructuredData) == 0 {
-		m.output.StructuredData = nil
+	delete(*output.StructuredData, m.currentelem)
+	if len(*output.StructuredData) == 0 {
+		output.StructuredData = nil
 	}
 	m.err = fmt.Errorf(errSdID, m.p)
 	fhold;
@@ -204,7 +204,7 @@ action err_sdid {
 }
 
 action err_sdparam {
-	if elements, ok := interface{}(m.output.StructuredData).(*map[string]map[string]string); ok {
+	if elements, ok := interface{}(output.StructuredData).(*map[string]map[string]string); ok {
 		delete((*elements)[m.currentelem], m.currentparam)
 	}
 	m.err = fmt.Errorf(errSdParam, m.p)
@@ -217,7 +217,7 @@ action err_msg {
 	if m.msg_at > 0 {
 		// Save the text until valid (m.p is where the parser has stopped)
 		if trunc := string(m.data[m.msg_at:m.p]); trunc != "" {
-			m.output.Message = &trunc
+			output.Message = &trunc
 		}
 	}
 
@@ -344,7 +344,7 @@ main := header sp structureddata (sp msg)? $err(err_parse);
 
 }%%
 
-%% write data;
+%% write data noerror noprefix;
 
 type machine struct {
 	data         []byte
@@ -352,7 +352,6 @@ type machine struct {
 	p, pe, eof   int
 	pb           int
 	err          error
-	output       *SyslogMessage
 	currentelem  string
 	currentparam string
 	msg_at       int
@@ -399,18 +398,18 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 	m.pe = len(input)
 	m.eof = len(input)
 	m.err = nil
-	m.output = &SyslogMessage{}
+	output := &SyslogMessage{}
 
     %% write init;
     %% write exec;
 
-	if m.cs < rfc5424_first_final || m.cs == rfc5424_en_fail {
-		if bestEffort != nil && *bestEffort != false && m.output.Valid() {
+	if m.cs < first_final || m.cs == en_fail {
+		if bestEffort != nil && *bestEffort != false && output.Valid() {
 			// An error occurred but partial parsing is on and partial message is minimally valid
-			return m.output, m.err
+			return output, m.err
 		}
 		return nil, m.err
 	}
 
-	return m.output, nil
+	return output, nil
 }
