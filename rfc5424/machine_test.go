@@ -167,7 +167,7 @@ var testCases = []testCase{
 		[]byte("<87]123 -"),
 		false,
 		nil,
-		// (note) > machine can only understand that the ] char is not in the reachable states (just as any number would be in this situation), so given the error about the priority val submachine, not about the pri submachine (ie., <prival>)
+		// (note) > machine can only understand that the ] char is not in the reachable states (just as any number would be in this situation), so it gives the error about the priority val submachine, not about the pri submachine (ie., <prival>)
 		"expecting a priority value in the range 1-191 or equal to 0 [col 3]",
 		nil, // nil since cannot reach version
 	},
