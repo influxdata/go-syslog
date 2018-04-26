@@ -86,7 +86,6 @@ func (s *Scanner) Scan() (tok Token) {
 			s.unread()
 			return s.scanSyslogMsg()
 		}
-		//s.ready = false // (todo) > verify ...
 	}
 
 	return Token{
@@ -126,6 +125,7 @@ func (s *Scanner) scanSyslogMsg() Token {
 	// Create a buffer and read the current character into it
 	buf := make([]byte, 0, s.msglen)
 
+	// (todo) > seek
 	for i := uint64(0); i < s.msglen; i++ {
 		b := s.read()
 
