@@ -46,7 +46,7 @@ var testCases = []testCase{
 	// Invalid, multiple syslog messages on multiple lines
 	{
 		[]byte(`<1>1 - - - - - -
-	<2>1 - - - - - -`),
+		<2>1 - - - - - -`),
 		false,
 		nil,
 		"parsing error [col 16]",
@@ -162,14 +162,15 @@ var testCases = []testCase{
 		"expecting a priority value within angle brackets [col 0]",
 		nil,
 	},
-	// (fixme) > Malformed pri outputs wrong error (inner error regarding prival, not the outer one regarding pri)
-	// {
-	// 	[]byte("<87]123 -"),
-	// 	false,
-	// 	nil,
-	// 	"expecting a priority value within angle brackets [col 3]",
-	// 	nil, // nil since cannot reach version
-	// },
+	// Malformed pri outputs wrong error
+	{
+		[]byte("<87]123 -"),
+		false,
+		nil,
+		// (note) > machine can only understand that the ] char is not in the reachable states (just as any number would be in this situation), so given the error about the priority val submachine, not about the pri submachine (ie., <prival>)
+		"expecting a priority value in the range 1-191 or equal to 0 [col 3]",
+		nil, // nil since cannot reach version
+	},
 	// Invalid, missing pri
 	{
 		[]byte("122 - - - - - -"),
@@ -240,9 +241,64 @@ var testCases = []testCase{
 		false,
 		nil,
 		"expecting a version value in the range 1-999 [col 8]",
-		nil,
+		&SyslogMessage{
+			Priority: getUint8Address(101),
+			facility: getUint8Address(12),
+			severity: getUint8Address(5),
+			Version:  100,
+		},
 	},
-	// Invalid, non numeric version
+	// Invalid, truncated after version whitespace
+	{
+		[]byte("<1>2 "),
+		false,
+		nil,
+		"parsing error [col 5]",
+		&SyslogMessage{
+			Priority: getUint8Address(1),
+			facility: getUint8Address(0),
+			severity: getUint8Address(1),
+			Version:  2,
+		},
+	},
+	// Invalid, truncated after version
+	{
+		[]byte("<1>1"),
+		false,
+		nil,
+		"parsing error [col 4]",
+		&SyslogMessage{
+			Priority: getUint8Address(1),
+			facility: getUint8Address(0),
+			severity: getUint8Address(1),
+			Version:  1,
+		},
+	},
+	// Invalid, non numeric (also partially) version
+	{
+		[]byte("<1>3a"),
+		false,
+		nil,
+		"parsing error [col 4]",
+		&SyslogMessage{
+			Priority: getUint8Address(1),
+			facility: getUint8Address(0),
+			severity: getUint8Address(1),
+			Version:  3,
+		},
+	},
+	{
+		[]byte("<1>4a "),
+		false,
+		nil,
+		"parsing error [col 4]",
+		&SyslogMessage{
+			Priority: getUint8Address(1),
+			facility: getUint8Address(0),
+			severity: getUint8Address(1),
+			Version:  4,
+		},
+	},
 	{
 		[]byte("<102>abc 2018-11-22"),
 		false,
@@ -2450,20 +2506,19 @@ y`),
 			Message:  getStringAddress("valid\ufeff"),
 		},
 	},
-
 	// Invalid, missing whitespace after nil timestamp
-	// {
-	// 	[]byte("<1>1 -- - - - -"),
-	// 	false,
-	// 	nil,
-	// 	"parsing error [col 6]",
-	// 	&SyslogMessage{
-	// 		Priority: getUint8Address(1),
-	// 		facility: getUint8Address(0),
-	// 		severity: getUint8Address(1),
-	// 		Version: 1,
-	// 	},
-	// },
+	{
+		[]byte("<1>10 -- - - - -"),
+		false,
+		nil,
+		"parsing error [col 7]",
+		&SyslogMessage{
+			Priority: getUint8Address(1),
+			facility: getUint8Address(0),
+			severity: getUint8Address(1),
+			Version:  10,
+		},
+	},
 
 	// (fixme) > evaluate non characters for UTF-8 security concerns, eg. \xef\xbf\xbe
 }

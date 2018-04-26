@@ -255,7 +255,7 @@ privalrange = (('1' ('9' ('0'..'1'){,1} | '0'..'8' ('0'..'9'){,1}){,1}) | ('2'..
 # 1..191 or 0
 prival = (privalrange | '0') >mark %from(set_prival) $err(err_prival);
 
-pri = ('<'  prival '>') @err(err_pri);
+pri = ('<' prival '>') @err(err_pri);
 
 version = (nonzerodigit digit{0,2} <err(err_version)) >mark %from(set_version) %eof(set_version) @err(err_version);
 
