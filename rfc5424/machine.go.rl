@@ -238,7 +238,6 @@ action err_parse {
     fgoto fail;
 }
 
-
 nilvalue = '-';
 
 sp = ' ';
@@ -258,7 +257,7 @@ prival = (privalrange | '0') >mark %from(set_prival) $err(err_prival);
 
 pri = ('<'  prival '>') @err(err_pri);
 
-version = (nonzerodigit digit{0,2}) >mark %set_version $err(err_version);
+version = (nonzerodigit digit{0,2} <err(err_version)) >mark %from(set_version) %eof(set_version) @err(err_version);
 
 datemday = ('0' . '1'..'9' | '1'..'2' . '0'..'9' | '3' . '0'..'1');
 
@@ -294,7 +293,7 @@ procid = nilvalue | printusascii{1,128} >mark %set_procid $err(err_procid);
 
 msgid = nilvalue | printusascii{1,32} >mark %set_msgid $err(err_msgid);
 
-header = pri version sp timestamp sp hostname sp appname sp procid sp msgid;
+header = (pri version sp timestamp sp hostname sp appname sp procid sp msgid) <>err(err_parse);
 
 # rfc 3629
 utf8tail = 0x80..0xBF;
