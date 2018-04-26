@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"io"
 	"strconv"
+	"unicode/utf8"
 )
 
 // eof represents a marker rune for the end of the reader
@@ -28,7 +29,7 @@ func isWhitespace(ch rune) bool {
 // Scanner represents a lexical scanner
 type Scanner struct {
 	r      *bufio.Reader
-	msglen int64
+	msglen uint64
 	ready  bool
 }
 
@@ -86,6 +87,7 @@ func (s *Scanner) Scan() (tok Token) {
 		s.ready = false
 	}
 
+	// (todo) > verify it is reachable
 	return Token{
 		typ: ILLEGAL,
 		lit: string(r),
@@ -111,7 +113,7 @@ func (s *Scanner) scanMsgLen() Token {
 	}
 
 	msglen := buf.String()
-	s.msglen, _ = strconv.ParseInt(msglen, 10, 64)
+	s.msglen, _ = strconv.ParseUint(msglen, 10, 64)
 
 	return Token{
 		typ: MSGLEN,
@@ -123,9 +125,10 @@ func (s *Scanner) scanSyslogMsg() Token {
 	// Create a buffer and read the current character into it
 	buf := make([]rune, 0, s.msglen)
 
-	for i := int64(0); i < s.msglen; i++ {
-		var ch rune
-		if ch = s.read(); ch == eof {
+	for i := uint64(0); i < s.msglen; {
+		ch := s.read()
+
+		if ch == eof {
 			return Token{
 				typ: EOF,
 				lit: string(buf),
@@ -133,6 +136,7 @@ func (s *Scanner) scanSyslogMsg() Token {
 		}
 
 		buf = append(buf, ch)
+		i += uint64(utf8.RuneLen(ch))
 	}
 
 	return Token{
