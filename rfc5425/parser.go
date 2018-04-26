@@ -9,18 +9,22 @@ import (
 
 // Parser represents a parser
 type Parser struct {
-	s      *Scanner
-	msglen int64
-	buf    struct {
+	s          Scanner
+	p          rfc5424.Parser
+	bestEffort bool
+	msglen     int64
+	buf        struct {
 		tok Token // last read token
 		num int   // size (max = 1)
 	}
 }
 
 // NewParser returns a new instance of Parser
-func NewParser(r io.Reader) *Parser {
+func NewParser(r io.Reader, bestEffort bool) *Parser {
 	return &Parser{
-		s: NewScanner(r),
+		s:          *NewScanner(r),
+		p:          *rfc5424.NewParser(),
+		bestEffort: bestEffort,
 	}
 }
 
@@ -31,22 +35,27 @@ func (p *Parser) Parse() ([]rfc5424.SyslogMessage, error) {
 
 		// First token MUST be a MSGLEN
 		if tok = p.scan(); tok.typ != MSGLEN {
-			return nil, fmt.Errorf("found %s, expected %s", tok.typ, MSGLEN)
+			return nil, fmt.Errorf("found %s, expecting a %s", tok, MSGLEN)
 		}
-		fmt.Printf("> %#v\n", tok)
+		fmt.Println(tok)
 
 		// Next we MUST see a WS
 		if tok = p.scan(); tok.typ != WS {
-			return nil, fmt.Errorf("found %s, expected %s", tok.typ, WS)
+			return nil, fmt.Errorf("found %s, expecting a %s", tok, WS)
 		}
-		fmt.Printf("> %#v\n", tok)
+		fmt.Println(tok)
 
 		// Next we MUST see a SYSLOG with length equal to MSGLEN
 		if tok = p.scan(); tok.typ != SYSLOGMSG {
-			return nil, fmt.Errorf(`found %s after "%s", expecting a %s containing %d octets`, tok.typ, tok.lit, SYSLOGMSG, p.s.msglen)
+			// (todo) > Try to parse syslogmsg literal also here?
+
+			return nil, fmt.Errorf(`found %s after "%s", expecting a %s containing %d octets`, tok, tok.lit, SYSLOGMSG, p.s.msglen)
 		}
-		fmt.Printf("> %#v\n", tok)
-		// (todo) > parse syslogmsg literal
+		fmt.Println(tok)
+		// Parse syslogmsg literal
+		sys, err := p.p.Parse(tok.lit, &p.bestEffort)
+		fmt.Printf("%#v\n", sys)
+		fmt.Println(err)
 
 		// Next we MUST see an EOF otherwise the parsing we'll start again
 		if tok = p.scan(); tok.typ == EOF {
