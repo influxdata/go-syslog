@@ -5,6 +5,7 @@ rfc5424/machine.go: rfc5424/machine.go.rl
 
 .PHONY: build
 build: rfc5424/machine.go
+	@gofmt -w -s $<
 
 .PHONY: bench
 bench: rfc5424/*_test.go rfc5424/machine.go
