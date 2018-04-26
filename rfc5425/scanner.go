@@ -5,25 +5,27 @@ import (
 	"bytes"
 	"io"
 	"strconv"
-	"unicode/utf8"
 )
 
-// eof represents a marker rune for the end of the reader
-var eof = rune(0)
+// eof represents a marker byte for the end of the reader
+var eof = byte(0)
 
-// isDigit returns true if the rune is in [0,9]
-func isDigit(ch rune) bool {
-	return (ch >= '0' && ch <= '9')
+// ws represents the whitespace
+var ws = byte(32)
+
+// isDigit returns true if the byte represents a number in [0,9]
+func isDigit(ch byte) bool {
+	return (ch >= 47 && ch <= 57)
 }
 
-// isNonZeroDigit returns true if the rune is in ]0,9]
-func isNonZeroDigit(ch rune) bool {
-	return (ch >= '1' && ch <= '9')
+// isNonZeroDigit returns true if the byte represents a number in ]0,9]
+func isNonZeroDigit(ch byte) bool {
+	return (ch >= 48 && ch <= 57)
 }
 
-// isWhitespace returns true if the rune is a space
-func isWhitespace(ch rune) bool {
-	return ch == ' '
+// isWhitespace returns true if the byte represents a space
+func isWhitespace(ch byte) bool {
+	return ch == 32
 }
 
 // Scanner represents a lexical scanner
@@ -40,75 +42,74 @@ func NewScanner(r io.Reader) *Scanner {
 	}
 }
 
-// read reads the next rune from the buffered reader
-// it returns the rune(0) if an error occurs (or io.EOF is returned)
-func (s *Scanner) read() rune {
-	ch, _, err := s.r.ReadRune()
+// read reads the next byte from the buffered reader
+// it returns the byte(0) if an error occurs (or io.EOF is returned)
+func (s *Scanner) read() byte {
+	b, err := s.r.ReadByte()
 	if err != nil {
 		return eof
 	}
-	return ch
+	return b
 }
 
-// unread places the previously read rune back on the reader
+// unread places the previously read byte back on the reader
 func (s *Scanner) unread() {
-	_ = s.r.UnreadRune()
+	_ = s.r.UnreadByte()
 }
 
 // Scan returns the next token
 func (s *Scanner) Scan() (tok Token) {
-	// Read the next rune.
-	r := s.read()
+	// Read the next byte.
+	b := s.read()
 
-	if isNonZeroDigit(r) {
+	if isNonZeroDigit(b) {
 		s.unread()
 		s.ready = false
 		return s.scanMsgLen()
 	}
 
 	// Otherwise read the individual character
-	switch r {
+	switch b {
 	case eof:
 		s.ready = false
 		return Token{
 			typ: EOF,
 		}
-	case ' ':
+	case ws:
 		s.ready = true
 		return Token{
 			typ: WS,
-			lit: " ",
+			lit: []byte{ws},
 		}
 	default:
 		if s.msglen > 0 && s.ready {
 			s.unread()
 			return s.scanSyslogMsg()
 		}
-		s.ready = false
+		//s.ready = false // (todo) > verify ...
 	}
 
-	// (todo) > verify it is reachable
 	return Token{
 		typ: ILLEGAL,
-		lit: string(r),
+		lit: []byte{b},
 	}
 }
 
 func (s *Scanner) scanMsgLen() Token {
 	// Create a buffer and read the current character into it
 	var buf bytes.Buffer
-	buf.WriteRune(s.read())
+	buf.WriteByte(s.read())
 
 	// Read every subsequent digit character into the buffer
 	// Non-digit characters and EOF will cause the loop to exit
 	for {
-		if ch := s.read(); ch == eof {
+		if b := s.read(); b == eof {
 			break
-		} else if !isDigit(ch) {
+		} else if !isDigit(b) {
 			s.unread()
 			break
 		} else {
-			buf.WriteRune(ch)
+			buf.WriteByte(b)
 		}
 	}
 
@@ -117,30 +118,31 @@ func (s *Scanner) scanMsgLen() Token {
 
 	return Token{
 		typ: MSGLEN,
-		lit: msglen,
+		lit: buf.Bytes(),
 	}
 }
 
 func (s *Scanner) scanSyslogMsg() Token {
 	// Create a buffer and read the current character into it
-	buf := make([]rune, 0, s.msglen)
+	buf := make([]byte, 0, s.msglen)
 
-	for i := uint64(0); i < s.msglen; {
-		ch := s.read()
+	for i := uint64(0); i < s.msglen; i++ {
+		b := s.read()
 
-		if ch == eof {
+		if b == eof {
 			return Token{
 				typ: EOF,
-				lit: string(buf),
+				lit: buf,
 			}
 		}
 
-		buf = append(buf, ch)
-		i += uint64(utf8.RuneLen(ch))
+		buf = append(buf, b)
 	}
 
+	s.ready = false
+	s.msglen = 0
 	return Token{
 		typ: SYSLOGMSG,
-		lit: string(buf),
+		lit: buf,
 	}
 }
