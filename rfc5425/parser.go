@@ -28,46 +28,71 @@ func NewParser(r io.Reader, bestEffort bool) *Parser {
 	}
 }
 
-// Parse parses ...
-func (p *Parser) Parse() ([]rfc5424.SyslogMessage, error) {
-	for {
-		var tok Token
+type Result struct {
+	Message *rfc5424.SyslogMessage
+	Error   error
+}
 
-		// First token MUST be a MSGLEN
-		if tok = p.scan(); tok.typ != MSGLEN {
-			return nil, fmt.Errorf("found %s, expecting a %s", tok, MSGLEN)
+// Parse parses the bytes coming in the parser emitting rfc5424.SyslogMessage instances
+func (p *Parser) Parse() chan Result {
+	c := make(chan Result)
+
+	go func() {
+		defer close(c)
+		for {
+			var tok Token
+
+			// First token MUST be a MSGLEN
+			if tok = p.scan(); tok.typ != MSGLEN {
+				c <- Result{
+					Error: fmt.Errorf("found %s, expecting a %s", tok, MSGLEN),
+				}
+				break
+			}
+			fmt.Println(tok)
+
+			// Next we MUST see a WS
+			if tok = p.scan(); tok.typ != WS {
+				c <- Result{
+					Error: fmt.Errorf("found %s, expecting a %s", tok, WS),
+				}
+				break
+			}
+			fmt.Println(tok)
+
+			// Next we MUST see a SYSLOGMSG with length equal to MSGLEN
+			if tok = p.scan(); tok.typ != SYSLOGMSG {
+				if len(tok.lit) < int(p.s.msglen) && p.bestEffort {
+					// (todo)
+					// underflow case
+					// try besteffort
+				}
+				c <- Result{
+					Error: fmt.Errorf(`found %s after "%s", expecting a %s containing %d octets`, tok, tok.lit, SYSLOGMSG, p.s.msglen),
+				}
+				break
+			}
+			fmt.Println(tok)
+
+			// Parse the SYSLOGMSG literal pretending it is a RFC5424 syslog message
+			sys, err := p.p.Parse(tok.lit, &p.bestEffort)
+			c <- Result{
+				Message: sys,
+				Error:   err,
+			}
+
+			// Next we MUST see an EOF otherwise the parsing we'll start again
+			if tok = p.scan(); tok.typ == EOF {
+				break
+			} else {
+				p.unscan()
+			}
+
+			fmt.Println()
 		}
-		fmt.Println(tok)
+	}()
 
-		// Next we MUST see a WS
-		if tok = p.scan(); tok.typ != WS {
-			return nil, fmt.Errorf("found %s, expecting a %s", tok, WS)
-		}
-		fmt.Println(tok)
-
-		// Next we MUST see a SYSLOG with length equal to MSGLEN
-		if tok = p.scan(); tok.typ != SYSLOGMSG {
-			// (todo) > Try to parse syslogmsg literal also here?
-
-			return nil, fmt.Errorf(`found %s after "%s", expecting a %s containing %d octets`, tok, tok.lit, SYSLOGMSG, p.s.msglen)
-		}
-		fmt.Println(tok)
-		// Parse syslogmsg literal
-		sys, err := p.p.Parse(tok.lit, &p.bestEffort)
-		fmt.Printf("%#v\n", sys)
-		fmt.Println(err)
-
-		// Next we MUST see an EOF otherwise the parsing we'll start again
-		if tok = p.scan(); tok.typ == EOF {
-			break
-		} else {
-			p.unscan()
-		}
-
-		fmt.Println()
-	}
-
-	return nil, nil
+	return c
 }
 
 // scan returns the next token from the underlying scanner.
