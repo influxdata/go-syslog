@@ -34,15 +34,16 @@ action mark {
 }
 
 action markmsg {
-	m.msg_at = m.p
+	m.msgat = m.p
 }
 
 action set_prival {
-	output.SetPriority(uint8(unsafeUTF8DecimalCodePointsToInt(m.text())))
+	output.priority = uint8(unsafeUTF8DecimalCodePointsToInt(m.text()))
+	output.prioritySet = true
 }
 
 action set_version {
-	output.Version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
+	output.version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
 }
 
 action set_timestamp {
@@ -51,60 +52,51 @@ action set_timestamp {
 		fhold;
     	fgoto fail;
     } else {
-        output.Timestamp = &t
+        output.timestamp = t
+		output.timestampSet = true
     }
 }
 
 action set_hostname {
-	if hostname := string(m.text()); hostname != "-" {
-		output.Hostname = &hostname
-	}
+	output.hostname = string(m.text())
 }
 
 action set_appname {
-	if appname := string(m.text()); appname != "-" {
-		output.Appname = &appname
-	}
+	output.appname = string(m.text())
 }
 
 action set_procid {
-	if procid := string(m.text()); procid != "-" {
-		output.ProcID = &procid
-	}
+	output.procID = string(m.text())
 }
 
 action set_msgid {
-	if msgid := string(m.text()); msgid != "-" {
-		output.MsgID = &msgid
-	}
+	output.msgID = string(m.text())
 }
 
-
 action ini_elements {
-	output.StructuredData = &(map[string]map[string]string{})
+	output.structuredData = map[string]map[string]string{}
 }
 
 action set_id {
-	if elements, ok := interface{}(output.StructuredData).(*map[string]map[string]string); ok {
+	if _, ok := output.structuredData[string(m.text())]; ok {
+		// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
+		m.err = fmt.Errorf(errSdIDDuplicated, m.p)
+		fhold;
+		fgoto fail;
+	} else {
 		id := string(m.text())
-		if _, ok := (*elements)[id]; ok {
-			// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
-			m.err = fmt.Errorf(errSdIDDuplicated, m.p)
-			fhold;
-			fgoto fail;
-		} else {
-			(*elements)[id] = map[string]string{}
-			m.currentelem = id
-		}
+		output.structuredData[id] = map[string]string{}
+		output.hasElements = true
+		m.currentelem = id
 	}
 }
 
 action ini_sdparam {
-	m.backslash_at = []int{}
+	m.backslashat = []int{}
 }
 
 action add_slash {
-	m.backslash_at = append(m.backslash_at, m.p)
+	m.backslashat = append(m.backslashat, m.p)
 }
 
 action set_paramname {
@@ -112,31 +104,29 @@ action set_paramname {
 }
 
 action set_paramvalue {
-	if elements, ok := interface{}(output.StructuredData).(*map[string]map[string]string); ok {
+	if output.hasElements {
 		// (fixme) > what if SD-PARAM-NAME already exist for the current element (ie., current SD-ID)?
 
 		// Store text
 		text := m.text()
 		
 		// Strip backslashes only when there are ...
-		if len(m.backslash_at) > 0 {
+		if len(m.backslashat) > 0 {
 			// We need a copy here to not modify m.data
 			cp := append([]byte(nil), text...)
-			for _, pos := range m.backslash_at {
+			for _, pos := range m.backslashat {
 				at := pos - m.pb
 				cp = append(cp[:at], cp[(at + 1):]...)
 			}
 			
 			text = cp
 		}
-		(*elements)[m.currentelem][m.currentparam] = string(text)
+		output.structuredData[m.currentelem][m.currentparam] = string(text)
 	}
 }
 
 action set_msg {
-	if msg := string(m.text()); msg != "" {
-		output.Message = &msg
-	}
+	output.message = string(m.text())
 }
 
 action err_prival {
@@ -194,9 +184,9 @@ action err_structureddata {
 }
 
 action err_sdid {
-	delete(*output.StructuredData, m.currentelem)
-	if len(*output.StructuredData) == 0 {
-		output.StructuredData = nil
+	delete(output.structuredData, m.currentelem)
+	if len(output.structuredData) == 0 {
+		output.hasElements = false
 	}
 	m.err = fmt.Errorf(errSdID, m.p)
 	fhold;
@@ -204,8 +194,8 @@ action err_sdid {
 }
 
 action err_sdparam {
-	if elements, ok := interface{}(output.StructuredData).(*map[string]map[string]string); ok {
-		delete((*elements)[m.currentelem], m.currentparam)
+	if len(output.structuredData) > 0 {
+		delete(output.structuredData[m.currentelem], m.currentparam)
 	}
 	m.err = fmt.Errorf(errSdParam, m.p)
 	fhold;
@@ -214,11 +204,9 @@ action err_sdparam {
 
 action err_msg {
 	// If error encountered within the message rule ...
-	if m.msg_at > 0 {
+	if m.msgat > 0 {
 		// Save the text until valid (m.p is where the parser has stopped)
-		if trunc := string(m.data[m.msg_at:m.p]); trunc != "" {
-			output.Message = &trunc
-		}
+		output.message = string(m.data[m.msgat:m.p])
 	}
 
 	m.err = fmt.Errorf(errMsg, m.p)
@@ -354,8 +342,8 @@ type machine struct {
 	err          error
 	currentelem  string
 	currentparam string
-	msg_at       int
-	backslash_at []int
+	msgat        int
+	backslashat  []int
 }
 
 // NewMachine creates a new FSM able to parse RFC5424 syslog messages.
@@ -393,23 +381,23 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 	m.data = input
 	m.p = 0
 	m.pb = 0
-	m.msg_at = 0
-	m.backslash_at = []int{}
+	m.msgat = 0
+	m.backslashat = []int{}
 	m.pe = len(input)
 	m.eof = len(input)
 	m.err = nil
-	output := &SyslogMessage{}
+	output := &syslogMessage{}
 
     %% write init;
     %% write exec;
 
 	if m.cs < first_final || m.cs == en_fail {
-		if bestEffort != nil && *bestEffort != false && output.Valid() {
+		if bestEffort != nil && *bestEffort && output.valid() {
 			// An error occurred but partial parsing is on and partial message is minimally valid
-			return output, m.err
+			return output.export(), m.err
 		}
 		return nil, m.err
 	}
 
-	return output, nil
+	return output.export(), nil
 }

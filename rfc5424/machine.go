@@ -1,4 +1,3 @@
-//line rfc5424/machine.go.rl:1
 package rfc5424
 
 import (
@@ -24,16 +23,13 @@ var (
 	errParse          = "parsing error [col %d]"
 )
 
-//line rfc5424/machine.go.rl:345
 
-//line rfc5424/machine.go:34
 const start int = 1
 const first_final int = 603
 
 const en_fail int = 607
 const en_main int = 1
 
-//line rfc5424/machine.go.rl:348
 type machine struct {
 	data         []byte
 	cs           int
@@ -42,19 +38,14 @@ type machine struct {
 	err          error
 	currentelem  string
 	currentparam string
-	msg_at       int
-	backslash_at []int
+	msgat        int
+	backslashat  []int
 }
 
 // NewMachine creates a new FSM able to parse RFC5424 syslog messages.
 func NewMachine() *machine {
 	m := &machine{}
 
-//line rfc5424/machine.go.rl:366
-//line rfc5424/machine.go.rl:367
-//line rfc5424/machine.go.rl:368
-//line rfc5424/machine.go.rl:369
-//line rfc5424/machine.go.rl:370
 	return m
 }
 
@@ -80,21 +71,18 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 	m.data = input
 	m.p = 0
 	m.pb = 0
-	m.msg_at = 0
-	m.backslash_at = []int{}
+	m.msgat = 0
+	m.backslashat = []int{}
 	m.pe = len(input)
 	m.eof = len(input)
 	m.err = nil
-	output := &SyslogMessage{}
+	output := &syslogMessage{}
 
-//line rfc5424/machine.go:104
 	{
 		m.cs = start
 	}
 
-//line rfc5424/machine.go.rl:404
 
-//line rfc5424/machine.go:111
 	{
 		if (m.p) == (m.pe) {
 			goto _test_eof
@@ -1324,7 +1312,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr0
 	tr0:
-//line rfc5424/machine.go.rl:148
 		m.err = fmt.Errorf(errPri, m.p)
 		(m.p)--
 
@@ -1334,7 +1321,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr2:
-//line rfc5424/machine.go.rl:142
 		m.err = fmt.Errorf(errPrival, m.p)
 		(m.p)--
 
@@ -1342,7 +1328,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto st607
 		}
 
-//line rfc5424/machine.go.rl:148
 		m.err = fmt.Errorf(errPri, m.p)
 		(m.p)--
 
@@ -1350,7 +1335,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto st607
 		}
 
-//line rfc5424/machine.go.rl:235
 		m.err = fmt.Errorf(errParse, m.p)
 		(m.p)--
 
@@ -1360,7 +1344,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr7:
-//line rfc5424/machine.go.rl:154
 		m.err = fmt.Errorf(errVersion, m.p)
 		(m.p)--
 
@@ -1368,7 +1351,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto st607
 		}
 
-//line rfc5424/machine.go.rl:235
 		m.err = fmt.Errorf(errParse, m.p)
 		(m.p)--
 
@@ -1378,7 +1360,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr9:
-//line rfc5424/machine.go.rl:235
 		m.err = fmt.Errorf(errParse, m.p)
 		(m.p)--
 
@@ -1388,7 +1369,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr15:
-//line rfc5424/machine.go.rl:166
 		m.err = fmt.Errorf(errHostname, m.p)
 		(m.p)--
 
@@ -1396,7 +1376,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto st607
 		}
 
-//line rfc5424/machine.go.rl:235
 		m.err = fmt.Errorf(errParse, m.p)
 		(m.p)--
 
@@ -1406,7 +1385,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr19:
-//line rfc5424/machine.go.rl:172
 		m.err = fmt.Errorf(errAppname, m.p)
 		(m.p)--
 
@@ -1414,7 +1392,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto st607
 		}
 
-//line rfc5424/machine.go.rl:235
 		m.err = fmt.Errorf(errParse, m.p)
 		(m.p)--
 
@@ -1424,7 +1401,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr23:
-//line rfc5424/machine.go.rl:178
 		m.err = fmt.Errorf(errProcid, m.p)
 		(m.p)--
 
@@ -1432,7 +1408,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto st607
 		}
 
-//line rfc5424/machine.go.rl:235
 		m.err = fmt.Errorf(errParse, m.p)
 		(m.p)--
 
@@ -1442,7 +1417,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr27:
-//line rfc5424/machine.go.rl:184
 		m.err = fmt.Errorf(errMsgid, m.p)
 		(m.p)--
 
@@ -1450,7 +1424,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto st607
 		}
 
-//line rfc5424/machine.go.rl:235
 		m.err = fmt.Errorf(errParse, m.p)
 		(m.p)--
 
@@ -1460,7 +1433,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr29:
-//line rfc5424/machine.go.rl:184
 		m.err = fmt.Errorf(errMsgid, m.p)
 		(m.p)--
 
@@ -1470,7 +1442,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr32:
-//line rfc5424/machine.go.rl:190
 		m.err = fmt.Errorf(errStructuredData, m.p)
 		(m.p)--
 
@@ -1480,14 +1451,11 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr35:
-//line rfc5424/machine.go.rl:215
 
 		// If error encountered within the message rule ...
-		if m.msg_at > 0 {
+		if m.msgat > 0 {
 			// Save the text until valid (m.p is where the parser has stopped)
-			if trunc := string(m.data[m.msg_at:m.p]); trunc != "" {
-				output.Message = &trunc
-			}
+			output.message = string(m.data[m.msgat:m.p])
 		}
 
 		m.err = fmt.Errorf(errMsg, m.p)
@@ -1497,7 +1465,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto st607
 		}
 
-//line rfc5424/machine.go.rl:235
 		m.err = fmt.Errorf(errParse, m.p)
 		(m.p)--
 
@@ -1507,10 +1474,9 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr39:
-//line rfc5424/machine.go.rl:196
-		delete(*output.StructuredData, m.currentelem)
-		if len(*output.StructuredData) == 0 {
-			output.StructuredData = nil
+		delete(output.structuredData, m.currentelem)
+		if len(output.structuredData) == 0 {
+			output.hasElements = false
 		}
 		m.err = fmt.Errorf(errSdID, m.p)
 		(m.p)--
@@ -1519,7 +1485,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto st607
 		}
 
-//line rfc5424/machine.go.rl:190
 		m.err = fmt.Errorf(errStructuredData, m.p)
 		(m.p)--
 
@@ -1529,27 +1494,24 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr41:
-//line rfc5424/machine.go.rl:87
-		if elements, ok := interface{}(output.StructuredData).(*map[string]map[string]string); ok {
-			id := string(m.text())
-			if _, ok := (*elements)[id]; ok {
-				// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
-				m.err = fmt.Errorf(errSdIDDuplicated, m.p)
-				(m.p)--
+		if _, ok := output.structuredData[string(m.text())]; ok {
+			// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
+			m.err = fmt.Errorf(errSdIDDuplicated, m.p)
+			(m.p)--
 
-				{
-					goto st607
-				}
-			} else {
-				(*elements)[id] = map[string]string{}
-				m.currentelem = id
+			{
+				goto st607
 			}
+		} else {
+			id := string(m.text())
+			output.structuredData[id] = map[string]string{}
+			output.hasElements = true
+			m.currentelem = id
 		}
 
-//line rfc5424/machine.go.rl:196
-		delete(*output.StructuredData, m.currentelem)
-		if len(*output.StructuredData) == 0 {
-			output.StructuredData = nil
+		delete(output.structuredData, m.currentelem)
+		if len(output.structuredData) == 0 {
+			output.hasElements = false
 		}
 		m.err = fmt.Errorf(errSdID, m.p)
 		(m.p)--
@@ -1558,7 +1520,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto st607
 		}
 
-//line rfc5424/machine.go.rl:190
 		m.err = fmt.Errorf(errStructuredData, m.p)
 		(m.p)--
 
@@ -1568,9 +1529,8 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr45:
-//line rfc5424/machine.go.rl:206
-		if elements, ok := interface{}(output.StructuredData).(*map[string]map[string]string); ok {
-			delete((*elements)[m.currentelem], m.currentparam)
+		if len(output.structuredData) > 0 {
+			delete(output.structuredData[m.currentelem], m.currentparam)
 		}
 		m.err = fmt.Errorf(errSdParam, m.p)
 		(m.p)--
@@ -1579,7 +1539,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto st607
 		}
 
-//line rfc5424/machine.go.rl:190
 		m.err = fmt.Errorf(errStructuredData, m.p)
 		(m.p)--
 
@@ -1589,7 +1548,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr83:
-//line rfc5424/machine.go.rl:229
 		m.err = fmt.Errorf(errEscape, m.p)
 		(m.p)--
 
@@ -1597,9 +1555,8 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto st607
 		}
 
-//line rfc5424/machine.go.rl:206
-		if elements, ok := interface{}(output.StructuredData).(*map[string]map[string]string); ok {
-			delete((*elements)[m.currentelem], m.currentparam)
+		if len(output.structuredData) > 0 {
+			delete(output.structuredData[m.currentelem], m.currentparam)
 		}
 		m.err = fmt.Errorf(errSdParam, m.p)
 		(m.p)--
@@ -1608,7 +1565,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto st607
 		}
 
-//line rfc5424/machine.go.rl:190
 		m.err = fmt.Errorf(errStructuredData, m.p)
 		(m.p)--
 
@@ -1618,7 +1574,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr588:
-//line rfc5424/machine.go.rl:160
 		m.err = fmt.Errorf(errTimestamp, m.p)
 		(m.p)--
 
@@ -1626,7 +1581,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto st607
 		}
 
-//line rfc5424/machine.go.rl:235
 		m.err = fmt.Errorf(errParse, m.p)
 		(m.p)--
 
@@ -1636,7 +1590,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr619:
-//line rfc5424/machine.go.rl:48
 		if t, e := time.Parse(time.RFC3339Nano, string(m.text())); e != nil {
 			m.err = fmt.Errorf("%s [col %d]", e, m.p)
 			(m.p)--
@@ -1645,10 +1598,10 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				goto st607
 			}
 		} else {
-			output.Timestamp = &t
+			output.timestamp = t
+			output.timestampSet = true
 		}
 
-//line rfc5424/machine.go.rl:235
 		m.err = fmt.Errorf(errParse, m.p)
 		(m.p)--
 
@@ -1658,7 +1611,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr645:
-//line rfc5424/machine.go.rl:190
 		m.err = fmt.Errorf(errStructuredData, m.p)
 		(m.p)--
 
@@ -1666,7 +1618,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto st607
 		}
 
-//line rfc5424/machine.go.rl:235
 		m.err = fmt.Errorf(errParse, m.p)
 		(m.p)--
 
@@ -1675,7 +1626,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 
 		goto st0
-//line rfc5424/machine.go:1656
 	st_case_0:
 	st0:
 		m.cs = 0
@@ -1696,7 +1646,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr2
 	tr3:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
 		goto st3
@@ -1705,10 +1654,9 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof3
 		}
 	st_case_3:
-//line rfc5424/machine.go.rl:40
-		output.SetPriority(uint8(unsafeUTF8DecimalCodePointsToInt(m.text())))
+		output.priority = uint8(unsafeUTF8DecimalCodePointsToInt(m.text()))
+		output.prioritySet = true
 
-//line rfc5424/machine.go:1691
 		if (m.data)[(m.p)] == 62 {
 			goto st4
 		}
@@ -1723,7 +1671,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr7
 	tr8:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
 		goto st5
@@ -1732,10 +1679,8 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof5
 		}
 	st_case_5:
-//line rfc5424/machine.go.rl:44
-		output.Version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
+		output.version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
 
-//line rfc5424/machine.go:1720
 		if (m.data)[(m.p)] == 32 {
 			goto st6
 		}
@@ -1765,7 +1710,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr9
 	tr620:
-//line rfc5424/machine.go.rl:48
 		if t, e := time.Parse(time.RFC3339Nano, string(m.text())); e != nil {
 			m.err = fmt.Errorf("%s [col %d]", e, m.p)
 			(m.p)--
@@ -1774,7 +1718,8 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				goto st607
 			}
 		} else {
-			output.Timestamp = &t
+			output.timestamp = t
+			output.timestampSet = true
 		}
 
 		goto st8
@@ -1783,13 +1728,11 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof8
 		}
 	st_case_8:
-//line rfc5424/machine.go:1767
 		if 33 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 126 {
 			goto tr16
 		}
 		goto tr15
 	tr16:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
 		goto st9
@@ -1798,7 +1741,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof9
 		}
 	st_case_9:
-//line rfc5424/machine.go:1783
 		if (m.data)[(m.p)] == 32 {
 			goto tr17
 		}
@@ -1807,10 +1749,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr15
 	tr17:
-//line rfc5424/machine.go.rl:58
-		if hostname := string(m.text()); hostname != "-" {
-			output.Hostname = &hostname
-		}
+		output.hostname = string(m.text())
 
 		goto st10
 	st10:
@@ -1818,13 +1757,11 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof10
 		}
 	st_case_10:
-//line rfc5424/machine.go:1804
 		if 33 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 126 {
 			goto tr20
 		}
 		goto tr19
 	tr20:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
 		goto st11
@@ -1833,7 +1770,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof11
 		}
 	st_case_11:
-//line rfc5424/machine.go:1820
 		if (m.data)[(m.p)] == 32 {
 			goto tr21
 		}
@@ -1842,10 +1778,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr19
 	tr21:
-//line rfc5424/machine.go.rl:64
-		if appname := string(m.text()); appname != "-" {
-			output.Appname = &appname
-		}
+		output.appname = string(m.text())
 
 		goto st12
 	st12:
@@ -1853,13 +1786,11 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof12
 		}
 	st_case_12:
-//line rfc5424/machine.go:1841
 		if 33 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 126 {
 			goto tr24
 		}
 		goto tr23
 	tr24:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
 		goto st13
@@ -1868,7 +1799,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof13
 		}
 	st_case_13:
-//line rfc5424/machine.go:1857
 		if (m.data)[(m.p)] == 32 {
 			goto tr25
 		}
@@ -1877,10 +1807,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr23
 	tr25:
-//line rfc5424/machine.go.rl:70
-		if procid := string(m.text()); procid != "-" {
-			output.ProcID = &procid
-		}
+		output.procID = string(m.text())
 
 		goto st14
 	st14:
@@ -1888,13 +1815,11 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof14
 		}
 	st_case_14:
-//line rfc5424/machine.go:1878
 		if 33 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 126 {
 			goto tr28
 		}
 		goto tr27
 	tr28:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
 		goto st15
@@ -1903,7 +1828,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof15
 		}
 	st_case_15:
-//line rfc5424/machine.go:1894
 		if (m.data)[(m.p)] == 32 {
 			goto tr30
 		}
@@ -1912,10 +1836,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr29
 	tr30:
-//line rfc5424/machine.go.rl:76
-		if msgid := string(m.text()); msgid != "-" {
-			output.MsgID = &msgid
-		}
+		output.msgID = string(m.text())
 
 		goto st16
 	st16:
@@ -1923,7 +1844,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof16
 		}
 	st_case_16:
-//line rfc5424/machine.go:1915
 		switch (m.data)[(m.p)] {
 		case 45:
 			goto st603
@@ -1979,11 +1899,9 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr632
 	tr632:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
-//line rfc5424/machine.go.rl:36
-		m.msg_at = m.p
+		m.msgat = m.p
 
 		goto st605
 	st605:
@@ -1991,7 +1909,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof605
 		}
 	st_case_605:
-//line rfc5424/machine.go:1985
 		switch (m.data)[(m.p)] {
 		case 224:
 			goto st18
@@ -2026,11 +1943,9 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto st605
 	tr633:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
-//line rfc5424/machine.go.rl:36
-		m.msg_at = m.p
+		m.msgat = m.p
 
 		goto st17
 	st17:
@@ -2038,17 +1953,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof17
 		}
 	st_case_17:
-//line rfc5424/machine.go:2034
 		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
 			goto st605
 		}
 		goto tr35
 	tr634:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
-//line rfc5424/machine.go.rl:36
-		m.msg_at = m.p
+		m.msgat = m.p
 
 		goto st18
 	st18:
@@ -2056,17 +1968,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof18
 		}
 	st_case_18:
-//line rfc5424/machine.go:2054
 		if 160 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
 			goto st17
 		}
 		goto tr35
 	tr635:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
-//line rfc5424/machine.go.rl:36
-		m.msg_at = m.p
+		m.msgat = m.p
 
 		goto st19
 	st19:
@@ -2074,17 +1983,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof19
 		}
 	st_case_19:
-//line rfc5424/machine.go:2074
 		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
 			goto st17
 		}
 		goto tr35
 	tr636:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
-//line rfc5424/machine.go.rl:36
-		m.msg_at = m.p
+		m.msgat = m.p
 
 		goto st20
 	st20:
@@ -2092,17 +1998,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof20
 		}
 	st_case_20:
-//line rfc5424/machine.go:2094
 		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 159 {
 			goto st17
 		}
 		goto tr35
 	tr637:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
-//line rfc5424/machine.go.rl:36
-		m.msg_at = m.p
+		m.msgat = m.p
 
 		goto st21
 	st21:
@@ -2110,17 +2013,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof21
 		}
 	st_case_21:
-//line rfc5424/machine.go:2114
 		if 144 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
 			goto st19
 		}
 		goto tr35
 	tr638:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
-//line rfc5424/machine.go.rl:36
-		m.msg_at = m.p
+		m.msgat = m.p
 
 		goto st22
 	st22:
@@ -2128,17 +2028,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof22
 		}
 	st_case_22:
-//line rfc5424/machine.go:2134
 		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
 			goto st19
 		}
 		goto tr35
 	tr639:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
-//line rfc5424/machine.go.rl:36
-		m.msg_at = m.p
+		m.msgat = m.p
 
 		goto st23
 	st23:
@@ -2146,14 +2043,12 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof23
 		}
 	st_case_23:
-//line rfc5424/machine.go:2154
 		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 143 {
 			goto st19
 		}
 		goto tr35
 	tr34:
-//line rfc5424/machine.go.rl:83
-		output.StructuredData = &(map[string]map[string]string{})
+		output.structuredData = map[string]map[string]string{}
 
 		goto st24
 	st24:
@@ -2161,7 +2056,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof24
 		}
 	st_case_24:
-//line rfc5424/machine.go:2170
 		if (m.data)[(m.p)] == 33 {
 			goto tr40
 		}
@@ -2179,7 +2073,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr39
 	tr40:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
 		goto st25
@@ -2188,7 +2081,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof25
 		}
 	st_case_25:
-//line rfc5424/machine.go:2198
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr42
@@ -2207,21 +2099,19 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr41
 	tr42:
-//line rfc5424/machine.go.rl:87
-		if elements, ok := interface{}(output.StructuredData).(*map[string]map[string]string); ok {
-			id := string(m.text())
-			if _, ok := (*elements)[id]; ok {
-				// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
-				m.err = fmt.Errorf(errSdIDDuplicated, m.p)
-				(m.p)--
+		if _, ok := output.structuredData[string(m.text())]; ok {
+			// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
+			m.err = fmt.Errorf(errSdIDDuplicated, m.p)
+			(m.p)--
 
-				{
-					goto st607
-				}
-			} else {
-				(*elements)[id] = map[string]string{}
-				m.currentelem = id
+			{
+				goto st607
 			}
+		} else {
+			id := string(m.text())
+			output.structuredData[id] = map[string]string{}
+			output.hasElements = true
+			m.currentelem = id
 		}
 
 		goto st26
@@ -2230,7 +2120,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof26
 		}
 	st_case_26:
-//line rfc5424/machine.go:2239
 		if (m.data)[(m.p)] == 33 {
 			goto tr46
 		}
@@ -2248,10 +2137,8 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr45
 	tr46:
-//line rfc5424/machine.go.rl:102
-		m.backslash_at = []int{}
+		m.backslashat = []int{}
 
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
 		goto st27
@@ -2260,7 +2147,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof27
 		}
 	st_case_27:
-//line rfc5424/machine.go:2271
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st28
@@ -2886,7 +2772,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr45
 	tr48:
-//line rfc5424/machine.go.rl:110
 		m.currentparam = string(m.text())
 
 		goto st59
@@ -2895,7 +2780,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof59
 		}
 	st_case_59:
-//line rfc5424/machine.go:2907
 		if (m.data)[(m.p)] == 34 {
 			goto st60
 		}
@@ -2945,7 +2829,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr80
 	tr80:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
 		goto st61
@@ -2954,7 +2837,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof61
 		}
 	st_case_61:
-//line rfc5424/machine.go:2967
 		switch (m.data)[(m.p)] {
 		case 34:
 			goto tr92
@@ -2995,51 +2877,48 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto st61
 	tr81:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
-//line rfc5424/machine.go.rl:114
-		if elements, ok := interface{}(output.StructuredData).(*map[string]map[string]string); ok {
+		if output.hasElements {
 			// (fixme) > what if SD-PARAM-NAME already exist for the current element (ie., current SD-ID)?
 
 			// Store text
 			text := m.text()
 
 			// Strip backslashes only when there are ...
-			if len(m.backslash_at) > 0 {
+			if len(m.backslashat) > 0 {
 				// We need a copy here to not modify m.data
 				cp := append([]byte(nil), text...)
-				for _, pos := range m.backslash_at {
+				for _, pos := range m.backslashat {
 					at := pos - m.pb
 					cp = append(cp[:at], cp[(at+1):]...)
 				}
 
 				text = cp
 			}
-			(*elements)[m.currentelem][m.currentparam] = string(text)
+			output.structuredData[m.currentelem][m.currentparam] = string(text)
 		}
 
 		goto st62
 	tr92:
-//line rfc5424/machine.go.rl:114
-		if elements, ok := interface{}(output.StructuredData).(*map[string]map[string]string); ok {
+		if output.hasElements {
 			// (fixme) > what if SD-PARAM-NAME already exist for the current element (ie., current SD-ID)?
 
 			// Store text
 			text := m.text()
 
 			// Strip backslashes only when there are ...
-			if len(m.backslash_at) > 0 {
+			if len(m.backslashat) > 0 {
 				// We need a copy here to not modify m.data
 				cp := append([]byte(nil), text...)
-				for _, pos := range m.backslash_at {
+				for _, pos := range m.backslashat {
 					at := pos - m.pb
 					cp = append(cp[:at], cp[(at+1):]...)
 				}
 
 				text = cp
 			}
-			(*elements)[m.currentelem][m.currentparam] = string(text)
+			output.structuredData[m.currentelem][m.currentparam] = string(text)
 		}
 
 		goto st62
@@ -3048,7 +2927,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof62
 		}
 	st_case_62:
-//line rfc5424/machine.go:3064
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto st26
@@ -3057,21 +2935,19 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr45
 	tr44:
-//line rfc5424/machine.go.rl:87
-		if elements, ok := interface{}(output.StructuredData).(*map[string]map[string]string); ok {
-			id := string(m.text())
-			if _, ok := (*elements)[id]; ok {
-				// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
-				m.err = fmt.Errorf(errSdIDDuplicated, m.p)
-				(m.p)--
+		if _, ok := output.structuredData[string(m.text())]; ok {
+			// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
+			m.err = fmt.Errorf(errSdIDDuplicated, m.p)
+			(m.p)--
 
-				{
-					goto st607
-				}
-			} else {
-				(*elements)[id] = map[string]string{}
-				m.currentelem = id
+			{
+				goto st607
 			}
+		} else {
+			id := string(m.text())
+			output.structuredData[id] = map[string]string{}
+			output.hasElements = true
+			m.currentelem = id
 		}
 
 		goto st606
@@ -3080,7 +2956,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof606
 		}
 	st_case_606:
-//line rfc5424/machine.go:3095
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto st604
@@ -3089,16 +2964,13 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr645
 	tr82:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
-//line rfc5424/machine.go.rl:106
-		m.backslash_at = append(m.backslash_at, m.p)
+		m.backslashat = append(m.backslashat, m.p)
 
 		goto st63
 	tr93:
-//line rfc5424/machine.go.rl:106
-		m.backslash_at = append(m.backslash_at, m.p)
+		m.backslashat = append(m.backslashat, m.p)
 
 		goto st63
 	st63:
@@ -3106,7 +2978,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof63
 		}
 	st_case_63:
-//line rfc5424/machine.go:3124
 		if (m.data)[(m.p)] == 34 {
 			goto st61
 		}
@@ -3115,7 +2986,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr83
 	tr84:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
 		goto st64
@@ -3124,13 +2994,11 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof64
 		}
 	st_case_64:
-//line rfc5424/machine.go:3143
 		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
 			goto st61
 		}
 		goto tr45
 	tr85:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
 		goto st65
@@ -3139,13 +3007,11 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof65
 		}
 	st_case_65:
-//line rfc5424/machine.go:3159
 		if 160 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
 			goto st64
 		}
 		goto tr45
 	tr86:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
 		goto st66
@@ -3154,13 +3020,11 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof66
 		}
 	st_case_66:
-//line rfc5424/machine.go:3175
 		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
 			goto st64
 		}
 		goto tr45
 	tr87:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
 		goto st67
@@ -3169,13 +3033,11 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof67
 		}
 	st_case_67:
-//line rfc5424/machine.go:3191
 		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 159 {
 			goto st64
 		}
 		goto tr45
 	tr88:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
 		goto st68
@@ -3184,13 +3046,11 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof68
 		}
 	st_case_68:
-//line rfc5424/machine.go:3207
 		if 144 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
 			goto st66
 		}
 		goto tr45
 	tr89:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
 		goto st69
@@ -3199,13 +3059,11 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof69
 		}
 	st_case_69:
-//line rfc5424/machine.go:3223
 		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
 			goto st66
 		}
 		goto tr45
 	tr90:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
 		goto st70
@@ -3214,7 +3072,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof70
 		}
 	st_case_70:
-//line rfc5424/machine.go:3239
 		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 143 {
 			goto st66
 		}
@@ -9388,7 +9245,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr15
 	tr13:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
 		goto st561
@@ -9397,7 +9253,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof561
 		}
 	st_case_561:
-//line rfc5424/machine.go:9423
 		if 48 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 57 {
 			goto st562
 		}
@@ -9798,10 +9653,8 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof598
 		}
 	st_case_598:
-//line rfc5424/machine.go.rl:44
-		output.Version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
+		output.version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
 
-//line rfc5424/machine.go:9828
 		if (m.data)[(m.p)] == 32 {
 			goto st6
 		}
@@ -9814,16 +9667,13 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof599
 		}
 	st_case_599:
-//line rfc5424/machine.go.rl:44
-		output.Version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
+		output.version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
 
-//line rfc5424/machine.go:9845
 		if (m.data)[(m.p)] == 32 {
 			goto st6
 		}
 		goto tr7
 	tr4:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
 		goto st600
@@ -9832,10 +9682,9 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof600
 		}
 	st_case_600:
-//line rfc5424/machine.go.rl:40
-		output.SetPriority(uint8(unsafeUTF8DecimalCodePointsToInt(m.text())))
+		output.priority = uint8(unsafeUTF8DecimalCodePointsToInt(m.text()))
+		output.prioritySet = true
 
-//line rfc5424/machine.go:9865
 		switch (m.data)[(m.p)] {
 		case 57:
 			goto st602
@@ -9847,7 +9696,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr2
 	tr5:
-//line rfc5424/machine.go.rl:32
 		m.pb = m.p
 
 		goto st601
@@ -9856,10 +9704,9 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof601
 		}
 	st_case_601:
-//line rfc5424/machine.go.rl:40
-		output.SetPriority(uint8(unsafeUTF8DecimalCodePointsToInt(m.text())))
+		output.priority = uint8(unsafeUTF8DecimalCodePointsToInt(m.text()))
+		output.prioritySet = true
 
-//line rfc5424/machine.go:9891
 		if (m.data)[(m.p)] == 62 {
 			goto st4
 		}
@@ -9872,10 +9719,9 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof602
 		}
 	st_case_602:
-//line rfc5424/machine.go.rl:40
-		output.SetPriority(uint8(unsafeUTF8DecimalCodePointsToInt(m.text())))
+		output.priority = uint8(unsafeUTF8DecimalCodePointsToInt(m.text()))
+		output.prioritySet = true
 
-//line rfc5424/machine.go:9908
 		if (m.data)[(m.p)] == 62 {
 			goto st4
 		}
@@ -11721,13 +11567,9 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		if (m.p) == (m.eof) {
 			switch m.cs {
 			case 605:
-//line rfc5424/machine.go.rl:136
-				if msg := string(m.text()); msg != "" {
-					output.Message = &msg
-				}
+				output.message = string(m.text())
 
 			case 1:
-//line rfc5424/machine.go.rl:148
 				m.err = fmt.Errorf(errPri, m.p)
 				(m.p)--
 
@@ -11736,7 +11578,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 15, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132:
-//line rfc5424/machine.go.rl:184
 				m.err = fmt.Errorf(errMsgid, m.p)
 				(m.p)--
 
@@ -11745,7 +11586,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 16:
-//line rfc5424/machine.go.rl:190
 				m.err = fmt.Errorf(errStructuredData, m.p)
 				(m.p)--
 
@@ -11754,7 +11594,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 6, 7:
-//line rfc5424/machine.go.rl:235
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
 
@@ -11763,10 +11602,8 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 5:
-//line rfc5424/machine.go.rl:44
-				output.Version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
+				output.version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
 
-//line rfc5424/machine.go.rl:235
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
 
@@ -11775,7 +11612,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 585:
-//line rfc5424/machine.go.rl:48
 				if t, e := time.Parse(time.RFC3339Nano, string(m.text())); e != nil {
 					m.err = fmt.Errorf("%s [col %d]", e, m.p)
 					(m.p)--
@@ -11784,10 +11620,10 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 						goto st607
 					}
 				} else {
-					output.Timestamp = &t
+					output.timestamp = t
+					output.timestampSet = true
 				}
 
-//line rfc5424/machine.go.rl:235
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
 
@@ -11796,7 +11632,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 4:
-//line rfc5424/machine.go.rl:154
 				m.err = fmt.Errorf(errVersion, m.p)
 				(m.p)--
 
@@ -11804,7 +11639,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 					goto st607
 				}
 
-//line rfc5424/machine.go.rl:235
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
 
@@ -11813,7 +11647,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 561, 562, 563, 564, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 580, 581, 582, 583, 584, 586, 587, 588, 589, 590, 591, 592, 593, 594, 595, 596, 597:
-//line rfc5424/machine.go.rl:160
 				m.err = fmt.Errorf(errTimestamp, m.p)
 				(m.p)--
 
@@ -11821,7 +11654,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 					goto st607
 				}
 
-//line rfc5424/machine.go.rl:235
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
 
@@ -11830,7 +11662,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 8, 9, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545, 546, 547, 548, 549, 550, 551, 552, 553, 554, 555, 556, 557, 558, 559, 560:
-//line rfc5424/machine.go.rl:166
 				m.err = fmt.Errorf(errHostname, m.p)
 				(m.p)--
 
@@ -11838,7 +11669,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 					goto st607
 				}
 
-//line rfc5424/machine.go.rl:235
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
 
@@ -11847,7 +11677,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 10, 11, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306:
-//line rfc5424/machine.go.rl:172
 				m.err = fmt.Errorf(errAppname, m.p)
 				(m.p)--
 
@@ -11855,7 +11684,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 					goto st607
 				}
 
-//line rfc5424/machine.go.rl:235
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
 
@@ -11864,7 +11692,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 12, 13, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259:
-//line rfc5424/machine.go.rl:178
 				m.err = fmt.Errorf(errProcid, m.p)
 				(m.p)--
 
@@ -11872,7 +11699,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 					goto st607
 				}
 
-//line rfc5424/machine.go.rl:235
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
 
@@ -11881,7 +11707,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 14:
-//line rfc5424/machine.go.rl:184
 				m.err = fmt.Errorf(errMsgid, m.p)
 				(m.p)--
 
@@ -11889,7 +11714,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 					goto st607
 				}
 
-//line rfc5424/machine.go.rl:235
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
 
@@ -11898,10 +11722,9 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 24:
-//line rfc5424/machine.go.rl:196
-				delete(*output.StructuredData, m.currentelem)
-				if len(*output.StructuredData) == 0 {
-					output.StructuredData = nil
+				delete(output.structuredData, m.currentelem)
+				if len(output.structuredData) == 0 {
+					output.hasElements = false
 				}
 				m.err = fmt.Errorf(errSdID, m.p)
 				(m.p)--
@@ -11910,7 +11733,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 					goto st607
 				}
 
-//line rfc5424/machine.go.rl:190
 				m.err = fmt.Errorf(errStructuredData, m.p)
 				(m.p)--
 
@@ -11919,9 +11741,8 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 62, 64, 65, 66, 67, 68, 69, 70:
-//line rfc5424/machine.go.rl:206
-				if elements, ok := interface{}(output.StructuredData).(*map[string]map[string]string); ok {
-					delete((*elements)[m.currentelem], m.currentparam)
+				if len(output.structuredData) > 0 {
+					delete(output.structuredData[m.currentelem], m.currentparam)
 				}
 				m.err = fmt.Errorf(errSdParam, m.p)
 				(m.p)--
@@ -11930,7 +11751,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 					goto st607
 				}
 
-//line rfc5424/machine.go.rl:190
 				m.err = fmt.Errorf(errStructuredData, m.p)
 				(m.p)--
 
@@ -11939,14 +11759,11 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 17, 18, 19, 20, 21, 22, 23:
-//line rfc5424/machine.go.rl:215
 
 				// If error encountered within the message rule ...
-				if m.msg_at > 0 {
+				if m.msgat > 0 {
 					// Save the text until valid (m.p is where the parser has stopped)
-					if trunc := string(m.data[m.msg_at:m.p]); trunc != "" {
-						output.Message = &trunc
-					}
+					output.message = string(m.data[m.msgat:m.p])
 				}
 
 				m.err = fmt.Errorf(errMsg, m.p)
@@ -11956,7 +11773,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 					goto st607
 				}
 
-//line rfc5424/machine.go.rl:235
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
 
@@ -11965,39 +11781,31 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 604:
-//line rfc5424/machine.go.rl:32
 				m.pb = m.p
 
-//line rfc5424/machine.go.rl:36
-				m.msg_at = m.p
+				m.msgat = m.p
 
-//line rfc5424/machine.go.rl:136
-				if msg := string(m.text()); msg != "" {
-					output.Message = &msg
-				}
+				output.message = string(m.text())
 
 			case 25, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101:
-//line rfc5424/machine.go.rl:87
-				if elements, ok := interface{}(output.StructuredData).(*map[string]map[string]string); ok {
-					id := string(m.text())
-					if _, ok := (*elements)[id]; ok {
-						// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
-						m.err = fmt.Errorf(errSdIDDuplicated, m.p)
-						(m.p)--
+				if _, ok := output.structuredData[string(m.text())]; ok {
+					// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
+					m.err = fmt.Errorf(errSdIDDuplicated, m.p)
+					(m.p)--
 
-						{
-							goto st607
-						}
-					} else {
-						(*elements)[id] = map[string]string{}
-						m.currentelem = id
+					{
+						goto st607
 					}
+				} else {
+					id := string(m.text())
+					output.structuredData[id] = map[string]string{}
+					output.hasElements = true
+					m.currentelem = id
 				}
 
-//line rfc5424/machine.go.rl:196
-				delete(*output.StructuredData, m.currentelem)
-				if len(*output.StructuredData) == 0 {
-					output.StructuredData = nil
+				delete(output.structuredData, m.currentelem)
+				if len(output.structuredData) == 0 {
+					output.hasElements = false
 				}
 				m.err = fmt.Errorf(errSdID, m.p)
 				(m.p)--
@@ -12006,7 +11814,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 					goto st607
 				}
 
-//line rfc5424/machine.go.rl:190
 				m.err = fmt.Errorf(errStructuredData, m.p)
 				(m.p)--
 
@@ -12015,7 +11822,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 2, 3, 600, 601, 602:
-//line rfc5424/machine.go.rl:142
 				m.err = fmt.Errorf(errPrival, m.p)
 				(m.p)--
 
@@ -12023,7 +11829,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 					goto st607
 				}
 
-//line rfc5424/machine.go.rl:148
 				m.err = fmt.Errorf(errPri, m.p)
 				(m.p)--
 
@@ -12031,7 +11836,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 					goto st607
 				}
 
-//line rfc5424/machine.go.rl:235
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
 
@@ -12040,7 +11844,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 598, 599:
-//line rfc5424/machine.go.rl:154
 				m.err = fmt.Errorf(errVersion, m.p)
 				(m.p)--
 
@@ -12048,10 +11851,8 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 					goto st607
 				}
 
-//line rfc5424/machine.go.rl:44
-				output.Version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
+				output.version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
 
-//line rfc5424/machine.go.rl:235
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
 
@@ -12060,7 +11861,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 60, 61, 63:
-//line rfc5424/machine.go.rl:229
 				m.err = fmt.Errorf(errEscape, m.p)
 				(m.p)--
 
@@ -12068,9 +11868,8 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 					goto st607
 				}
 
-//line rfc5424/machine.go.rl:206
-				if elements, ok := interface{}(output.StructuredData).(*map[string]map[string]string); ok {
-					delete((*elements)[m.currentelem], m.currentparam)
+				if len(output.structuredData) > 0 {
+					delete(output.structuredData[m.currentelem], m.currentparam)
 				}
 				m.err = fmt.Errorf(errSdParam, m.p)
 				(m.p)--
@@ -12079,7 +11878,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 					goto st607
 				}
 
-//line rfc5424/machine.go.rl:190
 				m.err = fmt.Errorf(errStructuredData, m.p)
 				(m.p)--
 
@@ -12087,7 +11885,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 					goto st607
 				}
 
-//line rfc5424/machine.go:10875
 			}
 		}
 
@@ -12096,14 +11893,13 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 	}
 
-//line rfc5424/machine.go.rl:405
 	if m.cs < first_final || m.cs == en_fail {
-		if bestEffort != nil && *bestEffort != false && output.Valid() {
+		if bestEffort != nil && *bestEffort && output.valid() {
 			// An error occurred but partial parsing is on and partial message is minimally valid
-			return output, m.err
+			return output.export(), m.err
 		}
 		return nil, m.err
 	}
 
-	return output, nil
+	return output.export(), nil
 }
