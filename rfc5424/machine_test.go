@@ -253,7 +253,7 @@ var testCases = []testCase{
 		[]byte("<1>2 "),
 		false,
 		nil,
-		"parsing error [col 5]",
+		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 5]",
 		&SyslogMessage{
 			Priority: getUint8Address(1),
 			facility: getUint8Address(0),
@@ -305,6 +305,19 @@ var testCases = []testCase{
 		nil,
 		"expecting a version value in the range 1-999 [col 5]",
 		nil,
+	},
+	// Invalid, letter rather than timestamp
+	{
+		[]byte("<1>5 A"),
+		false,
+		nil,
+		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 5]",
+		&SyslogMessage{
+			Priority: getUint8Address(1),
+			facility: getUint8Address(0),
+			severity: getUint8Address(1),
+			Version:  5,
+		},
 	},
 	// Invalid, wrong year
 	{
