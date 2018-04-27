@@ -271,7 +271,7 @@ partialtime = timehour ':' timeminute ':' timesecond . timesecfrac?;
 
 fulltime = partialtime . timeoffset;
 
-timestamp = (nilvalue | (fulldate >mark 'T' fulltime %set_timestamp %err(set_timestamp))) <>err(err_timestamp);
+timestamp = (nilvalue | (fulldate >mark 'T' fulltime %set_timestamp %err(set_timestamp))) @err(err_timestamp);
 
 hostname = nilvalue | printusascii{1,255} >mark %set_hostname $err(err_hostname);
 
