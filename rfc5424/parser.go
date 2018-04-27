@@ -26,7 +26,7 @@ func (p *Parser) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) {
 
 	msg, err := p.machine.Parse(input, bestEffort)
 	if err != nil {
-		if bestEffort != nil && *bestEffort != false {
+		if bestEffort != nil && *bestEffort {
 			return msg, err
 		}
 		return nil, err
