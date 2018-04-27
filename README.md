@@ -77,29 +77,29 @@ make bench
 On my machine<sup>[1](#mymachine)</sup> this are the results obtained in best effort mode.
 
 ```
-BenchmarkParse/[no]_empty_input__________________________________-4             30000000               245 ns/op             176 B/op          3 allocs/op
-BenchmarkParse/[no]_multiple_syslog_messages_on_multiple_lines___-4             20000000               473 ns/op             224 B/op         15 allocs/op
-BenchmarkParse/[no]_impossible_timestamp_________________________-4             10000000              1115 ns/op             424 B/op         17 allocs/op
-BenchmarkParse/[no]_malformed_structured_data____________________-4             20000000               554 ns/op             320 B/op         15 allocs/op
-BenchmarkParse/[no]_with_duplicated_structured_data_id___________-4              5000000              1457 ns/op             656 B/op         29 allocs/op
-BenchmarkParse/[ok]_minimal______________________________________-4             30000000               292 ns/op             167 B/op         12 allocs/op
-BenchmarkParse/[ok]_average_message______________________________-4              3000000              2115 ns/op            1528 B/op         35 allocs/op
-BenchmarkParse/[ok]_complicated_message__________________________-4              5000000              1796 ns/op            1256 B/op         34 allocs/op
-BenchmarkParse/[ok]_very_long_message____________________________-4              2000000              4070 ns/op            2440 B/op         40 allocs/op
-BenchmarkParse/[ok]_all_max_length_and_complete__________________-4              3000000              2961 ns/op            1872 B/op         40 allocs/op
-BenchmarkParse/[ok]_all_max_length_except_structured_data_and_mes-4              5000000              1881 ns/op             841 B/op         23 allocs/op
-BenchmarkParse/[ok]_minimal_with_message_containing_newline______-4             20000000               351 ns/op             186 B/op         14 allocs/op
-BenchmarkParse/[ok]_w/o_procid,_w/o_structured_data,_with_message-4             10000000               987 ns/op             336 B/op         19 allocs/op
-BenchmarkParse/[ok]_minimal_with_UTF-8_message___________________-4             20000000               551 ns/op             295 B/op         14 allocs/op
-BenchmarkParse/[ok]_with_structured_data_id,_w/o_structured_data_-4             10000000              1011 ns/op             552 B/op         22 allocs/op
-BenchmarkParse/[ok]_with_multiple_structured_data________________-4              5000000              1525 ns/op            1192 B/op         30 allocs/op
-BenchmarkParse/[ok]_with_escaped_backslash_within_structured_data-4              5000000              1397 ns/op             896 B/op         29 allocs/op
-BenchmarkParse/[ok]_with_UTF-8_structured_data_param_value,_with_-4              5000000              1504 ns/op            1032 B/op         30 allocs/op
+[no]_empty_input__________________________________-4	30000000       253 ns/op     224 B/op       3 allocs/op
+[no]_multiple_syslog_messages_on_multiple_lines___-4	20000000       433 ns/op     304 B/op      12 allocs/op
+[no]_impossible_timestamp_________________________-4	10000000      1080 ns/op     528 B/op      11 allocs/op
+[no]_malformed_structured_data____________________-4	20000000       552 ns/op     400 B/op      12 allocs/op
+[no]_with_duplicated_structured_data_id___________-4	 5000000      1246 ns/op     688 B/op      17 allocs/op
+[ok]_minimal______________________________________-4	30000000       264 ns/op     247 B/op       9 allocs/op
+[ok]_average_message______________________________-4	 5000000      1984 ns/op    1536 B/op      26 allocs/op
+[ok]_complicated_message__________________________-4	 5000000      1644 ns/op    1280 B/op      25 allocs/op
+[ok]_very_long_message____________________________-4	 2000000      3826 ns/op    2464 B/op      28 allocs/op
+[ok]_all_max_length_and_complete__________________-4	 3000000      2792 ns/op    1888 B/op      28 allocs/op
+[ok]_all_max_length_except_structured_data_and_mes-4	 5000000      1830 ns/op     883 B/op      13 allocs/op
+[ok]_minimal_with_message_containing_newline______-4	20000000       294 ns/op     250 B/op      10 allocs/op
+[ok]_w/o_procid,_w/o_structured_data,_with_message-4	10000000       956 ns/op     364 B/op      11 allocs/op
+[ok]_minimal_with_UTF-8_message___________________-4	20000000       586 ns/op     359 B/op      10 allocs/op
+[ok]_with_structured_data_id,_w/o_structured_data_-4	10000000       998 ns/op     592 B/op      14 allocs/op
+[ok]_with_multiple_structured_data________________-4	 5000000      1538 ns/op    1232 B/op      22 allocs/op
+[ok]_with_escaped_backslash_within_structured_data-4	 5000000      1316 ns/op     920 B/op      20 allocs/op
+[ok]_with_UTF-8_structured_data_param_value,_with_-4	 5000000      1580 ns/op    1050 B/op      21 allocs/op
 ```
 
 As you can see it takes:
 
-* ~300ns to parse the smallest legal message
+* ~250ns to parse the smallest legal message
 
 * ~2µs to parse an average legal message
 
