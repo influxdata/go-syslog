@@ -4,6 +4,62 @@ import (
 	"time"
 )
 
+type syslogMessage struct {
+	prioritySet    bool // We explictly flag the setting of priority since its zero value is a valid priority by RFC 5424
+	timestampSet   bool // We explictly flag the setting of timestamp since its zero value is a valid timestamp by RFC 5424
+	hasElements    bool
+	priority       uint8
+	version        uint16
+	timestamp      time.Time
+	hostname       string
+	appname        string
+	procID         string
+	msgID          string
+	structuredData map[string]map[string]string
+	message        string
+}
+
+func (sm *syslogMessage) valid() bool {
+	if sm.prioritySet && sm.version > 0 && sm.version <= 999 {
+		return true
+	}
+
+	return false
+}
+
+func (sm *syslogMessage) export() *SyslogMessage {
+	out := &SyslogMessage{}
+	if sm.prioritySet {
+		out.SetPriority(sm.priority)
+	}
+	if sm.version > 0 && sm.version <= 999 {
+		out.Version = sm.version
+	}
+	if sm.timestampSet {
+		out.Timestamp = &sm.timestamp
+	}
+	if sm.hostname != "-" && sm.hostname != "" {
+		out.Hostname = &sm.hostname
+	}
+	if sm.appname != "-" && sm.appname != "" {
+		out.Appname = &sm.appname
+	}
+	if sm.procID != "-" && sm.procID != "" {
+		out.ProcID = &sm.procID
+	}
+	if sm.msgID != "-" && sm.msgID != "" {
+		out.MsgID = &sm.msgID
+	}
+	if sm.hasElements {
+		out.StructuredData = &sm.structuredData
+	}
+	if sm.message != "" {
+		out.Message = &sm.message
+	}
+
+	return out
+}
+
 // SyslogMessage represents a syslog message
 type SyslogMessage struct {
 	Priority       *uint8
