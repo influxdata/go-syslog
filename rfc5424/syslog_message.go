@@ -77,7 +77,7 @@ type SyslogMessage struct {
 
 // Valid tells whether the message is well-formed or not.
 //
-// A minimally well-formed syslog message contains at least a priority ([0, 191]) and the version (]0, 999]).
+// A minimally well-formed syslog message contains at least a priority ([1, 191] or 0) and the version (]0, 999]).
 func (sm *SyslogMessage) Valid() bool {
 	// A nil priority or a 0 version means that the message is not valid
 	// Not checking the priority range since it's parser responsibility
