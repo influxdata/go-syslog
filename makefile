@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 
 rfc5424/machine.go: rfc5424/machine.go.rl
-	ragel -Z -G2 -o $@ $<
+	ragel -Z -G2 -e -o $@ $<
 
 .PHONY: build
 build: rfc5424/machine.go
