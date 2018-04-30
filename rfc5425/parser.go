@@ -38,7 +38,7 @@ type Result struct {
 // ResultHook is a function the user can use to specify what to do with every `Result` instance
 type ResultHook func(result *Result)
 
-// Parse parses the incoming bytes acuumulating the results
+// Parse parses the incoming bytes accumulating the results
 func (p *Parser) Parse() []Result {
 	results := []Result{}
 
@@ -80,7 +80,9 @@ func (p *Parser) ParseExecuting(hook ResultHook) {
 
 			if len(tok.lit) < int(p.s.msglen) && p.bestEffort {
 				// Though MSGLEN was not respected, we try to parse the existing SYSLOGMSG as a RFC5424 syslog message
-				hook(p.parse(tok.lit))
+				result := p.parse(tok.lit)
+				result.Error = e
+				hook(result)
 				break
 			}
 
