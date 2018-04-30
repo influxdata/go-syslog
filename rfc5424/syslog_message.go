@@ -30,7 +30,7 @@ func (sm *syslogMessage) valid() bool {
 func (sm *syslogMessage) export() *SyslogMessage {
 	out := &SyslogMessage{}
 	if sm.prioritySet {
-		out.SetPriority(sm.priority)
+		out.setPriority(sm.priority)
 	}
 	if sm.version > 0 && sm.version <= 999 {
 		out.Version = sm.version
@@ -88,13 +88,25 @@ func (sm *SyslogMessage) Valid() bool {
 	return false
 }
 
-// SetPriority set the priority value and the computed facility and severity codes accordingly.
-func (sm *SyslogMessage) SetPriority(value uint8) {
+func (sm *SyslogMessage) setPriority(value uint8) {
 	sm.Priority = &value
 	facility := uint8(value / 8)
 	severity := uint8(value % 8)
 	sm.facility = &facility
 	sm.severity = &severity
+}
+
+// SetPriority set the priority value and the computed facility and severity codes accordingly.
+//
+// It enforces a correct priority value (range [0, 191]), since it can not by null by RFC.
+func (sm *SyslogMessage) SetPriority(value uint8) *SyslogMessage {
+	if value >= 0 && value <= 191 {
+		sm.setPriority(value)
+
+		return sm
+	}
+
+	panic("out of range priority value")
 }
 
 // Facility returns the facility code.
@@ -184,4 +196,61 @@ var facilities = map[uint8]string{
 	21: "local use 5 (local5)",
 	22: "local use 6 (local6)",
 	23: "local use 7 (local7)",
+}
+
+// SetVersion set the version value.
+//
+// It enforces a correct version value (range ]0, 999]), since it can not by null by RFC.
+func (sm *SyslogMessage) SetVersion(value uint16) *SyslogMessage {
+	if value > 0 && value <= 999 {
+		sm.Version = value
+
+		return sm
+	}
+
+	panic("out of range version value")
+}
+
+// SetTimestamp set the timestamp value
+func (sm *SyslogMessage) SetTimestamp(value time.Time) *SyslogMessage {
+	sm.Timestamp = &value
+
+	return sm
+}
+
+// SetHostname set the hostname value
+func (sm *SyslogMessage) SetHostname(value string) *SyslogMessage {
+	sm.Hostname = &value
+
+	return sm
+}
+
+// SetAppname set the appname value
+func (sm *SyslogMessage) SetAppname(value string) *SyslogMessage {
+	sm.Appname = &value
+
+	return sm
+}
+
+// SetProcID set the procid value
+func (sm *SyslogMessage) SetProcID(value string) *SyslogMessage {
+	sm.ProcID = &value
+
+	return sm
+}
+
+// SetMsgID set the msgid value
+func (sm *SyslogMessage) SetMsgID(value string) *SyslogMessage {
+	sm.MsgID = &value
+
+	return sm
+}
+
+// (todo) > setters for structured data elements (id + parameters)
+
+// SetMessage set the message value
+func (sm *SyslogMessage) SetMessage(value string) *SyslogMessage {
+	sm.Message = &value
+
+	return sm
 }
