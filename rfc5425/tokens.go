@@ -26,9 +26,9 @@ const (
 func (t Token) String() string {
 	switch t.typ {
 	case WS, EOF:
-		return "Token{" + t.typ.String() + "}"
+		return t.typ.String()
 	default:
-		return "Token{" + t.typ.String() + ", " + string(t.lit) + "}"
+		return t.typ.String() + "(" + string(t.lit) + ")"
 	}
 }
 
