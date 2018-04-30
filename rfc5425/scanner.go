@@ -122,27 +122,25 @@ func (s *Scanner) scanMsgLen() Token {
 }
 
 func (s *Scanner) scanSyslogMsg() Token {
-	// Create a buffer and read the current character into it
-	buf := make([]byte, 0, s.msglen)
-
-	// (todo) > seek
-	for i := uint64(0); i < s.msglen; i++ {
-		b := s.read()
-
-		if b == eof {
-			return Token{
-				typ: EOF,
-				lit: buf,
-			}
+	// Check the reader contains almost MSGLEN characters
+	n := int(s.msglen)
+	b, err := s.r.Peek(n)
+	if err != nil {
+		return Token{
+			typ: EOF,
+			lit: b,
 		}
-
-		buf = append(buf, b)
 	}
+	// Advance the reader of MSGLEN characters
+	s.r.Discard(n)
 
+	// Reset status
 	s.ready = false
 	s.msglen = 0
+
+	// Return SYSLOGMSG token
 	return Token{
 		typ: SYSLOGMSG,
-		lit: buf,
+		lit: b,
 	}
 }
