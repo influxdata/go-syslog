@@ -9,22 +9,38 @@ import (
 
 // Parser represents a parser
 type Parser struct {
+	msglen     int64
 	s          Scanner
 	p          rfc5424.Parser
-	bestEffort bool
-	msglen     int64
-	buf        struct {
-		tok Token // last read token
-		num int   // size (max = 1)
-	}
+	last       Token
+	stepback   bool // Wheter to retrieve the last token or not
+	bestEffort bool // Best effort mode flag
 }
 
+// ParserOpt sets options for the parser
+type ParserOpt func(p *Parser) *Parser
+
 // NewParser returns a new instance of Parser
-func NewParser(r io.Reader, bestEffort bool) *Parser {
-	return &Parser{
-		s:          *NewScanner(r),
-		p:          *rfc5424.NewParser(),
-		bestEffort: bestEffort,
+func NewParser(r io.Reader, opts ...ParserOpt) *Parser {
+	p := &Parser{
+		s: *NewScanner(r),
+		p: *rfc5424.NewParser(),
+	}
+
+	for _, opt := range opts {
+		p = opt(p)
+	}
+
+	return p
+}
+
+// WithBestEffort sets the best effort mode on.
+//
+// When on the parser tries to recover as much of the syslog messages as possible.
+func WithBestEffort() ParserOpt {
+	return func(p *Parser) *Parser {
+		p.bestEffort = true
+		return p
 	}
 }
 
@@ -35,8 +51,8 @@ type Result struct {
 	Error        error
 }
 
-// ResultHook is a function the user can use to specify what to do with every `Result` instance
-type ResultHook func(result *Result)
+// ResultHandler is a function the user can use to specify what to do with every `Result` instance
+type ResultHandler func(result *Result)
 
 // Parse parses the incoming bytes accumulating the results
 func (p *Parser) Parse() []Result {
@@ -54,13 +70,13 @@ func (p *Parser) Parse() []Result {
 // ParseExecuting parses the incoming bytes in the parser executing the `hook` function to each `Result`
 //
 // It stops parsing when an error regarding RFC 5425 is found.
-func (p *Parser) ParseExecuting(hook ResultHook) {
+func (p *Parser) ParseExecuting(handler ResultHandler) {
 	for {
 		var tok Token
 
 		// First token MUST be a MSGLEN
 		if tok = p.scan(); tok.typ != MSGLEN {
-			hook(&Result{
+			handler(&Result{
 				Error: fmt.Errorf("found %s, expecting a %s", tok, MSGLEN),
 			})
 			break
@@ -68,7 +84,7 @@ func (p *Parser) ParseExecuting(hook ResultHook) {
 
 		// Next we MUST see a WS
 		if tok = p.scan(); tok.typ != WS {
-			hook(&Result{
+			handler(&Result{
 				Error: fmt.Errorf("found %s, expecting a %s", tok, WS),
 			})
 			break
@@ -82,18 +98,18 @@ func (p *Parser) ParseExecuting(hook ResultHook) {
 				// Though MSGLEN was not respected, we try to parse the existing SYSLOGMSG as a RFC5424 syslog message
 				result := p.parse(tok.lit)
 				result.Error = e
-				hook(result)
+				handler(result)
 				break
 			}
 
-			hook(&Result{
+			handler(&Result{
 				Error: e,
 			})
 			break
 		}
 
 		// Parse the SYSLOGMSG literal pretending it is a RFC5424 syslog message
-		hook(p.parse(tok.lit))
+		handler(p.parse(tok.lit))
 
 		// Next we MUST see an EOF otherwise the parsing we'll start again
 		if tok = p.scan(); tok.typ == EOF {
@@ -117,21 +133,21 @@ func (p *Parser) parse(input []byte) *Result {
 // if a token has been unscanned then read that instead.
 func (p *Parser) scan() Token {
 	// If we have a token on the buffer, then return it.
-	if p.buf.num != 0 {
-		p.buf.num = 0
-		return p.buf.tok
+	if p.stepback {
+		p.stepback = false
+		return p.last
 	}
 
 	// Otherwise read the next token from the scanner.
 	tok := p.s.Scan()
 
 	// Save it to the buffer in case we unscan later.
-	p.buf.tok = tok
+	p.last = tok
 
 	return tok
 }
 
 // unscan pushes the previously read token back onto the buffer.
 func (p *Parser) unscan() {
-	p.buf.num = 1
+	p.stepback = true
 }
