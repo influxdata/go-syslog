@@ -12,7 +12,7 @@ func output(out interface{}) {
 	spew.Dump(out)
 }
 
-func ExampleNewParser() {
+func Example() {
 	r := strings.NewReader("48 <1>1 2003-10-11T22:14:15.003Z host.local - - - -25 <3>1 - host.local - - - -38 <2>1 - host.local su - - - κόσμε")
 	output(NewParser(r, WithBestEffort()).Parse())
 	// Output:
@@ -71,22 +71,24 @@ func ExampleNewParser() {
 	// }
 }
 
-func EmittingParsing(p *Parser) chan Result {
-	c := make(chan Result)
+func Example_handler() {
+	// Defining a custom handler to send the parsing results into a channel
+	EmittingParsing := func(p *Parser) chan Result {
+		c := make(chan Result)
 
-	toChannel := func(r *Result) {
-		c <- *r
+		toChannel := func(r *Result) {
+			c <- *r
+		}
+
+		go func() {
+			defer close(c)
+			p.ParseExecuting(toChannel)
+		}()
+
+		return c
 	}
 
-	go func() {
-		defer close(c)
-		p.ParseExecuting(toChannel)
-	}()
-
-	return c
-}
-
-func ExampleParser() {
+	// Use it
 	r := strings.NewReader("16 <1>1 - - - - - -17 <2>12 A B C D E -16 <1>1")
 	results := EmittingParsing(NewParser(r, WithBestEffort()))
 

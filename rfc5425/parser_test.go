@@ -236,6 +236,35 @@ var testCases = []testCase{
 			},
 		},
 	},
+	{
+		"1st ok/2nd mf/3rd ok", // mf means malformed syslog message
+		"16 <1>1 - - - - - -17 <2>12 A B C D E -16 <1>1 - - - - - -",
+		// results w/o best effort
+		[]Result{
+			Result{
+				Message: (&rfc5424.SyslogMessage{}).SetPriority(1).SetVersion(1),
+			},
+			Result{
+				MessageError: getTimestampError(6),
+			},
+			Result{
+				Message: (&rfc5424.SyslogMessage{}).SetPriority(1).SetVersion(1),
+			},
+		},
+		// results with best effort
+		[]Result{
+			Result{
+				Message: (&rfc5424.SyslogMessage{}).SetPriority(1).SetVersion(1),
+			},
+			Result{
+				Message:      (&rfc5424.SyslogMessage{}).SetPriority(2).SetVersion(12),
+				MessageError: getTimestampError(6),
+			},
+			Result{
+				Message: (&rfc5424.SyslogMessage{}).SetPriority(1).SetVersion(1),
+			},
+		},
+	},
 }
 
 func TestParse(t *testing.T) {

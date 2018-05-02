@@ -7,7 +7,9 @@ import (
 	"github.com/influxdata/go-syslog/rfc5424"
 )
 
-// Parser represents a parser
+// Parser is capable to parse byte buffer on the basis of RFC5425.
+//
+// Use NewParser function to instantiate one.
 type Parser struct {
 	msglen     int64
 	s          Scanner
@@ -17,10 +19,10 @@ type Parser struct {
 	bestEffort bool // Best effort mode flag
 }
 
-// ParserOpt sets options for the parser
+// ParserOpt represents the type of options setters.
 type ParserOpt func(p *Parser) *Parser
 
-// NewParser returns a new instance of Parser
+// NewParser returns a pointer to a new instance of Parser.
 func NewParser(r io.Reader, opts ...ParserOpt) *Parser {
 	p := &Parser{
 		s: *NewScanner(r),
@@ -36,7 +38,7 @@ func NewParser(r io.Reader, opts ...ParserOpt) *Parser {
 
 // WithBestEffort sets the best effort mode on.
 //
-// When on the parser tries to recover as much of the syslog messages as possible.
+// When active the parser tries to recover as much of the syslog messages as possible.
 func WithBestEffort() ParserOpt {
 	return func(p *Parser) *Parser {
 		p.bestEffort = true
@@ -44,17 +46,17 @@ func WithBestEffort() ParserOpt {
 	}
 }
 
-// Result represent the resulting syslog message and (eventually) error occured during parsing
+// Result represent the resulting syslog message and (eventually) errors occured during parsing.
 type Result struct {
 	Message      *rfc5424.SyslogMessage
 	MessageError error
 	Error        error
 }
 
-// ResultHandler is a function the user can use to specify what to do with every `Result` instance
+// ResultHandler is a function the user can use to specify what to do with every Result instance.
 type ResultHandler func(result *Result)
 
-// Parse parses the incoming bytes accumulating the results
+// Parse parses the incoming bytes accumulating the results.
 func (p *Parser) Parse() []Result {
 	results := []Result{}
 
@@ -67,7 +69,7 @@ func (p *Parser) Parse() []Result {
 	return results
 }
 
-// ParseExecuting parses the incoming bytes in the parser executing the `hook` function to each `Result`
+// ParseExecuting parses the incoming bytes executing the handler function for each Result.
 //
 // It stops parsing when an error regarding RFC 5425 is found.
 func (p *Parser) ParseExecuting(handler ResultHandler) {

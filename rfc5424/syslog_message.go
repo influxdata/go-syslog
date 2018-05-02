@@ -60,7 +60,7 @@ func (sm *syslogMessage) export() *SyslogMessage {
 	return out
 }
 
-// SyslogMessage represents a syslog message
+// SyslogMessage represents a syslog message.
 type SyslogMessage struct {
 	Priority       *uint8
 	facility       *uint8
@@ -75,7 +75,7 @@ type SyslogMessage struct {
 	Message        *string
 }
 
-// Valid tells whether the message is well-formed or not.
+// Valid tells whether the receiving SyslogMessage is well-formed or not.
 //
 // A minimally well-formed syslog message contains at least a priority ([1, 191] or 0) and the version (]0, 999]).
 func (sm *SyslogMessage) Valid() bool {
@@ -207,7 +207,7 @@ func (sm *SyslogMessage) SetVersion(value uint16) *SyslogMessage {
 	return sm
 }
 
-// SetTimestamp set the timestamp value
+// SetTimestamp set the timestamp value.
 func (sm *SyslogMessage) SetTimestamp(value time.Time) *SyslogMessage {
 	// (fixme) > should get a string, not a time.Time ...
 	sm.Timestamp = &value
@@ -215,28 +215,28 @@ func (sm *SyslogMessage) SetTimestamp(value time.Time) *SyslogMessage {
 	return sm
 }
 
-// SetHostname set the hostname value
+// SetHostname set the hostname value.
 func (sm *SyslogMessage) SetHostname(value string) *SyslogMessage {
 	sm.Hostname = &value
 
 	return sm
 }
 
-// SetAppname set the appname value
+// SetAppname set the appname value.
 func (sm *SyslogMessage) SetAppname(value string) *SyslogMessage {
 	sm.Appname = &value
 
 	return sm
 }
 
-// SetProcID set the procid value
+// SetProcID set the procid value.
 func (sm *SyslogMessage) SetProcID(value string) *SyslogMessage {
 	sm.ProcID = &value
 
 	return sm
 }
 
-// SetMsgID set the msgid value
+// SetMsgID set the msgid value.
 func (sm *SyslogMessage) SetMsgID(value string) *SyslogMessage {
 	sm.MsgID = &value
 
@@ -245,7 +245,7 @@ func (sm *SyslogMessage) SetMsgID(value string) *SyslogMessage {
 
 // (todo) > setters for structured data elements (id + parameters)
 
-// SetMessage set the message value
+// SetMessage set the message value.
 func (sm *SyslogMessage) SetMessage(value string) *SyslogMessage {
 	if value != "" {
 		sm.Message = &value
