@@ -1237,7 +1237,7 @@ digraph rfc5424 {
 	5 -> err_5 [ label = "DEF / set_version, err_parse" ];
 	6 -> 7 [ label = "'-'" ];
 	6 -> 561 [ label = "'0'..'9' / mark" ];
-	6 -> err_6 [ label = "DEF / err_parse" ];
+	6 -> err_6 [ label = "DEF / err_timestamp, err_parse" ];
 	7 -> 8 [ label = "SP" ];
 	7 -> err_7 [ label = "DEF / err_parse" ];
 	8 -> 9 [ label = "'!'..'~' / mark" ];
@@ -3058,7 +3058,7 @@ digraph rfc5424 {
 	3 -> eof_3 [ label = "EOF / err_prival, err_pri, err_parse" ];
 	4 -> eof_4 [ label = "EOF / err_version, err_parse" ];
 	5 -> eof_5 [ label = "EOF / set_version, err_parse" ];
-	6 -> eof_6 [ label = "EOF / err_parse" ];
+	6 -> eof_6 [ label = "EOF / err_timestamp, err_parse" ];
 	7 -> eof_7 [ label = "EOF / err_parse" ];
 	8 -> eof_8 [ label = "EOF / err_hostname, err_parse" ];
 	9 -> eof_9 [ label = "EOF / err_hostname, err_parse" ];
