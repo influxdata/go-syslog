@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/influxdata/go-syslog/rfc5424"
 	"github.com/stretchr/testify/assert"
@@ -180,6 +181,58 @@ var testCases = []testCase{
 		[]Result{
 			Result{
 				Error: fmt.Errorf("found %s, expecting a %s", EOF, WS),
+			},
+		},
+	},
+	{
+		"1st ok/2nd ok/3rd ok",
+		"48 <1>1 2003-10-11T22:14:15.003Z host.local - - - -25 <3>1 - host.local - - - -38 <2>1 - host.local su - - - κόσμε",
+		// results w/o best effort
+		[]Result{
+			Result{
+				Message: (&rfc5424.SyslogMessage{}).
+					SetPriority(1).
+					SetVersion(1).
+					SetTimestamp(time.Date(2003, 10, 11, 22, 14, 15, 3000000, time.UTC)).
+					SetHostname("host.local"),
+			},
+			Result{
+				Message: (&rfc5424.SyslogMessage{}).
+					SetPriority(3).
+					SetVersion(1).
+					SetHostname("host.local"),
+			},
+			Result{
+				Message: (&rfc5424.SyslogMessage{}).
+					SetPriority(2).
+					SetVersion(1).
+					SetHostname("host.local").
+					SetAppname("su").
+					SetMessage("κόσμε"),
+			},
+		},
+		// results with best effort
+		[]Result{
+			Result{
+				Message: (&rfc5424.SyslogMessage{}).
+					SetPriority(1).
+					SetVersion(1).
+					SetTimestamp(time.Date(2003, 10, 11, 22, 14, 15, 3000000, time.UTC)).
+					SetHostname("host.local"),
+			},
+			Result{
+				Message: (&rfc5424.SyslogMessage{}).
+					SetPriority(3).
+					SetVersion(1).
+					SetHostname("host.local"),
+			},
+			Result{
+				Message: (&rfc5424.SyslogMessage{}).
+					SetPriority(2).
+					SetVersion(1).
+					SetHostname("host.local").
+					SetAppname("su").
+					SetMessage("κόσμε"),
 			},
 		},
 	},
