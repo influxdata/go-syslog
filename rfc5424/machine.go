@@ -23,6 +23,7 @@ var (
 	errParse          = "parsing error [col %d]"
 )
 
+
 const start int = 1
 const first_final int = 603
 
@@ -80,6 +81,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 	{
 		m.cs = start
 	}
+
 
 	{
 		if (m.p) == (m.pe) {

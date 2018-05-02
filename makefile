@@ -2,12 +2,12 @@ SHELL := /bin/bash
 
 rfc5424/machine.go: rfc5424/machine.go.rl
 	ragel -Z -G2 -e -o $@ $<
+	@gofmt -w -s $@
+	@sed -i '/^\/\/line/d' $@
 
 .PHONY: build
 build: rfc5424/machine.go
-	@gofmt -w -s $<
-	@sed -i '/^\/\/line/d' $<
-
+	
 .PHONY: bench
 bench: rfc5424/*_test.go rfc5424/machine.go
 	go test -bench=. -benchmem -benchtime=5s ./...
@@ -82,4 +82,4 @@ graph: docs docs/rfc5424.dot docs/rfc5424_pri.png docs/rfc5424_version.png docs/
 .PHONY: clean
 clean: rfc5424/machine.go
 	@rm -f $?
-	@rm -f docs
+	@rm -rf docs
