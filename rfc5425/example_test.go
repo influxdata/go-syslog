@@ -3,63 +3,72 @@ package rfc5425
 import (
 	"fmt"
 	"strings"
+
+	"github.com/davecgh/go-spew/spew"
 )
+
+func output(out []Result) {
+	spew.Config.DisableCapacities = true
+	spew.Config.DisablePointerAddresses = true
+	spew.Dump(out)
+}
 
 func ExampleNewParser() {
 	r := strings.NewReader("48 <1>1 2003-10-11T22:14:15.003Z host.local - - - -25 <3>1 - host.local - - - -38 <2>1 - host.local su - - - κόσμε")
-	NewParser(r, WithBestEffort()).Parse()
-	// Output: ([]rfc5425.Result) {
-	// (rfc5425.Result) {
-	// 	Message: (*rfc5424.SyslogMessage)({
-	// 	Priority: (*uint8)(1),
-	// 	facility: (*uint8)(0),
-	// 	severity: (*uint8)(1),
-	// 	Version: (uint16) 1,
-	// 	Timestamp: (*time.Time)(2003-10-11 22:14:15.003 +0000 UTC),
-	// 	Hostname: (*string)("host.local"),
-	// 	Appname: (*string)(<nil>),
-	// 	ProcID: (*string)(<nil>),
-	// 	MsgID: (*string)(<nil>),
-	// 	StructuredData: (*map[string]map[string]string)(<nil>),
-	// 	Message: (*string)(<nil>)
-	// 	}),
-	// 	MessageError: (error) <nil>,
-	// 	Error: (error) <nil>
-	// },
-	// (rfc5425.Result) {
-	// 	Message: (*rfc5424.SyslogMessage)({
-	// 	Priority: (*uint8)(3),
-	// 	facility: (*uint8)(0),
-	// 	severity: (*uint8)(3),
-	// 	Version: (uint16) 1,
-	// 	Timestamp: (*time.Time)(<nil>),
-	// 	Hostname: (*string)("host.local"),
-	// 	Appname: (*string)(<nil>),
-	// 	ProcID: (*string)(<nil>),
-	// 	MsgID: (*string)(<nil>),
-	// 	StructuredData: (*map[string]map[string]string)(<nil>),
-	// 	Message: (*string)(<nil>)
-	// 	}),
-	// 	MessageError: (error) <nil>,
-	// 	Error: (error) <nil>
-	// },
-	// (rfc5425.Result) {
-	// 	Message: (*rfc5424.SyslogMessage)({
-	// 	Priority: (*uint8)(2),
-	// 	facility: (*uint8)(0),
-	// 	severity: (*uint8)(2),
-	// 	Version: (uint16) 1,
-	// 	Timestamp: (*time.Time)(<nil>),
-	// 	Hostname: (*string)("host.local"),
-	// 	Appname: (*string)("su"),
-	// 	ProcID: (*string)(<nil>),
-	// 	MsgID: (*string)(<nil>),
-	// 	StructuredData: (*map[string]map[string]string)(<nil>),
-	// 	Message: (*string)((len=11) "κόσμε")
-	// 	}),
-	// 	MessageError: (error) <nil>,
-	// 	Error: (error) <nil>
-	// }
+	output(NewParser(r, WithBestEffort()).Parse())
+	// Output:
+	// ([]rfc5425.Result) (len=3) {
+	//  (rfc5425.Result) {
+	//   Message: (*rfc5424.SyslogMessage)({
+	//    Priority: (*uint8)(1),
+	//    facility: (*uint8)(0),
+	//    severity: (*uint8)(1),
+	//    Version: (uint16) 1,
+	//    Timestamp: (*time.Time)(2003-10-11 22:14:15.003 +0000 UTC),
+	//    Hostname: (*string)((len=10) "host.local"),
+	//    Appname: (*string)(<nil>),
+	//    ProcID: (*string)(<nil>),
+	//    MsgID: (*string)(<nil>),
+	//    StructuredData: (*map[string]map[string]string)(<nil>),
+	//    Message: (*string)(<nil>)
+	//   }),
+	//   MessageError: (error) <nil>,
+	//   Error: (error) <nil>
+	//  },
+	//  (rfc5425.Result) {
+	//   Message: (*rfc5424.SyslogMessage)({
+	//    Priority: (*uint8)(3),
+	//    facility: (*uint8)(0),
+	//    severity: (*uint8)(3),
+	//    Version: (uint16) 1,
+	//    Timestamp: (*time.Time)(<nil>),
+	//    Hostname: (*string)((len=10) "host.local"),
+	//    Appname: (*string)(<nil>),
+	//    ProcID: (*string)(<nil>),
+	//    MsgID: (*string)(<nil>),
+	//    StructuredData: (*map[string]map[string]string)(<nil>),
+	//    Message: (*string)(<nil>)
+	//   }),
+	//   MessageError: (error) <nil>,
+	//   Error: (error) <nil>
+	//  },
+	//  (rfc5425.Result) {
+	//   Message: (*rfc5424.SyslogMessage)({
+	//    Priority: (*uint8)(2),
+	//    facility: (*uint8)(0),
+	//    severity: (*uint8)(2),
+	//    Version: (uint16) 1,
+	//    Timestamp: (*time.Time)(<nil>),
+	//    Hostname: (*string)((len=10) "host.local"),
+	//    Appname: (*string)((len=2) "su"),
+	//    ProcID: (*string)(<nil>),
+	//    MsgID: (*string)(<nil>),
+	//    StructuredData: (*map[string]map[string]string)(<nil>),
+	//    Message: (*string)((len=11) "κόσμε")
+	//   }),
+	//   MessageError: (error) <nil>,
+	//   Error: (error) <nil>
+	//  }
 	// }
 }
 
