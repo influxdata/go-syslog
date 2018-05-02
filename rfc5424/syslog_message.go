@@ -98,15 +98,13 @@ func (sm *SyslogMessage) setPriority(value uint8) {
 
 // SetPriority set the priority value and the computed facility and severity codes accordingly.
 //
-// It enforces a correct priority value (range [0, 191]), since it can not by null by RFC.
+// It ignores incorrect priority values (range [0, 191]).
 func (sm *SyslogMessage) SetPriority(value uint8) *SyslogMessage {
 	if value >= 0 && value <= 191 {
 		sm.setPriority(value)
-
-		return sm
 	}
 
-	panic("out of range priority value")
+	return sm
 }
 
 // Facility returns the facility code.
@@ -200,19 +198,18 @@ var facilities = map[uint8]string{
 
 // SetVersion set the version value.
 //
-// It enforces a correct version value (range ]0, 999]), since it can not by null by RFC.
+// It ignores incorrect version values (range ]0, 999]).
 func (sm *SyslogMessage) SetVersion(value uint16) *SyslogMessage {
 	if value > 0 && value <= 999 {
 		sm.Version = value
-
-		return sm
 	}
 
-	panic("out of range version value")
+	return sm
 }
 
 // SetTimestamp set the timestamp value
 func (sm *SyslogMessage) SetTimestamp(value time.Time) *SyslogMessage {
+	// (fixme) > should get a string, not a time.Time ...
 	sm.Timestamp = &value
 
 	return sm
@@ -250,7 +247,9 @@ func (sm *SyslogMessage) SetMsgID(value string) *SyslogMessage {
 
 // SetMessage set the message value
 func (sm *SyslogMessage) SetMessage(value string) *SyslogMessage {
-	sm.Message = &value
+	if value != "" {
+		sm.Message = &value
+	}
 
 	return sm
 }
