@@ -1,3 +1,5 @@
+[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](LICENSE)
+
 **A parser for syslog messages**.
 
 > Blazing fast RFC5424-compliant parser
@@ -10,7 +12,7 @@ go get github.com/influxdata/go-syslog
 
 ## Docs
 
-API documentation can be found [here](https://godoc.org/github.com/influxdata/go-syslog/rfc5424).
+[![Documentation](https://img.shields.io/badge/godoc-reference-blue.svg?style=for-the-badge)](http://godoc.org/github.com/influxdata/go-syslog)
 
 The [docs](docs/) directory contains images representing the FSM parts of a RFC5424 syslog message.
 
@@ -112,3 +114,5 @@ _TBD: comparation against other golang parsers_.
 ---
 
 * <a name="mymachine">[1]</a>: Intel Core i7-7600U CPU @ 2.80GHz
+
+
