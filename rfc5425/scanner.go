@@ -23,11 +23,6 @@ func isNonZeroDigit(ch byte) bool {
 	return (ch >= 48 && ch <= 57)
 }
 
-// isWhitespace returns true if the byte represents a space
-func isWhitespace(ch byte) bool {
-	return ch == 32
-}
-
 // Scanner represents a lexical scanner
 type Scanner struct {
 	r      *bufio.Reader
