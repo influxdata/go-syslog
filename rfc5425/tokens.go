@@ -4,13 +4,13 @@ import (
 	"strconv"
 )
 
-// Token represents a lexical token
+// Token represents a lexical token of the RFC5425.
 type Token struct {
 	typ TokenType
 	lit []byte
 }
 
-// TokenType represents a lexical token type
+// TokenType represents a lexical token type of the RFC5425.
 type TokenType int
 
 // Tokens
@@ -22,7 +22,7 @@ const (
 	SYSLOGMSG
 )
 
-// String outputs the string representation of the receiving Token
+// String outputs the string representation of the receiving Token.
 func (t Token) String() string {
 	switch t.typ {
 	case WS, EOF:
@@ -36,7 +36,7 @@ const tokentypename = "ILLEGALEOFWSMSGLENSYSLOGMSG"
 
 var tokentypeindex = [...]uint8{0, 7, 10, 12, 18, 27}
 
-// String outputs the string representation of the receiving TokenType
+// String outputs the string representation of the receiving TokenType.
 func (i TokenType) String() string {
 	if i < 0 || i >= TokenType(len(tokentypeindex)-1) {
 		return "TokenType(" + strconv.FormatInt(int64(i), 10) + ")"

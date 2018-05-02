@@ -23,14 +23,14 @@ func isNonZeroDigit(ch byte) bool {
 	return (ch >= 48 && ch <= 57)
 }
 
-// Scanner represents a lexical scanner
+// Scanner represents the lexical scanner for RFC5425.
 type Scanner struct {
 	r      *bufio.Reader
 	msglen uint64
 	ready  bool
 }
 
-// NewScanner returns a new instance of Scanner
+// NewScanner returns a pointer to a new instance of Scanner.
 func NewScanner(r io.Reader) *Scanner {
 	return &Scanner{
 		r: bufio.NewReader(r),
@@ -52,7 +52,7 @@ func (s *Scanner) unread() {
 	_ = s.r.UnreadByte()
 }
 
-// Scan returns the next token
+// Scan returns the next token.
 func (s *Scanner) Scan() (tok Token) {
 	// Read the next byte.
 	b := s.read()
