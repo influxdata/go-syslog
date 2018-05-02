@@ -191,8 +191,8 @@ func TestParse(t *testing.T) {
 		t.Run(tc.descr, func(t *testing.T) {
 			// t.Parallel()
 
-			res1 := NewParser(strings.NewReader(tc.input), false).Parse()
-			res2 := NewParser(strings.NewReader(tc.input), true).Parse()
+			res1 := NewParser(strings.NewReader(tc.input)).Parse()
+			res2 := NewParser(strings.NewReader(tc.input), WithBestEffort()).Parse()
 
 			assert.Equal(t, tc.results, res1)
 			assert.Equal(t, tc.pResults, res2)
