@@ -1,12 +1,18 @@
 package rfc5424
 
 import (
+	"fmt"
+	"math/rand"
 	"strings"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
 )
+
+func random(min, max int) int {
+	return rand.Intn(max-min) + min
+}
 
 func timeParse(layout, value string) *time.Time {
 	t, _ := time.Parse(layout, value)
@@ -2536,11 +2542,101 @@ y`),
 	// (fixme) > evaluate non characters for UTF-8 security concerns, eg. \xef\xbf\xbe
 }
 
+func generateIncompleteTimestampTestCases() []testCase {
+	incompleteTimestamp := []byte("2003-11-02T23:12:46.012345")
+	prefix := []byte("<1>1 ")
+	mex := &SyslogMessage{
+		Priority: getUint8Address(1),
+		severity: getUint8Address(1),
+		facility: getUint8Address(0),
+		Version:  1,
+	}
+	tCases := make([]testCase, 0, len(incompleteTimestamp))
+	prev := make([]byte, 0, len(incompleteTimestamp))
+	for i, d := range incompleteTimestamp {
+		prev = append(prev, d)
+		tc := testCase{
+			input:        append(prefix, prev...),
+			valid:        false,
+			value:        nil,
+			errorString:  fmt.Sprintf("expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col %d]", len(prefix)+i+1),
+			partialValue: mex,
+		}
+		tCases = append(tCases, tc)
+	}
+	return tCases
+}
+
+func generateUntilMaxLengthStringTestCases(max []byte, pos int) []testCase {
+	if pos < 0 || pos > 3 {
+		panic("position not available")
+	}
+	templ := "<%d>%d - - - - - -"
+	where := 9 + (pos * 2)
+	templ = templ[:where] + "%s" + templ[where+1:]
+
+	tCases := []testCase{}
+	prev := ""
+	for _, c := range max {
+		prev += string(c)
+		randp := random(0, 9)
+		randv := random(1, 9)
+
+		input := []byte(fmt.Sprintf(templ, randp, randv, prev))
+
+		mex := &SyslogMessage{
+			Priority: getUint8Address(uint8(randp)),
+			severity: getUint8Address(uint8(randp % 8)),
+			facility: getUint8Address(uint8(randp / 8)),
+			Version:  uint16(randv),
+		}
+		switch pos {
+		case 0:
+			mex.Hostname = getStringAddress(string(prev))
+		case 1:
+			mex.Appname = getStringAddress(string(prev))
+		case 2:
+			mex.ProcID = getStringAddress(string(prev))
+		case 3:
+			mex.MsgID = getStringAddress(string(prev))
+		}
+
+		t := testCase{
+			input,
+			true,
+			mex,
+			"",
+			nil,
+		}
+
+		tCases = append(tCases, t)
+	}
+	return tCases
+}
+
+func init() {
+	rand.Seed(time.Now().Unix())
+
+	testCases = append(testCases, generateIncompleteTimestampTestCases()...)
+
+	hostnameMaxStr := []byte("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabc")
+	testCases = append(testCases, generateUntilMaxLengthStringTestCases(hostnameMaxStr, 0)...)
+
+	appnameMaxStr := []byte("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdef")
+	testCases = append(testCases, generateUntilMaxLengthStringTestCases(appnameMaxStr, 0)...)
+
+	procidMaxStr := []byte("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzab")
+	testCases = append(testCases, generateUntilMaxLengthStringTestCases(procidMaxStr, 0)...)
+
+	msgidMaxStr := []byte("abcdefghilmnopqrstuvzabcdefghilm")
+	testCases = append(testCases, generateUntilMaxLengthStringTestCases(msgidMaxStr, 0)...)
+}
+
 func TestMachineParse(t *testing.T) {
 	for _, tc := range testCases {
 		tc := tc
 		t.Run(rxpad(string(tc.input), 50), func(t *testing.T) {
-			t.Parallel()
+			// t.Parallel()
 
 			bestEffort := true
 			fsm := NewMachine()
