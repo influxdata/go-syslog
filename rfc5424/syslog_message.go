@@ -96,17 +96,6 @@ func (sm *SyslogMessage) setPriority(value uint8) {
 	sm.severity = &severity
 }
 
-// SetPriority set the priority value and the computed facility and severity codes accordingly.
-//
-// It ignores incorrect priority values (range [0, 191]).
-func (sm *SyslogMessage) SetPriority(value uint8) *SyslogMessage {
-	if value >= 0 && value <= 191 {
-		sm.setPriority(value)
-	}
-
-	return sm
-}
-
 // Facility returns the facility code.
 func (sm *SyslogMessage) Facility() *uint8 {
 	return sm.facility
@@ -194,62 +183,4 @@ var facilities = map[uint8]string{
 	21: "local use 5 (local5)",
 	22: "local use 6 (local6)",
 	23: "local use 7 (local7)",
-}
-
-// SetVersion set the version value.
-//
-// It ignores incorrect version values (range ]0, 999]).
-func (sm *SyslogMessage) SetVersion(value uint16) *SyslogMessage {
-	if value > 0 && value <= 999 {
-		sm.Version = value
-	}
-
-	return sm
-}
-
-// SetTimestamp set the timestamp value.
-func (sm *SyslogMessage) SetTimestamp(value time.Time) *SyslogMessage {
-	// (fixme) > should get a string, not a time.Time ...
-	sm.Timestamp = &value
-
-	return sm
-}
-
-// SetHostname set the hostname value.
-func (sm *SyslogMessage) SetHostname(value string) *SyslogMessage {
-	sm.Hostname = &value
-
-	return sm
-}
-
-// SetAppname set the appname value.
-func (sm *SyslogMessage) SetAppname(value string) *SyslogMessage {
-	sm.Appname = &value
-
-	return sm
-}
-
-// SetProcID set the procid value.
-func (sm *SyslogMessage) SetProcID(value string) *SyslogMessage {
-	sm.ProcID = &value
-
-	return sm
-}
-
-// SetMsgID set the msgid value.
-func (sm *SyslogMessage) SetMsgID(value string) *SyslogMessage {
-	sm.MsgID = &value
-
-	return sm
-}
-
-// (todo) > setters for structured data elements (id + parameters)
-
-// SetMessage set the message value.
-func (sm *SyslogMessage) SetMessage(value string) *SyslogMessage {
-	if value != "" {
-		sm.Message = &value
-	}
-
-	return sm
 }
