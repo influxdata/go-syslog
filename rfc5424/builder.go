@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-const builder_start int = 51
+const builder_start int = 52
 
 const builder_en_timestamp int = 8
 const builder_en_hostname int = 45
@@ -14,7 +14,8 @@ const builder_en_procid int = 47
 const builder_en_msgid int = 48
 const builder_en_sdid int = 49
 const builder_en_sdpn int = 50
-const builder_en_msg int = 51
+const builder_en_sdpv int = 51
+const builder_en_msg int = 52
 
 
 type entrypoint int
@@ -27,6 +28,7 @@ const (
 	msgid
 	sdid
 	sdpn
+	sdpv
 	msg
 )
 
@@ -46,6 +48,8 @@ func (e entrypoint) translate() int {
 		return builder_en_sdid
 	case sdpn:
 		return builder_en_sdpn
+	case sdpv:
+		return builder_en_sdpv
 	case msg:
 		return builder_en_msg
 	default:
@@ -66,10 +70,10 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 			goto _test_eof
 		}
 		switch cs {
-		case 51:
-			goto st_case_51
 		case 52:
 			goto st_case_52
+		case 53:
+			goto st_case_53
 		case 0:
 			goto st_case_0
 		case 1:
@@ -136,8 +140,8 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 			goto st_case_31
 		case 32:
 			goto st_case_32
-		case 53:
-			goto st_case_53
+		case 54:
+			goto st_case_54
 		case 33:
 			goto st_case_33
 		case 34:
@@ -164,8 +168,6 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 			goto st_case_44
 		case 45:
 			goto st_case_45
-		case 54:
-			goto st_case_54
 		case 55:
 			goto st_case_55
 		case 56:
@@ -674,10 +676,10 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 			goto st_case_307
 		case 308:
 			goto st_case_308
-		case 46:
-			goto st_case_46
 		case 309:
 			goto st_case_309
+		case 46:
+			goto st_case_46
 		case 310:
 			goto st_case_310
 		case 311:
@@ -772,10 +774,10 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 			goto st_case_355
 		case 356:
 			goto st_case_356
-		case 47:
-			goto st_case_47
 		case 357:
 			goto st_case_357
+		case 47:
+			goto st_case_47
 		case 358:
 			goto st_case_358
 		case 359:
@@ -1030,10 +1032,10 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 			goto st_case_483
 		case 484:
 			goto st_case_484
-		case 48:
-			goto st_case_48
 		case 485:
 			goto st_case_485
+		case 48:
+			goto st_case_48
 		case 486:
 			goto st_case_486
 		case 487:
@@ -1096,10 +1098,10 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 			goto st_case_515
 		case 516:
 			goto st_case_516
-		case 49:
-			goto st_case_49
 		case 517:
 			goto st_case_517
+		case 49:
+			goto st_case_49
 		case 518:
 			goto st_case_518
 		case 519:
@@ -1162,10 +1164,10 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 			goto st_case_547
 		case 548:
 			goto st_case_548
-		case 50:
-			goto st_case_50
 		case 549:
 			goto st_case_549
+		case 50:
+			goto st_case_50
 		case 550:
 			goto st_case_550
 		case 551:
@@ -1228,25 +1230,93 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 			goto st_case_579
 		case 580:
 			goto st_case_580
+		case 581:
+			goto st_case_581
+		case 51:
+			goto st_case_51
+		case 582:
+			goto st_case_582
+		case 583:
+			goto st_case_583
+		case 584:
+			goto st_case_584
+		case 585:
+			goto st_case_585
+		case 586:
+			goto st_case_586
+		case 587:
+			goto st_case_587
+		case 588:
+			goto st_case_588
+		case 589:
+			goto st_case_589
+		case 590:
+			goto st_case_590
+		case 591:
+			goto st_case_591
+		case 592:
+			goto st_case_592
+		case 593:
+			goto st_case_593
+		case 594:
+			goto st_case_594
+		case 595:
+			goto st_case_595
+		case 596:
+			goto st_case_596
+		case 597:
+			goto st_case_597
+		case 598:
+			goto st_case_598
+		case 599:
+			goto st_case_599
+		case 600:
+			goto st_case_600
+		case 601:
+			goto st_case_601
+		case 602:
+			goto st_case_602
+		case 603:
+			goto st_case_603
+		case 604:
+			goto st_case_604
+		case 605:
+			goto st_case_605
+		case 606:
+			goto st_case_606
+		case 607:
+			goto st_case_607
+		case 608:
+			goto st_case_608
+		case 609:
+			goto st_case_609
+		case 610:
+			goto st_case_610
+		case 611:
+			goto st_case_611
+		case 612:
+			goto st_case_612
+		case 613:
+			goto st_case_613
 		}
 		goto st_out
-	st_case_51:
+	st_case_52:
 		switch data[p] {
 		case 224:
-			goto tr49
+			goto tr50
 		case 237:
-			goto tr51
-		case 240:
 			goto tr52
+		case 240:
+			goto tr53
 		case 244:
-			goto tr54
+			goto tr55
 		}
 		switch {
 		case data[p] < 225:
 			switch {
 			case data[p] > 193:
 				if 194 <= data[p] && data[p] <= 223 {
-					goto tr48
+					goto tr49
 				}
 			case data[p] >= 128:
 				goto st0
@@ -1258,21 +1328,21 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 					goto st0
 				}
 			case data[p] >= 241:
-				goto tr53
+				goto tr54
 			}
 		default:
-			goto tr50
+			goto tr51
 		}
-		goto tr47
-	tr47:
+		goto tr48
+	tr48:
 		pb = p
 
-		goto st52
-	st52:
+		goto st53
+	st53:
 		if p++; p == pe {
-			goto _test_eof52
+			goto _test_eof53
 		}
-	st_case_52:
+	st_case_53:
 		switch data[p] {
 		case 224:
 			goto st2
@@ -1305,12 +1375,12 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 		default:
 			goto st3
 		}
-		goto st52
+		goto st53
 	st_case_0:
 	st0:
 		cs = 0
 		goto _out
-	tr48:
+	tr49:
 		pb = p
 
 		goto st1
@@ -1320,10 +1390,10 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 		}
 	st_case_1:
 		if 128 <= data[p] && data[p] <= 191 {
-			goto st52
+			goto st53
 		}
 		goto st0
-	tr49:
+	tr50:
 		pb = p
 
 		goto st2
@@ -1336,7 +1406,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 			goto st1
 		}
 		goto st0
-	tr50:
+	tr51:
 		pb = p
 
 		goto st3
@@ -1349,7 +1419,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 			goto st1
 		}
 		goto st0
-	tr51:
+	tr52:
 		pb = p
 
 		goto st4
@@ -1362,7 +1432,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 			goto st1
 		}
 		goto st0
-	tr52:
+	tr53:
 		pb = p
 
 		goto st5
@@ -1375,7 +1445,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 			goto st3
 		}
 		goto st0
-	tr53:
+	tr54:
 		pb = p
 
 		goto st6
@@ -1388,7 +1458,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 			goto st3
 		}
 		goto st0
-	tr54:
+	tr55:
 		pb = p
 
 		goto st7
@@ -1597,7 +1667,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 		case 46:
 			goto st34
 		case 90:
-			goto st53
+			goto st54
 		}
 		goto st0
 	st28:
@@ -1645,14 +1715,14 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 		}
 	st_case_32:
 		if 48 <= data[p] && data[p] <= 57 {
-			goto st53
+			goto st54
 		}
 		goto st0
-	st53:
+	st54:
 		if p++; p == pe {
-			goto _test_eof53
+			goto _test_eof54
 		}
-	st_case_53:
+	st_case_54:
 		goto st0
 	st33:
 		if p++; p == pe {
@@ -1683,7 +1753,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 		case 45:
 			goto st28
 		case 90:
-			goto st53
+			goto st54
 		}
 		if 48 <= data[p] && data[p] <= 57 {
 			goto st36
@@ -1700,7 +1770,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 		case 45:
 			goto st28
 		case 90:
-			goto st53
+			goto st54
 		}
 		if 48 <= data[p] && data[p] <= 57 {
 			goto st37
@@ -1717,7 +1787,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 		case 45:
 			goto st28
 		case 90:
-			goto st53
+			goto st54
 		}
 		if 48 <= data[p] && data[p] <= 57 {
 			goto st38
@@ -1734,7 +1804,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 		case 45:
 			goto st28
 		case 90:
-			goto st53
+			goto st54
 		}
 		if 48 <= data[p] && data[p] <= 57 {
 			goto st39
@@ -1751,7 +1821,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 		case 45:
 			goto st28
 		case 90:
-			goto st53
+			goto st54
 		}
 		if 48 <= data[p] && data[p] <= 57 {
 			goto st40
@@ -1768,7 +1838,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 		case 45:
 			goto st28
 		case 90:
-			goto st53
+			goto st54
 		}
 		goto st0
 	st41:
@@ -1815,16 +1885,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 	tr41:
 		pb = p
 
-		goto st54
-	st54:
-		if p++; p == pe {
-			goto _test_eof54
-		}
-	st_case_54:
-		if 33 <= data[p] && data[p] <= 126 {
-			goto st55
-		}
-		goto st0
+		goto st55
 	st55:
 		if p++; p == pe {
 			goto _test_eof55
@@ -4107,6 +4168,15 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 			goto _test_eof308
 		}
 	st_case_308:
+		if 33 <= data[p] && data[p] <= 126 {
+			goto st309
+		}
+		goto st0
+	st309:
+		if p++; p == pe {
+			goto _test_eof309
+		}
+	st_case_309:
 		goto st0
 	st_case_46:
 		if 33 <= data[p] && data[p] <= 126 {
@@ -4116,16 +4186,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 	tr42:
 		pb = p
 
-		goto st309
-	st309:
-		if p++; p == pe {
-			goto _test_eof309
-		}
-	st_case_309:
-		if 33 <= data[p] && data[p] <= 126 {
-			goto st310
-		}
-		goto st0
+		goto st310
 	st310:
 		if p++; p == pe {
 			goto _test_eof310
@@ -4545,6 +4606,15 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 			goto _test_eof356
 		}
 	st_case_356:
+		if 33 <= data[p] && data[p] <= 126 {
+			goto st357
+		}
+		goto st0
+	st357:
+		if p++; p == pe {
+			goto _test_eof357
+		}
+	st_case_357:
 		goto st0
 	st_case_47:
 		if 33 <= data[p] && data[p] <= 126 {
@@ -4554,16 +4624,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 	tr43:
 		pb = p
 
-		goto st357
-	st357:
-		if p++; p == pe {
-			goto _test_eof357
-		}
-	st_case_357:
-		if 33 <= data[p] && data[p] <= 126 {
-			goto st358
-		}
-		goto st0
+		goto st358
 	st358:
 		if p++; p == pe {
 			goto _test_eof358
@@ -5703,6 +5764,15 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 			goto _test_eof484
 		}
 	st_case_484:
+		if 33 <= data[p] && data[p] <= 126 {
+			goto st485
+		}
+		goto st0
+	st485:
+		if p++; p == pe {
+			goto _test_eof485
+		}
+	st_case_485:
 		goto st0
 	st_case_48:
 		if 33 <= data[p] && data[p] <= 126 {
@@ -5712,16 +5782,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 	tr44:
 		pb = p
 
-		goto st485
-	st485:
-		if p++; p == pe {
-			goto _test_eof485
-		}
-	st_case_485:
-		if 33 <= data[p] && data[p] <= 126 {
-			goto st486
-		}
-		goto st0
+		goto st486
 	st486:
 		if p++; p == pe {
 			goto _test_eof486
@@ -5997,6 +6058,15 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 			goto _test_eof516
 		}
 	st_case_516:
+		if 33 <= data[p] && data[p] <= 126 {
+			goto st517
+		}
+		goto st0
+	st517:
+		if p++; p == pe {
+			goto _test_eof517
+		}
+	st_case_517:
 		goto st0
 	st_case_49:
 		if data[p] == 33 {
@@ -6018,28 +6088,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 	tr45:
 		pb = p
 
-		goto st517
-	st517:
-		if p++; p == pe {
-			goto _test_eof517
-		}
-	st_case_517:
-		if data[p] == 33 {
-			goto st518
-		}
-		switch {
-		case data[p] < 62:
-			if 35 <= data[p] && data[p] <= 60 {
-				goto st518
-			}
-		case data[p] > 92:
-			if 94 <= data[p] && data[p] <= 126 {
-				goto st518
-			}
-		default:
-			goto st518
-		}
-		goto st0
+		goto st518
 	st518:
 		if p++; p == pe {
 			goto _test_eof518
@@ -6675,6 +6724,27 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 			goto _test_eof548
 		}
 	st_case_548:
+		if data[p] == 33 {
+			goto st549
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st549
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st549
+			}
+		default:
+			goto st549
+		}
+		goto st0
+	st549:
+		if p++; p == pe {
+			goto _test_eof549
+		}
+	st_case_549:
 		goto st0
 	st_case_50:
 		if data[p] == 33 {
@@ -6696,28 +6766,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 	tr46:
 		pb = p
 
-		goto st549
-	st549:
-		if p++; p == pe {
-			goto _test_eof549
-		}
-	st_case_549:
-		if data[p] == 33 {
-			goto st550
-		}
-		switch {
-		case data[p] < 62:
-			if 35 <= data[p] && data[p] <= 60 {
-				goto st550
-			}
-		case data[p] > 92:
-			if 94 <= data[p] && data[p] <= 126 {
-				goto st550
-			}
-		default:
-			goto st550
-		}
-		goto st0
+		goto st550
 	st550:
 		if p++; p == pe {
 			goto _test_eof550
@@ -7353,10 +7402,709 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 			goto _test_eof580
 		}
 	st_case_580:
+		if data[p] == 33 {
+			goto st581
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st581
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st581
+			}
+		default:
+			goto st581
+		}
+		goto st0
+	st581:
+		if p++; p == pe {
+			goto _test_eof581
+		}
+	st_case_581:
+		goto st0
+	st_case_51:
+		if data[p] == 33 {
+			goto tr47
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto tr47
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto tr47
+			}
+		default:
+			goto tr47
+		}
+		goto st0
+	tr47:
+		pb = p
+
+		goto st582
+	st582:
+		if p++; p == pe {
+			goto _test_eof582
+		}
+	st_case_582:
+		if data[p] == 33 {
+			goto st583
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st583
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st583
+			}
+		default:
+			goto st583
+		}
+		goto st0
+	st583:
+		if p++; p == pe {
+			goto _test_eof583
+		}
+	st_case_583:
+		if data[p] == 33 {
+			goto st584
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st584
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st584
+			}
+		default:
+			goto st584
+		}
+		goto st0
+	st584:
+		if p++; p == pe {
+			goto _test_eof584
+		}
+	st_case_584:
+		if data[p] == 33 {
+			goto st585
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st585
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st585
+			}
+		default:
+			goto st585
+		}
+		goto st0
+	st585:
+		if p++; p == pe {
+			goto _test_eof585
+		}
+	st_case_585:
+		if data[p] == 33 {
+			goto st586
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st586
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st586
+			}
+		default:
+			goto st586
+		}
+		goto st0
+	st586:
+		if p++; p == pe {
+			goto _test_eof586
+		}
+	st_case_586:
+		if data[p] == 33 {
+			goto st587
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st587
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st587
+			}
+		default:
+			goto st587
+		}
+		goto st0
+	st587:
+		if p++; p == pe {
+			goto _test_eof587
+		}
+	st_case_587:
+		if data[p] == 33 {
+			goto st588
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st588
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st588
+			}
+		default:
+			goto st588
+		}
+		goto st0
+	st588:
+		if p++; p == pe {
+			goto _test_eof588
+		}
+	st_case_588:
+		if data[p] == 33 {
+			goto st589
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st589
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st589
+			}
+		default:
+			goto st589
+		}
+		goto st0
+	st589:
+		if p++; p == pe {
+			goto _test_eof589
+		}
+	st_case_589:
+		if data[p] == 33 {
+			goto st590
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st590
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st590
+			}
+		default:
+			goto st590
+		}
+		goto st0
+	st590:
+		if p++; p == pe {
+			goto _test_eof590
+		}
+	st_case_590:
+		if data[p] == 33 {
+			goto st591
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st591
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st591
+			}
+		default:
+			goto st591
+		}
+		goto st0
+	st591:
+		if p++; p == pe {
+			goto _test_eof591
+		}
+	st_case_591:
+		if data[p] == 33 {
+			goto st592
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st592
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st592
+			}
+		default:
+			goto st592
+		}
+		goto st0
+	st592:
+		if p++; p == pe {
+			goto _test_eof592
+		}
+	st_case_592:
+		if data[p] == 33 {
+			goto st593
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st593
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st593
+			}
+		default:
+			goto st593
+		}
+		goto st0
+	st593:
+		if p++; p == pe {
+			goto _test_eof593
+		}
+	st_case_593:
+		if data[p] == 33 {
+			goto st594
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st594
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st594
+			}
+		default:
+			goto st594
+		}
+		goto st0
+	st594:
+		if p++; p == pe {
+			goto _test_eof594
+		}
+	st_case_594:
+		if data[p] == 33 {
+			goto st595
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st595
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st595
+			}
+		default:
+			goto st595
+		}
+		goto st0
+	st595:
+		if p++; p == pe {
+			goto _test_eof595
+		}
+	st_case_595:
+		if data[p] == 33 {
+			goto st596
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st596
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st596
+			}
+		default:
+			goto st596
+		}
+		goto st0
+	st596:
+		if p++; p == pe {
+			goto _test_eof596
+		}
+	st_case_596:
+		if data[p] == 33 {
+			goto st597
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st597
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st597
+			}
+		default:
+			goto st597
+		}
+		goto st0
+	st597:
+		if p++; p == pe {
+			goto _test_eof597
+		}
+	st_case_597:
+		if data[p] == 33 {
+			goto st598
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st598
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st598
+			}
+		default:
+			goto st598
+		}
+		goto st0
+	st598:
+		if p++; p == pe {
+			goto _test_eof598
+		}
+	st_case_598:
+		if data[p] == 33 {
+			goto st599
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st599
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st599
+			}
+		default:
+			goto st599
+		}
+		goto st0
+	st599:
+		if p++; p == pe {
+			goto _test_eof599
+		}
+	st_case_599:
+		if data[p] == 33 {
+			goto st600
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st600
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st600
+			}
+		default:
+			goto st600
+		}
+		goto st0
+	st600:
+		if p++; p == pe {
+			goto _test_eof600
+		}
+	st_case_600:
+		if data[p] == 33 {
+			goto st601
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st601
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st601
+			}
+		default:
+			goto st601
+		}
+		goto st0
+	st601:
+		if p++; p == pe {
+			goto _test_eof601
+		}
+	st_case_601:
+		if data[p] == 33 {
+			goto st602
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st602
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st602
+			}
+		default:
+			goto st602
+		}
+		goto st0
+	st602:
+		if p++; p == pe {
+			goto _test_eof602
+		}
+	st_case_602:
+		if data[p] == 33 {
+			goto st603
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st603
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st603
+			}
+		default:
+			goto st603
+		}
+		goto st0
+	st603:
+		if p++; p == pe {
+			goto _test_eof603
+		}
+	st_case_603:
+		if data[p] == 33 {
+			goto st604
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st604
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st604
+			}
+		default:
+			goto st604
+		}
+		goto st0
+	st604:
+		if p++; p == pe {
+			goto _test_eof604
+		}
+	st_case_604:
+		if data[p] == 33 {
+			goto st605
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st605
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st605
+			}
+		default:
+			goto st605
+		}
+		goto st0
+	st605:
+		if p++; p == pe {
+			goto _test_eof605
+		}
+	st_case_605:
+		if data[p] == 33 {
+			goto st606
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st606
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st606
+			}
+		default:
+			goto st606
+		}
+		goto st0
+	st606:
+		if p++; p == pe {
+			goto _test_eof606
+		}
+	st_case_606:
+		if data[p] == 33 {
+			goto st607
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st607
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st607
+			}
+		default:
+			goto st607
+		}
+		goto st0
+	st607:
+		if p++; p == pe {
+			goto _test_eof607
+		}
+	st_case_607:
+		if data[p] == 33 {
+			goto st608
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st608
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st608
+			}
+		default:
+			goto st608
+		}
+		goto st0
+	st608:
+		if p++; p == pe {
+			goto _test_eof608
+		}
+	st_case_608:
+		if data[p] == 33 {
+			goto st609
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st609
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st609
+			}
+		default:
+			goto st609
+		}
+		goto st0
+	st609:
+		if p++; p == pe {
+			goto _test_eof609
+		}
+	st_case_609:
+		if data[p] == 33 {
+			goto st610
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st610
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st610
+			}
+		default:
+			goto st610
+		}
+		goto st0
+	st610:
+		if p++; p == pe {
+			goto _test_eof610
+		}
+	st_case_610:
+		if data[p] == 33 {
+			goto st611
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st611
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st611
+			}
+		default:
+			goto st611
+		}
+		goto st0
+	st611:
+		if p++; p == pe {
+			goto _test_eof611
+		}
+	st_case_611:
+		if data[p] == 33 {
+			goto st612
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st612
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st612
+			}
+		default:
+			goto st612
+		}
+		goto st0
+	st612:
+		if p++; p == pe {
+			goto _test_eof612
+		}
+	st_case_612:
+		if data[p] == 33 {
+			goto st613
+		}
+		switch {
+		case data[p] < 62:
+			if 35 <= data[p] && data[p] <= 60 {
+				goto st613
+			}
+		case data[p] > 92:
+			if 94 <= data[p] && data[p] <= 126 {
+				goto st613
+			}
+		default:
+			goto st613
+		}
+		goto st0
+	st613:
+		if p++; p == pe {
+			goto _test_eof613
+		}
+	st_case_613:
 		goto st0
 	st_out:
-	_test_eof52:
-		cs = 52
+	_test_eof53:
+		cs = 53
 		goto _test_eof
 	_test_eof1:
 		cs = 1
@@ -7451,8 +8199,8 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 	_test_eof32:
 		cs = 32
 		goto _test_eof
-	_test_eof53:
-		cs = 53
+	_test_eof54:
+		cs = 54
 		goto _test_eof
 	_test_eof33:
 		cs = 33
@@ -7489,9 +8237,6 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 		goto _test_eof
 	_test_eof44:
 		cs = 44
-		goto _test_eof
-	_test_eof54:
-		cs = 54
 		goto _test_eof
 	_test_eof55:
 		cs = 55
@@ -9071,53 +9816,172 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 	_test_eof580:
 		cs = 580
 		goto _test_eof
+	_test_eof581:
+		cs = 581
+		goto _test_eof
+	_test_eof582:
+		cs = 582
+		goto _test_eof
+	_test_eof583:
+		cs = 583
+		goto _test_eof
+	_test_eof584:
+		cs = 584
+		goto _test_eof
+	_test_eof585:
+		cs = 585
+		goto _test_eof
+	_test_eof586:
+		cs = 586
+		goto _test_eof
+	_test_eof587:
+		cs = 587
+		goto _test_eof
+	_test_eof588:
+		cs = 588
+		goto _test_eof
+	_test_eof589:
+		cs = 589
+		goto _test_eof
+	_test_eof590:
+		cs = 590
+		goto _test_eof
+	_test_eof591:
+		cs = 591
+		goto _test_eof
+	_test_eof592:
+		cs = 592
+		goto _test_eof
+	_test_eof593:
+		cs = 593
+		goto _test_eof
+	_test_eof594:
+		cs = 594
+		goto _test_eof
+	_test_eof595:
+		cs = 595
+		goto _test_eof
+	_test_eof596:
+		cs = 596
+		goto _test_eof
+	_test_eof597:
+		cs = 597
+		goto _test_eof
+	_test_eof598:
+		cs = 598
+		goto _test_eof
+	_test_eof599:
+		cs = 599
+		goto _test_eof
+	_test_eof600:
+		cs = 600
+		goto _test_eof
+	_test_eof601:
+		cs = 601
+		goto _test_eof
+	_test_eof602:
+		cs = 602
+		goto _test_eof
+	_test_eof603:
+		cs = 603
+		goto _test_eof
+	_test_eof604:
+		cs = 604
+		goto _test_eof
+	_test_eof605:
+		cs = 605
+		goto _test_eof
+	_test_eof606:
+		cs = 606
+		goto _test_eof
+	_test_eof607:
+		cs = 607
+		goto _test_eof
+	_test_eof608:
+		cs = 608
+		goto _test_eof
+	_test_eof609:
+		cs = 609
+		goto _test_eof
+	_test_eof610:
+		cs = 610
+		goto _test_eof
+	_test_eof611:
+		cs = 611
+		goto _test_eof
+	_test_eof612:
+		cs = 612
+		goto _test_eof
+	_test_eof613:
+		cs = 613
+		goto _test_eof
 
 	_test_eof:
 		{
 		}
 		if p == eof {
 			switch cs {
-			case 53:
+			case 54:
 				fmt.Println("set_timestamp")
 				if t, e := time.Parse(time.RFC3339Nano, string(data[pb:p])); e == nil {
 					sm.Timestamp = &t
 				}
 
-			case 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308:
+			case 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309:
 				fmt.Println("set_hostname")
 				if s := string(data[pb:p]); s != "-" {
 					sm.Hostname = &s
 				}
 
-			case 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356:
+			case 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357:
 				fmt.Println("set_appname")
 				if s := string(data[pb:p]); s != "-" {
 					sm.Appname = &s
 				}
 
-			case 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484:
+			case 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485:
 				fmt.Println("set_procid")
 				if s := string(data[pb:p]); s != "-" {
 					sm.ProcID = &s
 				}
 
-			case 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516:
+			case 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517:
 				fmt.Println("set_msgid")
 				if s := string(data[pb:p]); s != "-" {
 					sm.MsgID = &s
 				}
 
-			case 517, 518, 519, 520, 521, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545, 546, 547, 548:
+			case 518, 519, 520, 521, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545, 546, 547, 548, 549:
+				fmt.Println("set_sdid")
+				if sm.StructuredData == nil {
+					sm.StructuredData = &(map[string]map[string]string{})
+				}
 
-			case 549, 550, 551, 552, 553, 554, 555, 556, 557, 558, 559, 560, 561, 562, 563, 564, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 580:
+				id := string(data[pb:p])
+				elements := *sm.StructuredData
+				if _, ok := elements[id]; !ok {
+					elements[id] = map[string]string{}
+				}
 
-			case 52:
+			case 550, 551, 552, 553, 554, 555, 556, 557, 558, 559, 560, 561, 562, 563, 564, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 580, 581:
+				fmt.Println("set_sdpn")
+				// Assuming SD map already exists, contains currentid key (set from outside)
+				elements := *sm.StructuredData
+				elements[currentid][string(data[pb:p])] = ""
+
+			case 582, 583, 584, 585, 586, 587, 588, 589, 590, 591, 592, 593, 594, 595, 596, 597, 598, 599, 600, 601, 602, 603, 604, 605, 606, 607, 608, 609, 610, 611, 612, 613:
+				fmt.Println("set_sdpv")
+				// Assuming SD map already exists, contains currentid key and currentparamname key (set from outside)
+				elements := *sm.StructuredData
+				elements[currentid][currentparamname] = string(data[pb:p])
+
+			case 53:
 				fmt.Println("set_msg")
 				if s := string(data[pb:p]); s != "" {
 					sm.Message = &s
 				}
 
-			case 51:
+			case 52:
 				pb = p
 
 				fmt.Println("set_msg")
@@ -9183,20 +10047,50 @@ func (sm *SyslogMessage) SetMsgID(value string) *SyslogMessage {
 	return sm.set(msgid, value)
 }
 
-// (todo) > setters for structured data elements (id + parameters)
-// func (sm *SyslogMessage) SetElementID(value string) *SyslogMessage {
-//     return sm.set(sdid, value) // (todo) > ignore incoming duplicates? per essere coerenti col design si ...
-// }
+// SetElementID set a structured data id.
+//
+// When the provided id already exists the operation is discarded.
+func (sm *SyslogMessage) SetElementID(value string) *SyslogMessage {
+	return sm.set(sdid, value)
+}
 
-// func (sm *SyslogMessage) SetParameter(element string, name string, value string) *SyslogMessage {
-//     // (todo) > se chiave non esiste gia sm.set(sdid, element)
-//     sm.set(sdpn, name)
-//     // (todo) > se id okay sm.set(sdpv, value)
-// }
+// SetParameter set a structured data parameter belonging to the given element.
+//
+// If the element does not exist it creates one with the given element id.
+// When a parameter with the given name already exists for the given element the operation is discarded.
+func (sm *SyslogMessage) SetParameter(id string, name string, value string) *SyslogMessage {
+	// Create an element with the given id (or re-use the existing one)
+	sm.set(sdid, id)
+
+	// We can create parameter iff the given element id exists
+	if sm.StructuredData != nil {
+		elements := *sm.StructuredData
+		if _, ok := elements[id]; ok {
+			currentid = id
+			sm.set(sdpn, name)
+			// We can assign parameter value iff the given parameter key exists
+			if _, ok := elements[id][name]; ok {
+				currentparamname = name
+				sm.set(sdpv, value)
+			}
+		}
+	}
+
+	return sm
+}
 
 // SetMessage set the message value.
 func (sm *SyslogMessage) SetMessage(value string) *SyslogMessage {
 	return sm.set(msg, value)
 }
 
-// textmarshaler or string method?
+func (sm *SyslogMessage) String() (string, error) {
+	if !sm.Valid() {
+		return "", fmt.Errorf("invalid syslog")
+	}
+
+	return "", nil // (todo)
+}
+
+var currentid string
+var currentparamname string
