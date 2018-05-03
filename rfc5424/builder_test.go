@@ -138,3 +138,46 @@ func TestOutOfRangePriorityValues(t *testing.T) {}
 func TestValidVersionValues(t *testing.T) {}
 
 func TestValidPriorityValues(t *testing.T) {}
+
+func TestValidSDID(t *testing.T) {
+	identifier := "one"
+	m := &SyslogMessage{}
+	assert.Nil(t, m.StructuredData)
+	m.SetElementID(identifier)
+	sd := m.StructuredData
+	assert.NotNil(t, sd)
+	assert.IsType(t, (*map[string]map[string]string)(nil), sd)
+	assert.NotNil(t, (*sd)[identifier])
+	assert.IsType(t, map[string]string{}, (*sd)[identifier])
+	m.SetElementID(identifier)
+	assert.Len(t, *sd, 1)
+}
+
+func TestValidSDParam(t *testing.T) {
+	id := "one"
+	pn := "pname"
+	pv := "pvalue"
+	m := &SyslogMessage{}
+	m.SetParameter(id, pn, pv)
+	sd := m.StructuredData
+	assert.NotNil(t, sd)
+	assert.IsType(t, (*map[string]map[string]string)(nil), sd)
+	assert.NotNil(t, (*sd)[id])
+	assert.IsType(t, map[string]string{}, (*sd)[id])
+	assert.Len(t, *sd, 1)
+	assert.Len(t, (*sd)[id], 1)
+	assert.Equal(t, pv, (*sd)[id][pn])
+
+	pn1 := "pname1"
+	pv1 := "pvalue1"
+	m.SetParameter(id, pn1, pv1)
+	assert.Len(t, (*sd)[id], 2)
+	assert.Equal(t, pv1, (*sd)[id][pn1])
+
+	id1 := "another"
+	m.SetParameter(id1, pn1, pv1).SetParameter(id1, pn, pv)
+	assert.Len(t, *sd, 2)
+	assert.Len(t, (*sd)[id1], 2)
+	assert.Equal(t, pv1, (*sd)[id1][pn1])
+	assert.Equal(t, pv, (*sd)[id1][pn])
+}
