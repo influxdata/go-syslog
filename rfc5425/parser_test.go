@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/influxdata/go-syslog/rfc5424"
 	"github.com/stretchr/testify/assert"
@@ -193,7 +192,7 @@ var testCases = []testCase{
 				Message: (&rfc5424.SyslogMessage{}).
 					SetPriority(1).
 					SetVersion(1).
-					SetTimestamp(time.Date(2003, 10, 11, 22, 14, 15, 3000000, time.UTC)).
+					SetTimestamp("2003-10-11T22:14:15.003Z").
 					SetHostname("host.local"),
 			},
 			Result{
@@ -217,7 +216,7 @@ var testCases = []testCase{
 				Message: (&rfc5424.SyslogMessage{}).
 					SetPriority(1).
 					SetVersion(1).
-					SetTimestamp(time.Date(2003, 10, 11, 22, 14, 15, 3000000, time.UTC)).
+					SetTimestamp("2003-10-11T22:14:15.003Z").
 					SetHostname("host.local"),
 			},
 			Result{
