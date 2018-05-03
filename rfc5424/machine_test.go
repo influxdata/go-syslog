@@ -327,6 +327,66 @@ var testCases = []testCase{
 	},
 	// Invalid, wrong year
 	{
+		[]byte("<101>123 2"),
+		false,
+		nil,
+		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 10]",
+		&SyslogMessage{
+			Priority: getUint8Address(101),
+			facility: getUint8Address(12),
+			severity: getUint8Address(5),
+			Version:  123,
+		},
+	},
+	{
+		[]byte("<101>124 20"),
+		false,
+		nil,
+		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 11]",
+		&SyslogMessage{
+			Priority: getUint8Address(101),
+			facility: getUint8Address(12),
+			severity: getUint8Address(5),
+			Version:  124,
+		},
+	},
+	{
+		[]byte("<101>125 201"),
+		false,
+		nil,
+		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 12]",
+		&SyslogMessage{
+			Priority: getUint8Address(101),
+			facility: getUint8Address(12),
+			severity: getUint8Address(5),
+			Version:  125,
+		},
+	},
+	{
+		[]byte("<101>125 2013"),
+		false,
+		nil,
+		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 13]",
+		&SyslogMessage{
+			Priority: getUint8Address(101),
+			facility: getUint8Address(12),
+			severity: getUint8Address(5),
+			Version:  125,
+		},
+	},
+	{
+		[]byte("<101>126 2013-"),
+		false,
+		nil,
+		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 14]",
+		&SyslogMessage{
+			Priority: getUint8Address(101),
+			facility: getUint8Address(12),
+			severity: getUint8Address(5),
+			Version:  126,
+		},
+	},
+	{
 		[]byte("<101>122 201-11-22"),
 		false,
 		nil,
