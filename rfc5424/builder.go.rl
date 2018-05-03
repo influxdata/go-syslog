@@ -51,11 +51,30 @@ action set_msgid {
 }
 
 action set_sdid {
-
+    fmt.Println("set_sdid")
+    if sm.StructuredData == nil {
+        sm.StructuredData = &(map[string]map[string]string{})
+    }
+    
+    id := string(data[pb:p])
+    elements := *sm.StructuredData
+    if _, ok := elements[id]; !ok {
+        elements[id] = map[string]string{}
+    }
 }
 
 action set_sdpn {
-    
+    fmt.Println("set_sdpn")
+    // Assuming SD map already exists, contains currentid key (set from outside)
+    elements := *sm.StructuredData
+    elements[currentid][string(data[pb:p])] = ""
+}
+
+action set_sdpv {
+    fmt.Println("set_sdpv")
+    // Assuming SD map already exists, contains currentid key and currentparamname key (set from outside)
+    elements := *sm.StructuredData
+    elements[currentid][currentparamname] = string(data[pb:p])
 }
 
 action set_msg {
@@ -79,6 +98,9 @@ sdid := sdname >mark %set_sdid;
 
 sdpn := sdname >mark %set_sdpn;
 
+# (fixme) > this is temporary for testing purposes only - must use its real rule
+sdpv := sdname >mark %set_sdpv;
+
 msg := (bom? utf8octets) >mark %set_msg;
 
 write data noerror nofinal;
@@ -94,6 +116,7 @@ const (
 	msgid
     sdid
     sdpn
+    sdpv
     msg
 )
 
@@ -113,6 +136,8 @@ func (e entrypoint) translate() int {
         return builder_en_sdid
     case sdpn:
         return builder_en_sdpn
+    case sdpv:
+        return builder_en_sdpv
     case msg:
         return builder_en_msg
     default:
@@ -179,20 +204,50 @@ func (sm *SyslogMessage) SetMsgID(value string) *SyslogMessage {
     return sm.set(msgid, value)
 }
 
-// (todo) > setters for structured data elements (id + parameters)
-// func (sm *SyslogMessage) SetElementID(value string) *SyslogMessage {
-//     return sm.set(sdid, value) // (todo) > ignore incoming duplicates? per essere coerenti col design si ...
-// }
+// SetElementID set a structured data id.
+//
+// When the provided id already exists the operation is discarded.
+func (sm *SyslogMessage) SetElementID(value string) *SyslogMessage {
+    return sm.set(sdid, value)
+}
 
-// func (sm *SyslogMessage) SetParameter(element string, name string, value string) *SyslogMessage {
-//     // (todo) > se chiave non esiste gia sm.set(sdid, element)
-//     sm.set(sdpn, name)
-//     // (todo) > se id okay sm.set(sdpv, value) 
-// }
+// SetParameter set a structured data parameter belonging to the given element.
+//
+// If the element does not exist it creates one with the given element id.
+// When a parameter with the given name already exists for the given element the operation is discarded.
+func (sm *SyslogMessage) SetParameter(id string, name string, value string) *SyslogMessage {
+    // Create an element with the given id (or re-use the existing one)
+    sm.set(sdid, id)
+    
+    // We can create parameter iff the given element id exists
+    if sm.StructuredData != nil {
+        elements := *sm.StructuredData
+        if _, ok := elements[id]; ok {
+            currentid = id
+            sm.set(sdpn, name)
+            // We can assign parameter value iff the given parameter key exists
+            if _, ok := elements[id][name]; ok {
+                currentparamname = name
+                sm.set(sdpv, value)
+            }
+        }
+    }
+    
+    return sm
+}
 
 // SetMessage set the message value.
 func (sm *SyslogMessage) SetMessage(value string) *SyslogMessage {
 	return sm.set(msg, value)
 }
 
-// textmarshaler or string method?
+func (sm *SyslogMessage) String() (string, error) {
+    if !sm.Valid() {
+        return "", fmt.Errorf("invalid syslog")
+    }
+
+    return "", nil // (todo)
+}
+
+var currentid string
+var currentparamname string
