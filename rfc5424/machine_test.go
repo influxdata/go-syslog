@@ -2623,13 +2623,13 @@ func init() {
 	testCases = append(testCases, generateUntilMaxLengthStringTestCases(hostnameMaxStr, 0)...)
 
 	appnameMaxStr := []byte("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdef")
-	testCases = append(testCases, generateUntilMaxLengthStringTestCases(appnameMaxStr, 0)...)
+	testCases = append(testCases, generateUntilMaxLengthStringTestCases(appnameMaxStr, 1)...)
 
 	procidMaxStr := []byte("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzab")
-	testCases = append(testCases, generateUntilMaxLengthStringTestCases(procidMaxStr, 0)...)
+	testCases = append(testCases, generateUntilMaxLengthStringTestCases(procidMaxStr, 2)...)
 
 	msgidMaxStr := []byte("abcdefghilmnopqrstuvzabcdefghilm")
-	testCases = append(testCases, generateUntilMaxLengthStringTestCases(msgidMaxStr, 0)...)
+	testCases = append(testCases, generateUntilMaxLengthStringTestCases(msgidMaxStr, 3)...)
 }
 
 func TestMachineParse(t *testing.T) {
