@@ -26,6 +26,8 @@ var (
 %%{
 machine rfc5424;
 
+include rfc5424 "rfc5424.rl";
+
 # unsigned alphabet
 alphtype uint8;
 
@@ -228,14 +230,7 @@ action err_parse {
 
 nilvalue = '-';
 
-sp = ' ';
-
 nonzerodigit = '1'..'9';
-
-# 0..59
-sexagesimal = '0'..'5' . '0'..'9';
-
-printusascii = '!'..'~';
 
 # 1..191
 privalrange = (('1' ('9' ('0'..'1'){,1} | '0'..'8' ('0'..'9'){,1}){,1}) | ('2'..'9' ('0'..'9'){,1}));
@@ -247,64 +242,23 @@ pri = ('<' prival '>') @err(err_pri);
 
 version = (nonzerodigit digit{0,2} <err(err_version)) >mark %from(set_version) %eof(set_version) @err(err_version);
 
-datemday = ('0' . '1'..'9' | '1'..'2' . '0'..'9' | '3' . '0'..'1');
-
-datemonth = ('0' . '1'..'9' | '1' . '0'..'2');
-
-datefullyear = digit{4};
-
-fulldate = datefullyear '-' datemonth '-' datemday;
-
-timehour = ('0'..'1' . '0'..'9' | '2' . '0'..'3');
-
-timeminute = sexagesimal;
-
-timesecond = sexagesimal;
-
-timesecfrac = '.' digit{1,6};
-
-timenumoffset = ('+' | '-') timehour ':' timeminute;
-
-timeoffset = 'Z' | timenumoffset;
-
-partialtime = timehour ':' timeminute ':' timesecond . timesecfrac?;
-
-fulltime = partialtime . timeoffset;
-
 timestamp = (nilvalue | (fulldate >mark 'T' fulltime %set_timestamp %err(set_timestamp))) @err(err_timestamp);
 
-hostname = nilvalue | printusascii{1,255} >mark %set_hostname $err(err_hostname);
+hostname = hostnamerange >mark %set_hostname $err(err_hostname);
 
-appname = nilvalue | printusascii{1,48} >mark %set_appname $err(err_appname);
+appname = appnamerange >mark %set_appname $err(err_appname);
 
-procid = nilvalue | printusascii{1,128} >mark %set_procid $err(err_procid);
+procid = procidrange >mark %set_procid $err(err_procid);
 
-msgid = nilvalue | printusascii{1,32} >mark %set_msgid $err(err_msgid);
+msgid = msgidrange >mark %set_msgid $err(err_msgid);
 
 header = (pri version sp timestamp sp hostname sp appname sp procid sp msgid) <>err(err_parse);
 
-# rfc 3629
-utf8tail = 0x80..0xBF;
-
-utf81 = 0x00..0x7F;
-
-utf82 = 0xC2..0xDF utf8tail;
-
-utf83 = 0xE0 0xA0..0xBF utf8tail | 0xE1..0xEC utf8tail{2} | 0xED 0x80..0x9F utf8tail | 0xEE..0xEF utf8tail{2};
-
-utf84 = 0xF0 0x90..0xBF utf8tail{2} | 0xF1..0xF3 utf8tail{3} | 0xF4 0x80..0x8F utf8tail{2};
-
-utf8char = utf81 | utf82 | utf83 | utf84;
-
-utf8octets = utf8char*;
-
-sdname = (printusascii - ('=' | sp | ']' | '"')){1,32};
-
 # utf8char except ", ], \
-utf8charwodelims = utf8char - (0x22 | 0x5D | 0x5C);
+utf8charwodelims = utf8char - toescape;
 
 # \", \], \\
-escapes = (0x5C >add_slash (0x22 | 0x5D | 0x5C)) $err(err_escape);
+escapes = (bs >add_slash toescape) $err(err_escape);
 
 # As per section 6.3.3 param value MUST NOT contain '"', '\' and ']', unless they are escaped.
 # A backslash '\' followed by none of the this three characters is an invalid escape sequence.
@@ -313,7 +267,7 @@ paramvalue = (utf8charwodelims* escapes*)+ >mark %set_paramvalue;
 
 paramname = sdname >mark %set_paramname;
 
-sdparam = (paramname '=' '"' paramvalue '"') >ini_sdparam $err(err_sdparam);
+sdparam = (paramname '=' dq paramvalue dq) >ini_sdparam $err(err_sdparam);
 
 # (note) > finegrained semantics of section 6.3.2 not represented here since not so useful for parsing goal
 sdid = sdname >mark %set_id %err(set_id) $err(err_sdid);
@@ -322,11 +276,9 @@ sdelement = ('[' sdid (sp sdparam)* ']');
 
 structureddata = nilvalue | sdelement+ >ini_elements $err(err_structureddata);
 
-bom = 0xEF 0xBB 0xBF;
-
 msg = (bom? utf8octets) >mark >markmsg %set_msg $err(err_msg);
 
-fail := (any - [\n\r])* @err{ fgoto main; };  
+fail := (any - [\n\r])* @err{ fgoto main; };
 
 main := header sp structureddata (sp msg)? $err(err_parse);
 
