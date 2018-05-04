@@ -116,8 +116,8 @@ action set_paramvalue {
 		if len(m.backslashat) > 0 {
 			// We need a copy here to not modify m.data
 			cp := append([]byte(nil), text...)
-			for _, pos := range m.backslashat {
-				at := pos - m.pb
+			for i, pos := range m.backslashat {
+				at := pos - i - m.pb
 				cp = append(cp[:at], cp[(at + 1):]...)
 			}
 			
