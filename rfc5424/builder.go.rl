@@ -74,8 +74,8 @@ action set_sdpv {
     if len(backslashes) > 0 {
         // We need a copy here to not modify data
         cp := append([]byte(nil), text...)
-        for _, pos := range backslashes {
-            at := pos - pb
+        for i, pos := range backslashes {
+            at := pos - i - pb
             cp = append(cp[:at], cp[(at + 1):]...)
         }
         text = cp
@@ -303,7 +303,7 @@ func (sm *SyslogMessage) String() (string, error) {
             sort.Strings(names)
 
             for _, name := range names {
-                sd += fmt.Sprintf(" %s=\"%s\"", name, params[name]) // (todo) > escape value
+                sd += fmt.Sprintf(" %s=\"%s\"", name, escape(params[name]))
             }
             sd += "]"
         }
@@ -313,4 +313,16 @@ func (sm *SyslogMessage) String() (string, error) {
     }
 
     return fmt.Sprintf(template, *sm.Priority, sm.Version, t, hn, an, pid, mid, sd, m), nil
+}
+
+func escape(value string) string {
+    res := ""
+	for i, c := range value {
+	    if c == 92 || c == 93 || c == 34 {
+	        res += `\`
+ 	    }
+	    res += string(value[i])
+	}
+
+    return res
 }
