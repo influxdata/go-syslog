@@ -13,7 +13,10 @@ func TestSetTimestamp(t *testing.T) {
 	assert.Equal(t, time.Date(2003, 10, 11, 22, 14, 15, 0, time.UTC), *m.SetTimestamp("2003-10-11T22:14:15Z").Timestamp)
 	assert.Equal(t, time.Date(2003, 10, 11, 22, 14, 15, 3000, time.UTC), *m.SetTimestamp("2003-10-11T22:14:15.000003Z").Timestamp)
 
-	// (todo) > check that 2003-10-11T22:14:15.000003Z+07:00 is ignored since invalid
+	// (note) > timestamp is invalid but it accepts until valid - ie., Z char
+	// (note) > this dependes on the builder internal parser which does not have a final state, nor we check for any error or final state
+	// (todo) > decide wheter to be more strict or not
+	assert.Equal(t, time.Date(2003, 10, 11, 22, 14, 15, 3000, time.UTC), *m.SetTimestamp("2003-10-11T22:14:15.000003Z+02:00").Timestamp)
 }
 
 func TestSetNilTimestamp(t *testing.T) {

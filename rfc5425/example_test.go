@@ -127,7 +127,7 @@ func Example_handler() {
 	//   StructuredData: (*map[string]map[string]string)(<nil>),
 	//   Message: (*string)(<nil>)
 	//  }),
-	//  MessageError: (*errors.errorString)(expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 6]),
+	//  MessageError: (*errors.errorString)(expecting a RFC3339MICRO timestamp or a nil value [col 6]),
 	//  Error: (error) <nil>
 	// }
 	// (rfc5425.Result) {
