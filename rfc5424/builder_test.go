@@ -258,11 +258,11 @@ func TestSetSDParam(t *testing.T) {
 
 	id2 := "tre"
 	pn2 := "meta"
-	m.SetParameter(id2, pn, `is\\valid`).SetParameter(id2, pn1, `is\]valid`).SetParameter(id2, pn2, `is\"valid`)
+	m.SetParameter(id2, pn, `valid\\`).SetParameter(id2, pn1, `\]valid`).SetParameter(id2, pn2, `is\"valid`)
 	assert.Len(t, *sd, 3)
 	assert.Len(t, (*sd)[id2], 3)
-	assert.Equal(t, `is\valid`, (*sd)[id2][pn])
-	assert.Equal(t, `is]valid`, (*sd)[id2][pn1])
+	assert.Equal(t, `valid\`, (*sd)[id2][pn])
+	assert.Equal(t, `]valid`, (*sd)[id2][pn1])
 	assert.Equal(t, `is"valid`, (*sd)[id2][pn2])
 	// Cannot contain \, ], " unless escaped
 	m.SetParameter(id2, pn, `is\valid`).SetParameter(id2, pn1, `is]valid`).SetParameter(id2, pn2, `is"valid`)
@@ -312,14 +312,14 @@ func TestSerialization(t *testing.T) {
 	m.
 		SetParameter("mega", "x", "a").
 		SetParameter("mega", "y", "b").
-		SetParameter("mega", "z", "c").
+		SetParameter("mega", "z", `\" \] \\`).
 		SetParameter("peta", "a", "name").
 		SetParameter("giga", "1", "").
 		SetParameter("peta", "c", "nomen")
 
 	res, err = m.String()
 	assert.Nil(t, err)
-	assert.Equal(t, `<1>1 - - - - - [giga 1=""][mega x="a" y="b" z="c"][peta a="name" c="nomen"] -`, res)
+	assert.Equal(t, `<1>1 - - - - - [giga 1=""][mega x="a" y="b" z="\" \] \\"][peta a="name" c="nomen"] -`, res)
 
 	pout, perr = p.Parse([]byte(res), nil)
 	assert.Equal(t, m, pout)
@@ -328,7 +328,7 @@ func TestSerialization(t *testing.T) {
 	m.SetHostname("host1")
 	res, err = m.String()
 	assert.Nil(t, err)
-	assert.Equal(t, `<1>1 - host1 - - - [giga 1=""][mega x="a" y="b" z="c"][peta a="name" c="nomen"] -`, res)
+	assert.Equal(t, `<1>1 - host1 - - - [giga 1=""][mega x="a" y="b" z="\" \] \\"][peta a="name" c="nomen"] -`, res)
 
 	pout, perr = p.Parse([]byte(res), nil)
 	assert.Equal(t, m, pout)
@@ -337,7 +337,7 @@ func TestSerialization(t *testing.T) {
 	m.SetAppname("su")
 	res, err = m.String()
 	assert.Nil(t, err)
-	assert.Equal(t, `<1>1 - host1 su - - [giga 1=""][mega x="a" y="b" z="c"][peta a="name" c="nomen"] -`, res)
+	assert.Equal(t, `<1>1 - host1 su - - [giga 1=""][mega x="a" y="b" z="\" \] \\"][peta a="name" c="nomen"] -`, res)
 
 	pout, perr = p.Parse([]byte(res), nil)
 	assert.Equal(t, m, pout)
@@ -346,7 +346,7 @@ func TestSerialization(t *testing.T) {
 	m.SetProcID("22")
 	res, err = m.String()
 	assert.Nil(t, err)
-	assert.Equal(t, `<1>1 - host1 su 22 - [giga 1=""][mega x="a" y="b" z="c"][peta a="name" c="nomen"] -`, res)
+	assert.Equal(t, `<1>1 - host1 su 22 - [giga 1=""][mega x="a" y="b" z="\" \] \\"][peta a="name" c="nomen"] -`, res)
 
 	pout, perr = p.Parse([]byte(res), nil)
 	assert.Equal(t, m, pout)
@@ -355,7 +355,7 @@ func TestSerialization(t *testing.T) {
 	m.SetMsgID("#1")
 	res, err = m.String()
 	assert.Nil(t, err)
-	assert.Equal(t, `<1>1 - host1 su 22 #1 [giga 1=""][mega x="a" y="b" z="c"][peta a="name" c="nomen"] -`, res)
+	assert.Equal(t, `<1>1 - host1 su 22 #1 [giga 1=""][mega x="a" y="b" z="\" \] \\"][peta a="name" c="nomen"] -`, res)
 
 	pout, perr = p.Parse([]byte(res), nil)
 	assert.Equal(t, m, pout)
@@ -364,7 +364,7 @@ func TestSerialization(t *testing.T) {
 	m.SetTimestamp("2002-10-22T16:33:15.000087+01:00")
 	res, err = m.String()
 	assert.Nil(t, err)
-	assert.Equal(t, `<1>1 2002-10-22T16:33:15.000087+01:00 host1 su 22 #1 [giga 1=""][mega x="a" y="b" z="c"][peta a="name" c="nomen"] -`, res)
+	assert.Equal(t, `<1>1 2002-10-22T16:33:15.000087+01:00 host1 su 22 #1 [giga 1=""][mega x="a" y="b" z="\" \] \\"][peta a="name" c="nomen"] -`, res)
 
 	pout, perr = p.Parse([]byte(res), nil)
 	assert.Equal(t, m, pout)
@@ -373,7 +373,7 @@ func TestSerialization(t *testing.T) {
 	m.SetMessage("κόσμε")
 	res, err = m.String()
 	assert.Nil(t, err)
-	assert.Equal(t, `<1>1 2002-10-22T16:33:15.000087+01:00 host1 su 22 #1 [giga 1=""][mega x="a" y="b" z="c"][peta a="name" c="nomen"] κόσμε`, res)
+	assert.Equal(t, `<1>1 2002-10-22T16:33:15.000087+01:00 host1 su 22 #1 [giga 1=""][mega x="a" y="b" z="\" \] \\"][peta a="name" c="nomen"] κόσμε`, res)
 
 	pout, perr = p.Parse([]byte(res), nil)
 	assert.Equal(t, m, pout)
