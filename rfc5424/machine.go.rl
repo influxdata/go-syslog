@@ -114,14 +114,7 @@ action set_paramvalue {
 		
 		// Strip backslashes only when there are ...
 		if len(m.backslashat) > 0 {
-			// We need a copy here to not modify m.data
-			cp := append([]byte(nil), text...)
-			for i, pos := range m.backslashat {
-				at := pos - i - m.pb
-				cp = append(cp[:at], cp[(at + 1):]...)
-			}
-			
-			text = cp
+			text = rmchars(text, m.backslashat, m.pb)
 		}
 		output.structuredData[m.currentelem][m.currentparam] = string(text)
 	}

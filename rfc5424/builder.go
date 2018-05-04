@@ -9381,13 +9381,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 				text := data[pb:p]
 				// Strip backslashes only when there are ...
 				if len(backslashes) > 0 {
-					// We need a copy here to not modify data
-					cp := append([]byte(nil), text...)
-					for i, pos := range backslashes {
-						at := pos - i - pb
-						cp = append(cp[:at], cp[(at+1):]...)
-					}
-					text = cp
+					text = rmchars(text, backslashes, pb)
 				}
 				// Assuming SD map already exists, contains currentid key and currentparamname key (set from outside)
 				elements := *sm.StructuredData
@@ -9406,13 +9400,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 				text := data[pb:p]
 				// Strip backslashes only when there are ...
 				if len(backslashes) > 0 {
-					// We need a copy here to not modify data
-					cp := append([]byte(nil), text...)
-					for i, pos := range backslashes {
-						at := pos - i - pb
-						cp = append(cp[:at], cp[(at+1):]...)
-					}
-					text = cp
+					text = rmchars(text, backslashes, pb)
 				}
 				// Assuming SD map already exists, contains currentid key and currentparamname key (set from outside)
 				elements := *sm.StructuredData
@@ -9580,16 +9568,4 @@ func (sm *SyslogMessage) String() (string, error) {
 	}
 
 	return fmt.Sprintf(template, *sm.Priority, sm.Version, t, hn, an, pid, mid, sd, m), nil
-}
-
-func escape(value string) string {
-	res := ""
-	for i, c := range value {
-		if c == 92 || c == 93 || c == 34 {
-			res += `\`
-		}
-		res += string(value[i])
-	}
-
-	return res
 }
