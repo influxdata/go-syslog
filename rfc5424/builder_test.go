@@ -131,13 +131,37 @@ func TestSetWrongUTF8Message(t *testing.T) {}
 
 func TestSetMessageWithBOM(t *testing.T) {}
 
-func TestSetOutOfRangeVersion(t *testing.T) {}
+func TestSetOutOfRangeVersion(t *testing.T) {
+	m := &SyslogMessage{}
+	m.SetVersion(1000)
+	assert.Equal(t, m.Version, uint16(0)) // 0 signals nil for version
+	m.SetVersion(0)
+	assert.Equal(t, m.Version, uint16(0)) // 0 signals nil for version
+}
 
-func TestSetOutOfRangePriority(t *testing.T) {}
+func TestSetOutOfRangePriority(t *testing.T) {
+	m := &SyslogMessage{}
+	m.SetPriority(192)
+	assert.Nil(t, m.Priority)
+}
 
-func TestSetVersion(t *testing.T) {}
+func TestSetVersion(t *testing.T) {
+	m := &SyslogMessage{}
+	m.SetVersion(1)
+	assert.Equal(t, m.Version, uint16(1))
+	m.SetVersion(999)
+	assert.Equal(t, m.Version, uint16(999))
+}
 
-func TestSetPriority(t *testing.T) {}
+func TestSetPriority(t *testing.T) {
+	m := &SyslogMessage{}
+	m.SetPriority(0)
+	assert.Equal(t, *m.Priority, uint8(0))
+	m.SetPriority(1)
+	assert.Equal(t, *m.Priority, uint8(1))
+	m.SetPriority(191)
+	assert.Equal(t, *m.Priority, uint8(191))
+}
 
 func TestSetSDID(t *testing.T) {
 	identifier := "one"
