@@ -75,4 +75,7 @@ utf8octets = utf8char*;
 
 bom = 0xEF 0xBB 0xBF;
 
+# utf8char except ", ], \
+utf8charwodelims = utf8char - toescape;
+
 }%%
