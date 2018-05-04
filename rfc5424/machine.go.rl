@@ -254,9 +254,6 @@ msgid = msgidrange >mark %set_msgid $err(err_msgid);
 
 header = (pri version sp timestamp sp hostname sp appname sp procid sp msgid) <>err(err_parse);
 
-# utf8char except ", ], \
-utf8charwodelims = utf8char - toescape;
-
 # \", \], \\
 escapes = (bs >add_slash toescape) $err(err_escape);
 

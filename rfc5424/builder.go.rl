@@ -6,7 +6,6 @@ import (
 )
 
 %%{
-
 machine builder;
 
 include rfc5424 "rfc5424.rl";
@@ -16,42 +15,36 @@ action mark {
 }
 
 action set_timestamp {
-    fmt.Println("set_timestamp")
 	if t, e := time.Parse(time.RFC3339Nano, string(data[pb:p])); e == nil {
         sm.Timestamp = &t
     }
 }
 
 action set_hostname {
-    fmt.Println("set_hostname")
     if s := string(data[pb:p]); s != "-" {
         sm.Hostname = &s
     }
 }
 
 action set_appname {
-    fmt.Println("set_appname")
     if s := string(data[pb:p]); s != "-" {
         sm.Appname = &s
     }
 }
 
 action set_procid {
-    fmt.Println("set_procid")
     if s := string(data[pb:p]); s != "-" {
         sm.ProcID = &s
     }
 }
 
 action set_msgid {
-    fmt.Println("set_msgid")
     if s := string(data[pb:p]); s != "-" {
         sm.MsgID = &s
     }
 }
 
 action set_sdid {
-    fmt.Println("set_sdid")
     if sm.StructuredData == nil {
         sm.StructuredData = &(map[string]map[string]string{})
     }
@@ -64,21 +57,34 @@ action set_sdid {
 }
 
 action set_sdpn {
-    fmt.Println("set_sdpn")
     // Assuming SD map already exists, contains currentid key (set from outside)
     elements := *sm.StructuredData
     elements[currentid][string(data[pb:p])] = ""
 }
 
+action markslash {
+    backslashes = append(backslashes, p)
+}
+
 action set_sdpv {
-    fmt.Println("set_sdpv")
-    // Assuming SD map already exists, contains currentid key and currentparamname key (set from outside)
+    // Store text
+	text := data[pb:p]
+	// Strip backslashes only when there are ...
+    if len(backslashes) > 0 {
+        // We need a copy here to not modify data
+        cp := append([]byte(nil), text...)
+        for _, pos := range backslashes {
+            at := pos - pb
+            cp = append(cp[:at], cp[(at + 1):]...)
+        }
+        text = cp
+    }
+	// Assuming SD map already exists, contains currentid key and currentparamname key (set from outside)
     elements := *sm.StructuredData
-    elements[currentid][currentparamname] = string(data[pb:p])
+    elements[currentid][currentparamname] = string(text)
 }
 
 action set_msg {
-    fmt.Println("set_msg")
     if s := string(data[pb:p]); s != "" {
         sm.Message = &s
     }
@@ -98,8 +104,9 @@ sdid := sdname >mark %set_sdid;
 
 sdpn := sdname >mark %set_sdpn;
 
-# (fixme) > this is temporary for testing purposes only - must use its real rule
-sdpv := sdname >mark %set_sdpv;
+escapes = (bs >markslash toescape);
+
+sdpv := (utf8charwodelims* escapes*)+ >mark %set_sdpv;
 
 msg := (bom? utf8octets) >mark %set_msg;
 
@@ -145,6 +152,9 @@ func (e entrypoint) translate() int {
     }
 }
 
+var currentid string
+var currentparamname string
+
 func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
     data := []byte(value)
 	p := 0
@@ -152,6 +162,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 	pe := len(data)
 	eof := len(data)
     cs := from.translate()
+    backslashes := []int{}
     %% write exec;
 
     return sm
@@ -246,8 +257,15 @@ func (sm *SyslogMessage) String() (string, error) {
         return "", fmt.Errorf("invalid syslog")
     }
 
-    return "", nil // (todo)
-}
+    // template := "<%d>%d %s %s %s %s %s %s%s"
+    // if sm.Timestamp == nil {
+    //     t := "-"
+    // } else {
+    //     t := sm.Timestamp.Format("2006-01-02T15:04:05.999999Z07:00") // verify 07:00
+    // }
+    // (todo) > continue
 
-var currentid string
-var currentparamname string
+
+    // return fmt.Sprintf(template, sm.Priority, sm.Version, t, hn, an, pid, mid, sd, m), nil
+    return "", nil
+}
