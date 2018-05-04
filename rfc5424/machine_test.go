@@ -2696,7 +2696,7 @@ func TestMachineParse(t *testing.T) {
 	for _, tc := range testCases {
 		tc := tc
 		t.Run(rxpad(string(tc.input), 50), func(t *testing.T) {
-			// t.Parallel()
+			t.Parallel()
 
 			bestEffort := true
 			fsm := NewMachine()
