@@ -12,6 +12,8 @@ func TestSetTimestamp(t *testing.T) {
 
 	assert.Equal(t, time.Date(2003, 10, 11, 22, 14, 15, 0, time.UTC), *m.SetTimestamp("2003-10-11T22:14:15Z").Timestamp)
 	assert.Equal(t, time.Date(2003, 10, 11, 22, 14, 15, 3000, time.UTC), *m.SetTimestamp("2003-10-11T22:14:15.000003Z").Timestamp)
+
+	// (todo) > check that 2003-10-11T22:14:15.000003Z+07:00 is ignored since invalid
 }
 
 func TestSetNilTimestamp(t *testing.T) {
@@ -131,6 +133,8 @@ func TestSetWrongUTF8Message(t *testing.T) {}
 
 func TestSetMessageWithBOM(t *testing.T) {}
 
+func TestSetMessageWithNewline(t *testing.T) {}
+
 func TestSetOutOfRangeVersion(t *testing.T) {
 	m := &SyslogMessage{}
 	m.SetVersion(1000)
@@ -240,7 +244,7 @@ func TestSetSDParam(t *testing.T) {
 	assert.Equal(t, pv, (*sd)[id][pn])
 
 	pn1 := "pname1"
-	pv1 := "pvalue1"
+	pv1 := "κόσμε"
 	m.SetParameter(id, pn1, pv1)
 	assert.Len(t, (*sd)[id], 2)
 	assert.Equal(t, pv1, (*sd)[id][pn1])
@@ -274,4 +278,112 @@ func TestSetEmptySDParam(t *testing.T) {
 	assert.Len(t, *sd, 1)
 	assert.Len(t, (*sd)[id], 1)
 	assert.Equal(t, "", (*sd)[id][pn])
+}
+
+func TestSerialization(t *testing.T) {
+	var res string
+	var err error
+	var pout *SyslogMessage
+	var perr error
+
+	p := NewParser()
+
+	// Valid syslog message
+	m := &SyslogMessage{}
+	m.SetPriority(1)
+	m.SetVersion(1)
+	res, err = m.String()
+	assert.Nil(t, err)
+	assert.Equal(t, "<1>1 - - - - - -", res)
+
+	pout, perr = p.Parse([]byte(res), nil)
+	assert.Equal(t, m, pout)
+	assert.Nil(t, perr)
+
+	m.SetMessage("-") // does not means nil in this case, remember
+	res, err = m.String()
+	assert.Nil(t, err)
+	assert.Equal(t, "<1>1 - - - - - - -", res)
+
+	pout, perr = p.Parse([]byte(res), nil)
+	assert.Equal(t, m, pout)
+	assert.Nil(t, perr)
+
+	m.
+		SetParameter("mega", "x", "a").
+		SetParameter("mega", "y", "b").
+		SetParameter("mega", "z", "c").
+		SetParameter("peta", "a", "name").
+		SetParameter("giga", "1", "").
+		SetParameter("peta", "c", "nomen")
+
+	res, err = m.String()
+	assert.Nil(t, err)
+	assert.Equal(t, `<1>1 - - - - - [giga 1=""][mega x="a" y="b" z="c"][peta a="name" c="nomen"] -`, res)
+
+	pout, perr = p.Parse([]byte(res), nil)
+	assert.Equal(t, m, pout)
+	assert.Nil(t, perr)
+
+	m.SetHostname("host1")
+	res, err = m.String()
+	assert.Nil(t, err)
+	assert.Equal(t, `<1>1 - host1 - - - [giga 1=""][mega x="a" y="b" z="c"][peta a="name" c="nomen"] -`, res)
+
+	pout, perr = p.Parse([]byte(res), nil)
+	assert.Equal(t, m, pout)
+	assert.Nil(t, perr)
+
+	m.SetAppname("su")
+	res, err = m.String()
+	assert.Nil(t, err)
+	assert.Equal(t, `<1>1 - host1 su - - [giga 1=""][mega x="a" y="b" z="c"][peta a="name" c="nomen"] -`, res)
+
+	pout, perr = p.Parse([]byte(res), nil)
+	assert.Equal(t, m, pout)
+	assert.Nil(t, perr)
+
+	m.SetProcID("22")
+	res, err = m.String()
+	assert.Nil(t, err)
+	assert.Equal(t, `<1>1 - host1 su 22 - [giga 1=""][mega x="a" y="b" z="c"][peta a="name" c="nomen"] -`, res)
+
+	pout, perr = p.Parse([]byte(res), nil)
+	assert.Equal(t, m, pout)
+	assert.Nil(t, perr)
+
+	m.SetMsgID("#1")
+	res, err = m.String()
+	assert.Nil(t, err)
+	assert.Equal(t, `<1>1 - host1 su 22 #1 [giga 1=""][mega x="a" y="b" z="c"][peta a="name" c="nomen"] -`, res)
+
+	pout, perr = p.Parse([]byte(res), nil)
+	assert.Equal(t, m, pout)
+	assert.Nil(t, perr)
+
+	m.SetTimestamp("2002-10-22T16:33:15.000087+01:00")
+	res, err = m.String()
+	assert.Nil(t, err)
+	assert.Equal(t, `<1>1 2002-10-22T16:33:15.000087+01:00 host1 su 22 #1 [giga 1=""][mega x="a" y="b" z="c"][peta a="name" c="nomen"] -`, res)
+
+	pout, perr = p.Parse([]byte(res), nil)
+	assert.Equal(t, m, pout)
+	assert.Nil(t, perr)
+
+	m.SetMessage("κόσμε")
+	res, err = m.String()
+	assert.Nil(t, err)
+	assert.Equal(t, `<1>1 2002-10-22T16:33:15.000087+01:00 host1 su 22 #1 [giga 1=""][mega x="a" y="b" z="c"][peta a="name" c="nomen"] κόσμε`, res)
+
+	pout, perr = p.Parse([]byte(res), nil)
+	assert.Equal(t, m, pout)
+	assert.Nil(t, perr)
+
+	// Invalid syslog message
+	m2 := &SyslogMessage{}
+	m2.SetPriority(192)
+	m2.SetVersion(9999)
+	res, err = m2.String()
+	assert.Empty(t, res)
+	assert.Error(t, err)
 }

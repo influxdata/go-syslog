@@ -2,6 +2,7 @@ package rfc5424
 
 import (
 	"fmt"
+	"sort"
 	"time"
 )
 
@@ -9524,14 +9525,59 @@ func (sm *SyslogMessage) String() (string, error) {
 		return "", fmt.Errorf("invalid syslog")
 	}
 
-	// template := "<%d>%d %s %s %s %s %s %s%s"
-	// if sm.Timestamp == nil {
-	//     t := "-"
-	// } else {
-	//     t := sm.Timestamp.Format("2006-01-02T15:04:05.999999Z07:00") // verify 07:00
-	// }
-	// (todo) > continue
+	template := "<%d>%d %s %s %s %s %s %s%s"
 
-	// return fmt.Sprintf(template, sm.Priority, sm.Version, t, hn, an, pid, mid, sd, m), nil
-	return "", nil
+	t := "-"
+	hn := "-"
+	an := "-"
+	pid := "-"
+	mid := "-"
+	sd := "-"
+	m := ""
+	if sm.Timestamp != nil {
+		t = sm.Timestamp.Format("2006-01-02T15:04:05.999999Z07:00") // verify 07:00
+	}
+	if sm.Hostname != nil {
+		hn = *sm.Hostname
+	}
+	if sm.Appname != nil {
+		an = *sm.Appname
+	}
+	if sm.ProcID != nil {
+		pid = *sm.ProcID
+	}
+	if sm.MsgID != nil {
+		mid = *sm.MsgID
+	}
+	if sm.StructuredData != nil {
+		// Sort element identifiers
+		identifiers := make([]string, 0)
+		for k := range *sm.StructuredData {
+			identifiers = append(identifiers, k)
+		}
+		sort.Strings(identifiers)
+
+		sd = ""
+		for _, id := range identifiers {
+			sd += fmt.Sprintf("[%s", id)
+
+			// Sort parameter names
+			params := (*sm.StructuredData)[id]
+			names := make([]string, 0)
+			for n := range params {
+				names = append(names, n)
+			}
+			sort.Strings(names)
+
+			for _, name := range names {
+				sd += fmt.Sprintf(" %s=\"%s\"", name, params[name]) // (todo) > escape value
+			}
+			sd += "]"
+		}
+	}
+	if sm.Message != nil {
+		m = " " + *sm.Message
+	}
+
+	return fmt.Sprintf(template, *sm.Priority, sm.Version, t, hn, an, pid, mid, sd, m), nil
 }
