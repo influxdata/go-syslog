@@ -9,7 +9,7 @@ var (
 	errPrival         = "expecting a priority value in the range 1-191 or equal to 0 [col %d]"
 	errPri            = "expecting a priority value within angle brackets [col %d]"
 	errVersion        = "expecting a version value in the range 1-999 [col %d]"
-	errTimestamp      = "expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col %d]"
+	errTimestamp      = "expecting a RFC3339MICRO timestamp or a nil value [col %d]"
 	errHostname       = "expecting an hostname (from 1 to max 255 US-ASCII characters) or a nil value [col %d]"
 	errAppname        = "expecting an app-name (from 1 to max 48 US-ASCII characters) or a nil value [col %d]"
 	errProcid         = "expecting a procid (from 1 to max 128 US-ASCII characters) or a nil value [col %d]"
@@ -22,6 +22,9 @@ var (
 	errEscape         = "expecting chars `]`, `\"`, and `\\` to be escaped within param value [col %d]"
 	errParse          = "parsing error [col %d]"
 )
+
+const RFC3339MICRO = "2006-01-02T15:04:05.999999Z07:00"
+
 
 const start int = 1
 const first_final int = 603
@@ -80,6 +83,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 	{
 		m.cs = start
 	}
+
 
 	{
 		if (m.p) == (m.pe) {
@@ -1588,7 +1592,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr619:
-		if t, e := time.Parse(time.RFC3339Nano, string(m.text())); e != nil {
+		if t, e := time.Parse(RFC3339MICRO, string(m.text())); e != nil {
 			m.err = fmt.Errorf("%s [col %d]", e, m.p)
 			(m.p)--
 
@@ -1708,7 +1712,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr9
 	tr620:
-		if t, e := time.Parse(time.RFC3339Nano, string(m.text())); e != nil {
+		if t, e := time.Parse(RFC3339MICRO, string(m.text())); e != nil {
 			m.err = fmt.Errorf("%s [col %d]", e, m.p)
 			(m.p)--
 
@@ -11596,7 +11600,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 585:
-				if t, e := time.Parse(time.RFC3339Nano, string(m.text())); e != nil {
+				if t, e := time.Parse(RFC3339MICRO, string(m.text())); e != nil {
 					m.err = fmt.Errorf("%s [col %d]", e, m.p)
 					(m.p)--
 

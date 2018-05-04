@@ -16,7 +16,7 @@ action mark {
 }
 
 action set_timestamp {
-	if t, e := time.Parse(time.RFC3339Nano, string(data[pb:p])); e == nil {
+	if t, e := time.Parse(RFC3339MICRO, string(data[pb:p])); e == nil {
         sm.Timestamp = &t
     }
 }

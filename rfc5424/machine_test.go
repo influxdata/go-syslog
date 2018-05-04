@@ -259,7 +259,7 @@ var testCases = []testCase{
 		[]byte("<1>2 "),
 		false,
 		nil,
-		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 5]",
+		"expecting a RFC3339MICRO timestamp or a nil value [col 5]",
 		&SyslogMessage{
 			Priority: getUint8Address(1),
 			facility: getUint8Address(0),
@@ -317,7 +317,7 @@ var testCases = []testCase{
 		[]byte("<1>5 A"),
 		false,
 		nil,
-		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 5]",
+		"expecting a RFC3339MICRO timestamp or a nil value [col 5]",
 		&SyslogMessage{
 			Priority: getUint8Address(1),
 			facility: getUint8Address(0),
@@ -325,12 +325,37 @@ var testCases = []testCase{
 			Version:  5,
 		},
 	},
+	// Invalid, timestamp T and Z must be uppercase
+	{
+		[]byte(`<29>1 2006-01-02t15:04:05Z - - - - -`),
+		false,
+		nil,
+		"expecting a RFC3339MICRO timestamp or a nil value [col 16]",
+		&SyslogMessage{
+			facility: getUint8Address(3),
+			severity: getUint8Address(5),
+			Priority: getUint8Address(29),
+			Version:  1,
+		},
+	},
+	{
+		[]byte(`<29>2 2006-01-02T15:04:05z - - - - -`),
+		false,
+		nil,
+		"expecting a RFC3339MICRO timestamp or a nil value [col 25]",
+		&SyslogMessage{
+			facility: getUint8Address(3),
+			severity: getUint8Address(5),
+			Priority: getUint8Address(29),
+			Version:  2,
+		},
+	},
 	// Invalid, wrong year
 	{
 		[]byte("<101>123 2"),
 		false,
 		nil,
-		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 10]",
+		"expecting a RFC3339MICRO timestamp or a nil value [col 10]",
 		&SyslogMessage{
 			Priority: getUint8Address(101),
 			facility: getUint8Address(12),
@@ -342,7 +367,7 @@ var testCases = []testCase{
 		[]byte("<101>124 20"),
 		false,
 		nil,
-		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 11]",
+		"expecting a RFC3339MICRO timestamp or a nil value [col 11]",
 		&SyslogMessage{
 			Priority: getUint8Address(101),
 			facility: getUint8Address(12),
@@ -354,7 +379,7 @@ var testCases = []testCase{
 		[]byte("<101>125 201"),
 		false,
 		nil,
-		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 12]",
+		"expecting a RFC3339MICRO timestamp or a nil value [col 12]",
 		&SyslogMessage{
 			Priority: getUint8Address(101),
 			facility: getUint8Address(12),
@@ -366,7 +391,7 @@ var testCases = []testCase{
 		[]byte("<101>125 2013"),
 		false,
 		nil,
-		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 13]",
+		"expecting a RFC3339MICRO timestamp or a nil value [col 13]",
 		&SyslogMessage{
 			Priority: getUint8Address(101),
 			facility: getUint8Address(12),
@@ -378,7 +403,7 @@ var testCases = []testCase{
 		[]byte("<101>126 2013-"),
 		false,
 		nil,
-		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 14]",
+		"expecting a RFC3339MICRO timestamp or a nil value [col 14]",
 		&SyslogMessage{
 			Priority: getUint8Address(101),
 			facility: getUint8Address(12),
@@ -390,7 +415,7 @@ var testCases = []testCase{
 		[]byte("<101>122 201-11-22"),
 		false,
 		nil,
-		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 12]",
+		"expecting a RFC3339MICRO timestamp or a nil value [col 12]",
 		&SyslogMessage{
 			Priority: getUint8Address(101),
 			facility: getUint8Address(12),
@@ -402,7 +427,7 @@ var testCases = []testCase{
 		[]byte("<101>189 0-11-22"),
 		false,
 		nil,
-		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 10]",
+		"expecting a RFC3339MICRO timestamp or a nil value [col 10]",
 		&SyslogMessage{
 			Priority: getUint8Address(101),
 			facility: getUint8Address(12),
@@ -415,7 +440,7 @@ var testCases = []testCase{
 		[]byte("<101>122 2018-112-22"),
 		false,
 		nil,
-		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 16]",
+		"expecting a RFC3339MICRO timestamp or a nil value [col 16]",
 		&SyslogMessage{
 			Priority: getUint8Address(101),
 			facility: getUint8Address(12),
@@ -428,7 +453,7 @@ var testCases = []testCase{
 		[]byte("<101>123 2018-02-32"),
 		false,
 		nil,
-		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 18]",
+		"expecting a RFC3339MICRO timestamp or a nil value [col 18]",
 		&SyslogMessage{
 			Priority: getUint8Address(101),
 			facility: getUint8Address(12),
@@ -441,7 +466,7 @@ var testCases = []testCase{
 		[]byte("<101>124 2018-02-01:25:15Z"),
 		false,
 		nil,
-		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 19]",
+		"expecting a RFC3339MICRO timestamp or a nil value [col 19]",
 		&SyslogMessage{
 			Priority: getUint8Address(101),
 			facility: getUint8Address(12),
@@ -454,7 +479,7 @@ var testCases = []testCase{
 		[]byte("<101>125 2003-09-29T22:99:16Z"),
 		false,
 		nil,
-		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 23]",
+		"expecting a RFC3339MICRO timestamp or a nil value [col 23]",
 		&SyslogMessage{
 			Priority: getUint8Address(101),
 			facility: getUint8Address(12),
@@ -467,7 +492,7 @@ var testCases = []testCase{
 		[]byte("<101>126 2003-09-29T22:09:99Z"),
 		false,
 		nil,
-		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 26]",
+		"expecting a RFC3339MICRO timestamp or a nil value [col 26]",
 		&SyslogMessage{
 			Priority: getUint8Address(101),
 			facility: getUint8Address(12),
@@ -480,7 +505,7 @@ var testCases = []testCase{
 		[]byte("<101>127 2003-09-29T22:09:01.000000000009Z"),
 		false,
 		nil,
-		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 35]",
+		"expecting a RFC3339MICRO timestamp or a nil value [col 35]",
 		&SyslogMessage{
 			Priority: getUint8Address(101),
 			facility: getUint8Address(12),
@@ -492,7 +517,7 @@ var testCases = []testCase{
 		[]byte("<101>128 2003-09-29T22:09:01.Z"),
 		false,
 		nil,
-		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 29]",
+		"expecting a RFC3339MICRO timestamp or a nil value [col 29]",
 		&SyslogMessage{
 			Priority: getUint8Address(101),
 			facility: getUint8Address(12),
@@ -504,7 +529,7 @@ var testCases = []testCase{
 		[]byte("<101>28 2003-09-29T22:09:01."),
 		false,
 		nil,
-		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 28]",
+		"expecting a RFC3339MICRO timestamp or a nil value [col 28]",
 		&SyslogMessage{
 			Priority: getUint8Address(101),
 			facility: getUint8Address(12),
@@ -517,7 +542,7 @@ var testCases = []testCase{
 		[]byte("<101>129 2003-09-29T22:09:01A"),
 		false,
 		nil,
-		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 28]",
+		"expecting a RFC3339MICRO timestamp or a nil value [col 28]",
 		&SyslogMessage{
 			Priority: getUint8Address(101),
 			facility: getUint8Address(12),
@@ -529,7 +554,7 @@ var testCases = []testCase{
 		[]byte("<101>130 2003-08-24T05:14:15.000003-24:00"),
 		false,
 		nil,
-		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 37]",
+		"expecting a RFC3339MICRO timestamp or a nil value [col 37]",
 		&SyslogMessage{
 			Priority: getUint8Address(101),
 			facility: getUint8Address(12),
@@ -541,7 +566,7 @@ var testCases = []testCase{
 		[]byte("<101>131 2003-08-24T05:14:15.000003-60:00"),
 		false,
 		nil,
-		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 36]",
+		"expecting a RFC3339MICRO timestamp or a nil value [col 36]",
 		&SyslogMessage{
 			Priority: getUint8Address(101),
 			facility: getUint8Address(12),
@@ -553,12 +578,25 @@ var testCases = []testCase{
 		[]byte("<101>132 2003-08-24T05:14:15.000003-07:61"),
 		false,
 		nil,
-		"expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col 39]",
+		"expecting a RFC3339MICRO timestamp or a nil value [col 39]",
 		&SyslogMessage{
 			Priority: getUint8Address(101),
 			facility: getUint8Address(12),
 			severity: getUint8Address(5),
 			Version:  132,
+		},
+	},
+	{
+		[]byte(`<29>1 2006-01-02T15:04:05Z+07:00 - - - - -`),
+		false,
+		nil,
+		"parsing error [col 26]", // after the Z (valid and complete timestamp) it searches for a whitespace
+		&SyslogMessage{
+			facility:  getUint8Address(3),
+			severity:  getUint8Address(5),
+			Priority:  getUint8Address(29),
+			Version:   1,
+			Timestamp: timeParse(RFC3339MICRO, "2006-01-02T15:04:05Z"),
 		},
 	},
 	// Invalid, non existing dates
@@ -621,7 +659,7 @@ var testCases = []testCase{
 			facility:  getUint8Address(0),
 			severity:  getUint8Address(1),
 			Version:   1,
-			Timestamp: timeParse(time.RFC3339Nano, "2003-09-29T22:14:16Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2003-09-29T22:14:16Z"),
 		},
 	},
 	// Invalid, appname too long
@@ -647,7 +685,7 @@ var testCases = []testCase{
 			facility:  getUint8Address(0),
 			severity:  getUint8Address(1),
 			Version:   1,
-			Timestamp: timeParse(time.RFC3339Nano, "2003-09-29T22:14:16Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2003-09-29T22:14:16Z"),
 		},
 	},
 	{
@@ -673,7 +711,7 @@ var testCases = []testCase{
 			facility:  getUint8Address(0),
 			severity:  getUint8Address(1),
 			Version:   1,
-			Timestamp: timeParse(time.RFC3339Nano, "2003-09-29T22:14:16Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2003-09-29T22:14:16Z"),
 			Hostname:  getStringAddress("host"),
 		},
 	},
@@ -899,7 +937,7 @@ var testCases = []testCase{
 			severity:  getUint8Address(5),
 			Priority:  getUint8Address(29),
 			Version:   1,
-			Timestamp: timeParse(time.RFC3339Nano, "2016-02-21T04:32:57+00:00"),
+			Timestamp: timeParse(RFC3339MICRO, "2016-02-21T04:32:57+00:00"),
 			Hostname:  getStringAddress("web1"),
 			Appname:   getStringAddress("someservice"),
 			StructuredData: &map[string]map[string]string{
@@ -983,7 +1021,7 @@ var testCases = []testCase{
 			facility:  getUint8Address(23),
 			severity:  getUint8Address(7),
 			Version:   999,
-			Timestamp: timeParse(time.RFC3339Nano, "2018-12-31T23:59:59.999999-23:59"),
+			Timestamp: timeParse(RFC3339MICRO, "2018-12-31T23:59:59.999999-23:59"),
 			Hostname:  getStringAddress("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabc"),
 			Appname:   getStringAddress("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdef"),
 			ProcID:    getStringAddress("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzab"),
@@ -1001,7 +1039,7 @@ var testCases = []testCase{
 			facility:  getUint8Address(23),
 			severity:  getUint8Address(7),
 			Version:   999,
-			Timestamp: timeParse(time.RFC3339Nano, "2018-12-31T23:59:59.999999-23:59"),
+			Timestamp: timeParse(RFC3339MICRO, "2018-12-31T23:59:59.999999-23:59"),
 			Hostname:  getStringAddress("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabc"),
 			Appname:   getStringAddress("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdef"),
 			ProcID:    getStringAddress("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzab"),
@@ -1029,7 +1067,7 @@ var testCases = []testCase{
 			severity:       getUint8Address(2),
 			Priority:       getUint8Address(34),
 			Version:        1,
-			Timestamp:      timeParse(time.RFC3339Nano, "2003-10-11T22:14:15.003Z"),
+			Timestamp:      timeParse(RFC3339MICRO, "2003-10-11T22:14:15.003Z"),
 			Hostname:       getStringAddress("mymachine.example.com"),
 			Appname:        getStringAddress("su"),
 			ProcID:         nil,
@@ -1069,7 +1107,7 @@ var testCases = []testCase{
 			severity:       getUint8Address(5),
 			Priority:       getUint8Address(165),
 			Version:        1,
-			Timestamp:      timeParse(time.RFC3339Nano, "2003-08-24T05:14:15.000003-07:00"),
+			Timestamp:      timeParse(RFC3339MICRO, "2003-08-24T05:14:15.000003-07:00"),
 			Hostname:       getStringAddress("192.0.2.1"),
 			Appname:        getStringAddress("myproc"),
 			ProcID:         getStringAddress("8710"),
@@ -1089,7 +1127,7 @@ var testCases = []testCase{
 			severity:       getUint8Address(5),
 			Priority:       getUint8Address(165),
 			Version:        2,
-			Timestamp:      timeParse(time.RFC3339Nano, "2003-08-24T05:14:15.000003-07:00"),
+			Timestamp:      timeParse(RFC3339MICRO, "2003-08-24T05:14:15.000003-07:00"),
 			Hostname:       nil,
 			Appname:        nil,
 			ProcID:         nil,
@@ -1109,7 +1147,7 @@ var testCases = []testCase{
 			severity:       getUint8Address(5),
 			Priority:       getUint8Address(165),
 			Version:        222,
-			Timestamp:      timeParse(time.RFC3339Nano, "2003-08-24T05:14:15.000003-07:00"),
+			Timestamp:      timeParse(RFC3339MICRO, "2003-08-24T05:14:15.000003-07:00"),
 			Hostname:       nil,
 			Appname:        nil,
 			ProcID:         nil,
@@ -1129,7 +1167,7 @@ var testCases = []testCase{
 			severity:  getUint8Address(6),
 			Priority:  getUint8Address(78),
 			Version:   1,
-			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T00:04:01+00:00"),
+			Timestamp: timeParse(RFC3339MICRO, "2016-01-15T00:04:01+00:00"),
 			Hostname:  getStringAddress("host1"),
 			Appname:   getStringAddress("CROND"),
 			ProcID:    getStringAddress("10391"),
@@ -1151,7 +1189,7 @@ var testCases = []testCase{
 			severity:  getUint8Address(6),
 			Priority:  getUint8Address(78),
 			Version:   1,
-			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T00:04:01+00:00"),
+			Timestamp: timeParse(RFC3339MICRO, "2016-01-15T00:04:01+00:00"),
 			Hostname:  getStringAddress("host1"),
 			Appname:   getStringAddress("CROND"),
 			ProcID:    getStringAddress("10391"),
@@ -1175,7 +1213,7 @@ var testCases = []testCase{
 			severity:  getUint8Address(6),
 			Priority:  getUint8Address(78),
 			Version:   2,
-			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T00:04:01+00:00"),
+			Timestamp: timeParse(RFC3339MICRO, "2016-01-15T00:04:01+00:00"),
 			Hostname:  getStringAddress("host1"),
 			Appname:   getStringAddress("CROND"),
 			ProcID:    getStringAddress("10391"),
@@ -1199,7 +1237,7 @@ var testCases = []testCase{
 			facility:  getUint8Address(3),
 			severity:  getUint8Address(5),
 			Version:   50,
-			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
 			Hostname:  getStringAddress("hn"),
 			Appname:   getStringAddress("S"),
 			StructuredData: &map[string]map[string]string{
@@ -1220,7 +1258,7 @@ var testCases = []testCase{
 			facility:  getUint8Address(3),
 			severity:  getUint8Address(5),
 			Version:   52,
-			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
 			Hostname:  getStringAddress("hn"),
 			Appname:   getStringAddress("S"),
 			StructuredData: &map[string]map[string]string{
@@ -1242,7 +1280,7 @@ var testCases = []testCase{
 			facility:  getUint8Address(3),
 			severity:  getUint8Address(5),
 			Version:   53,
-			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
 			Hostname:  getStringAddress("hn"),
 			Appname:   getStringAddress("S"),
 			StructuredData: &map[string]map[string]string{
@@ -1267,7 +1305,7 @@ var testCases = []testCase{
 			facility:  getUint8Address(3),
 			severity:  getUint8Address(5),
 			Version:   51,
-			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
 			Hostname:  getStringAddress("hn"),
 			Appname:   getStringAddress("S"),
 			StructuredData: &map[string]map[string]string{
@@ -1288,7 +1326,7 @@ var testCases = []testCase{
 			facility:  getUint8Address(3),
 			severity:  getUint8Address(5),
 			Version:   54,
-			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
 			Hostname:  getStringAddress("hn"),
 			Appname:   getStringAddress("S"),
 			StructuredData: &map[string]map[string]string{
@@ -1309,7 +1347,7 @@ var testCases = []testCase{
 			facility:  getUint8Address(3),
 			severity:  getUint8Address(5),
 			Version:   55,
-			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
 			Hostname:  getStringAddress("hn"),
 			Appname:   getStringAddress("S"),
 			StructuredData: &map[string]map[string]string{
@@ -1331,7 +1369,7 @@ var testCases = []testCase{
 			facility:  getUint8Address(3),
 			severity:  getUint8Address(5),
 			Version:   50,
-			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
 			Hostname:  getStringAddress("hn"),
 			Appname:   getStringAddress("S"),
 			StructuredData: &map[string]map[string]string{
@@ -1353,7 +1391,7 @@ var testCases = []testCase{
 			facility:  getUint8Address(3),
 			severity:  getUint8Address(5),
 			Version:   50,
-			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
 			Hostname:  getStringAddress("hn"),
 			Appname:   getStringAddress("S"),
 			StructuredData: &map[string]map[string]string{
@@ -1379,7 +1417,7 @@ var testCases = []testCase{
 			severity:  getUint8Address(5),
 			Priority:  getUint8Address(165),
 			Version:   3,
-			Timestamp: timeParse(time.RFC3339Nano, "2003-10-11T22:14:15.003Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2003-10-11T22:14:15.003Z"),
 			Hostname:  getStringAddress("example.com"),
 			Appname:   getStringAddress("evnts"),
 			ProcID:    nil,
@@ -1410,7 +1448,7 @@ var testCases = []testCase{
 			facility:  getUint8Address(20),
 			severity:  getUint8Address(5),
 			Version:   3,
-			Timestamp: timeParse(time.RFC3339Nano, "2003-10-11T22:14:15.003Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2003-10-11T22:14:15.003Z"),
 			Hostname:  getStringAddress("example.com"),
 			Appname:   getStringAddress("evnts"),
 			MsgID:     getStringAddress("ID27"),
@@ -1430,7 +1468,7 @@ var testCases = []testCase{
 			facility:  getUint8Address(20),
 			severity:  getUint8Address(5),
 			Version:   3,
-			Timestamp: timeParse(time.RFC3339Nano, "2003-10-11T22:14:15.003Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2003-10-11T22:14:15.003Z"),
 			Hostname:  getStringAddress("example.com"),
 			Appname:   getStringAddress("evnts"),
 			MsgID:     getStringAddress("ID27"),
@@ -1451,7 +1489,7 @@ var testCases = []testCase{
 			severity:  getUint8Address(5),
 			Priority:  getUint8Address(165),
 			Version:   4,
-			Timestamp: timeParse(time.RFC3339Nano, "2003-10-11T22:14:15.003Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2003-10-11T22:14:15.003Z"),
 			Hostname:  getStringAddress("mymachine.it"),
 			Appname:   getStringAddress("e"),
 			ProcID:    nil,
@@ -1476,7 +1514,7 @@ var testCases = []testCase{
 			severity:  getUint8Address(5),
 			Priority:  getUint8Address(29),
 			Version:   1,
-			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
 			Hostname:  getStringAddress("some-host-name"),
 			Appname:   getStringAddress("SEKRETPROGRAM"),
 			ProcID:    getStringAddress("prg"),
@@ -1521,7 +1559,7 @@ var testCases = []testCase{
 			severity:  getUint8Address(5),
 			Priority:  getUint8Address(29),
 			Version:   2,
-			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
 			Hostname:  getStringAddress("some-host-name"),
 			Appname:   getStringAddress("SEKRETPROGRAM"),
 			ProcID:    getStringAddress("prg"),
@@ -1544,7 +1582,7 @@ var testCases = []testCase{
 			severity:  getUint8Address(5),
 			Priority:  getUint8Address(29),
 			Version:   2,
-			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
 			Hostname:  getStringAddress("some-host-name"),
 			Appname:   getStringAddress("SEKRETPROGRAM"),
 			ProcID:    getStringAddress("prg"),
@@ -1566,7 +1604,7 @@ var testCases = []testCase{
 			severity:  getUint8Address(5),
 			Priority:  getUint8Address(29),
 			Version:   2,
-			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
 			Hostname:  getStringAddress("some-host-name"),
 			Appname:   getStringAddress("SEKRETPROGRAM"),
 			ProcID:    getStringAddress("prg"),
@@ -1588,7 +1626,7 @@ var testCases = []testCase{
 			severity:  getUint8Address(5),
 			Priority:  getUint8Address(29),
 			Version:   2,
-			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
 			Hostname:  getStringAddress("some-host-name"),
 			Appname:   getStringAddress("SEKRETPROGRAM"),
 			ProcID:    getStringAddress("prg"),
@@ -1613,7 +1651,7 @@ var testCases = []testCase{
 			severity:  getUint8Address(5),
 			Priority:  getUint8Address(29),
 			Version:   3,
-			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
 			Hostname:  getStringAddress("hn"),
 			Appname:   getStringAddress("S"),
 			StructuredData: &map[string]map[string]string{
@@ -1631,7 +1669,7 @@ var testCases = []testCase{
 			severity:  getUint8Address(5),
 			Priority:  getUint8Address(29),
 			Version:   5,
-			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
 			Hostname:  getStringAddress("hn"),
 			Appname:   getStringAddress("S"),
 			StructuredData: &map[string]map[string]string{
@@ -1649,7 +1687,7 @@ var testCases = []testCase{
 			severity:  getUint8Address(5),
 			Priority:  getUint8Address(29),
 			Version:   4,
-			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
 			Hostname:  getStringAddress("hn"),
 			Appname:   getStringAddress("S"),
 			StructuredData: &map[string]map[string]string{
@@ -1668,7 +1706,7 @@ var testCases = []testCase{
 			severity:  getUint8Address(5),
 			Priority:  getUint8Address(29),
 			Version:   4,
-			Timestamp: timeParse(time.RFC3339Nano, "2017-01-15T01:00:43Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2017-01-15T01:00:43Z"),
 			Hostname:  getStringAddress("hn"),
 			Appname:   getStringAddress("S"),
 			StructuredData: &map[string]map[string]string{
@@ -1686,7 +1724,7 @@ var testCases = []testCase{
 			severity:  getUint8Address(5),
 			Priority:  getUint8Address(29),
 			Version:   6,
-			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
 			Hostname:  getStringAddress("hn"),
 			Appname:   getStringAddress("S"),
 			StructuredData: &map[string]map[string]string{
@@ -1704,7 +1742,7 @@ var testCases = []testCase{
 			severity:  getUint8Address(5),
 			Priority:  getUint8Address(29),
 			Version:   4,
-			Timestamp: timeParse(time.RFC3339Nano, "2018-01-15T01:00:43Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2018-01-15T01:00:43Z"),
 			Hostname:  getStringAddress("hn"),
 			Appname:   getStringAddress("S"),
 			StructuredData: &map[string]map[string]string{
@@ -1723,7 +1761,7 @@ var testCases = []testCase{
 			severity:  getUint8Address(5),
 			Priority:  getUint8Address(29),
 			Version:   5,
-			Timestamp: timeParse(time.RFC3339Nano, "2019-01-15T01:00:43Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2019-01-15T01:00:43Z"),
 			Hostname:  getStringAddress("hn"),
 			Appname:   getStringAddress("S"),
 			StructuredData: &map[string]map[string]string{
@@ -1741,7 +1779,7 @@ var testCases = []testCase{
 			severity:  getUint8Address(5),
 			Priority:  getUint8Address(29),
 			Version:   7,
-			Timestamp: timeParse(time.RFC3339Nano, "2019-01-15T01:00:43Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2019-01-15T01:00:43Z"),
 			Hostname:  getStringAddress("hn"),
 			Appname:   getStringAddress("S"),
 			StructuredData: &map[string]map[string]string{
@@ -1759,7 +1797,7 @@ var testCases = []testCase{
 			severity:  getUint8Address(5),
 			Priority:  getUint8Address(29),
 			Version:   8,
-			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Timestamp: timeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
 			Hostname:  getStringAddress("hn"),
 			Appname:   getStringAddress("S"),
 			StructuredData: &map[string]map[string]string{
@@ -2640,7 +2678,7 @@ func generateIncompleteTimestampTestCases() []testCase {
 			input:        append(prefix, prev...),
 			valid:        false,
 			value:        nil,
-			errorString:  fmt.Sprintf("expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col %d]", len(prefix)+i+1),
+			errorString:  fmt.Sprintf("expecting a RFC3339MICRO timestamp or a nil value [col %d]", len(prefix)+i+1),
 			partialValue: mex,
 		}
 		tCases = append(tCases, tc)
@@ -2717,7 +2755,7 @@ func TestMachineParse(t *testing.T) {
 	for _, tc := range testCases {
 		tc := tc
 		t.Run(rxpad(string(tc.input), 50), func(t *testing.T) {
-			//t.Parallel()
+			t.Parallel()
 
 			bestEffort := true
 			fsm := NewMachine()
