@@ -15,3 +15,27 @@ func unsafeUTF8DecimalCodePointsToInt(chars []uint8) int {
 	}
 	return out
 }
+
+// escape adds a backslash to \, ], " characters
+func escape(value string) string {
+	res := ""
+	for i, c := range value {
+		if c == 92 || c == 93 || c == 34 {
+			res += `\`
+		}
+		res += string(value[i])
+	}
+
+	return res
+}
+
+// rmchars remove byte at given positions starting from offset
+func rmchars(data []byte, positions []int, offset int) []byte {
+	// We need a copy here to not modify original data
+	cp := append([]byte(nil), data...)
+	for i, pos := range positions {
+		at := pos - i - offset
+		cp = append(cp[:at], cp[(at+1):]...)
+	}
+	return cp
+}
