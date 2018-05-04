@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestSetValidTimestamp(t *testing.T) {
+func TestSetTimestamp(t *testing.T) {
 	m := &SyslogMessage{}
 
 	assert.Equal(t, time.Date(2003, 10, 11, 22, 14, 15, 0, time.UTC), *m.SetTimestamp("2003-10-11T22:14:15Z").Timestamp)
@@ -51,7 +51,7 @@ func TestSetNilOrEmptyHostname(t *testing.T) {
 	assert.Nil(t, m.SetHostname("").Hostname)
 }
 
-func TestSetValidHostname(t *testing.T) {
+func TestSetHostname(t *testing.T) {
 	m := &SyslogMessage{}
 
 	maxlen := []byte("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabc")
@@ -64,7 +64,7 @@ func TestSetValidHostname(t *testing.T) {
 	}
 }
 
-func TestSetValidAppname(t *testing.T) {
+func TestSetAppname(t *testing.T) {
 	m := &SyslogMessage{}
 
 	maxlen := []byte("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdef")
@@ -77,7 +77,7 @@ func TestSetValidAppname(t *testing.T) {
 	}
 }
 
-func TestSetValidProcID(t *testing.T) {
+func TestSetProcID(t *testing.T) {
 	m := &SyslogMessage{}
 
 	maxlen := []byte("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzab")
@@ -90,7 +90,7 @@ func TestSetValidProcID(t *testing.T) {
 	}
 }
 
-func TestSetValidMsgID(t *testing.T) {
+func TestSetMsgID(t *testing.T) {
 	m := &SyslogMessage{}
 
 	maxlen := []byte("abcdefghilmnopqrstuvzabcdefghilm")
@@ -115,31 +115,31 @@ func TestSetSyntacticallyWrongHostnameAppnameProcIDMsgID(t *testing.T) {
 	assert.Nil(t, m.SetMsgID(string([]byte{0x0})).MsgID)
 }
 
-func TestValidMessage(t *testing.T) {
+func TestSetMessage(t *testing.T) {
 	m := &SyslogMessage{}
 	greek := "κόσμε"
 	assert.Equal(t, greek, *m.SetMessage(greek).Message)
 }
 
-func TestEmptyMessageIsNil(t *testing.T) {
+func TestSetEmptyMessage(t *testing.T) {
 	m := &SyslogMessage{}
 	m.SetMessage("")
 	assert.Nil(t, m.Message)
 }
 
-func TestWrongUTF8Message(t *testing.T) {}
+func TestSetWrongUTF8Message(t *testing.T) {}
 
-func TestMessageWithBOM(t *testing.T) {}
+func TestSetMessageWithBOM(t *testing.T) {}
 
-func TestOutOfRangeVersionValues(t *testing.T) {}
+func TestSetOutOfRangeVersion(t *testing.T) {}
 
-func TestOutOfRangePriorityValues(t *testing.T) {}
+func TestSetOutOfRangePriority(t *testing.T) {}
 
-func TestValidVersionValues(t *testing.T) {}
+func TestSetVersion(t *testing.T) {}
 
-func TestValidPriorityValues(t *testing.T) {}
+func TestSetPriority(t *testing.T) {}
 
-func TestValidSDID(t *testing.T) {
+func TestSetSDID(t *testing.T) {
 	identifier := "one"
 	m := &SyslogMessage{}
 	assert.Nil(t, m.StructuredData)
@@ -153,7 +153,54 @@ func TestValidSDID(t *testing.T) {
 	assert.Len(t, *sd, 1)
 }
 
-func TestValidSDParam(t *testing.T) {
+func TestSetAllLenghtsSDID(t *testing.T) {
+	m := &SyslogMessage{}
+
+	maxlen := []byte("abcdefghilmnopqrstuvzabcdefghilm")
+
+	prev := make([]byte, 0, len(maxlen))
+	for i, input := range maxlen {
+		prev = append(prev, input)
+		id := string(prev)
+		m.SetElementID(id)
+		assert.Len(t, *m.StructuredData, i+1)
+		assert.IsType(t, map[string]string{}, (*m.StructuredData)[id])
+	}
+}
+
+func TestSetTooLongSDID(t *testing.T) {
+	m := &SyslogMessage{}
+	m.SetElementID("abcdefghilmnopqrstuvzabcdefghilmX")
+	assert.Nil(t, m.StructuredData)
+}
+
+func TestSetSyntacticallyWrongSDID(t *testing.T) {
+	m := &SyslogMessage{}
+	m.SetElementID("no whitespaces")
+	assert.Nil(t, m.StructuredData)
+	m.SetElementID(" ")
+	assert.Nil(t, m.StructuredData)
+	m.SetElementID(`"`)
+	assert.Nil(t, m.StructuredData)
+	m.SetElementID(`no"`)
+	assert.Nil(t, m.StructuredData)
+	m.SetElementID(`"no`)
+	assert.Nil(t, m.StructuredData)
+	m.SetElementID("]")
+	assert.Nil(t, m.StructuredData)
+	m.SetElementID("no]")
+	assert.Nil(t, m.StructuredData)
+	m.SetElementID("]no")
+	assert.Nil(t, m.StructuredData)
+}
+
+func TestSetEmptySDID(t *testing.T) {
+	m := &SyslogMessage{}
+	m.SetElementID("")
+	assert.Nil(t, m.StructuredData)
+}
+
+func TestSetSDParam(t *testing.T) {
 	id := "one"
 	pn := "pname"
 	pv := "pvalue"
@@ -180,4 +227,27 @@ func TestValidSDParam(t *testing.T) {
 	assert.Len(t, (*sd)[id1], 2)
 	assert.Equal(t, pv1, (*sd)[id1][pn1])
 	assert.Equal(t, pv, (*sd)[id1][pn])
+
+	id2 := "tre"
+	pn2 := "meta"
+	m.SetParameter(id2, pn, `is\\valid`).SetParameter(id2, pn1, `is\]valid`).SetParameter(id2, pn2, `is\"valid`)
+	assert.Len(t, *sd, 3)
+	assert.Len(t, (*sd)[id2], 3)
+	assert.Equal(t, `is\valid`, (*sd)[id2][pn])
+	assert.Equal(t, `is]valid`, (*sd)[id2][pn1])
+	assert.Equal(t, `is"valid`, (*sd)[id2][pn2])
+	// Cannot contain \, ], " unless escaped
+	m.SetParameter(id2, pn, `is\valid`).SetParameter(id2, pn1, `is]valid`).SetParameter(id2, pn2, `is"valid`)
+	assert.Len(t, (*sd)[id2], 3)
+}
+
+func TestSetEmptySDParam(t *testing.T) {
+	id := "id"
+	pn := "pn"
+	m := &SyslogMessage{}
+	m.SetParameter(id, pn, "")
+	sd := m.StructuredData
+	assert.Len(t, *sd, 1)
+	assert.Len(t, (*sd)[id], 1)
+	assert.Equal(t, "", (*sd)[id][pn])
 }
