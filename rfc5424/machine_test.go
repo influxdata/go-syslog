@@ -1512,7 +1512,7 @@ var testCases = []testCase{
 		"",
 		nil,
 	},
-	// Valid, with double quotes in the message and escaped character within param
+	// Valid, with escaped character within param value
 	{
 		[]byte(`<29>2 2016-01-15T01:00:43Z some-host-name SEKRETPROGRAM prg - [meta escape="\]"] some "mex"`),
 		true,
@@ -1536,7 +1536,6 @@ var testCases = []testCase{
 		"",
 		nil,
 	},
-	// Valid, with escaped character within param
 	{
 		[]byte(`<29>2 2016-01-15T01:00:43Z some-host-name SEKRETPROGRAM prg - [meta escape="\\"]`),
 		true,
@@ -1575,6 +1574,28 @@ var testCases = []testCase{
 			StructuredData: &map[string]map[string]string{
 				"meta": map[string]string{
 					"escape": `"`,
+				},
+			},
+		},
+		"",
+		nil,
+	},
+	{
+		[]byte(`<29>2 2016-01-15T01:00:43Z some-host-name SEKRETPROGRAM prg - [meta escape="\]\"\\\\\]\""]`),
+		true,
+		&SyslogMessage{
+			facility:  getUint8Address(3),
+			severity:  getUint8Address(5),
+			Priority:  getUint8Address(29),
+			Version:   2,
+			Timestamp: timeParse(time.RFC3339Nano, "2016-01-15T01:00:43Z"),
+			Hostname:  getStringAddress("some-host-name"),
+			Appname:   getStringAddress("SEKRETPROGRAM"),
+			ProcID:    getStringAddress("prg"),
+			MsgID:     nil,
+			StructuredData: &map[string]map[string]string{
+				"meta": map[string]string{
+					"escape": `]"\\]"`,
 				},
 			},
 		},
