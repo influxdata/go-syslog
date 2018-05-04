@@ -23,7 +23,6 @@ var (
 	errParse          = "parsing error [col %d]"
 )
 
-
 const start int = 1
 const first_final int = 603
 
@@ -81,7 +80,6 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 	{
 		m.cs = start
 	}
-
 
 	{
 		if (m.p) == (m.pe) {
@@ -2887,14 +2885,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 			// Strip backslashes only when there are ...
 			if len(m.backslashat) > 0 {
-				// We need a copy here to not modify m.data
-				cp := append([]byte(nil), text...)
-				for i, pos := range m.backslashat {
-					at := pos - i - m.pb
-					cp = append(cp[:at], cp[(at+1):]...)
-				}
-
-				text = cp
+				text = rmchars(text, m.backslashat, m.pb)
 			}
 			output.structuredData[m.currentelem][m.currentparam] = string(text)
 		}
@@ -2909,14 +2900,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 			// Strip backslashes only when there are ...
 			if len(m.backslashat) > 0 {
-				// We need a copy here to not modify m.data
-				cp := append([]byte(nil), text...)
-				for i, pos := range m.backslashat {
-					at := pos - i - m.pb
-					cp = append(cp[:at], cp[(at+1):]...)
-				}
-
-				text = cp
+				text = rmchars(text, m.backslashat, m.pb)
 			}
 			output.structuredData[m.currentelem][m.currentparam] = string(text)
 		}
