@@ -25,7 +25,7 @@ type testCase struct {
 }
 
 func getTimestampError(col int) error {
-	return fmt.Errorf("expecting a RFC3339 or a RFC3339NANO timestamp or a nil value [col %d]", col)
+	return fmt.Errorf("expecting a RFC3339MICRO timestamp or a nil value [col %d]", col)
 }
 
 func getParsingError(col int) error {
