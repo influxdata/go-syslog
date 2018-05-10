@@ -4,6 +4,12 @@
 
 > Blazing fast RFC5424-compliant parser
 
+To wrap up, this package provides:
+
+- a RFC5424-compliant parser (syslog message)
+- a RFC5424-compliant builder
+- a RFC5425-compliant parser (syslog messages with octet counting)
+
 ## Installation
 
 ```
