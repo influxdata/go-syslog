@@ -33,28 +33,28 @@ func (sm *syslogMessage) export() *SyslogMessage {
 		out.setPriority(sm.priority)
 	}
 	if sm.version > 0 && sm.version <= 999 {
-		out.Version = sm.version
+		out.version = sm.version
 	}
 	if sm.timestampSet {
-		out.Timestamp = &sm.timestamp
+		out.timestamp = &sm.timestamp
 	}
 	if sm.hostname != "-" && sm.hostname != "" {
-		out.Hostname = &sm.hostname
+		out.hostname = &sm.hostname
 	}
 	if sm.appname != "-" && sm.appname != "" {
-		out.Appname = &sm.appname
+		out.appname = &sm.appname
 	}
 	if sm.procID != "-" && sm.procID != "" {
-		out.ProcID = &sm.procID
+		out.procID = &sm.procID
 	}
 	if sm.msgID != "-" && sm.msgID != "" {
-		out.MsgID = &sm.msgID
+		out.msgID = &sm.msgID
 	}
 	if sm.hasElements {
-		out.StructuredData = &sm.structuredData
+		out.structuredData = &sm.structuredData
 	}
 	if sm.message != "" {
-		out.Message = &sm.message
+		out.message = &sm.message
 	}
 
 	return out
@@ -62,17 +62,17 @@ func (sm *syslogMessage) export() *SyslogMessage {
 
 // SyslogMessage represents a syslog message.
 type SyslogMessage struct {
-	Priority       *uint8
+	priority       *uint8
 	facility       *uint8
 	severity       *uint8
-	Version        uint16 // Grammar mandates that version cannot be 0, so we can use the 0 value of uint16 to signal nil
-	Timestamp      *time.Time
-	Hostname       *string
-	Appname        *string
-	ProcID         *string
-	MsgID          *string
-	StructuredData *map[string]map[string]string
-	Message        *string
+	version        uint16 // Grammar mandates that version cannot be 0, so we can use the 0 value of uint16 to signal nil
+	timestamp      *time.Time
+	hostname       *string
+	appname        *string
+	procID         *string
+	msgID          *string
+	structuredData *map[string]map[string]string
+	message        *string
 }
 
 // Valid tells whether the receiving SyslogMessage is well-formed or not.
@@ -81,15 +81,24 @@ type SyslogMessage struct {
 func (sm *SyslogMessage) Valid() bool {
 	// A nil priority or a 0 version means that the message is not valid
 	// Not checking the priority range since it's parser responsibility
-	if sm.Priority != nil && *sm.Priority >= 0 && *sm.Priority <= 191 && sm.Version > 0 && sm.Version <= 999 {
+	if sm.priority != nil && *sm.priority >= 0 && *sm.priority <= 191 && sm.version > 0 && sm.version <= 999 {
 		return true
 	}
 
 	return false
 }
 
+// Priority returns the syslog priority or nil when not set
+func (sm *SyslogMessage) Priority() *uint8 {
+	return sm.priority
+}
+
+// Version returns the syslog version or nil when not set
+func (sm *SyslogMessage) Version() uint16 {
+	return sm.version
+}
 func (sm *SyslogMessage) setPriority(value uint8) {
-	sm.Priority = &value
+	sm.priority = &value
 	facility := uint8(value / 8)
 	severity := uint8(value % 8)
 	sm.facility = &facility
@@ -183,4 +192,39 @@ var facilities = map[uint8]string{
 	21: "local use 5 (local5)",
 	22: "local use 6 (local6)",
 	23: "local use 7 (local7)",
+}
+
+// Timestamp returns the syslog timestamp or nil when not set
+func (sm *SyslogMessage) Timestamp() *time.Time {
+	return sm.timestamp
+}
+
+// Hostname returns the syslog hostname or nil when not set
+func (sm *SyslogMessage) Hostname() *string {
+	return sm.hostname
+}
+
+// ProcID returns the syslog proc ID or nil when not set
+func (sm *SyslogMessage) ProcID() *string {
+	return sm.procID
+}
+
+// Appname returns the syslog appname or nil when not set
+func (sm *SyslogMessage) Appname() *string {
+	return sm.appname
+}
+
+// MsgID returns the syslog msg ID or nil when not set
+func (sm *SyslogMessage) MsgID() *string {
+	return sm.msgID
+}
+
+// Message returns the syslog message or nil when not set
+func (sm *SyslogMessage) Message() *string {
+	return sm.message
+}
+
+// StructuredData returns the syslog structured data or nil when not set
+func (sm *SyslogMessage) StructuredData() *map[string]map[string]string {
+	return sm.structuredData
 }
