@@ -10,18 +10,18 @@ import (
 func TestSetTimestamp(t *testing.T) {
 	m := &SyslogMessage{}
 
-	assert.Equal(t, time.Date(2003, 10, 11, 22, 14, 15, 0, time.UTC), *m.SetTimestamp("2003-10-11T22:14:15Z").Timestamp)
-	assert.Equal(t, time.Date(2003, 10, 11, 22, 14, 15, 3000, time.UTC), *m.SetTimestamp("2003-10-11T22:14:15.000003Z").Timestamp)
+	assert.Equal(t, time.Date(2003, 10, 11, 22, 14, 15, 0, time.UTC), *m.SetTimestamp("2003-10-11T22:14:15Z").Timestamp())
+	assert.Equal(t, time.Date(2003, 10, 11, 22, 14, 15, 3000, time.UTC), *m.SetTimestamp("2003-10-11T22:14:15.000003Z").Timestamp())
 
 	// (note) > timestamp is invalid but it accepts until valid - ie., Z char
 	// (note) > this dependes on the builder internal parser which does not have a final state, nor we check for any error or final state
 	// (todo) > decide wheter to be more strict or not
-	assert.Equal(t, time.Date(2003, 10, 11, 22, 14, 15, 3000, time.UTC), *m.SetTimestamp("2003-10-11T22:14:15.000003Z+02:00").Timestamp)
+	assert.Equal(t, time.Date(2003, 10, 11, 22, 14, 15, 3000, time.UTC), *m.SetTimestamp("2003-10-11T22:14:15.000003Z+02:00").Timestamp())
 }
 
 func TestSetNilTimestamp(t *testing.T) {
 	m := &SyslogMessage{}
-	assert.Nil(t, m.SetTimestamp("-").Timestamp)
+	assert.Nil(t, m.SetTimestamp("-").Timestamp())
 }
 
 func TestSetIncompleteTimestamp(t *testing.T) {
@@ -30,30 +30,30 @@ func TestSetIncompleteTimestamp(t *testing.T) {
 	prev := make([]byte, 0, len(date))
 	for _, d := range date {
 		prev = append(prev, d)
-		assert.Nil(t, m.SetTimestamp(string(prev)).Timestamp)
+		assert.Nil(t, m.SetTimestamp(string(prev)).Timestamp())
 	}
 }
 
 func TestSetSyntacticallyCompleteButIncorrectTimestamp(t *testing.T) {
 	m := &SyslogMessage{}
-	assert.Nil(t, m.SetTimestamp("2003-42-42T22:14:15Z").Timestamp)
+	assert.Nil(t, m.SetTimestamp("2003-42-42T22:14:15Z").Timestamp())
 }
 
 func TestSetImpossibleButSyntacticallyCorrectTimestamp(t *testing.T) {
 	m := &SyslogMessage{}
-	assert.Nil(t, m.SetTimestamp("2003-09-31T22:14:15Z").Timestamp)
+	assert.Nil(t, m.SetTimestamp("2003-09-31T22:14:15Z").Timestamp())
 }
 
 func TestSetTooLongHostname(t *testing.T) {
 	m := &SyslogMessage{}
 	m.SetHostname("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcX")
-	assert.Nil(t, m.Hostname)
+	assert.Nil(t, m.Hostname())
 }
 
 func TestSetNilOrEmptyHostname(t *testing.T) {
 	m := &SyslogMessage{}
-	assert.Nil(t, m.SetHostname("-").Hostname)
-	assert.Nil(t, m.SetHostname("").Hostname)
+	assert.Nil(t, m.SetHostname("-").Hostname())
+	assert.Nil(t, m.SetHostname("").Hostname())
 }
 
 func TestSetHostname(t *testing.T) {
@@ -65,7 +65,7 @@ func TestSetHostname(t *testing.T) {
 	for _, input := range maxlen {
 		prev = append(prev, input)
 		str := string(prev)
-		assert.Equal(t, str, *m.SetHostname(str).Hostname)
+		assert.Equal(t, str, *m.SetHostname(str).Hostname())
 	}
 }
 
@@ -78,7 +78,7 @@ func TestSetAppname(t *testing.T) {
 	for _, input := range maxlen {
 		prev = append(prev, input)
 		str := string(prev)
-		assert.Equal(t, str, *m.SetAppname(str).Appname)
+		assert.Equal(t, str, *m.SetAppname(str).Appname())
 	}
 }
 
@@ -91,7 +91,7 @@ func TestSetProcID(t *testing.T) {
 	for _, input := range maxlen {
 		prev = append(prev, input)
 		str := string(prev)
-		assert.Equal(t, str, *m.SetProcID(str).ProcID)
+		assert.Equal(t, str, *m.SetProcID(str).ProcID())
 	}
 }
 
@@ -104,32 +104,32 @@ func TestSetMsgID(t *testing.T) {
 	for _, input := range maxlen {
 		prev = append(prev, input)
 		str := string(prev)
-		assert.Equal(t, str, *m.SetMsgID(str).MsgID)
+		assert.Equal(t, str, *m.SetMsgID(str).MsgID())
 	}
 }
 
 func TestSetSyntacticallyWrongHostnameAppnameProcIDMsgID(t *testing.T) {
 	m := &SyslogMessage{}
-	assert.Nil(t, m.SetHostname("white space not possible").Hostname)
-	assert.Nil(t, m.SetHostname(string([]byte{0x0})).Hostname)
-	assert.Nil(t, m.SetAppname("white space not possible").Appname)
-	assert.Nil(t, m.SetAppname(string([]byte{0x0})).Appname)
-	assert.Nil(t, m.SetProcID("white space not possible").ProcID)
-	assert.Nil(t, m.SetProcID(string([]byte{0x0})).ProcID)
-	assert.Nil(t, m.SetMsgID("white space not possible").MsgID)
-	assert.Nil(t, m.SetMsgID(string([]byte{0x0})).MsgID)
+	assert.Nil(t, m.SetHostname("white space not possible").Hostname())
+	assert.Nil(t, m.SetHostname(string([]byte{0x0})).Hostname())
+	assert.Nil(t, m.SetAppname("white space not possible").Appname())
+	assert.Nil(t, m.SetAppname(string([]byte{0x0})).Appname())
+	assert.Nil(t, m.SetProcID("white space not possible").ProcID())
+	assert.Nil(t, m.SetProcID(string([]byte{0x0})).ProcID())
+	assert.Nil(t, m.SetMsgID("white space not possible").MsgID())
+	assert.Nil(t, m.SetMsgID(string([]byte{0x0})).MsgID())
 }
 
 func TestSetMessage(t *testing.T) {
 	m := &SyslogMessage{}
 	greek := "κόσμε"
-	assert.Equal(t, greek, *m.SetMessage(greek).Message)
+	assert.Equal(t, greek, *m.SetMessage(greek).Message())
 }
 
 func TestSetEmptyMessage(t *testing.T) {
 	m := &SyslogMessage{}
 	m.SetMessage("")
-	assert.Nil(t, m.Message)
+	assert.Nil(t, m.Message())
 }
 
 func TestSetWrongUTF8Message(t *testing.T) {}
@@ -141,41 +141,41 @@ func TestSetMessageWithNewline(t *testing.T) {}
 func TestSetOutOfRangeVersion(t *testing.T) {
 	m := &SyslogMessage{}
 	m.SetVersion(1000)
-	assert.Equal(t, m.Version, uint16(0)) // 0 signals nil for version
+	assert.Equal(t, m.Version(), uint16(0)) // 0 signals nil for version
 	m.SetVersion(0)
-	assert.Equal(t, m.Version, uint16(0)) // 0 signals nil for version
+	assert.Equal(t, m.Version(), uint16(0)) // 0 signals nil for version
 }
 
 func TestSetOutOfRangePriority(t *testing.T) {
 	m := &SyslogMessage{}
 	m.SetPriority(192)
-	assert.Nil(t, m.Priority)
+	assert.Nil(t, m.Priority())
 }
 
 func TestSetVersion(t *testing.T) {
 	m := &SyslogMessage{}
 	m.SetVersion(1)
-	assert.Equal(t, m.Version, uint16(1))
+	assert.Equal(t, m.Version(), uint16(1))
 	m.SetVersion(999)
-	assert.Equal(t, m.Version, uint16(999))
+	assert.Equal(t, m.Version(), uint16(999))
 }
 
 func TestSetPriority(t *testing.T) {
 	m := &SyslogMessage{}
 	m.SetPriority(0)
-	assert.Equal(t, *m.Priority, uint8(0))
+	assert.Equal(t, *m.Priority(), uint8(0))
 	m.SetPriority(1)
-	assert.Equal(t, *m.Priority, uint8(1))
+	assert.Equal(t, *m.Priority(), uint8(1))
 	m.SetPriority(191)
-	assert.Equal(t, *m.Priority, uint8(191))
+	assert.Equal(t, *m.Priority(), uint8(191))
 }
 
 func TestSetSDID(t *testing.T) {
 	identifier := "one"
 	m := &SyslogMessage{}
-	assert.Nil(t, m.StructuredData)
+	assert.Nil(t, m.StructuredData())
 	m.SetElementID(identifier)
-	sd := m.StructuredData
+	sd := m.StructuredData()
 	assert.NotNil(t, sd)
 	assert.IsType(t, (*map[string]map[string]string)(nil), sd)
 	assert.NotNil(t, (*sd)[identifier])
@@ -194,41 +194,41 @@ func TestSetAllLenghtsSDID(t *testing.T) {
 		prev = append(prev, input)
 		id := string(prev)
 		m.SetElementID(id)
-		assert.Len(t, *m.StructuredData, i+1)
-		assert.IsType(t, map[string]string{}, (*m.StructuredData)[id])
+		assert.Len(t, *m.StructuredData(), i+1)
+		assert.IsType(t, map[string]string{}, (*m.StructuredData())[id])
 	}
 }
 
 func TestSetTooLongSDID(t *testing.T) {
 	m := &SyslogMessage{}
 	m.SetElementID("abcdefghilmnopqrstuvzabcdefghilmX")
-	assert.Nil(t, m.StructuredData)
+	assert.Nil(t, m.StructuredData())
 }
 
 func TestSetSyntacticallyWrongSDID(t *testing.T) {
 	m := &SyslogMessage{}
 	m.SetElementID("no whitespaces")
-	assert.Nil(t, m.StructuredData)
+	assert.Nil(t, m.StructuredData())
 	m.SetElementID(" ")
-	assert.Nil(t, m.StructuredData)
+	assert.Nil(t, m.StructuredData())
 	m.SetElementID(`"`)
-	assert.Nil(t, m.StructuredData)
+	assert.Nil(t, m.StructuredData())
 	m.SetElementID(`no"`)
-	assert.Nil(t, m.StructuredData)
+	assert.Nil(t, m.StructuredData())
 	m.SetElementID(`"no`)
-	assert.Nil(t, m.StructuredData)
+	assert.Nil(t, m.StructuredData())
 	m.SetElementID("]")
-	assert.Nil(t, m.StructuredData)
+	assert.Nil(t, m.StructuredData())
 	m.SetElementID("no]")
-	assert.Nil(t, m.StructuredData)
+	assert.Nil(t, m.StructuredData())
 	m.SetElementID("]no")
-	assert.Nil(t, m.StructuredData)
+	assert.Nil(t, m.StructuredData())
 }
 
 func TestSetEmptySDID(t *testing.T) {
 	m := &SyslogMessage{}
 	m.SetElementID("")
-	assert.Nil(t, m.StructuredData)
+	assert.Nil(t, m.StructuredData())
 }
 
 func TestSetSDParam(t *testing.T) {
@@ -237,7 +237,7 @@ func TestSetSDParam(t *testing.T) {
 	pv := "pvalue"
 	m := &SyslogMessage{}
 	m.SetParameter(id, pn, pv)
-	sd := m.StructuredData
+	sd := m.StructuredData()
 	assert.NotNil(t, sd)
 	assert.IsType(t, (*map[string]map[string]string)(nil), sd)
 	assert.NotNil(t, (*sd)[id])
@@ -277,7 +277,7 @@ func TestSetEmptySDParam(t *testing.T) {
 	pn := "pn"
 	m := &SyslogMessage{}
 	m.SetParameter(id, pn, "")
-	sd := m.StructuredData
+	sd := m.StructuredData()
 	assert.Len(t, *sd, 1)
 	assert.Len(t, (*sd)[id], 1)
 	assert.Equal(t, "", (*sd)[id][pn])

@@ -17,41 +17,41 @@ action mark {
 
 action set_timestamp {
 	if t, e := time.Parse(RFC3339MICRO, string(data[pb:p])); e == nil {
-        sm.Timestamp = &t
+        sm.timestamp = &t
     }
 }
 
 action set_hostname {
     if s := string(data[pb:p]); s != "-" {
-        sm.Hostname = &s
+        sm.hostname = &s
     }
 }
 
 action set_appname {
     if s := string(data[pb:p]); s != "-" {
-        sm.Appname = &s
+        sm.appname = &s
     }
 }
 
 action set_procid {
     if s := string(data[pb:p]); s != "-" {
-        sm.ProcID = &s
+        sm.procID = &s
     }
 }
 
 action set_msgid {
     if s := string(data[pb:p]); s != "-" {
-        sm.MsgID = &s
+        sm.msgID = &s
     }
 }
 
 action set_sdid {
-    if sm.StructuredData == nil {
-        sm.StructuredData = &(map[string]map[string]string{})
+    if sm.structuredData == nil {
+        sm.structuredData = &(map[string]map[string]string{})
     }
     
     id := string(data[pb:p])
-    elements := *sm.StructuredData
+    elements := *sm.structuredData
     if _, ok := elements[id]; !ok {
         elements[id] = map[string]string{}
     }
@@ -59,7 +59,7 @@ action set_sdid {
 
 action set_sdpn {
     // Assuming SD map already exists, contains currentid key (set from outside)
-    elements := *sm.StructuredData
+    elements := *sm.structuredData
     elements[currentid][string(data[pb:p])] = ""
 }
 
@@ -75,13 +75,13 @@ action set_sdpv {
         text = rmchars(text, backslashes, pb)
     }
 	// Assuming SD map already exists, contains currentid key and currentparamname key (set from outside)
-    elements := *sm.StructuredData
+    elements := *sm.structuredData
     elements[currentid][currentparamname] = string(text)
 }
 
 action set_msg {
     if s := string(data[pb:p]); s != "" {
-        sm.Message = &s
+        sm.message = &s
     }
 }
 
@@ -179,7 +179,7 @@ func (sm *SyslogMessage) SetPriority(value uint8) *SyslogMessage {
 // It ignores incorrect version values (range ]0, 999]).
 func (sm *SyslogMessage) SetVersion(value uint16) *SyslogMessage {
 	if value > 0 && value <= 999 {
-		sm.Version = value
+		sm.version = value
 	}
 
 	return sm
@@ -226,8 +226,8 @@ func (sm *SyslogMessage) SetParameter(id string, name string, value string) *Sys
     sm.set(sdid, id)
     
     // We can create parameter iff the given element id exists
-    if sm.StructuredData != nil {
-        elements := *sm.StructuredData
+    if sm.structuredData != nil {
+        elements := *sm.structuredData
         if _, ok := elements[id]; ok {
             currentid = id
             sm.set(sdpn, name)
@@ -261,25 +261,25 @@ func (sm *SyslogMessage) String() (string, error) {
     mid := "-"
     sd := "-"
     m := ""
-    if sm.Timestamp != nil {
-        t = sm.Timestamp.Format("2006-01-02T15:04:05.999999Z07:00") // verify 07:00
+    if sm.timestamp != nil {
+        t = sm.timestamp.Format("2006-01-02T15:04:05.999999Z07:00") // verify 07:00
     }
-    if sm.Hostname != nil {
-        hn = *sm.Hostname
+    if sm.hostname != nil {
+        hn = *sm.hostname
     }
-    if sm.Appname != nil {
-        an = *sm.Appname
+    if sm.appname != nil {
+        an = *sm.appname
     }
-    if sm.ProcID != nil {
-        pid = *sm.ProcID
+    if sm.procID != nil {
+        pid = *sm.procID
     }
-    if sm.MsgID != nil {
-        mid = *sm.MsgID
+    if sm.msgID != nil {
+        mid = *sm.msgID
     }
-    if sm.StructuredData != nil {
+    if sm.structuredData != nil {
         // Sort element identifiers
         identifiers := make([]string, 0)
-        for k, _ := range *sm.StructuredData {
+        for k, _ := range *sm.structuredData {
             identifiers = append(identifiers, k)
         }
         sort.Strings(identifiers)
@@ -289,7 +289,7 @@ func (sm *SyslogMessage) String() (string, error) {
             sd += fmt.Sprintf("[%s", id)
 
             // Sort parameter names
-            params := (*sm.StructuredData)[id]
+            params := (*sm.structuredData)[id]
             names := make([]string, 0)
             for n, _ := range params {
                 names = append(names, n)
@@ -302,9 +302,9 @@ func (sm *SyslogMessage) String() (string, error) {
             sd += "]"
         }
     }
-    if sm.Message != nil {
-        m = " " + *sm.Message
+    if sm.message != nil {
+        m = " " + *sm.message
     }
 
-    return fmt.Sprintf(template, *sm.Priority, sm.Version, t, hn, an, pid, mid, sd, m), nil
+    return fmt.Sprintf(template, *sm.priority, sm.version, t, hn, an, pid, mid, sd, m), nil
 }
