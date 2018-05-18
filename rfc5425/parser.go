@@ -95,7 +95,7 @@ func (p *Parser) ParseExecuting(handler ResultHandler) {
 		// Next we MUST see a SYSLOGMSG with length equal to MSGLEN
 		if tok = p.scan(); tok.typ != SYSLOGMSG {
 			e := fmt.Errorf(`found %s after "%s", expecting a %s containing %d octets`, tok, tok.lit, SYSLOGMSG, p.s.msglen)
-
+			// Overflow case
 			if len(tok.lit) < int(p.s.msglen) && p.bestEffort {
 				// Though MSGLEN was not respected, we try to parse the existing SYSLOGMSG as a RFC5424 syslog message
 				result := p.parse(tok.lit)
@@ -111,7 +111,14 @@ func (p *Parser) ParseExecuting(handler ResultHandler) {
 		}
 
 		// Parse the SYSLOGMSG literal pretending it is a RFC5424 syslog message
-		handler(p.parse(tok.lit))
+		result := p.parse(tok.lit)
+		if p.bestEffort || result.MessageError == nil {
+			handler(result)
+		}
+		if !p.bestEffort && result.MessageError != nil {
+			handler(&Result{MessageError: result.MessageError})
+			break
+		}
 
 		// Next we MUST see an EOF otherwise the parsing we'll start again
 		if tok = p.scan(); tok.typ == EOF {
