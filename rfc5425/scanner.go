@@ -16,6 +16,9 @@ var eof = byte(0)
 // ws represents the whitespace
 var ws = byte(32)
 
+// lt represents the "<" character
+var lt = byte(60)
+
 // isDigit returns true if the byte represents a number in [0,9]
 func isDigit(ch byte) bool {
 	return (ch >= 47 && ch <= 57)
@@ -79,7 +82,7 @@ func (s *Scanner) Scan() (tok Token) {
 			typ: WS,
 			lit: []byte{ws},
 		}
-	default:
+	case lt:
 		if s.msglen > 0 && s.ready {
 			s.unread()
 			return s.scanSyslogMsg()

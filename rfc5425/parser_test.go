@@ -136,9 +136,6 @@ func getTestCases() []testCase {
 				Result{
 					MessageError: getTimestampError(5),
 				},
-				Result{
-					Error: fmt.Errorf("found %s, expecting a %s", Token{ILLEGAL, []byte("x")}, MSGLEN),
-				},
 			},
 			// results with best effort
 			[]Result{
@@ -285,9 +282,6 @@ func getTestCases() []testCase {
 				},
 				Result{
 					MessageError: getTimestampError(6),
-				},
-				Result{
-					Message: (&rfc5424.SyslogMessage{}).SetPriority(1).SetVersion(1),
 				},
 			},
 			// results with best effort
@@ -472,6 +466,26 @@ func getTestCases() []testCase {
 						SetMsgID(maxMsgID).
 						SetMessage(message7681),
 					Error: fmt.Errorf("found %s after \"%s\", expecting a %s containing %d octets", EOF, fmt.Sprintf("<%d>%d %s %s %s %s %s - %s", maxPriority, maxVersion, maxTimestamp, maxHostname, maxAppname, maxProcID, maxMsgID, message7681), SYSLOGMSG, 8193),
+				},
+			},
+		},
+		{
+			"1st uf/2nd ok//incomplete SYSLOGMSG/notdetectable",
+			"16 <1>217 <11>1 - - - - - -",
+			// results w/o best effort
+			[]Result{
+				Result{
+					MessageError: fmt.Errorf(`expecting a RFC3339MICRO timestamp or a nil value [col 7]`),
+				},
+			},
+			// results with best effort
+			[]Result{
+				Result{
+					Message:      (&rfc5424.SyslogMessage{}).SetPriority(1).SetVersion(217),
+					MessageError: getTimestampError(7),
+				},
+				Result{
+					Error: fmt.Errorf("found %s, expecting a %s", WS, MSGLEN),
 				},
 			},
 		},
