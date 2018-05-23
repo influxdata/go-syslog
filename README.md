@@ -6,9 +6,9 @@
 
 To wrap up, this package provides:
 
-- a RFC5424-compliant parser (syslog message)
+- a RFC5424-compliant parser
 - a RFC5424-compliant builder
-- a RFC5425-compliant parser (syslog messages with octet counting)
+- a RFC5425-compliant parser
 
 ## Installation
 
@@ -24,55 +24,130 @@ The [docs](docs/) directory contains images representing the FSM parts of a RFC5
 
 ## Usage
 
+Suppose you want to parse a given sequence of bytes as a RFC5424 message.
 
 ```go
 i := []byte(`<165>4 2018-10-11T22:14:15.003Z mymach.it e - 1 [ex@32473 iut="3"] An application event log entry...`)
-p := NewParser()
+p := rfc5424.NewParser()
 m, e := p.Parse(i, nil)
-fmt.Printf("%#v\n", m)
-// &rfc5424.SyslogMessage{
-//  Priority:  (*uint8)(0xc420098a73)(165),
-//  facility:  (*uint8)(0xc420098a74)(20),
-//  severity:  (*uint8)(0xc420098a75)(5),
-//  Version:   (uint16) 4,
-//  Timestamp: (*time.Time)(0xc42011a8e0)(2018-10-11 22:14:15.003 +0000 UTC),
-//  Hostname:  (*string)(0xc42008d5a0)((len=9) "mymach.it"),
-//  Appname:   (*string)(0xc42008d5b0)((len=1) "e"),
-//  MsgID:     (*string)(0xc42008d5d0)((len=1) "1"),
-//  StructuredData: (*map[string]map[string]string)(0xc42009a080)((len=1) {
+```
+
+This results in `m` being equal to:
+
+```go
+// (*rfc5424.SyslogMessage)({
+//  priority: (*uint8)(165),
+//  facility: (*uint8)(20),
+//  severity: (*uint8)(5),
+//  version: (uint16) 4,
+//  timestamp: (*time.Time)(2018-10-11 22:14:15.003 +0000 UTC),
+//  hostname: (*string)((len=9) "mymach.it"),
+//  appname: (*string)((len=1) "e"),
+//  procID: (*string)(<nil>),
+//  msgID: (*string)((len=1) "1"),
+//  structuredData: (*map[string]map[string]string)((len=1) {
 //   (string) (len=8) "ex@32473": (map[string]string) (len=1) {
 //    (string) (len=3) "iut": (string) (len=1) "3"
 //   }
 //  }),
-//  Message: (*string)(0xc42008d5e0)((len=33) "An application event log entry...")
-// }
-fmt.Println(e)
-// <nil>
+//  message: (*string)((len=33) "An application event log entry...")
+// })
 ```
+
+And `e` being equal to `nil`, since the `i` is a perfectly valid RFC5424 message.
 
 ### Best effort mode
 
-This modality enables partial parsing.
+RFC5424 parser has the ability to perform partial matches (until it can).
 
-When the parsing process errors out it returns the message collected until that position, and the error that caused the parser to stop.
+With this mode enabled, when the parsing process errors out it returns the message collected until that position, and the error that caused the parser to stop.
 
-Notice that in this modality the output is returned iff it represents a minimally valid message - ie., a message containing almost a priority field in `[1,191]` within angular brackets, followed by a version in `]0,999]`.
+Notice that in this modality the output is returned _iff_ it represents a minimally valid message - ie., a message containing almost a priority field in `[1,191]` within angular brackets, followed by a version in `]0,999]`.
+
+Let's look at an example.
 
 ```go
-bestEffort := true
-i := []byte("<1>1 - - - - - X")
+bestEffortOn := true
+i := []byte("<1>1 A - - - - - -")
 p := NewParser()
-m, e := p.Parse(i, &bestEffort)
-fmt.Printf("%#v\n", m)
-// &rfc5424.SyslogMessage{
-//	Priority: (*uint8)(0xc4200988bd)(1),
-//  facility: (*uint8)(0xc4200988be)(0),
-//  severity: (*uint8)(0xc4200988bf)(1),
-//  Version:  (uint16) 1
-// }
-fmt.Println(e)
-// expecting a structured data section containing one or more elements (`[id( key="value")*]+`) or a nil value [col 15]
+m, e := p.Parse(i, &bestEffortOn)
 ```
+
+This results in `m` being equal to the following `SyslogMessage` instance.
+
+```go
+// (*rfc5424.SyslogMessage)({
+//  priority: (*uint8)(1),
+//  facility: (*uint8)(0),
+//  severity: (*uint8)(1),
+//  version: (uint16) 1,
+//  timestamp: (*time.Time)(<nil>),
+//  hostname: (*string)(<nil>),
+//  appname: (*string)(<nil>),
+//  procID: (*string)(<nil>),
+//  msgID: (*string)(<nil>),
+//  structuredData: (*map[string]map[string]string)(<nil>),
+//  message: (*string)(<nil>)
+// })
+```
+
+And, at the same time, in `e` reporting the error that actually stopped the parser.
+
+```go
+expecting a RFC3339MICRO timestamp or a nil value [col 5]
+```
+
+Both `m` and `e` have a value since at the column the parser stopped it already was able to construct a minimally valid `SyslogMessage`.
+
+### Builder
+
+This library also provides a builder to construct valid syslog messages.
+
+Notice that its API ignores input values that does not match the grammar.
+
+Let's have a look to an example.
+
+```go
+msg := &SyslogMessage{}
+msg.SetTimestamp("not a RFC3339MICRO timestamp")
+// Not yet a valid message (try msg.Valid())
+msg.SetPriority(191)
+msg.SetVersion(1)
+msg.Valid() // Now it is minimally valid
+```
+
+Printing `msg` you will verify it contains a `nil` timestamp (since an invalid one has been given).
+
+```go
+// (*rfc5424.SyslogMessage)({
+//  priority: (*uint8)(191),
+//  facility: (*uint8)(23),
+//  severity: (*uint8)(7),
+//  version: (uint16) 1,
+//  timestamp: (*time.Time)(<nil>),
+//  hostname: (*string)(<nil>),
+//  appname: (*string)(<nil>),
+//  procID: (*string)(<nil>),
+//  msgID: (*string)(<nil>),
+//  structuredData: (*map[string]map[string]string)(<nil>),
+//  message: (*string)(<nil>)
+// })
+```
+
+Finally you can serialize the message into a string.
+
+```go
+str, _ := msg.String()
+// <191>1 - - - - - -
+```
+
+### RFC5425
+
+The RFC5425 builds upon RFC5424.
+
+In short, it describes the recommended way to transport syslog messages - ie., over TLS with the **octect counting** technique.
+
+To quickly understand how to use it please have a look at the [example file](rfc5425/example_test.go).
 
 ## Performance
 

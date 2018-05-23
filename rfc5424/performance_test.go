@@ -1,6 +1,8 @@
 package rfc5424
 
-import "testing"
+import (
+	"testing"
+)
 
 // This is here to avoid compiler optimizations that
 // could remove the actual call we are benchmarking
