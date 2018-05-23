@@ -226,6 +226,7 @@ var facilities = map[uint8]string{
 	23: "local use 7 (local7)",
 }
 
+// As per syslog(3)
 var facilityKeywords = map[uint8]string{
 	0:  "kern",
 	1:  "user",
