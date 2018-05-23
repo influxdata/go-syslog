@@ -125,6 +125,21 @@ func (sm *SyslogMessage) FacilityMessage() *string {
 	return nil
 }
 
+// FacilityLevel returns the
+func (sm *SyslogMessage) FacilityLevel() *string {
+	if sm.facility != nil {
+		if msg, ok := facilityKeywords[*sm.facility]; ok {
+			return &msg
+		}
+
+		// Fallback to facility message
+		msg := facilities[*sm.facility]
+		return &msg
+	}
+
+	return nil
+}
+
 // SeverityMessage returns the text message for the current severity value.
 func (sm *SyslogMessage) SeverityMessage() *string {
 	if sm.severity != nil {
@@ -136,9 +151,14 @@ func (sm *SyslogMessage) SeverityMessage() *string {
 }
 
 // SeverityLevel returns the text level for the current severity value.
-func (sm *SyslogMessage) SeverityLevel() *string {
+func (sm *SyslogMessage) SeverityLevel(short bool) *string {
 	if sm.severity != nil {
-		msg := severityLevels[*sm.severity]
+		var msg string
+		if short {
+			msg = severityLevelsShort[*sm.severity]
+		} else {
+			msg = severityLevels[*sm.severity]
+		}
 		return &msg
 	}
 
@@ -167,6 +187,18 @@ var severityLevels = map[uint8]string{
 	7: "debug",
 }
 
+// As per https://github.com/torvalds/linux/blob/master/tools/include/linux/kern_levels.h and syslog(3)
+var severityLevelsShort = map[uint8]string{
+	0: "emerg",
+	1: "alert",
+	2: "crit",
+	3: "err",
+	4: "warning",
+	5: "notice",
+	6: "info",
+	7: "debug",
+}
+
 var facilities = map[uint8]string{
 	0:  "kernel messages",
 	1:  "user-level messages",
@@ -183,7 +215,7 @@ var facilities = map[uint8]string{
 	12: "NTP subsystem",
 	13: "log audit",
 	14: "log alert",
-	15: "clock daemon (note 2)",
+	15: "clock daemon (note 2)", // (todo) > some sources reporting "scheduling daemon"
 	16: "local use 0 (local0)",
 	17: "local use 1 (local1)",
 	18: "local use 2 (local2)",
@@ -192,6 +224,29 @@ var facilities = map[uint8]string{
 	21: "local use 5 (local5)",
 	22: "local use 6 (local6)",
 	23: "local use 7 (local7)",
+}
+
+var facilityKeywords = map[uint8]string{
+	0:  "kern",
+	1:  "user",
+	2:  "mail",
+	3:  "daemon",
+	4:  "auth",
+	5:  "syslog",
+	6:  "lpr",
+	7:  "news",
+	8:  "uucp",
+	10: "authpriv",
+	11: "ftp",
+	15: "cron",
+	16: "local0",
+	17: "local1",
+	18: "local2",
+	19: "local3",
+	20: "local4",
+	21: "local5",
+	22: "local6",
+	23: "local7",
 }
 
 // Timestamp returns the syslog timestamp or nil when not set
