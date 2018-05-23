@@ -27,8 +27,8 @@ func TestFacilityAndSeverity(t *testing.T) {
 	assert.Nil(t, m.FacilityLevel())
 	assert.Nil(t, m.Severity())
 	assert.Nil(t, m.SeverityMessage())
-	assert.Nil(t, m.SeverityLevel(false))
-	assert.Nil(t, m.SeverityLevel(true))
+	assert.Nil(t, m.SeverityLevel())
+	assert.Nil(t, m.SeverityShortLevel())
 
 	m.SetPriority(1)
 
@@ -37,8 +37,8 @@ func TestFacilityAndSeverity(t *testing.T) {
 	assert.Equal(t, "kern", *m.FacilityLevel())
 	assert.Equal(t, uint8(1), *m.Severity())
 	assert.Equal(t, "action must be taken immediately", *m.SeverityMessage())
-	assert.Equal(t, "alert", *m.SeverityLevel(false))
-	assert.Equal(t, "alert", *m.SeverityLevel(true))
+	assert.Equal(t, "alert", *m.SeverityLevel())
+	assert.Equal(t, "alert", *m.SeverityShortLevel())
 
 	m.SetPriority(120)
 
@@ -47,8 +47,8 @@ func TestFacilityAndSeverity(t *testing.T) {
 	assert.Equal(t, "cron", *m.FacilityLevel())
 	assert.Equal(t, uint8(0), *m.Severity())
 	assert.Equal(t, "system is unusable", *m.SeverityMessage())
-	assert.Equal(t, "emergency", *m.SeverityLevel(false))
-	assert.Equal(t, "emerg", *m.SeverityLevel(true))
+	assert.Equal(t, "emergency", *m.SeverityLevel())
+	assert.Equal(t, "emerg", *m.SeverityShortLevel())
 
 	m.SetPriority(99)
 
@@ -57,8 +57,8 @@ func TestFacilityAndSeverity(t *testing.T) {
 	assert.Equal(t, "NTP subsystem", *m.FacilityLevel()) // MUST fallback to message
 	assert.Equal(t, uint8(3), *m.Severity())
 	assert.Equal(t, "error conditions", *m.SeverityMessage())
-	assert.Equal(t, "error", *m.SeverityLevel(false))
-	assert.Equal(t, "err", *m.SeverityLevel(true))
+	assert.Equal(t, "error", *m.SeverityLevel())
+	assert.Equal(t, "err", *m.SeverityShortLevel())
 }
 
 func TestSetNilTimestamp(t *testing.T) {

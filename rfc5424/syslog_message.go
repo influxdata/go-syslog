@@ -151,14 +151,19 @@ func (sm *SyslogMessage) SeverityMessage() *string {
 }
 
 // SeverityLevel returns the text level for the current severity value.
-func (sm *SyslogMessage) SeverityLevel(short bool) *string {
+func (sm *SyslogMessage) SeverityLevel() *string {
 	if sm.severity != nil {
-		var msg string
-		if short {
-			msg = severityLevelsShort[*sm.severity]
-		} else {
-			msg = severityLevels[*sm.severity]
-		}
+		msg := severityLevels[*sm.severity]
+		return &msg
+	}
+
+	return nil
+}
+
+// SeverityShortLevel returns the short text level for the current severity value.
+func (sm *SyslogMessage) SeverityShortLevel() *string {
+	if sm.severity != nil {
+		msg := severityLevelsShort[*sm.severity]
 		return &msg
 	}
 
