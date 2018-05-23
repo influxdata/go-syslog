@@ -19,6 +19,48 @@ func TestSetTimestamp(t *testing.T) {
 	assert.Equal(t, time.Date(2003, 10, 11, 22, 14, 15, 3000, time.UTC), *m.SetTimestamp("2003-10-11T22:14:15.000003Z+02:00").Timestamp())
 }
 
+func TestFacilityAndSeverity(t *testing.T) {
+	m := &SyslogMessage{}
+
+	assert.Nil(t, m.Facility())
+	assert.Nil(t, m.FacilityMessage())
+	assert.Nil(t, m.FacilityLevel())
+	assert.Nil(t, m.Severity())
+	assert.Nil(t, m.SeverityMessage())
+	assert.Nil(t, m.SeverityLevel(false))
+	assert.Nil(t, m.SeverityLevel(true))
+
+	m.SetPriority(1)
+
+	assert.Equal(t, uint8(0), *m.Facility())
+	assert.Equal(t, "kernel messages", *m.FacilityMessage())
+	assert.Equal(t, "kern", *m.FacilityLevel())
+	assert.Equal(t, uint8(1), *m.Severity())
+	assert.Equal(t, "action must be taken immediately", *m.SeverityMessage())
+	assert.Equal(t, "alert", *m.SeverityLevel(false))
+	assert.Equal(t, "alert", *m.SeverityLevel(true))
+
+	m.SetPriority(120)
+
+	assert.Equal(t, uint8(15), *m.Facility())
+	assert.Equal(t, "clock daemon (note 2)", *m.FacilityMessage())
+	assert.Equal(t, "cron", *m.FacilityLevel())
+	assert.Equal(t, uint8(0), *m.Severity())
+	assert.Equal(t, "system is unusable", *m.SeverityMessage())
+	assert.Equal(t, "emergency", *m.SeverityLevel(false))
+	assert.Equal(t, "emerg", *m.SeverityLevel(true))
+
+	m.SetPriority(99)
+
+	assert.Equal(t, uint8(12), *m.Facility())
+	assert.Equal(t, "NTP subsystem", *m.FacilityMessage())
+	assert.Equal(t, "NTP subsystem", *m.FacilityLevel()) // MUST fallback to message
+	assert.Equal(t, uint8(3), *m.Severity())
+	assert.Equal(t, "error conditions", *m.SeverityMessage())
+	assert.Equal(t, "error", *m.SeverityLevel(false))
+	assert.Equal(t, "err", *m.SeverityLevel(true))
+}
+
 func TestSetNilTimestamp(t *testing.T) {
 	m := &SyslogMessage{}
 	assert.Nil(t, m.SetTimestamp("-").Timestamp())
