@@ -20,6 +20,7 @@ const builder_en_sdpn int = 50
 const builder_en_sdpv int = 589
 const builder_en_msg int = 59
 
+
 type entrypoint int
 
 const (
@@ -9429,6 +9430,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 			case 589:
 
 				pb = p
+
 
 				// Store text
 				text := data[pb:p]

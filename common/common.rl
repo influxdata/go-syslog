@@ -46,17 +46,21 @@ partialtime = timehour ':' timeminute ':' timesecond . timesecfrac?;
 
 fulltime = partialtime . timeoffset;
 
-printusascii = '!'..'~';
+# 1..191
+privalrange = (('1' ('9' ('0'..'1'){,1} | '0'..'8' ('0'..'9'){,1}){,1}) | ('2'..'9' ('0'..'9'){,1}));
 
-hostnamerange = printusascii{1,255};
+# 1..191 or 0
+prival = (privalrange | '0');
 
-appnamerange = printusascii{1,48};
+hostnamerange = graph{1,255};
 
-procidrange = printusascii{1,128};
+appnamerange = graph{1,48};
 
-msgidrange = printusascii{1,32};
+procidrange = graph{1,128};
 
-sdname = (printusascii - ('=' | sp | csb | dq)){1,32};
+msgidrange = graph{1,32};
+
+sdname = (graph - ('=' | sp | csb | dq)){1,32};
 
 # rfc 3629
 utf8tail = 0x80..0xBF;
