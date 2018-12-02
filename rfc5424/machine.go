@@ -2,6 +2,7 @@ package rfc5424
 
 import (
 	"fmt"
+	"github.com/influxdata/go-syslog"
 	"time"
 )
 
@@ -32,6 +33,7 @@ const first_final int = 603
 const en_fail int = 607
 const en_main int = 1
 
+
 type machine struct {
 	data         []byte
 	cs           int
@@ -47,6 +49,11 @@ type machine struct {
 // NewMachine creates a new FSM able to parse RFC5424 syslog messages.
 func NewMachine() *machine {
 	m := &machine{}
+
+
+
+
+
 
 	return m
 }
@@ -69,7 +76,7 @@ func (m *machine) text() []byte {
 //
 // It can also partially parse input messages returning a partially valid structured representation
 // and the error that stopped the parsing.
-func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) {
+func (m *machine) Parse(input []byte, bestEffort *bool) (syslog.Message, error) {
 	m.data = input
 	m.p = 0
 	m.pb = 0
@@ -1314,6 +1321,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr0
 	tr0:
+
 		m.err = fmt.Errorf(errPri, m.p)
 		(m.p)--
 
@@ -1323,6 +1331,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr2:
+
 		m.err = fmt.Errorf(errPrival, m.p)
 		(m.p)--
 
@@ -1330,12 +1339,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto st607
 		}
 
+
 		m.err = fmt.Errorf(errPri, m.p)
 		(m.p)--
 
 		{
 			goto st607
 		}
+
 
 		m.err = fmt.Errorf(errParse, m.p)
 		(m.p)--
@@ -1346,12 +1357,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr7:
+
 		m.err = fmt.Errorf(errVersion, m.p)
 		(m.p)--
 
 		{
 			goto st607
 		}
+
 
 		m.err = fmt.Errorf(errParse, m.p)
 		(m.p)--
@@ -1362,6 +1375,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr9:
+
 		m.err = fmt.Errorf(errParse, m.p)
 		(m.p)--
 
@@ -1371,12 +1385,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr12:
+
 		m.err = fmt.Errorf(errTimestamp, m.p)
 		(m.p)--
 
 		{
 			goto st607
 		}
+
 
 		m.err = fmt.Errorf(errParse, m.p)
 		(m.p)--
@@ -1387,12 +1403,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr16:
+
 		m.err = fmt.Errorf(errHostname, m.p)
 		(m.p)--
 
 		{
 			goto st607
 		}
+
 
 		m.err = fmt.Errorf(errParse, m.p)
 		(m.p)--
@@ -1403,12 +1421,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr20:
+
 		m.err = fmt.Errorf(errAppname, m.p)
 		(m.p)--
 
 		{
 			goto st607
 		}
+
 
 		m.err = fmt.Errorf(errParse, m.p)
 		(m.p)--
@@ -1419,12 +1439,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr24:
+
 		m.err = fmt.Errorf(errProcid, m.p)
 		(m.p)--
 
 		{
 			goto st607
 		}
+
 
 		m.err = fmt.Errorf(errParse, m.p)
 		(m.p)--
@@ -1435,12 +1457,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr28:
+
 		m.err = fmt.Errorf(errMsgid, m.p)
 		(m.p)--
 
 		{
 			goto st607
 		}
+
 
 		m.err = fmt.Errorf(errParse, m.p)
 		(m.p)--
@@ -1451,6 +1475,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr30:
+
 		m.err = fmt.Errorf(errMsgid, m.p)
 		(m.p)--
 
@@ -1460,6 +1485,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr33:
+
 		m.err = fmt.Errorf(errStructuredData, m.p)
 		(m.p)--
 
@@ -1483,6 +1509,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto st607
 		}
 
+
 		m.err = fmt.Errorf(errParse, m.p)
 		(m.p)--
 
@@ -1492,6 +1519,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr40:
+
 		delete(output.structuredData, m.currentelem)
 		if len(output.structuredData) == 0 {
 			output.hasElements = false
@@ -1503,6 +1531,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto st607
 		}
 
+
 		m.err = fmt.Errorf(errStructuredData, m.p)
 		(m.p)--
 
@@ -1512,6 +1541,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr42:
+
 		if _, ok := output.structuredData[string(m.text())]; ok {
 			// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
 			m.err = fmt.Errorf(errSdIDDuplicated, m.p)
@@ -1527,6 +1557,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			m.currentelem = id
 		}
 
+
 		delete(output.structuredData, m.currentelem)
 		if len(output.structuredData) == 0 {
 			output.hasElements = false
@@ -1538,6 +1569,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto st607
 		}
 
+
 		m.err = fmt.Errorf(errStructuredData, m.p)
 		(m.p)--
 
@@ -1547,6 +1579,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr46:
+
 		if len(output.structuredData) > 0 {
 			delete(output.structuredData[m.currentelem], m.currentparam)
 		}
@@ -1556,6 +1589,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		{
 			goto st607
 		}
+
 
 		m.err = fmt.Errorf(errStructuredData, m.p)
 		(m.p)--
@@ -1566,12 +1600,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr84:
+
 		m.err = fmt.Errorf(errEscape, m.p)
 		(m.p)--
 
 		{
 			goto st607
 		}
+
 
 		if len(output.structuredData) > 0 {
 			delete(output.structuredData[m.currentelem], m.currentparam)
@@ -1583,6 +1619,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto st607
 		}
 
+
 		m.err = fmt.Errorf(errStructuredData, m.p)
 		(m.p)--
 
@@ -1592,6 +1629,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr619:
+
 		if t, e := time.Parse(RFC3339MICRO, string(m.text())); e != nil {
 			m.err = fmt.Errorf("%s [col %d]", e, m.p)
 			(m.p)--
@@ -1604,6 +1642,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			output.timestampSet = true
 		}
 
+
 		m.err = fmt.Errorf(errParse, m.p)
 		(m.p)--
 
@@ -1613,12 +1652,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st0
 	tr645:
+
 		m.err = fmt.Errorf(errStructuredData, m.p)
 		(m.p)--
 
 		{
 			goto st607
 		}
+
 
 		m.err = fmt.Errorf(errParse, m.p)
 		(m.p)--
@@ -1648,6 +1689,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr2
 	tr3:
+
 		m.pb = m.p
 
 		goto st3
@@ -1656,6 +1698,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof3
 		}
 	st_case_3:
+
 		output.priority = uint8(unsafeUTF8DecimalCodePointsToInt(m.text()))
 		output.prioritySet = true
 
@@ -1673,6 +1716,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr7
 	tr8:
+
 		m.pb = m.p
 
 		goto st5
@@ -1681,6 +1725,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof5
 		}
 	st_case_5:
+
 		output.version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
 
 		if (m.data)[(m.p)] == 32 {
@@ -1712,6 +1757,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr9
 	tr620:
+
 		if t, e := time.Parse(RFC3339MICRO, string(m.text())); e != nil {
 			m.err = fmt.Errorf("%s [col %d]", e, m.p)
 			(m.p)--
@@ -1735,6 +1781,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr16
 	tr17:
+
 		m.pb = m.p
 
 		goto st9
@@ -1751,6 +1798,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr16
 	tr18:
+
 		output.hostname = string(m.text())
 
 		goto st10
@@ -1764,6 +1812,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr20
 	tr21:
+
 		m.pb = m.p
 
 		goto st11
@@ -1780,6 +1829,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr20
 	tr22:
+
 		output.appname = string(m.text())
 
 		goto st12
@@ -1793,6 +1843,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr24
 	tr25:
+
 		m.pb = m.p
 
 		goto st13
@@ -1809,6 +1860,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr24
 	tr26:
+
 		output.procID = string(m.text())
 
 		goto st14
@@ -1822,6 +1874,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr28
 	tr29:
+
 		m.pb = m.p
 
 		goto st15
@@ -1838,6 +1891,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr30
 	tr31:
+
 		output.msgID = string(m.text())
 
 		goto st16
@@ -1901,7 +1955,9 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr632
 	tr632:
+
 		m.pb = m.p
+
 
 		m.msgat = m.p
 
@@ -1945,7 +2001,9 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto st605
 	tr633:
+
 		m.pb = m.p
+
 
 		m.msgat = m.p
 
@@ -1960,7 +2018,9 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr36
 	tr634:
+
 		m.pb = m.p
+
 
 		m.msgat = m.p
 
@@ -1975,7 +2035,9 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr36
 	tr635:
+
 		m.pb = m.p
+
 
 		m.msgat = m.p
 
@@ -1990,7 +2052,9 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr36
 	tr636:
+
 		m.pb = m.p
+
 
 		m.msgat = m.p
 
@@ -2005,7 +2069,9 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr36
 	tr637:
+
 		m.pb = m.p
+
 
 		m.msgat = m.p
 
@@ -2020,7 +2086,9 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr36
 	tr638:
+
 		m.pb = m.p
+
 
 		m.msgat = m.p
 
@@ -2035,7 +2103,9 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr36
 	tr639:
+
 		m.pb = m.p
+
 
 		m.msgat = m.p
 
@@ -2050,6 +2120,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr36
 	tr35:
+
 		output.structuredData = map[string]map[string]string{}
 
 		goto st24
@@ -2075,6 +2146,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr40
 	tr41:
+
 		m.pb = m.p
 
 		goto st25
@@ -2101,6 +2173,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr42
 	tr43:
+
 		if _, ok := output.structuredData[string(m.text())]; ok {
 			// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
 			m.err = fmt.Errorf(errSdIDDuplicated, m.p)
@@ -2139,7 +2212,9 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr46
 	tr47:
+
 		m.backslashat = []int{}
+
 
 		m.pb = m.p
 
@@ -2774,6 +2849,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr46
 	tr49:
+
 		m.currentparam = string(m.text())
 
 		goto st59
@@ -2831,6 +2907,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr81
 	tr81:
+
 		m.pb = m.p
 
 		goto st61
@@ -2879,7 +2956,9 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto st61
 	tr82:
+
 		m.pb = m.p
+
 
 		if output.hasElements {
 			// (fixme) > what if SD-PARAM-NAME already exist for the current element (ie., current SD-ID)?
@@ -2896,6 +2975,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 
 		goto st62
 	tr93:
+
 		if output.hasElements {
 			// (fixme) > what if SD-PARAM-NAME already exist for the current element (ie., current SD-ID)?
 
@@ -2923,6 +3003,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr46
 	tr45:
+
 		if _, ok := output.structuredData[string(m.text())]; ok {
 			// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
 			m.err = fmt.Errorf(errSdIDDuplicated, m.p)
@@ -2952,12 +3033,15 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr645
 	tr83:
+
 		m.pb = m.p
+
 
 		m.backslashat = append(m.backslashat, m.p)
 
 		goto st63
 	tr94:
+
 		m.backslashat = append(m.backslashat, m.p)
 
 		goto st63
@@ -2974,6 +3058,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr84
 	tr85:
+
 		m.pb = m.p
 
 		goto st64
@@ -2987,6 +3072,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr46
 	tr86:
+
 		m.pb = m.p
 
 		goto st65
@@ -3000,6 +3086,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr46
 	tr87:
+
 		m.pb = m.p
 
 		goto st66
@@ -3013,6 +3100,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr46
 	tr88:
+
 		m.pb = m.p
 
 		goto st67
@@ -3026,6 +3114,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr46
 	tr89:
+
 		m.pb = m.p
 
 		goto st68
@@ -3039,6 +3128,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr46
 	tr90:
+
 		m.pb = m.p
 
 		goto st69
@@ -3052,6 +3142,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr46
 	tr91:
+
 		m.pb = m.p
 
 		goto st70
@@ -9233,6 +9324,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr16
 	tr14:
+
 		m.pb = m.p
 
 		goto st561
@@ -9641,6 +9733,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof598
 		}
 	st_case_598:
+
 		output.version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
 
 		if (m.data)[(m.p)] == 32 {
@@ -9655,6 +9748,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof599
 		}
 	st_case_599:
+
 		output.version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
 
 		if (m.data)[(m.p)] == 32 {
@@ -9662,6 +9756,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr7
 	tr4:
+
 		m.pb = m.p
 
 		goto st600
@@ -9670,6 +9765,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof600
 		}
 	st_case_600:
+
 		output.priority = uint8(unsafeUTF8DecimalCodePointsToInt(m.text()))
 		output.prioritySet = true
 
@@ -9684,6 +9780,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		}
 		goto tr2
 	tr5:
+
 		m.pb = m.p
 
 		goto st601
@@ -9692,6 +9789,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof601
 		}
 	st_case_601:
+
 		output.priority = uint8(unsafeUTF8DecimalCodePointsToInt(m.text()))
 		output.prioritySet = true
 
@@ -9707,6 +9805,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 			goto _test_eof602
 		}
 	st_case_602:
+
 		output.priority = uint8(unsafeUTF8DecimalCodePointsToInt(m.text()))
 		output.prioritySet = true
 
@@ -11555,9 +11654,11 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		if (m.p) == (m.eof) {
 			switch m.cs {
 			case 605:
+
 				output.message = string(m.text())
 
 			case 1:
+
 				m.err = fmt.Errorf(errPri, m.p)
 				(m.p)--
 
@@ -11566,6 +11667,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 15, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132:
+
 				m.err = fmt.Errorf(errMsgid, m.p)
 				(m.p)--
 
@@ -11574,6 +11676,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 16:
+
 				m.err = fmt.Errorf(errStructuredData, m.p)
 				(m.p)--
 
@@ -11582,6 +11685,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 7:
+
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
 
@@ -11590,7 +11694,9 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 5:
+
 				output.version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
+
 
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
@@ -11600,6 +11706,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 585:
+
 				if t, e := time.Parse(RFC3339MICRO, string(m.text())); e != nil {
 					m.err = fmt.Errorf("%s [col %d]", e, m.p)
 					(m.p)--
@@ -11612,6 +11719,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 					output.timestampSet = true
 				}
 
+
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
 
@@ -11620,12 +11728,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 4:
+
 				m.err = fmt.Errorf(errVersion, m.p)
 				(m.p)--
 
 				{
 					goto st607
 				}
+
 
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
@@ -11635,12 +11745,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 6, 561, 562, 563, 564, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 580, 581, 582, 583, 584, 586, 587, 588, 589, 590, 591, 592, 593, 594, 595, 596, 597:
+
 				m.err = fmt.Errorf(errTimestamp, m.p)
 				(m.p)--
 
 				{
 					goto st607
 				}
+
 
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
@@ -11650,12 +11762,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 8, 9, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545, 546, 547, 548, 549, 550, 551, 552, 553, 554, 555, 556, 557, 558, 559, 560:
+
 				m.err = fmt.Errorf(errHostname, m.p)
 				(m.p)--
 
 				{
 					goto st607
 				}
+
 
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
@@ -11665,12 +11779,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 10, 11, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306:
+
 				m.err = fmt.Errorf(errAppname, m.p)
 				(m.p)--
 
 				{
 					goto st607
 				}
+
 
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
@@ -11680,12 +11796,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 12, 13, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259:
+
 				m.err = fmt.Errorf(errProcid, m.p)
 				(m.p)--
 
 				{
 					goto st607
 				}
+
 
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
@@ -11695,12 +11813,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 14:
+
 				m.err = fmt.Errorf(errMsgid, m.p)
 				(m.p)--
 
 				{
 					goto st607
 				}
+
 
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
@@ -11710,6 +11830,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 24:
+
 				delete(output.structuredData, m.currentelem)
 				if len(output.structuredData) == 0 {
 					output.hasElements = false
@@ -11721,6 +11842,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 					goto st607
 				}
 
+
 				m.err = fmt.Errorf(errStructuredData, m.p)
 				(m.p)--
 
@@ -11729,6 +11851,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 62, 64, 65, 66, 67, 68, 69, 70:
+
 				if len(output.structuredData) > 0 {
 					delete(output.structuredData[m.currentelem], m.currentparam)
 				}
@@ -11738,6 +11861,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				{
 					goto st607
 				}
+
 
 				m.err = fmt.Errorf(errStructuredData, m.p)
 				(m.p)--
@@ -11761,6 +11885,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 					goto st607
 				}
 
+
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
 
@@ -11769,13 +11894,17 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 604:
+
 				m.pb = m.p
 
+
 				m.msgat = m.p
+
 
 				output.message = string(m.text())
 
 			case 25, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101:
+
 				if _, ok := output.structuredData[string(m.text())]; ok {
 					// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
 					m.err = fmt.Errorf(errSdIDDuplicated, m.p)
@@ -11791,6 +11920,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 					m.currentelem = id
 				}
 
+
 				delete(output.structuredData, m.currentelem)
 				if len(output.structuredData) == 0 {
 					output.hasElements = false
@@ -11802,6 +11932,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 					goto st607
 				}
 
+
 				m.err = fmt.Errorf(errStructuredData, m.p)
 				(m.p)--
 
@@ -11810,6 +11941,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 2, 3, 600, 601, 602:
+
 				m.err = fmt.Errorf(errPrival, m.p)
 				(m.p)--
 
@@ -11817,12 +11949,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 					goto st607
 				}
 
+
 				m.err = fmt.Errorf(errPri, m.p)
 				(m.p)--
 
 				{
 					goto st607
 				}
+
 
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
@@ -11832,6 +11966,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 598, 599:
+
 				m.err = fmt.Errorf(errVersion, m.p)
 				(m.p)--
 
@@ -11839,7 +11974,9 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 					goto st607
 				}
 
+
 				output.version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
+
 
 				m.err = fmt.Errorf(errParse, m.p)
 				(m.p)--
@@ -11849,12 +11986,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				}
 
 			case 60, 61, 63:
+
 				m.err = fmt.Errorf(errEscape, m.p)
 				(m.p)--
 
 				{
 					goto st607
 				}
+
 
 				if len(output.structuredData) > 0 {
 					delete(output.structuredData[m.currentelem], m.currentparam)
@@ -11865,6 +12004,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 				{
 					goto st607
 				}
+
 
 				m.err = fmt.Errorf(errStructuredData, m.p)
 				(m.p)--
@@ -11880,6 +12020,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) 
 		{
 		}
 	}
+
 
 	if m.cs < first_final || m.cs == en_fail {
 		if bestEffort != nil && *bestEffort && output.valid() {
