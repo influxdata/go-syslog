@@ -3,6 +3,7 @@ package rfc5424
 import (
 	"time"
 	"fmt"
+	"github.com/influxdata/go-syslog"
 )
 
 var (
@@ -321,7 +322,7 @@ func (m *machine) text() []byte {
 //
 // It can also partially parse input messages returning a partially valid structured representation
 // and the error that stopped the parsing.
-func (m *machine) Parse(input []byte, bestEffort *bool) (*SyslogMessage, error) {
+func (m *machine) Parse(input []byte, bestEffort *bool) (syslog.Message, error) {
 	m.data = input
 	m.p = 0
 	m.pb = 0
