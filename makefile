@@ -9,6 +9,11 @@ rfc5424/builder.go rfc5424/machine.go:
 	@gofmt -w -s $@
 	@sed -i '/^\/\/line/d' $@
 
+rfc6587/machine.go: rfc6587/machine.go.rl
+	ragel -Z -G2 -e -o $@ $<
+	@gofmt -w -s $@
+	@sed -i '/^\/\/line/d' $@
+
 .PHONY: build
 build: rfc5424/machine.go rfc5424/builder.go
 	
