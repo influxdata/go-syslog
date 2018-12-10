@@ -1,0 +1,18 @@
+digraph rfc6587 {
+	rankdir=LR;
+	node [ shape = point ];
+	ENTRY;
+	en_1;
+	node [ shape = circle, height = 0.2 ];
+	node [ fixedsize = true, height = 0.65, shape = doublecircle ];
+	3;
+	node [ shape = circle ];
+	1 -> 2 [ label = "'<' / on_init" ];
+	2 -> 3 [ label = "'\\n' / on_trailer" ];
+	2 -> 2 [ label = "DEF" ];
+	3 -> 3 [ label = "'\\n' / on_trailer" ];
+	3 -> 2 [ label = "'<' / on_init" ];
+	3 -> 2 [ label = "DEF" ];
+	ENTRY -> 1 [ label = "IN" ];
+	en_1 -> 1 [ label = "main" ];
+}
