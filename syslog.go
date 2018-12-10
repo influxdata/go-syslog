@@ -13,6 +13,11 @@ type Machine interface {
 // MachineOption represents the type of options setters.
 type MachineOption func(m Machine) Machine
 
+// BestEfforter is an interface that wraps the HasBestEffort method.
+type BestEfforter interface {
+	HasBestEffort() bool
+}
+
 // Parser is an interface that wraps the Parse method.
 type Parser interface {
 	Parse(r io.Reader)

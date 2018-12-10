@@ -15,7 +15,7 @@ func output(out interface{}) {
 func Example() {
 	i := []byte(`<165>4 2018-10-11T22:14:15.003Z mymach.it e - 1 [ex@32473 iut="3"] An application event log entry...`)
 	p := NewParser()
-	m, _ := p.Parse(i, nil)
+	m, _ := p.Parse(i)
 	output(m)
 	// Output:
 	// (*rfc5424.SyslogMessage)({
@@ -38,10 +38,9 @@ func Example() {
 }
 
 func Example_besteffort() {
-	bestEffortOn := true
 	i := []byte(`<1>1 A - - - - - -`)
-	p := NewParser()
-	m, e := p.Parse(i, &bestEffortOn)
+	p := NewParser(WithBestEffort())
+	m, e := p.Parse(i)
 	output(m)
 	fmt.Println(e)
 	// Output:

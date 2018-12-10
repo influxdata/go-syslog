@@ -3,19 +3,28 @@ package rfc5424
 import (
 	"testing"
 
+	"github.com/influxdata/go-syslog"
 	"github.com/stretchr/testify/assert"
 )
 
+func TestHasBestEffort(t *testing.T) {
+	p1 := NewParser().(syslog.BestEfforter)
+	assert.False(t, p1.HasBestEffort())
+
+	p2 := NewParser(WithBestEffort()).(syslog.BestEfforter)
+	assert.True(t, p2.HasBestEffort())
+}
+
 func TestParserParse(t *testing.T) {
 	p := NewParser()
+	pBest := NewParser(WithBestEffort())
 	for _, tc := range testCases {
 		tc := tc
 		t.Run(rxpad(string(tc.input), 50), func(t *testing.T) {
 			t.Parallel()
 
-			bestEffort := true
-			message, merr := p.Parse(tc.input, nil)
-			partial, perr := p.Parse(tc.input, &bestEffort)
+			message, merr := p.Parse(tc.input)
+			partial, perr := pBest.Parse(tc.input)
 
 			if !tc.valid {
 				assert.Nil(t, message)

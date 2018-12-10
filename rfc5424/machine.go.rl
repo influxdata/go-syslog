@@ -24,6 +24,7 @@ var (
 	errParse          = "parsing error [col %d]"
 )
 
+// RFC3339MICRO represents the timestamp format that RFC5424 mandates.
 const RFC3339MICRO = "2006-01-02T15:04:05.999999Z07:00"
 
 %%{
@@ -289,11 +290,16 @@ type machine struct {
 	currentparam string
 	msgat        int
 	backslashat  []int
+	bestEffort 	 bool
 }
 
 // NewMachine creates a new FSM able to parse RFC5424 syslog messages.
-func NewMachine() *machine {
+func NewMachine(options ...syslog.MachineOption) syslog.Machine {
 	m := &machine{}
+
+	for _, opt := range options {
+		opt(m)
+	}
 
 	%% access m.;
 	%% variable p m.p;
@@ -302,6 +308,19 @@ func NewMachine() *machine {
 	%% variable data m.data;
 
 	return m
+}
+
+// WithBestEffort enables the best effort mode.
+func WithBestEffort() syslog.MachineOption {
+	return func(m syslog.Machine) syslog.Machine {
+		m.(*machine).bestEffort = true
+		return m
+	}
+}
+
+// HasBestEffort tells whether the receiving machine has best effort mode on or off.
+func (m *machine) HasBestEffort() bool {
+	return m.bestEffort
 }
 
 // Err returns the error that occurred on the last call to Parse.
@@ -322,7 +341,7 @@ func (m *machine) text() []byte {
 //
 // It can also partially parse input messages returning a partially valid structured representation
 // and the error that stopped the parsing.
-func (m *machine) Parse(input []byte, bestEffort *bool) (syslog.Message, error) {
+func (m *machine) Parse(input []byte) (syslog.Message, error) {
 	m.data = input
 	m.p = 0
 	m.pb = 0
@@ -337,7 +356,7 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (syslog.Message, error) 
     %% write exec;
 
 	if m.cs < first_final || m.cs == en_fail {
-		if bestEffort != nil && *bestEffort && output.valid() {
+		if m.bestEffort && output.valid() {
 			// An error occurred but partial parsing is on and partial message is minimally valid
 			return output.export(), m.err
 		}
