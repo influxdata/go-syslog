@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/influxdata/go-syslog"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -328,7 +329,7 @@ func TestSetEmptySDParam(t *testing.T) {
 func TestSerialization(t *testing.T) {
 	var res string
 	var err error
-	var pout *SyslogMessage
+	var pout syslog.Message
 	var perr error
 
 	p := NewParser()
@@ -341,7 +342,7 @@ func TestSerialization(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, "<1>1 - - - - - -", res)
 
-	pout, perr = p.Parse([]byte(res), nil)
+	pout, perr = p.Parse([]byte(res))
 	assert.Equal(t, m, pout)
 	assert.Nil(t, perr)
 
@@ -350,7 +351,7 @@ func TestSerialization(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, "<1>1 - - - - - - -", res)
 
-	pout, perr = p.Parse([]byte(res), nil)
+	pout, perr = p.Parse([]byte(res))
 	assert.Equal(t, m, pout)
 	assert.Nil(t, perr)
 
@@ -366,7 +367,7 @@ func TestSerialization(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, `<1>1 - - - - - [giga 1=""][mega x="a" y="b" z="\" \] \\"][peta a="name" c="nomen"] -`, res)
 
-	pout, perr = p.Parse([]byte(res), nil)
+	pout, perr = p.Parse([]byte(res))
 	assert.Equal(t, m, pout)
 	assert.Nil(t, perr)
 
@@ -375,7 +376,7 @@ func TestSerialization(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, `<1>1 - host1 - - - [giga 1=""][mega x="a" y="b" z="\" \] \\"][peta a="name" c="nomen"] -`, res)
 
-	pout, perr = p.Parse([]byte(res), nil)
+	pout, perr = p.Parse([]byte(res))
 	assert.Equal(t, m, pout)
 	assert.Nil(t, perr)
 
@@ -384,7 +385,7 @@ func TestSerialization(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, `<1>1 - host1 su - - [giga 1=""][mega x="a" y="b" z="\" \] \\"][peta a="name" c="nomen"] -`, res)
 
-	pout, perr = p.Parse([]byte(res), nil)
+	pout, perr = p.Parse([]byte(res))
 	assert.Equal(t, m, pout)
 	assert.Nil(t, perr)
 
@@ -393,7 +394,7 @@ func TestSerialization(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, `<1>1 - host1 su 22 - [giga 1=""][mega x="a" y="b" z="\" \] \\"][peta a="name" c="nomen"] -`, res)
 
-	pout, perr = p.Parse([]byte(res), nil)
+	pout, perr = p.Parse([]byte(res))
 	assert.Equal(t, m, pout)
 	assert.Nil(t, perr)
 
@@ -402,7 +403,7 @@ func TestSerialization(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, `<1>1 - host1 su 22 #1 [giga 1=""][mega x="a" y="b" z="\" \] \\"][peta a="name" c="nomen"] -`, res)
 
-	pout, perr = p.Parse([]byte(res), nil)
+	pout, perr = p.Parse([]byte(res))
 	assert.Equal(t, m, pout)
 	assert.Nil(t, perr)
 
@@ -411,7 +412,7 @@ func TestSerialization(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, `<1>1 2002-10-22T16:33:15.000087+01:00 host1 su 22 #1 [giga 1=""][mega x="a" y="b" z="\" \] \\"][peta a="name" c="nomen"] -`, res)
 
-	pout, perr = p.Parse([]byte(res), nil)
+	pout, perr = p.Parse([]byte(res))
 	assert.Equal(t, m, pout)
 	assert.Nil(t, perr)
 
@@ -420,7 +421,7 @@ func TestSerialization(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, `<1>1 2002-10-22T16:33:15.000087+01:00 host1 su 22 #1 [giga 1=""][mega x="a" y="b" z="\" \] \\"][peta a="name" c="nomen"] κόσμε`, res)
 
-	pout, perr = p.Parse([]byte(res), nil)
+	pout, perr = p.Parse([]byte(res))
 	assert.Equal(t, m, pout)
 	assert.Nil(t, perr)
 

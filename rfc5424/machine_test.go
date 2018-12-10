@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/influxdata/go-syslog"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -35,9 +36,9 @@ func rxpad(str string, lim int) string {
 type testCase struct {
 	input        []byte
 	valid        bool
-	value        *SyslogMessage
+	value        syslog.Message
 	errorString  string
-	partialValue *SyslogMessage
+	partialValue syslog.Message
 }
 
 var testCases = []testCase{
@@ -52,7 +53,7 @@ var testCases = []testCase{
 	// Invalid, multiple syslog messages on multiple lines
 	{
 		[]byte(`<1>1 - - - - - -
-		<2>1 - - - - - -`),
+			<2>1 - - - - - -`),
 		false,
 		nil,
 		"parsing error [col 16]",
@@ -2757,10 +2758,8 @@ func TestMachineParse(t *testing.T) {
 		t.Run(rxpad(string(tc.input), 50), func(t *testing.T) {
 			t.Parallel()
 
-			bestEffort := true
-			fsm := NewMachine()
-			message, merr := fsm.Parse(tc.input, nil)
-			partial, perr := fsm.Parse(tc.input, &bestEffort)
+			message, merr := NewMachine().Parse(tc.input)
+			partial, perr := NewMachine(WithBestEffort()).Parse(tc.input)
 
 			if !tc.valid {
 				assert.Nil(t, message)
