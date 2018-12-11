@@ -1,3 +1,5 @@
+// Package syslog provides generic interfaces and structs for syslog messages and transport.
+// Subpackages contains various parsers or scanners for different syslog formats.
 package syslog
 
 import (
@@ -25,6 +27,9 @@ type Parser interface {
 
 // ParserOption represent an option for Parser instances.
 type ParserOption func(p Parser) Parser
+
+// ParserListener is a function that receives syslog parsing results, one by one.
+type ParserListener func(*Result)
 
 // Result wraps the outcomes obtained parsing a syslog message.
 type Result struct {
