@@ -3,82 +3,90 @@ package rfc5425
 import (
 	"fmt"
 	"io"
+	"sync"
 
+	"github.com/influxdata/go-syslog"
 	"github.com/influxdata/go-syslog/rfc5424"
 )
 
-// Parser is capable to parse byte buffer on the basis of RFC5425.
+// Parser is capable to parse the input stream following RFC5425.
 //
 // Use NewParser function to instantiate one.
 type Parser struct {
+	sync.Mutex
 	msglen     int64
 	s          Scanner
-	p          rfc5424.Parser
+	internal   syslog.Machine
 	last       Token
 	stepback   bool // Wheter to retrieve the last token or not
 	bestEffort bool // Best effort mode flag
+	emit       syslog.ParserListener
 }
 
-// ParserOpt represents the type of options setters.
-type ParserOpt func(p *Parser) *Parser
-
 // NewParser returns a pointer to a new instance of Parser.
-func NewParser(r io.Reader, opts ...ParserOpt) *Parser {
+func NewParser(opts ...syslog.ParserOption) syslog.Parser {
 	p := &Parser{
-		s: *NewScanner(r),
-		p: *rfc5424.NewParser(),
+		emit: func(*syslog.Result) { /* noop */ },
 	}
 
 	for _, opt := range opts {
-		p = opt(p)
+		p = opt(p).(*Parser)
+	}
+
+	if p.internal == nil {
+		p.internal = rfc5424.NewParser()
 	}
 
 	return p
 }
 
+// HasBestEffort tells whether the receiving parser has best effort mode on or off.
+func (p *Parser) HasBestEffort() bool {
+	return p.bestEffort
+}
+
 // WithBestEffort sets the best effort mode on.
 //
 // When active the parser tries to recover as much of the syslog messages as possible.
-func WithBestEffort() ParserOpt {
-	return func(p *Parser) *Parser {
-		p.bestEffort = true
+func WithBestEffort() syslog.ParserOption {
+	return func(p syslog.Parser) syslog.Parser {
+		var parser = p.(*Parser)
+		parser.bestEffort = true
+		// Push down the best effort, too
+		parser.internal = rfc5424.NewParser(rfc5424.WithBestEffort())
 		return p
 	}
 }
 
-// Result represent the resulting syslog message and (eventually) errors occured during parsing.
-type Result struct {
-	Message      *rfc5424.SyslogMessage
-	MessageError error
-	Error        error
-}
+// WithListener specifies the function to send the results of the parsing.
+func WithListener(ln syslog.ParserListener) syslog.ParserOption {
+	return func(p syslog.Parser) syslog.Parser {
+		// parser := p.(*Parser)
+		// parser.Lock()
+		// defer parser.Unlock()
 
-// ResultHandler is a function the user can use to specify what to do with every Result instance.
-type ResultHandler func(result *Result)
-
-// Parse parses the incoming bytes accumulating the results.
-func (p *Parser) Parse() []Result {
-	results := []Result{}
-
-	acc := func(result *Result) {
-		results = append(results, *result)
+		p.(*Parser).emit = ln
+		return p
 	}
-
-	p.ParseExecuting(acc)
-
-	return results
 }
 
-// ParseExecuting parses the incoming bytes executing the handler function for each Result.
+// Parse parses the io.Reader incoming bytes.
 //
 // It stops parsing when an error regarding RFC 5425 is found.
-func (p *Parser) ParseExecuting(handler ResultHandler) {
+func (p *Parser) Parse(r io.Reader) {
+	// p.Lock()
+	// defer p.Unlock()
+	p.s = *NewScanner(r)
+	p.run()
+}
+
+func (p *Parser) run() {
 	for {
 		var tok Token
 
 		// First token MUST be a MSGLEN
 		if tok = p.scan(); tok.typ != MSGLEN {
-			handler(&Result{
+			p.emit(&syslog.Result{
 				Error: fmt.Errorf("found %s, expecting a %s", tok, MSGLEN),
 			})
 			break
@@ -86,7 +94,7 @@ func (p *Parser) ParseExecuting(handler ResultHandler) {
 
 		// Next we MUST see a WS
 		if tok = p.scan(); tok.typ != WS {
-			handler(&Result{
+			p.emit(&syslog.Result{
 				Error: fmt.Errorf("found %s, expecting a %s", tok, WS),
 			})
 			break
@@ -95,16 +103,18 @@ func (p *Parser) ParseExecuting(handler ResultHandler) {
 		// Next we MUST see a SYSLOGMSG with length equal to MSGLEN
 		if tok = p.scan(); tok.typ != SYSLOGMSG {
 			e := fmt.Errorf(`found %s after "%s", expecting a %s containing %d octets`, tok, tok.lit, SYSLOGMSG, p.s.msglen)
-			// Overflow case
+			// Underflow case
 			if len(tok.lit) < int(p.s.msglen) && p.bestEffort {
 				// Though MSGLEN was not respected, we try to parse the existing SYSLOGMSG as a RFC5424 syslog message
 				result := p.parse(tok.lit)
-				result.Error = e
-				handler(result)
+				if result.Error == nil {
+					result.Error = e
+				}
+				p.emit(result)
 				break
 			}
 
-			handler(&Result{
+			p.emit(&syslog.Result{
 				Error: e,
 			})
 			break
@@ -112,11 +122,11 @@ func (p *Parser) ParseExecuting(handler ResultHandler) {
 
 		// Parse the SYSLOGMSG literal pretending it is a RFC5424 syslog message
 		result := p.parse(tok.lit)
-		if p.bestEffort || result.MessageError == nil {
-			handler(result)
+		if p.bestEffort || result.Error == nil {
+			p.emit(result)
 		}
-		if !p.bestEffort && result.MessageError != nil {
-			handler(&Result{MessageError: result.MessageError})
+		if !p.bestEffort && result.Error != nil {
+			p.emit(&syslog.Result{Error: result.Error})
 			break
 		}
 
@@ -129,12 +139,12 @@ func (p *Parser) ParseExecuting(handler ResultHandler) {
 	}
 }
 
-func (p *Parser) parse(input []byte) *Result {
-	sys, err := p.p.Parse(input, &p.bestEffort)
+func (p *Parser) parse(input []byte) *syslog.Result {
+	sys, err := p.internal.Parse(input)
 
-	return &Result{
-		Message:      sys,
-		MessageError: err,
+	return &syslog.Result{
+		Message: sys,
+		Error:   err,
 	}
 }
 
