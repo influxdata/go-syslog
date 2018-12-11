@@ -2,6 +2,7 @@ package rfc6587
 
 import (
 	"io"
+	"sync"
 
 	"fmt"
 	syslog "github.com/influxdata/go-syslog"
@@ -16,20 +17,24 @@ func TestMeToo(t *testing.T) {
 		"<1>1 - - - - - - A\nB\nC\nD",
 	}
 
+	wg := sync.WaitGroup{}
+
 	r, w := io.Pipe()
 
 	go func() {
 		defer w.Close()
 
 		for _, m := range messages {
+			wg.Add(1)
 			w.Write([]byte(m))  // message (containing trailers to be interpreted as message)
 			w.Write([]byte{10}) // trailer
-			time.Sleep(time.Millisecond * 1)
+			time.Sleep(time.Second * 1)
 		}
 	}()
 
-	results := make(chan syslog.Result)
-	ln := func(x syslog.Result) {
+	results := make(chan *syslog.Result)
+	defer close(results)
+	ln := func(x *syslog.Result) {
 		fmt.Println("EMIT", x)
 		results <- x
 	}
@@ -37,11 +42,12 @@ func TestMeToo(t *testing.T) {
 	go func() {
 		for {
 			fmt.Println("RECV", <-results)
+			wg.Done()
 		}
 	}()
 
-	New(WithListener(ln)).Parse(r)
+	NewParser(WithListener(ln)).Parse(r)
 
-	close(results)
+	wg.Wait()
 	r.Close()
 }

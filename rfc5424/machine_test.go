@@ -53,7 +53,7 @@ var testCases = []testCase{
 	// Invalid, multiple syslog messages on multiple lines
 	{
 		[]byte(`<1>1 - - - - - -
-			<2>1 - - - - - -`),
+		<2>1 - - - - - -`),
 		false,
 		nil,
 		"parsing error [col 16]",

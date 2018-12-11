@@ -47,12 +47,12 @@ type machine struct{
 	trailer   byte
 	candidate []byte
 	internal  syslog.Machine
-	emitter   func(syslog.Result)
+	emit      syslog.ParserListener
 }
 
 func (m *machine) process() {
 	// res, err := m.internal.Parse(m.candidate, func(x bool) *bool { return &x }(true))
-	m.emitter(syslog.Result{
+	m.emit(&syslog.Result{
 		Message: (&rfc5424.SyslogMessage{}).SetMessage("momentarily empty"),
 		Error: nil,
 	})
@@ -88,12 +88,12 @@ func (m *machine) OnCompletion() {
 // todo(leodido) > make trailer byte configurable, e.g. WithTrailer(TrailerType)
 // todo(leodido) > make best effort option for internal parsing configurable, e.g. WithBestEffort(bool)
 
-// New ...
-func New(options ...syslog.ParserOption) syslog.Parser {
+// NewParser ...
+func NewParser(options ...syslog.ParserOption) syslog.Parser {
 	m := &machine{
 		internal: rfc5424.NewMachine(),
 		trailer: 10,
-		emitter: func(syslog.Result) { /* noop */ },
+		emit: func(*syslog.Result) { /* noop */ },
 	}
 
 	for _, opt := range options {
@@ -104,10 +104,10 @@ func New(options ...syslog.ParserOption) syslog.Parser {
 }
 
 // WithListener ....
-func WithListener(f func(syslog.Result)) syslog.ParserOption {
+func WithListener(f syslog.ParserListener) syslog.ParserOption {
 	return func(m syslog.Parser) syslog.Parser {
 		machine := m.(*machine)
-		machine.emitter = f
+		machine.emit = f
 		return machine
 	}
 }
