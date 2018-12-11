@@ -1,7 +1,10 @@
 package rfc5425
 
 import (
+	"github.com/influxdata/go-syslog"
+	"io"
 	"strings"
+	"time"
 
 	"github.com/davecgh/go-spew/spew"
 )
@@ -13,11 +16,16 @@ func output(out interface{}) {
 }
 
 func Example() {
+	results := []syslog.Result{}
+	acc := func(res *syslog.Result) {
+		results = append(results, *res)
+	}
 	r := strings.NewReader("48 <1>1 2003-10-11T22:14:15.003Z host.local - - - -25 <3>1 - host.local - - - -38 <2>1 - host.local su - - - κόσμε")
-	output(NewParser(r, WithBestEffort()).Parse())
+	NewParser(WithBestEffort(), WithListener(acc)).Parse(r)
+	output(results)
 	// Output:
-	// ([]rfc5425.Result) (len=3) {
-	//  (rfc5425.Result) {
+	// ([]syslog.Result) (len=3) {
+	//  (syslog.Result) {
 	//   Message: (*rfc5424.SyslogMessage)({
 	//    priority: (*uint8)(1),
 	//    facility: (*uint8)(0),
@@ -31,10 +39,9 @@ func Example() {
 	//    structuredData: (*map[string]map[string]string)(<nil>),
 	//    message: (*string)(<nil>)
 	//   }),
-	//   MessageError: (error) <nil>,
 	//   Error: (error) <nil>
 	//  },
-	//  (rfc5425.Result) {
+	//  (syslog.Result) {
 	//   Message: (*rfc5424.SyslogMessage)({
 	//    priority: (*uint8)(3),
 	//    facility: (*uint8)(0),
@@ -48,10 +55,9 @@ func Example() {
 	//    structuredData: (*map[string]map[string]string)(<nil>),
 	//    message: (*string)(<nil>)
 	//   }),
-	//   MessageError: (error) <nil>,
 	//   Error: (error) <nil>
 	//  },
-	//  (rfc5425.Result) {
+	//  (syslog.Result) {
 	//   Message: (*rfc5424.SyslogMessage)({
 	//    priority: (*uint8)(2),
 	//    facility: (*uint8)(0),
@@ -65,38 +71,48 @@ func Example() {
 	//    structuredData: (*map[string]map[string]string)(<nil>),
 	//    message: (*string)((len=11) "κόσμε")
 	//   }),
-	//   MessageError: (error) <nil>,
 	//   Error: (error) <nil>
 	//  }
 	// }
 }
 
-func Example_handler() {
-	// Defining a custom handler to send the parsing results into a channel
-	EmittingParsing := func(p *Parser) chan Result {
-		c := make(chan Result)
-
-		toChannel := func(r *Result) {
-			c <- *r
-		}
-
-		go func() {
-			defer close(c)
-			p.ParseExecuting(toChannel)
-		}()
-
-		return c
+func Example_channel() {
+	messages := []string{
+		"16 <1>1 - - - - - -",
+		"17 <2>12 A B C D E -",
+		"16 <1>1",
 	}
 
-	// Use it
-	r := strings.NewReader("16 <1>1 - - - - - -17 <2>12 A B C D E -16 <1>1")
-	results := EmittingParsing(NewParser(r, WithBestEffort()))
+	r, w := io.Pipe()
 
-	for r := range results {
+	go func() {
+		defer w.Close()
+
+		for _, m := range messages {
+			w.Write([]byte(m))
+			time.Sleep(time.Millisecond * 220)
+		}
+	}()
+
+	c := make(chan syslog.Result)
+	emit := func(res *syslog.Result) {
+		c <- *res
+	}
+
+	parser := NewParser(WithBestEffort(), WithListener(emit))
+	go func() {
+		defer close(c)
+		parser.Parse(r)
+	}()
+
+	for r := range c {
 		output(r)
 	}
+
+	r.Close()
+
 	// Output:
-	// (rfc5425.Result) {
+	// (syslog.Result) {
 	//  Message: (*rfc5424.SyslogMessage)({
 	//   priority: (*uint8)(1),
 	//   facility: (*uint8)(0),
@@ -110,10 +126,9 @@ func Example_handler() {
 	//   structuredData: (*map[string]map[string]string)(<nil>),
 	//   message: (*string)(<nil>)
 	//  }),
-	//  MessageError: (error) <nil>,
 	//  Error: (error) <nil>
 	// }
-	// (rfc5425.Result) {
+	// (syslog.Result) {
 	//  Message: (*rfc5424.SyslogMessage)({
 	//   priority: (*uint8)(2),
 	//   facility: (*uint8)(0),
@@ -127,10 +142,9 @@ func Example_handler() {
 	//   structuredData: (*map[string]map[string]string)(<nil>),
 	//   message: (*string)(<nil>)
 	//  }),
-	//  MessageError: (*errors.errorString)(expecting a RFC3339MICRO timestamp or a nil value [col 6]),
-	//  Error: (error) <nil>
+	//  Error: (*errors.errorString)(expecting a RFC3339MICRO timestamp or a nil value [col 6])
 	// }
-	// (rfc5425.Result) {
+	// (syslog.Result) {
 	//  Message: (*rfc5424.SyslogMessage)({
 	//   priority: (*uint8)(1),
 	//   facility: (*uint8)(0),
@@ -144,7 +158,6 @@ func Example_handler() {
 	//   structuredData: (*map[string]map[string]string)(<nil>),
 	//   message: (*string)(<nil>)
 	//  }),
-	//  MessageError: (*errors.errorString)(parsing error [col 4]),
-	//  Error: (*errors.errorString)(found EOF after "<1>1", expecting a SYSLOGMSG containing 16 octets)
+	//  Error: (*errors.errorString)(parsing error [col 4])
 	// }
 }
