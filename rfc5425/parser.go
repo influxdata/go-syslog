@@ -3,7 +3,6 @@ package rfc5425
 import (
 	"fmt"
 	"io"
-	"sync"
 
 	"github.com/influxdata/go-syslog"
 	"github.com/influxdata/go-syslog/rfc5424"
@@ -13,7 +12,6 @@ import (
 //
 // Use NewParser function to instantiate one.
 type Parser struct {
-	sync.Mutex
 	msglen     int64
 	s          Scanner
 	internal   syslog.Machine
@@ -61,10 +59,6 @@ func WithBestEffort() syslog.ParserOption {
 // WithListener specifies the function to send the results of the parsing.
 func WithListener(ln syslog.ParserListener) syslog.ParserOption {
 	return func(p syslog.Parser) syslog.Parser {
-		// parser := p.(*Parser)
-		// parser.Lock()
-		// defer parser.Unlock()
-
 		p.(*Parser).emit = ln
 		return p
 	}
@@ -74,8 +68,6 @@ func WithListener(ln syslog.ParserListener) syslog.ParserOption {
 //
 // It stops parsing when an error regarding RFC 5425 is found.
 func (p *Parser) Parse(r io.Reader) {
-	// p.Lock()
-	// defer p.Unlock()
 	p.s = *NewScanner(r)
 	p.run()
 }
