@@ -25,6 +25,7 @@ func (t TrailerType) String() string {
 	return names[t]
 }
 
+// Value returns the byte corresponding to the receiving TrailerType.
 func (t TrailerType) Value() (int, error) {
 	if t < LF || t > NUL {
 		return -1, fmt.Errorf("unknown TrailerType")

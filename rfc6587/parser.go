@@ -7,12 +7,10 @@ import (
 	"io"
 )
 
-
 const rfc6587Start int = 1
 const rfc6587Error int = 0
 
 const rfc6587EnMain int = 1
-
 
 type machine struct {
 	trailertyp TrailerType // default is 0 thus TrailerType(LF)
@@ -169,6 +167,7 @@ func (m *machine) Exec(s *parser.State) (int, int) {
 }
 
 func (m *machine) OnErr() {
+	// todo(leodido) > handle unexpected errors (only unexepected EOFs?)
 }
 
 func (m *machine) OnEOF() {
@@ -213,7 +212,6 @@ func WithTrailer(t TrailerType) syslog.ParserOption {
 			m.(*machine).trailer = byte(val)
 			m.(*machine).trailertyp = t
 		}
-
 		return m
 	}
 }
@@ -259,3 +257,5 @@ func (m *machine) process() {
 		Error:   err,
 	})
 }
+
+// todo(leodido) > error management.
