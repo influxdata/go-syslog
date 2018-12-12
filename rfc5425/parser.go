@@ -8,10 +8,10 @@ import (
 	"github.com/influxdata/go-syslog/rfc5424"
 )
 
-// Parser is capable to parse the input stream following RFC5425.
+// parser is capable to parse the input stream following RFC5425.
 //
 // Use NewParser function to instantiate one.
-type Parser struct {
+type parser struct {
 	msglen     int64
 	s          Scanner
 	internal   syslog.Machine
@@ -21,14 +21,14 @@ type Parser struct {
 	emit       syslog.ParserListener
 }
 
-// NewParser returns a pointer to a new instance of Parser.
+// NewParser returns a syslog.Parser suitable to parse syslog messages sent with transparent - ie. octet counting (RFC 5425) - framing.
 func NewParser(opts ...syslog.ParserOption) syslog.Parser {
-	p := &Parser{
+	p := &parser{
 		emit: func(*syslog.Result) { /* noop */ },
 	}
 
 	for _, opt := range opts {
-		p = opt(p).(*Parser)
+		p = opt(p).(*parser)
 	}
 
 	if p.internal == nil {
@@ -39,7 +39,7 @@ func NewParser(opts ...syslog.ParserOption) syslog.Parser {
 }
 
 // HasBestEffort tells whether the receiving parser has best effort mode on or off.
-func (p *Parser) HasBestEffort() bool {
+func (p *parser) HasBestEffort() bool {
 	return p.bestEffort
 }
 
@@ -48,7 +48,7 @@ func (p *Parser) HasBestEffort() bool {
 // When active the parser tries to recover as much of the syslog messages as possible.
 func WithBestEffort() syslog.ParserOption {
 	return func(p syslog.Parser) syslog.Parser {
-		var parser = p.(*Parser)
+		var parser = p.(*parser)
 		parser.bestEffort = true
 		// Push down the best effort, too
 		parser.internal = rfc5424.NewParser(rfc5424.WithBestEffort())
@@ -59,7 +59,7 @@ func WithBestEffort() syslog.ParserOption {
 // WithListener specifies the function to send the results of the parsing.
 func WithListener(ln syslog.ParserListener) syslog.ParserOption {
 	return func(p syslog.Parser) syslog.Parser {
-		p.(*Parser).emit = ln
+		p.(*parser).emit = ln
 		return p
 	}
 }
@@ -67,12 +67,12 @@ func WithListener(ln syslog.ParserListener) syslog.ParserOption {
 // Parse parses the io.Reader incoming bytes.
 //
 // It stops parsing when an error regarding RFC 5425 is found.
-func (p *Parser) Parse(r io.Reader) {
+func (p *parser) Parse(r io.Reader) {
 	p.s = *NewScanner(r)
 	p.run()
 }
 
-func (p *Parser) run() {
+func (p *parser) run() {
 	for {
 		var tok Token
 
@@ -131,7 +131,7 @@ func (p *Parser) run() {
 	}
 }
 
-func (p *Parser) parse(input []byte) *syslog.Result {
+func (p *parser) parse(input []byte) *syslog.Result {
 	sys, err := p.internal.Parse(input)
 
 	return &syslog.Result{
@@ -142,7 +142,7 @@ func (p *Parser) parse(input []byte) *syslog.Result {
 
 // scan returns the next token from the underlying scanner;
 // if a token has been unscanned then read that instead.
-func (p *Parser) scan() Token {
+func (p *parser) scan() Token {
 	// If we have a token on the buffer, then return it.
 	if p.stepback {
 		p.stepback = false
@@ -159,6 +159,6 @@ func (p *Parser) scan() Token {
 }
 
 // unscan pushes the previously read token back onto the buffer.
-func (p *Parser) unscan() {
+func (p *parser) unscan() {
 	p.stepback = true
 }
