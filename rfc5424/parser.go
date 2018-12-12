@@ -5,15 +5,15 @@ import (
 	"sync"
 )
 
-// Parser represent a RFC5424 parser with mutex capabilities.
-type Parser struct {
+// parser represent a RFC5424 parser with mutex capabilities.
+type parser struct {
 	sync.Mutex
 	*machine
 }
 
-// NewParser creates a new parser and the underlying FSM.
+// NewParser creates a syslog.Machine that parses RFC5424 syslog messages.
 func NewParser(options ...syslog.MachineOption) syslog.Machine {
-	p := &Parser{
+	p := &parser{
 		machine: NewMachine(options...).(*machine),
 	}
 
@@ -21,14 +21,14 @@ func NewParser(options ...syslog.MachineOption) syslog.Machine {
 }
 
 // HasBestEffort tells whether the receiving parser has best effort mode on or off.
-func (p *Parser) HasBestEffort() bool {
+func (p *parser) HasBestEffort() bool {
 	return p.bestEffort
 }
 
 // Parse parses the input RFC5424 syslog message using its FSM.
 //
 // Best effort mode enables the partial parsing.
-func (p *Parser) Parse(input []byte) (syslog.Message, error) {
+func (p *parser) Parse(input []byte) (syslog.Message, error) {
 	p.Lock()
 	defer p.Unlock()
 
