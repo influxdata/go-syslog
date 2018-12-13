@@ -516,7 +516,7 @@ func TestParse(t *testing.T) {
 			t.Parallel()
 
 			res := []syslog.Result{}
-			effortParser := NewParser(WithBestEffort(), syslog.WithListener(func(r *syslog.Result) {
+			effortParser := NewParser(syslog.WithBestEffort(), syslog.WithListener(func(r *syslog.Result) {
 				res = append(res, *r)
 			}))
 			effortParser.Parse(strings.NewReader(tc.input))
