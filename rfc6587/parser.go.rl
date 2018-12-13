@@ -123,13 +123,9 @@ func WithBestEffort(f syslog.ParserListener) syslog.ParserOption {
     }
 }
 
-// WithListener specifies the function to send the results of the parsing.
-func WithListener(f syslog.ParserListener) syslog.ParserOption {
-    return func(m syslog.Parser) syslog.Parser {
-        machine := m.(*machine)
-        machine.emit = f
-        return machine
-    }
+// WithListener sets the function the parser uses to emit.
+func (m *machine) WithListener(f syslog.ParserListener) {
+    m.emit = f
 }
 
 // Parse parses the io.Reader incoming bytes.

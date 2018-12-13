@@ -37,7 +37,7 @@ func Example_channel_lf() {
 		results <- x
 	}
 
-	p := NewParser(WithListener(ln))
+	p := NewParser(syslog.WithListener(ln))
 	go func() {
 		defer close(results)
 		defer r.Close()
@@ -116,7 +116,7 @@ func Example_channel_nul() {
 		results <- x
 	}
 
-	p := NewParser(WithListener(ln), WithTrailer(NUL))
+	p := NewParser(syslog.WithListener(ln), WithTrailer(NUL))
 
 	go func() {
 		defer close(results)

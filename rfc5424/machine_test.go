@@ -900,7 +900,7 @@ var testCases = []testCase{
 			severity: getUint8Address(1),
 			version:  1,
 			structuredData: &map[string]map[string]string{
-				"id": map[string]string{},
+				"id": {},
 			},
 		},
 	},
@@ -942,10 +942,10 @@ var testCases = []testCase{
 			hostname:  getStringAddress("web1"),
 			appname:   getStringAddress("someservice"),
 			structuredData: &map[string]map[string]string{
-				"origin": map[string]string{
+				"origin": {
 					"x-service": "someservice",
 				},
-				"meta": map[string]string{
+				"meta": {
 					"sequenceId": "14125553",
 				},
 			},
@@ -1046,11 +1046,11 @@ var testCases = []testCase{
 			procID:    getStringAddress("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzab"),
 			msgID:     getStringAddress("abcdefghilmnopqrstuvzabcdefghilm"),
 			structuredData: &map[string]map[string]string{
-				"an@id": map[string]string{
+				"an@id": {
 					"key1": "val1",
 					"key2": "val2",
 				},
-				"another@id": map[string]string{
+				"another@id": {
 					"key1": "val1",
 				},
 			},
@@ -1174,7 +1174,7 @@ var testCases = []testCase{
 			procID:    getStringAddress("10391"),
 			msgID:     nil,
 			structuredData: &map[string]map[string]string{
-				"sdid": map[string]string{},
+				"sdid": {},
 			},
 			message: getStringAddress("some_message"),
 		},
@@ -1196,7 +1196,7 @@ var testCases = []testCase{
 			procID:    getStringAddress("10391"),
 			msgID:     nil,
 			structuredData: &map[string]map[string]string{
-				"sdid": map[string]string{
+				"sdid": {
 					"x": "⌘",
 				},
 			},
@@ -1220,7 +1220,7 @@ var testCases = []testCase{
 			procID:    getStringAddress("10391"),
 			msgID:     nil,
 			structuredData: &map[string]map[string]string{
-				"sdid": map[string]string{
+				"sdid": {
 					"x": `hey \u2318 hey`,
 				},
 			},
@@ -1242,7 +1242,7 @@ var testCases = []testCase{
 			hostname:  getStringAddress("hn"),
 			appname:   getStringAddress("S"),
 			structuredData: &map[string]map[string]string{
-				"meta": map[string]string{
+				"meta": {
 					"es": `\valid`,
 				},
 			},
@@ -1263,7 +1263,7 @@ var testCases = []testCase{
 			hostname:  getStringAddress("hn"),
 			appname:   getStringAddress("S"),
 			structuredData: &map[string]map[string]string{
-				"meta": map[string]string{
+				"meta": {
 					"one": `\one`,
 					"two": `\two`,
 				},
@@ -1285,10 +1285,10 @@ var testCases = []testCase{
 			hostname:  getStringAddress("hn"),
 			appname:   getStringAddress("S"),
 			structuredData: &map[string]map[string]string{
-				"meta": map[string]string{
+				"meta": {
 					"one": `\one`,
 				},
-				"other": map[string]string{
+				"other": {
 					"two":    `\two`,
 					"double": `\a\b`,
 				},
@@ -1310,7 +1310,7 @@ var testCases = []testCase{
 			hostname:  getStringAddress("hn"),
 			appname:   getStringAddress("S"),
 			structuredData: &map[string]map[string]string{
-				"meta": map[string]string{
+				"meta": {
 					"es": `\double\slash`,
 				},
 			},
@@ -1331,7 +1331,7 @@ var testCases = []testCase{
 			hostname:  getStringAddress("hn"),
 			appname:   getStringAddress("S"),
 			structuredData: &map[string]map[string]string{
-				"meta": map[string]string{
+				"meta": {
 					"es": `in \middle of the string`,
 				},
 			},
@@ -1352,7 +1352,7 @@ var testCases = []testCase{
 			hostname:  getStringAddress("hn"),
 			appname:   getStringAddress("S"),
 			structuredData: &map[string]map[string]string{
-				"meta": map[string]string{
+				"meta": {
 					"es": `at the \end`,
 				},
 			},
@@ -1374,7 +1374,7 @@ var testCases = []testCase{
 			hostname:  getStringAddress("hn"),
 			appname:   getStringAddress("S"),
 			structuredData: &map[string]map[string]string{
-				"meta": map[string]string{
+				"meta": {
 					"es": "\t5Ὂg̀9!℃ᾭGa b",
 				},
 			},
@@ -1396,11 +1396,11 @@ var testCases = []testCase{
 			hostname:  getStringAddress("hn"),
 			appname:   getStringAddress("S"),
 			structuredData: &map[string]map[string]string{
-				"meta": map[string]string{
+				"meta": {
 					"gr": "κόσμε",
 					"es": "ñ",
 				},
-				"beta": map[string]string{
+				"beta": {
 					"pr": "₡",
 				},
 			},
@@ -1424,12 +1424,12 @@ var testCases = []testCase{
 			procID:    nil,
 			msgID:     getStringAddress("ID27"),
 			structuredData: &map[string]map[string]string{
-				"exampleSDID@32473": map[string]string{
+				"exampleSDID@32473": {
 					"iut":         "3",
 					"eventSource": "Application",
 					"eventID":     "1011",
 				},
-				"examplePriority@32473": map[string]string{
+				"examplePriority@32473": {
 					"class": "high",
 				},
 			},
@@ -1454,7 +1454,7 @@ var testCases = []testCase{
 			appname:   getStringAddress("evnts"),
 			msgID:     getStringAddress("ID27"),
 			structuredData: &map[string]map[string]string{
-				"id1": map[string]string{},
+				"id1": {},
 			},
 		},
 	},
@@ -1474,8 +1474,8 @@ var testCases = []testCase{
 			appname:   getStringAddress("evnts"),
 			msgID:     getStringAddress("ID27"),
 			structuredData: &map[string]map[string]string{
-				"id1": map[string]string{},
-				"dupe": map[string]string{
+				"id1": {},
+				"dupe": {
 					"e": "1",
 				},
 			},
@@ -1496,7 +1496,7 @@ var testCases = []testCase{
 			procID:    nil,
 			msgID:     getStringAddress("1"),
 			structuredData: &map[string]map[string]string{
-				"ex@32473": map[string]string{
+				"ex@32473": {
 					"iut":         "3",
 					"eventSource": "A",
 				},
@@ -1521,10 +1521,10 @@ var testCases = []testCase{
 			procID:    getStringAddress("prg"),
 			msgID:     nil,
 			structuredData: &map[string]map[string]string{
-				"origin": map[string]string{
+				"origin": {
 					"x-service": "svcname",
 				},
-				"meta": map[string]string{
+				"meta": {
 					"sequenceId": "1",
 				},
 			},
@@ -1543,7 +1543,7 @@ var testCases = []testCase{
 			severity: getUint8Address(1),
 			version:  1,
 			structuredData: &map[string]map[string]string{
-				"id": map[string]string{
+				"id": {
 					"pk": "",
 				},
 			},
@@ -1566,7 +1566,7 @@ var testCases = []testCase{
 			procID:    getStringAddress("prg"),
 			msgID:     nil,
 			structuredData: &map[string]map[string]string{
-				"meta": map[string]string{
+				"meta": {
 					"escape": "]",
 				},
 			},
@@ -1589,7 +1589,7 @@ var testCases = []testCase{
 			procID:    getStringAddress("prg"),
 			msgID:     nil,
 			structuredData: &map[string]map[string]string{
-				"meta": map[string]string{
+				"meta": {
 					"escape": `\`,
 				},
 			},
@@ -1611,7 +1611,7 @@ var testCases = []testCase{
 			procID:    getStringAddress("prg"),
 			msgID:     nil,
 			structuredData: &map[string]map[string]string{
-				"meta": map[string]string{
+				"meta": {
 					"escape": `"`,
 				},
 			},
@@ -1633,7 +1633,7 @@ var testCases = []testCase{
 			procID:    getStringAddress("prg"),
 			msgID:     nil,
 			structuredData: &map[string]map[string]string{
-				"meta": map[string]string{
+				"meta": {
 					"escape": `]"\\]"`,
 				},
 			},
@@ -1656,7 +1656,7 @@ var testCases = []testCase{
 			hostname:  getStringAddress("hn"),
 			appname:   getStringAddress("S"),
 			structuredData: &map[string]map[string]string{
-				"meta": map[string]string{},
+				"meta": {},
 			},
 		},
 	},
@@ -1674,7 +1674,7 @@ var testCases = []testCase{
 			hostname:  getStringAddress("hn"),
 			appname:   getStringAddress("S"),
 			structuredData: &map[string]map[string]string{
-				"meta": map[string]string{},
+				"meta": {},
 			},
 		},
 	},
@@ -1692,7 +1692,7 @@ var testCases = []testCase{
 			hostname:  getStringAddress("hn"),
 			appname:   getStringAddress("S"),
 			structuredData: &map[string]map[string]string{
-				"meta": map[string]string{},
+				"meta": {},
 			},
 		},
 	},
@@ -1711,7 +1711,7 @@ var testCases = []testCase{
 			hostname:  getStringAddress("hn"),
 			appname:   getStringAddress("S"),
 			structuredData: &map[string]map[string]string{
-				"meta": map[string]string{},
+				"meta": {},
 			},
 		},
 	},
@@ -1729,7 +1729,7 @@ var testCases = []testCase{
 			hostname:  getStringAddress("hn"),
 			appname:   getStringAddress("S"),
 			structuredData: &map[string]map[string]string{
-				"meta": map[string]string{},
+				"meta": {},
 			},
 		},
 	},
@@ -1747,7 +1747,7 @@ var testCases = []testCase{
 			hostname:  getStringAddress("hn"),
 			appname:   getStringAddress("S"),
 			structuredData: &map[string]map[string]string{
-				"meta": map[string]string{},
+				"meta": {},
 			},
 		},
 	},
@@ -1766,7 +1766,7 @@ var testCases = []testCase{
 			hostname:  getStringAddress("hn"),
 			appname:   getStringAddress("S"),
 			structuredData: &map[string]map[string]string{
-				"meta": map[string]string{},
+				"meta": {},
 			},
 		},
 	},
@@ -1784,7 +1784,7 @@ var testCases = []testCase{
 			hostname:  getStringAddress("hn"),
 			appname:   getStringAddress("S"),
 			structuredData: &map[string]map[string]string{
-				"meta": map[string]string{},
+				"meta": {},
 			},
 		},
 	},
@@ -1802,7 +1802,7 @@ var testCases = []testCase{
 			hostname:  getStringAddress("hn"),
 			appname:   getStringAddress("S"),
 			structuredData: &map[string]map[string]string{
-				"meta": map[string]string{},
+				"meta": {},
 			},
 		},
 	},
