@@ -5,7 +5,7 @@ import (
 	"io"
 	"math/rand"
 
-	syslog "github.com/influxdata/go-syslog"
+	"github.com/influxdata/go-syslog"
 	"time"
 )
 
@@ -37,7 +37,7 @@ func Example_channel_lf() {
 		results <- x
 	}
 
-	p := NewParser(syslog.WithListener(ln))
+	p := NewParser(syslog.WithListener(ln), syslog.WithBestEffort())
 	go func() {
 		defer close(results)
 		defer r.Close()
@@ -67,7 +67,19 @@ func Example_channel_lf() {
 	//  Error: (error) <nil>
 	// })
 	// (*syslog.Result)({
-	//  Message: (syslog.Message) <nil>,
+	//  Message: (*rfc5424.SyslogMessage)({
+	//   priority: (*uint8)(1),
+	//   facility: (*uint8)(0),
+	//   severity: (*uint8)(1),
+	//   version: (uint16) 1,
+	//   timestamp: (*time.Time)(<nil>),
+	//   hostname: (*string)(<nil>),
+	//   appname: (*string)(<nil>),
+	//   procID: (*string)(<nil>),
+	//   msgID: (*string)(<nil>),
+	//   structuredData: (*map[string]map[string]string)(<nil>),
+	//   message: (*string)(<nil>)
+	//  }),
 	//  Error: (*errors.errorString)(parsing error [col 6])
 	// })
 	// (*syslog.Result)({
