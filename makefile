@@ -2,6 +2,9 @@ SHELL := /bin/bash
 
 .PHONY: build
 build: rfc5424/machine.go rfc5424/builder.go rfc6587/parser.go
+	@gofmt -w -s ./rfc5424
+	@gofmt -w -s ./rfc5425
+	@gofmt -w -s ./rfc6587
 
 rfc5424/machine.go: rfc5424/machine.go.rl rfc5424/rfc5424.rl
 
@@ -9,26 +12,18 @@ rfc5424/builder.go: rfc5424/builder.go.rl rfc5424/rfc5424.rl
 
 rfc5424/builder.go rfc5424/machine.go:
 	ragel -Z -G2 -e -o $@ $<
-	@gofmt -w -s $@
-	@sed -i '/^\/\/line/d' $@
-	$(MAKE) file=$@ snake2camel
-
-rfc6587/machine.go: rfc6587/machine.go.rl
-	ragel -Z -G2 -e -o $@ $<
-	@gofmt -w -s $@
 	@sed -i '/^\/\/line/d' $@
 	$(MAKE) file=$@ snake2camel
 
 rfc6587/parser.go: rfc6587/parser.go.rl
 	ragel -Z -G2 -e -o $@ $<
-	@gofmt -w -s $@
 	@sed -i '/^\/\/line/d' $@
 	$(MAKE) file=$@ snake2camel
 
 .PHONY: snake2camel
 snake2camel:
 	@awk -i inplace '{ \
-	while ( match($$0, /(.*)([a-z]+[0-9]*)_([a-zA-Z0-9])(.*)/, cap)) \
+	while ( match($$0, /(.*)([a-z]+[0-9]*)_([a-zA-Z0-9])(.*)/, cap) ) \
 	$$0 = cap[1] cap[2] toupper(cap[3]) cap[4]; \
 	print \
 	}' $(file)
