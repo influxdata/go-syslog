@@ -2,6 +2,7 @@ package rfc6587
 
 import (
 	"fmt"
+	"strings"
 )
 
 // TrailerType is the king of supported trailers for non-transparent frames.
@@ -32,4 +33,33 @@ func (t TrailerType) Value() (int, error) {
 	}
 
 	return bytes[t], nil
+}
+
+// TrailerTypeFromString returns a TrailerType given a string.
+func TrailerTypeFromString(s string) (TrailerType, error) {
+	switch strings.ToUpper(s) {
+	case "LF":
+		return LF, nil
+	case "NUL":
+		return NUL, nil
+	}
+	return -1, fmt.Errorf("unknown TrailerType")
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler
+func (t *TrailerType) UnmarshalText(data []byte) error {
+	trailer, err := TrailerTypeFromString(string(data))
+	if err != nil {
+		*t = trailer
+	}
+	return err
+}
+
+// MarshalText implements encoding.TextMarshaler
+func (t TrailerType) MarshalText() ([]byte, error) {
+	s := t.String()
+	if s != "" {
+		return []byte(s), nil
+	}
+	return nil, fmt.Errorf("unknown TrailerType")
 }
