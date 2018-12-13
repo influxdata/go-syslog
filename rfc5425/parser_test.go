@@ -78,10 +78,10 @@ func getTestCases() []testCase {
 			"empty",
 			"",
 			[]syslog.Result{
-				syslog.Result{Error: fmt.Errorf("found %s, expecting a %s", EOF, MSGLEN)},
+				{Error: fmt.Errorf("found %s, expecting a %s", EOF, MSGLEN)},
 			},
 			[]syslog.Result{
-				syslog.Result{Error: fmt.Errorf("found %s, expecting a %s", EOF, MSGLEN)},
+				{Error: fmt.Errorf("found %s, expecting a %s", EOF, MSGLEN)},
 			},
 		},
 		{
@@ -89,19 +89,19 @@ func getTestCases() []testCase {
 			"16 <1>1 - - - - - -17 <2>12 A B C D E -",
 			// results w/o best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).SetPriority(1).SetVersion(1),
 				},
-				syslog.Result{
+				{
 					Error: getTimestampError(6),
 				},
 			},
 			// results with best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).SetPriority(1).SetVersion(1),
 				},
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).SetPriority(2).SetVersion(12),
 					Error:   getTimestampError(6),
 				},
@@ -112,19 +112,19 @@ func getTestCases() []testCase {
 			"16 <1>1 - - - - - -xaaa",
 			// results w/o best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).SetPriority(1).SetVersion(1),
 				},
-				syslog.Result{
+				{
 					Error: fmt.Errorf("found %s, expecting a %s", Token{ILLEGAL, []byte("x")}, MSGLEN),
 				},
 			},
 			// results with best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).SetPriority(1).SetVersion(1),
 				},
-				syslog.Result{
+				{
 					Error: fmt.Errorf("found %s, expecting a %s", Token{ILLEGAL, []byte("x")}, MSGLEN),
 				},
 			},
@@ -134,17 +134,17 @@ func getTestCases() []testCase {
 			"16 <1>1 A B C D E -xaaa",
 			// results w/o best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Error: getTimestampError(5),
 				},
 			},
 			// results with best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).SetPriority(1).SetVersion(1),
 					Error:   getTimestampError(5),
 				},
-				syslog.Result{
+				{
 					Error: fmt.Errorf("found %s, expecting a %s", Token{ILLEGAL, []byte("x")}, MSGLEN),
 				},
 			},
@@ -154,7 +154,7 @@ func getTestCases() []testCase {
 			"23 <1>1 - - - - - - hellø", // msglen MUST be the octet count
 			//results w/o best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).
 						SetPriority(1).
 						SetVersion(1).
@@ -163,7 +163,7 @@ func getTestCases() []testCase {
 			},
 			// results with best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).
 						SetPriority(1).
 						SetVersion(1).
@@ -176,13 +176,13 @@ func getTestCases() []testCase {
 			"16 <1>1",
 			// results w/o best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Error: fmt.Errorf(`found %s after "%s", expecting a %s containing %d octets`, EOF, "<1>1", SYSLOGMSG, 16),
 				},
 			},
 			// results with best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).SetPriority(1).SetVersion(1),
 					Error:   getParsingError(4),
 					// Error:   fmt.Errorf(`found %s after "%s", expecting a %s containing %d octets`, EOF, "<1>1", SYSLOGMSG, 16),
@@ -194,13 +194,13 @@ func getTestCases() []testCase {
 			"16<1>1",
 			// results w/o best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Error: fmt.Errorf("found %s, expecting a %s", Token{ILLEGAL, []byte("<")}, WS),
 				},
 			},
 			// results with best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Error: fmt.Errorf("found %s, expecting a %s", Token{ILLEGAL, []byte("<")}, WS),
 				},
 			},
@@ -210,13 +210,13 @@ func getTestCases() []testCase {
 			"1",
 			// results w/o best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Error: fmt.Errorf("found %s, expecting a %s", EOF, WS),
 				},
 			},
 			// results with best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Error: fmt.Errorf("found %s, expecting a %s", EOF, WS),
 				},
 			},
@@ -226,20 +226,20 @@ func getTestCases() []testCase {
 			"48 <1>1 2003-10-11T22:14:15.003Z host.local - - - -25 <3>1 - host.local - - - -38 <2>1 - host.local su - - - κόσμε",
 			// results w/o best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).
 						SetPriority(1).
 						SetVersion(1).
 						SetTimestamp("2003-10-11T22:14:15.003Z").
 						SetHostname("host.local"),
 				},
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).
 						SetPriority(3).
 						SetVersion(1).
 						SetHostname("host.local"),
 				},
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).
 						SetPriority(2).
 						SetVersion(1).
@@ -250,20 +250,20 @@ func getTestCases() []testCase {
 			},
 			// results with best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).
 						SetPriority(1).
 						SetVersion(1).
 						SetTimestamp("2003-10-11T22:14:15.003Z").
 						SetHostname("host.local"),
 				},
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).
 						SetPriority(3).
 						SetVersion(1).
 						SetHostname("host.local"),
 				},
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).
 						SetPriority(2).
 						SetVersion(1).
@@ -278,23 +278,23 @@ func getTestCases() []testCase {
 			"16 <1>1 - - - - - -17 <2>12 A B C D E -16 <1>1 - - - - - -",
 			// results w/o best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).SetPriority(1).SetVersion(1),
 				},
-				syslog.Result{
+				{
 					Error: getTimestampError(6),
 				},
 			},
 			// results with best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).SetPriority(1).SetVersion(1),
 				},
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).SetPriority(2).SetVersion(12),
 					Error:   getTimestampError(6),
 				},
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).SetPriority(1).SetVersion(1),
 				},
 			},
@@ -304,7 +304,7 @@ func getTestCases() []testCase {
 			fmt.Sprintf("8192 <%d>%d %s %s %s %s %s - %s", maxPriority, maxVersion, maxTimestamp, maxHostname, maxAppname, maxProcID, maxMsgID, message7681),
 			// results w/o best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).
 						SetPriority(maxPriority).
 						SetVersion(maxVersion).
@@ -318,7 +318,7 @@ func getTestCases() []testCase {
 			},
 			// results with best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).
 						SetPriority(maxPriority).
 						SetVersion(maxVersion).
@@ -336,7 +336,7 @@ func getTestCases() []testCase {
 			fmt.Sprintf("8192 <%d>%d %s %s %s %s %s - %s8192 <%d>%d %s %s %s %s %s - %s", maxPriority, maxVersion, maxTimestamp, maxHostname, maxAppname, maxProcID, maxMsgID, message7681, maxPriority, maxVersion, maxTimestamp, maxHostname, maxAppname, maxProcID, maxMsgID, message7681),
 			// results w/o best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).
 						SetPriority(maxPriority).
 						SetVersion(maxVersion).
@@ -347,7 +347,7 @@ func getTestCases() []testCase {
 						SetMsgID(maxMsgID).
 						SetMessage(message7681),
 				},
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).
 						SetPriority(maxPriority).
 						SetVersion(maxVersion).
@@ -361,7 +361,7 @@ func getTestCases() []testCase {
 			},
 			// results with best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).
 						SetPriority(maxPriority).
 						SetVersion(maxVersion).
@@ -372,7 +372,7 @@ func getTestCases() []testCase {
 						SetMsgID(maxMsgID).
 						SetMessage(message7681),
 				},
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).
 						SetPriority(maxPriority).
 						SetVersion(maxVersion).
@@ -390,7 +390,7 @@ func getTestCases() []testCase {
 			fmt.Sprintf("8192 <%d>%d %s %s %s %s %s - %s16 <1>1 - - - - - -8192 <%d>%d %s %s %s %s %s - %s", maxPriority, maxVersion, maxTimestamp, maxHostname, maxAppname, maxProcID, maxMsgID, message7681, maxPriority, maxVersion, maxTimestamp, maxHostname, maxAppname, maxProcID, maxMsgID, message7681),
 			// results w/o best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).
 						SetPriority(maxPriority).
 						SetVersion(maxVersion).
@@ -401,10 +401,10 @@ func getTestCases() []testCase {
 						SetMsgID(maxMsgID).
 						SetMessage(message7681),
 				},
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).SetPriority(1).SetVersion(1),
 				},
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).
 						SetPriority(maxPriority).
 						SetVersion(maxVersion).
@@ -418,7 +418,7 @@ func getTestCases() []testCase {
 			},
 			// results with best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).
 						SetPriority(maxPriority).
 						SetVersion(maxVersion).
@@ -429,10 +429,10 @@ func getTestCases() []testCase {
 						SetMsgID(maxMsgID).
 						SetMessage(message7681),
 				},
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).SetPriority(1).SetVersion(1),
 				},
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).
 						SetPriority(maxPriority).
 						SetVersion(maxVersion).
@@ -450,13 +450,13 @@ func getTestCases() []testCase {
 			fmt.Sprintf("8193 <%d>%d %s %s %s %s %s - %s", maxPriority, maxVersion, maxTimestamp, maxHostname, maxAppname, maxProcID, maxMsgID, message7681),
 			// results w/o best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Error: fmt.Errorf("found %s after \"%s\", expecting a %s containing %d octets", EOF, fmt.Sprintf("<%d>%d %s %s %s %s %s - %s", maxPriority, maxVersion, maxTimestamp, maxHostname, maxAppname, maxProcID, maxMsgID, message7681), SYSLOGMSG, 8193),
 				},
 			},
 			// results with best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).
 						SetPriority(maxPriority).
 						SetVersion(maxVersion).
@@ -475,17 +475,17 @@ func getTestCases() []testCase {
 			"16 <1>217 <11>1 - - - - - -",
 			// results w/o best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Error: getTimestampError(7),
 				},
 			},
 			// results with best effort
 			[]syslog.Result{
-				syslog.Result{
+				{
 					Message: (&rfc5424.SyslogMessage{}).SetPriority(1).SetVersion(217),
 					Error:   getTimestampError(7),
 				},
-				syslog.Result{
+				{
 					Error: fmt.Errorf("found %s, expecting a %s", WS, MSGLEN),
 				},
 			},
@@ -500,11 +500,12 @@ func init() {
 func TestParse(t *testing.T) {
 	for _, tc := range testCases {
 		tc := tc
+
 		t.Run(fmt.Sprintf("strict/%s", tc.descr), func(t *testing.T) {
 			t.Parallel()
 
 			res := []syslog.Result{}
-			strictParser := NewParser(WithListener(func(r *syslog.Result) {
+			strictParser := NewParser(syslog.WithListener(func(r *syslog.Result) {
 				res = append(res, *r)
 			}))
 			strictParser.Parse(strings.NewReader(tc.input))
@@ -515,7 +516,7 @@ func TestParse(t *testing.T) {
 			t.Parallel()
 
 			res := []syslog.Result{}
-			effortParser := NewParser(WithBestEffort(), WithListener(func(r *syslog.Result) {
+			effortParser := NewParser(WithBestEffort(), syslog.WithListener(func(r *syslog.Result) {
 				res = append(res, *r)
 			}))
 			effortParser.Parse(strings.NewReader(tc.input))
