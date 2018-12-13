@@ -31,8 +31,11 @@ func NewParser(opts ...syslog.ParserOption) syslog.Parser {
 		p = opt(p).(*parser)
 	}
 
-	if p.internal == nil {
-		p.internal = rfc5424.NewParser()
+	// Create internal parser depending on options
+	if p.bestEffort {
+		p.internal = rfc5424.NewMachine(rfc5424.WithBestEffort())
+	} else {
+		p.internal = rfc5424.NewMachine()
 	}
 
 	return p
@@ -43,20 +46,16 @@ func (p *parser) HasBestEffort() bool {
 	return p.bestEffort
 }
 
-// WithBestEffort sets the best effort mode on.
+// WithBestEffort implements the syslog.BestEfforter interface.
 //
-// When active the parser tries to recover as much of the syslog messages as possible.
-func WithBestEffort() syslog.ParserOption {
-	return func(p syslog.Parser) syslog.Parser {
-		var parser = p.(*parser)
-		parser.bestEffort = true
-		// Push down the best effort, too
-		parser.internal = rfc5424.NewParser(rfc5424.WithBestEffort())
-		return p
-	}
+// The generic options uses it.
+func (p *parser) WithBestEffort() {
+	p.bestEffort = true
 }
 
-// WithListener sets the function the parser uses to emit.
+// WithListener implements the syslog.Parser interface.
+//
+// The generic options uses it.
 func (p *parser) WithListener(f syslog.ParserListener) {
 	p.emit = f
 }
