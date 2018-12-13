@@ -17,6 +17,7 @@ type MachineOption func(m Machine) Machine
 
 // BestEfforter is an interface that wraps the HasBestEffort method.
 type BestEfforter interface {
+	WithBestEffort()
 	HasBestEffort() bool
 }
 
@@ -24,6 +25,7 @@ type BestEfforter interface {
 type Parser interface {
 	Parse(r io.Reader)
 	WithListener(ParserListener)
+	BestEfforter
 }
 
 // ParserOption represent an option for Parser instances.
