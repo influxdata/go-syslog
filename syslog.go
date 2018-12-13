@@ -23,6 +23,7 @@ type BestEfforter interface {
 // Parser is an interface that wraps the Parse method.
 type Parser interface {
 	Parse(r io.Reader)
+	WithListener(ParserListener)
 }
 
 // ParserOption represent an option for Parser instances.
