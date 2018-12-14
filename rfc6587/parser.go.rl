@@ -60,11 +60,12 @@ func (m *machine) Exec(s *parser.State) (int, int) {
     return p, pe
 }
 
-func (m *machine) OnErr() {
-    // todo(leodido) > handle unexpected errors (only unexepected EOFs?)
+func (m *machine) OnErr(chunk []byte) {
+    // When unexpected EOF use the current chunk as possible candidate
+    m.candidate = chunk
 }
 
-func (m *machine) OnEOF() {
+func (m *machine) OnEOF(chunk []byte) {
 }
 
 func (m *machine) OnCompletion() {
@@ -130,7 +131,7 @@ func (m *machine) WithListener(f syslog.ParserListener) {
 // Parse parses the io.Reader incoming bytes.
 //
 // It stops parsing when an error regarding RFC 6587 is found.
-func (m *machine) Parse(reader io.Reader) {	
+func (m *machine) Parse(reader io.Reader) {
     r := parser.ArbitraryReader(reader, m.trailer)
     parser.New(r, m, parser.WithStart(%%{ write start; }%%)).Parse()
 }
