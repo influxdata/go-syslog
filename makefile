@@ -1,10 +1,10 @@
 SHELL := /bin/bash
 
 .PHONY: build
-build: rfc5424/machine.go rfc5424/builder.go rfc6587/parser.go
+build: rfc5424/machine.go rfc5424/builder.go nontransparent/parser.go
 	@gofmt -w -s ./rfc5424
-	@gofmt -w -s ./rfc5425
-	@gofmt -w -s ./rfc6587
+	@gofmt -w -s ./octetcounting
+	@gofmt -w -s ./nontransparent
 
 rfc5424/machine.go: rfc5424/machine.go.rl rfc5424/rfc5424.rl
 
@@ -15,7 +15,7 @@ rfc5424/builder.go rfc5424/machine.go:
 	@sed -i '/^\/\/line/d' $@
 	$(MAKE) file=$@ snake2camel
 
-rfc6587/parser.go: rfc6587/parser.go.rl
+nontransparent/parser.go: nontransparent/parser.go.rl
 	ragel -Z -G2 -e -o $@ $<
 	@sed -i '/^\/\/line/d' $@
 	$(MAKE) file=$@ snake2camel
@@ -36,7 +36,7 @@ bench: rfc5424/*_test.go rfc5424/machine.go
 tests: rfc5424/machine.go rfc5424/builder.go
 	go test -race -timeout 10s -coverprofile cover.out -v ./...
 
-docs/rfc6587.dot: rfc6587/parser.go.rl
+docs/nontransparent.dot: nontransparent/parser.go.rl
 	ragel -Z -Vp $< -o $@
 
 docs/rfc5424.dot: rfc5424/machine.go.rl rfc5424/rfc5424.rl

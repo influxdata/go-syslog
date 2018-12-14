@@ -1,4 +1,4 @@
-package rfc6587
+package nontransparent
 
 import (
 	syslog "github.com/influxdata/go-syslog"
@@ -7,10 +7,10 @@ import (
 	"io"
 )
 
-const rfc6587Start int = 1
-const rfc6587Error int = 0
+const nontransparentStart int = 1
+const nontransparentError int = 0
 
-const rfc6587EnMain int = 1
+const nontransparentEnMain int = 1
 
 type machine struct {
 	trailertyp TrailerType // default is 0 thus TrailerType(LF)

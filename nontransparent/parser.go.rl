@@ -1,4 +1,4 @@
-package rfc6587
+package nontransparent
 
 import (
     "io"
@@ -8,7 +8,7 @@ import (
 )
 
 %%{
-machine rfc6587;
+machine nontransparent;
 
 # unsigned alphabet
 alphtype uint8;

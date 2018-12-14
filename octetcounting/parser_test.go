@@ -1,4 +1,4 @@
-package rfc5425
+package octetcounting
 
 import (
 	"fmt"
