@@ -10,13 +10,14 @@ import (
 	"time"
 )
 
-func Example() {
+func Example_withoutTrailerAtEnd() {
 	results := []syslog.Result{}
 	acc := func(res *syslog.Result) {
 		results = append(results, *res)
 	}
+	// Notice the message ends without trailer but we catch it anyway
 	r := strings.NewReader("<1>1 2003-10-11T22:14:15.003Z host.local - - - - mex")
-	NewParser(syslog.WithBestEffort(), syslog.WithListener(acc)).Parse(r)
+	NewParser(syslog.WithListener(acc)).Parse(r)
 	output(results)
 	// Output:
 	// ([]syslog.Result) (len=1) {
@@ -34,12 +35,57 @@ func Example() {
 	//    structuredData: (*map[string]map[string]string)(<nil>),
 	//    message: (*string)((len=3) "mex")
 	//   }),
-	//   Error: (error) <nil>
+	//   Error: (*ragel.ReadingError)(unexpected EOF)
 	//  }
 	// }
 }
 
-func Example_channel_lf() {
+func Example_bestEffortOnLastOne() {
+	results := []syslog.Result{}
+	acc := func(res *syslog.Result) {
+		results = append(results, *res)
+	}
+	r := strings.NewReader("<1>1 - - - - - - -\n<3>1\n")
+	NewParser(syslog.WithBestEffort(), syslog.WithListener(acc)).Parse(r)
+	output(results)
+	// Output:
+	// ([]syslog.Result) (len=2) {
+	//  (syslog.Result) {
+	//   Message: (*rfc5424.SyslogMessage)({
+	//    priority: (*uint8)(1),
+	//    facility: (*uint8)(0),
+	//    severity: (*uint8)(1),
+	//    version: (uint16) 1,
+	//    timestamp: (*time.Time)(<nil>),
+	//    hostname: (*string)(<nil>),
+	//    appname: (*string)(<nil>),
+	//    procID: (*string)(<nil>),
+	//    msgID: (*string)(<nil>),
+	//    structuredData: (*map[string]map[string]string)(<nil>),
+	//    message: (*string)((len=1) "-")
+	//   }),
+	//   Error: (error) <nil>
+	//  },
+	//  (syslog.Result) {
+	//   Message: (*rfc5424.SyslogMessage)({
+	//    priority: (*uint8)(3),
+	//    facility: (*uint8)(0),
+	//    severity: (*uint8)(3),
+	//    version: (uint16) 1,
+	//    timestamp: (*time.Time)(<nil>),
+	//    hostname: (*string)(<nil>),
+	//    appname: (*string)(<nil>),
+	//    procID: (*string)(<nil>),
+	//    msgID: (*string)(<nil>),
+	//    structuredData: (*map[string]map[string]string)(<nil>),
+	//    message: (*string)(<nil>)
+	//   }),
+	//   Error: (*errors.errorString)(parsing error [col 4])
+	//  }
+	// }
+}
+
+func Example_intoChannelWithLF() {
 	messages := []string{
 		"<2>1 - - - - - - A\nB",
 		"<1>1 -",
@@ -130,7 +176,7 @@ func Example_channel_lf() {
 	// })
 }
 
-func Example_channel_nul() {
+func Example_intoChannelWithNUL() {
 	messages := []string{
 		"<2>1 - - - - - - A\x00B",
 		"<1>1 -",
