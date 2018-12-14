@@ -47,11 +47,8 @@ func TrailerTypeFromString(s string) (TrailerType, error) {
 }
 
 // UnmarshalText implements encoding.TextUnmarshaler
-func (t *TrailerType) UnmarshalText(data []byte) error {
-	trailer, err := TrailerTypeFromString(string(data))
-	if err != nil {
-		*t = trailer
-	}
+func (t *TrailerType) UnmarshalText(data []byte) (err error) {
+	*t, err = TrailerTypeFromString(string(data))
 	return err
 }
 
