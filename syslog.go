@@ -7,19 +7,20 @@ import (
 	"time"
 )
 
-// Machine represent a FSM able to parse an entire syslog message and return it in an structured way.
-type Machine interface {
-	Parse(input []byte) (Message, error)
-}
-
-// MachineOption represents the type of options setters.
-type MachineOption func(m Machine) Machine
-
 // BestEfforter is an interface that wraps the HasBestEffort method.
 type BestEfforter interface {
 	WithBestEffort()
 	HasBestEffort() bool
 }
+
+// Machine represent a FSM able to parse an entire syslog message and return it in an structured way.
+type Machine interface {
+	Parse(input []byte) (Message, error)
+	BestEfforter
+}
+
+// MachineOption represents the type of option setters for Machine instances.
+type MachineOption func(m Machine) Machine
 
 // Parser is an interface that wraps the Parse method.
 type Parser interface {
@@ -28,7 +29,7 @@ type Parser interface {
 	BestEfforter
 }
 
-// ParserOption represent an option for Parser instances.
+// ParserOption represent the type of option setters for Parser instances.
 type ParserOption func(p Parser) Parser
 
 // ParserListener is a function that receives syslog parsing results, one by one.

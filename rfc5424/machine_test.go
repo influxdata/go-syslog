@@ -2752,6 +2752,14 @@ func init() {
 	testCases = append(testCases, generateUntilMaxLengthStringTestCases(msgidMaxStr, 3)...)
 }
 
+func TestMachineBestEffortOption(t *testing.T) {
+	p1 := NewMachine().(syslog.BestEfforter)
+	assert.False(t, p1.HasBestEffort())
+
+	p2 := NewMachine(WithBestEffort()).(syslog.BestEfforter)
+	assert.True(t, p2.HasBestEffort())
+}
+
 func TestMachineParse(t *testing.T) {
 	for _, tc := range testCases {
 		tc := tc

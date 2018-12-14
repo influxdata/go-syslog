@@ -310,12 +310,8 @@ func NewMachine(options ...syslog.MachineOption) syslog.Machine {
 	return m
 }
 
-// WithBestEffort enables the best effort mode.
-func WithBestEffort() syslog.MachineOption {
-	return func(m syslog.Machine) syslog.Machine {
-		m.(*machine).bestEffort = true
-		return m
-	}
+func (m *machine) WithBestEffort() {
+	m.bestEffort = true
 }
 
 // HasBestEffort tells whether the receiving machine has best effort mode on or off.
