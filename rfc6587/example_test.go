@@ -4,10 +4,40 @@ import (
 	"github.com/davecgh/go-spew/spew"
 	"io"
 	"math/rand"
+	"strings"
 
 	"github.com/influxdata/go-syslog"
 	"time"
 )
+
+func Example() {
+	results := []syslog.Result{}
+	acc := func(res *syslog.Result) {
+		results = append(results, *res)
+	}
+	r := strings.NewReader("<1>1 2003-10-11T22:14:15.003Z host.local - - - - mex")
+	NewParser(syslog.WithBestEffort(), syslog.WithListener(acc)).Parse(r)
+	output(results)
+	// Output:
+	// ([]syslog.Result) (len=1) {
+	//  (syslog.Result) {
+	//   Message: (*rfc5424.SyslogMessage)({
+	//    priority: (*uint8)(1),
+	//    facility: (*uint8)(0),
+	//    severity: (*uint8)(1),
+	//    version: (uint16) 1,
+	//    timestamp: (*time.Time)(2003-10-11 22:14:15.003 +0000 UTC),
+	//    hostname: (*string)((len=10) "host.local"),
+	//    appname: (*string)(<nil>),
+	//    procID: (*string)(<nil>),
+	//    msgID: (*string)(<nil>),
+	//    structuredData: (*map[string]map[string]string)(<nil>),
+	//    message: (*string)((len=3) "mex")
+	//   }),
+	//   Error: (error) <nil>
+	//  }
+	// }
+}
 
 func Example_channel_lf() {
 	messages := []string{
