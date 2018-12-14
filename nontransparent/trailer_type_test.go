@@ -1,4 +1,4 @@
-package rfc6587
+package nontransparent
 
 import (
 	"encoding/json"

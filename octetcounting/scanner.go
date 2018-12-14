@@ -1,4 +1,4 @@
-package rfc5425
+package octetcounting
 
 import (
 	"bufio"
@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-// size as per rfc5425#section-4.3.1
+// size as per octetcounting#section-4.3.1
 var size = 8192
 
 // eof represents a marker byte for the end of the reader
@@ -29,7 +29,7 @@ func isNonZeroDigit(ch byte) bool {
 	return (ch >= 48 && ch <= 57)
 }
 
-// Scanner represents the lexical scanner for RFC5425.
+// Scanner represents the lexical scanner for octetcounting.
 type Scanner struct {
 	r      *bufio.Reader
 	msglen uint64

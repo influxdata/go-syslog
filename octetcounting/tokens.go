@@ -1,16 +1,16 @@
-package rfc5425
+package octetcounting
 
 import (
 	"strconv"
 )
 
-// Token represents a lexical token of the RFC5425.
+// Token represents a lexical token of the octetcounting.
 type Token struct {
 	typ TokenType
 	lit []byte
 }
 
-// TokenType represents a lexical token type of the RFC5425.
+// TokenType represents a lexical token type of the octetcounting.
 type TokenType int
 
 // Tokens

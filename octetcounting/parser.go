@@ -1,4 +1,4 @@
-package rfc5425
+package octetcounting
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"github.com/influxdata/go-syslog/rfc5424"
 )
 
-// parser is capable to parse the input stream following RFC5425.
+// parser is capable to parse the input stream following octetcounting.
 //
 // Use NewParser function to instantiate one.
 type parser struct {
