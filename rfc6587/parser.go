@@ -166,11 +166,12 @@ func (m *machine) Exec(s *parser.State) (int, int) {
 	return p, pe
 }
 
-func (m *machine) OnErr() {
-	// todo(leodido) > handle unexpected errors (only unexepected EOFs?)
+func (m *machine) OnErr(chunk []byte) {
+	// When unexpected EOF use the current chunk as possible candidate
+	m.candidate = chunk
 }
 
-func (m *machine) OnEOF() {
+func (m *machine) OnEOF(chunk []byte) {
 }
 
 func (m *machine) OnCompletion() {
