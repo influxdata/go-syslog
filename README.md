@@ -2,13 +2,22 @@
 
 **A parser for syslog messages**.
 
-> Blazing fast RFC5424-compliant parser
+> [Blazing fast](#Performances) RFC5424-compliant parsers
 
 To wrap up, this package provides:
 
 - a RFC5424-compliant parser
 - a RFC5424-compliant builder
-- a RFC5425-compliant parser
+- a parser which works on streams for syslog with [octet-counting](https://tools.ietf.org/html/rfc5425#section-4.3) framing technique
+- a parser which works on streams for syslog with [non-transparent](https://tools.ietf.org/html/rfc6587#section-3.4.2) framing technique
+
+This library provides the pieces to parse syslog messages transported following various RFCs.
+
+For example:
+
+- TLS with octet count ([RFC5425](https://tools.ietf.org/html/rfc5425))
+- TCP with non-transparent framing or with octet count ([RFC 6587](https://tools.ietf.org/html/rfc6587))
+- UDP carrying one message per packet ([RFC5426](https://tools.ietf.org/html/rfc5426))
 
 ## Installation
 
@@ -20,7 +29,7 @@ go get github.com/influxdata/go-syslog
 
 [![Documentation](https://img.shields.io/badge/godoc-reference-blue.svg?style=for-the-badge)](http://godoc.org/github.com/influxdata/go-syslog)
 
-The [docs](docs/) directory contains images representing the FSM parts of a RFC5424 syslog message.
+The [docs](docs/) directory contains images representing the FSM parts of a [RFC5424](https://tools.ietf.org/html/rfc5424) syslog message.
 
 ## Usage
 
@@ -110,7 +119,7 @@ Let's have a look to an example.
 ```go
 msg := &SyslogMessage{}
 msg.SetTimestamp("not a RFC3339MICRO timestamp")
-// Not yet a valid message (try msg.Valid())
+msg.Valid() // Not yet a valid message (try msg.Valid())
 msg.SetPriority(191)
 msg.SetVersion(1)
 msg.Valid() // Now it is minimally valid
@@ -141,15 +150,41 @@ str, _ := msg.String()
 // <191>1 - - - - - -
 ```
 
-### RFC5425
+## Message transfer
 
-The RFC5425 builds upon RFC5424.
+Excluding encapsulating one message for packet in packet protocols there are two ways to transfer syslog messages over streams.
 
-In short, it describes the recommended way to transport syslog messages - ie., over TLS with the **octect counting** technique.
+The older - ie., the **non-transparent** framing - and the newer one - ie., the **octet counting** framing - which is reliable and has not been seen to cause problems noted with the non-transparent one.
 
-To quickly understand how to use it please have a look at the [example file](rfc5425/example_test.go).
+This library provide stream parsers for both.
 
-## Performance
+### Octet counting
+
+In short, [RFC5425](https://tools.ietf.org/html/rfc5425#section-4.3) and [RFC6587](), aside from the protocol considerations, describe a **transparent framing** technique for syslog messages that uses the **octect counting** technique - ie., the message lenght of the incoming message.
+
+Each syslog message is sent with a prefix representing the number of bytes it is made of.
+
+This [package](./octetcounting) parses messages stream following such rule.
+
+To quickly understand how to use it please have a look at the [example file](./octetcounting/example_test.go).
+
+### Non transparent
+
+The [RFC6587](https://tools.ietf.org/html/rfc6587#section-3.4.2) also describes the **non-transparent framing** transport of syslog messages.
+
+In such case the messages are separated by a trailer, usually a line feed.
+
+This [package](./nontransparent) parses message stream following such [technique](https://tools.ietf.org/html/rfc6587#section-3.4.2).
+
+To quickly understand how to use it please have a look at the [example file](./nontransparent/example_test.go).
+
+Things we do not support:
+
+- trailers other than `LF` or `NUL`
+- trailer which length is greater than 1 byte
+- trailer change on a frame-by-frame basis
+
+## Performances
 
 To run the benchmark execute the following command.
 
@@ -195,5 +230,3 @@ _TBD: comparation against other golang parsers_.
 ---
 
 * <a name="mymachine">[1]</a>: Intel Core i7-7600U CPU @ 2.80GHz
-
-
