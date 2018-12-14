@@ -21,7 +21,7 @@ action on_init {
     if len(m.candidate) > 0 {
         m.process()
     }
-    m.candidate = make([]byte, 0)
+    m.candidate = make([]byte, 0)    
 }
 
 t = 10 when { m.trailertyp == LF } |
@@ -47,6 +47,8 @@ type machine struct{
     bestEffort bool
     internal   syslog.Machine
     emit       syslog.ParserListener
+    readError  error
+    lastChunk  []byte // store last candidate message also if it does not ends with a trailer
 }
 
 // Exec implements the ragel.Parser interface.
@@ -60,9 +62,10 @@ func (m *machine) Exec(s *parser.State) (int, int) {
     return p, pe
 }
 
-func (m *machine) OnErr(chunk []byte) {
-    // When unexpected EOF use the current chunk as possible candidate
-    m.candidate = chunk
+func (m *machine) OnErr(chunk []byte, err error) {
+    // Store the last chunk of bytes ending without a trailer - ie., unexpected EOF from the reader
+    m.lastChunk = chunk
+    m.readError = err
 }
 
 func (m *machine) OnEOF(chunk []byte) {
@@ -71,6 +74,17 @@ func (m *machine) OnEOF(chunk []byte) {
 func (m *machine) OnCompletion() {
     if len(m.candidate) > 0 {
         m.process()
+    }
+    // Try to parse last chunk as a candidate
+    if m.readError != nil && len(m.lastChunk) > 0 {
+        res, err := m.internal.Parse(m.lastChunk)
+        if err == nil {
+            err = m.readError
+        }
+        m.emit(&syslog.Result{
+            Message: res,
+            Error: err,
+        })
     }
 }
 
@@ -137,9 +151,9 @@ func (m *machine) Parse(reader io.Reader) {
 }
 
 func (m *machine) process() {
-    lastOne := len(m.candidate) - 1
-    if m.candidate[lastOne] == m.trailer {
-        m.candidate = m.candidate[:lastOne]
+    lastByte := len(m.candidate) - 1
+    if m.candidate[lastByte] == m.trailer {
+        m.candidate = m.candidate[:lastByte]
     }
     res, err := m.internal.Parse(m.candidate)
     m.emit(&syslog.Result{
@@ -147,5 +161,3 @@ func (m *machine) process() {
         Error: err,
     })
 }
-
-// todo(leodido) > error management.
