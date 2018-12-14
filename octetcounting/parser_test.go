@@ -525,3 +525,11 @@ func TestParse(t *testing.T) {
 		})
 	}
 }
+
+func TestParserBestEffortOption(t *testing.T) {
+	p1 := NewParser().(syslog.BestEfforter)
+	assert.False(t, p1.HasBestEffort())
+
+	p2 := NewParser(syslog.WithBestEffort()).(syslog.BestEfforter)
+	assert.True(t, p2.HasBestEffort())
+}

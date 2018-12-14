@@ -33,8 +33,8 @@ bench: rfc5424/*_test.go rfc5424/machine.go
 	go test -bench=. -benchmem -benchtime=5s ./...
 
 .PHONY: tests
-tests: rfc5424/machine.go rfc5424/builder.go
-	go test -race -timeout 10s -coverprofile cover.out -v ./...
+tests: rfc5424/machine.go rfc5424/builder.go nontransparent/parser.go
+	go test -race -timeout 10s -coverprofile cover.out ./...
 
 docs/nontransparent.dot: nontransparent/parser.go.rl
 	ragel -Z -Vp $< -o $@
