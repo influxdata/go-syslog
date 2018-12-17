@@ -27,7 +27,6 @@ type machine struct {
 func (m *machine) Exec(s *parser.State) (int, int) {
 	// Retrieve previously stored parsing variables
 	cs, p, pe, eof, data := s.Get()
-	// Inline FSM code here
 
 	{
 		var _widec int16

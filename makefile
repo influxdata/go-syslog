@@ -1,5 +1,7 @@
 SHELL := /bin/bash
 
+export GO_TEST=env GOTRACEBACK=all GO111MODULE=on go test $(GO_ARGS)
+
 .PHONY: build
 build: rfc5424/machine.go rfc5424/builder.go nontransparent/parser.go
 	@gofmt -w -s ./rfc5424
@@ -33,8 +35,8 @@ bench: rfc5424/*_test.go rfc5424/machine.go
 	go test -bench=. -benchmem -benchtime=5s ./...
 
 .PHONY: tests
-tests: rfc5424/machine.go rfc5424/builder.go nontransparent/parser.go
-	go test -race -timeout 10s -coverprofile cover.out ./...
+tests:
+	$(GO_TEST) ./...
 
 docs/nontransparent.dot: nontransparent/parser.go.rl
 	ragel -Z -Vp $< -o $@
