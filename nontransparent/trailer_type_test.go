@@ -12,6 +12,37 @@ type trailerWrapper struct {
 	Trailer TrailerType `json:"trailer"`
 }
 
+func TestUnmarshalTOML(t *testing.T) {
+	var t1 TrailerType
+	t1.UnmarshalTOML([]byte(`"LF"`))
+	assert.Equal(t, LF, t1)
+
+	var t2 TrailerType
+	t2.UnmarshalTOML([]byte(`LF`))
+	assert.Equal(t, LF, t2)
+
+	var t3 TrailerType
+	t3.UnmarshalTOML([]byte(`'LF'`))
+	assert.Equal(t, LF, t3)
+
+	var t4 TrailerType
+	t4.UnmarshalTOML([]byte(`"NUL"`))
+	assert.Equal(t, NUL, t4)
+
+	var t5 TrailerType
+	t5.UnmarshalTOML([]byte(`NUL`))
+	assert.Equal(t, NUL, t5)
+
+	var t6 TrailerType
+	t6.UnmarshalTOML([]byte(`'NUL'`))
+	assert.Equal(t, NUL, t6)
+
+	var t7 TrailerType
+	err := t7.UnmarshalTOML([]byte(`wrong`))
+	assert.Equal(t, TrailerType(-1), t7)
+	assert.Error(t, err)
+}
+
 func TestUnmarshalLowercase(t *testing.T) {
 	x := &trailerWrapper{}
 	in := []byte(`{"trailer": "lf"}`)

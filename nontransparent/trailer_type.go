@@ -38,12 +38,26 @@ func (t TrailerType) Value() (int, error) {
 // TrailerTypeFromString returns a TrailerType given a string.
 func TrailerTypeFromString(s string) (TrailerType, error) {
 	switch strings.ToUpper(s) {
-	case "LF":
+	case `"LF"`:
+		fallthrough
+	case `'LF'`:
+		fallthrough
+	case `LF`:
 		return LF, nil
-	case "NUL":
+
+	case `"NUL"`:
+		fallthrough
+	case `'NUL'`:
+		fallthrough
+	case `NUL`:
 		return NUL, nil
 	}
 	return -1, fmt.Errorf("unknown TrailerType")
+}
+
+// UnmarshalTOML decodes trailer type from TOML data.
+func (t *TrailerType) UnmarshalTOML(data []byte) (err error) {
+	return t.UnmarshalText(data)
 }
 
 // UnmarshalText implements encoding.TextUnmarshaler
