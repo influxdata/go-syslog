@@ -8,7 +8,7 @@ To wrap up, this package provides:
 
 - a RFC5424-compliant parser
 - a RFC5424-compliant builder
-- a parser which works on streams for syslog with [octet-counting](https://tools.ietf.org/html/rfc5425#section-4.3) framing technique
+- a parser which works on streams for syslog with [octet counting](https://tools.ietf.org/html/rfc5425#section-4.3) framing technique
 - a parser which works on streams for syslog with [non-transparent](https://tools.ietf.org/html/rfc6587#section-3.4.2) framing technique
 
 This library provides the pieces to parse syslog messages transported following various RFCs.
@@ -29,7 +29,7 @@ go get github.com/influxdata/go-syslog
 
 [![Documentation](https://img.shields.io/badge/godoc-reference-blue.svg?style=for-the-badge)](http://godoc.org/github.com/influxdata/go-syslog)
 
-The [docs](docs/) directory contains images representing the FSM parts of a [RFC5424](https://tools.ietf.org/html/rfc5424) syslog message.
+The [docs](docs/) directory contains `.dot` files representing the FSM parts of a [RFC5424](https://tools.ietf.org/html/rfc5424) syslog message and also the ones representing the other transport parsers.
 
 ## Usage
 
