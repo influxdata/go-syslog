@@ -281,6 +281,14 @@ var testCases = []testCase{
 			version:  1,
 		},
 	},
+	// fixme(leodido) > when space after multi-digit version is missing, the version error handler launches (should not)
+	// {
+	// 	[]byte("<3>22"),
+	// 	false,
+	// 	nil,
+	// 	"parsing error [col 6]",
+	// 	(&SyslogMessage{}).SetPriority(3).SetVersion(22),
+	// },
 	// Invalid, non numeric (also partially) version
 	{
 		[]byte("<1>3a"),
