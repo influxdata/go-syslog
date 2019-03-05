@@ -1,7 +1,7 @@
 package rfc5424
 
 import (
-	"github.com/influxdata/go-syslog"
+	"github.com/influxdata/go-syslog/v2"
 	"testing"
 )
 

@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/influxdata/go-syslog"
-	"github.com/influxdata/go-syslog/rfc5424"
+	syslog "github.com/influxdata/go-syslog/v2"
+	"github.com/influxdata/go-syslog/v2/rfc5424"
 	"github.com/stretchr/testify/assert"
 )
 

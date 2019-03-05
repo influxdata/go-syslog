@@ -1,10 +1,11 @@
 package nontransparent
 
 import (
-	syslog "github.com/influxdata/go-syslog"
-	"github.com/influxdata/go-syslog/rfc5424"
-	parser "github.com/leodido/ragel-machinery/parser"
 	"io"
+
+	syslog "github.com/influxdata/go-syslog/v2"
+	"github.com/influxdata/go-syslog/v2/rfc5424"
+	parser "github.com/leodido/ragel-machinery/parser"
 )
 
 const nontransparentStart int = 1

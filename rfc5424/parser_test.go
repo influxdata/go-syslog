@@ -3,7 +3,7 @@ package rfc5424
 import (
 	"testing"
 
-	"github.com/influxdata/go-syslog"
+	"github.com/influxdata/go-syslog/v2"
 	"github.com/stretchr/testify/assert"
 )
 

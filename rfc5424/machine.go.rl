@@ -3,7 +3,8 @@ package rfc5424
 import (
 	"time"
 	"fmt"
-	"github.com/influxdata/go-syslog"
+	
+	syslog "github.com/influxdata/go-syslog/v2"
 )
 
 var (

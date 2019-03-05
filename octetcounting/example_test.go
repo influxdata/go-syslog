@@ -1,12 +1,12 @@
 package octetcounting
 
 import (
-	"github.com/influxdata/go-syslog"
 	"io"
 	"strings"
 	"time"
 
 	"github.com/davecgh/go-spew/spew"
+	syslog "github.com/influxdata/go-syslog/v2"
 )
 
 func output(out interface{}) {
