@@ -8,7 +8,7 @@ import (
 	"github.com/influxdata/go-syslog/v2/rfc5424"
 )
 
-// parser is capable to parse the input stream following octetcounting.
+// parser is capable to parse the input stream containing syslog messages with octetcounting framing.
 //
 // Use NewParser function to instantiate one.
 type parser struct {

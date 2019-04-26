@@ -31,7 +31,7 @@ const RFC3339MICRO = "2006-01-02T15:04:05.999999Z07:00"
 %%{
 machine rfc5424;
 
-include rfc5424 "rfc5424.rl";
+include common "common.rl";
 
 # unsigned alphabet
 alphtype uint8;
