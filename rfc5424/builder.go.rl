@@ -9,7 +9,7 @@ import (
 %%{
 machine builder;
 
-include rfc5424 "rfc5424.rl";
+include common "common.rl";
 
 action mark {
     pb = p

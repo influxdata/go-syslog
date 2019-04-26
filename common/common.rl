@@ -1,5 +1,5 @@
 %%{
-machine rfc5424;
+machine common;
 
 # whitespace
 sp = ' ';
