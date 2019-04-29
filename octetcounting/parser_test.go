@@ -2,12 +2,11 @@ package octetcounting
 
 import (
 	"fmt"
-	"math/rand"
 	"strings"
 	"testing"
-	"time"
 
-	syslog "github.com/influxdata/go-syslog/v2"
+	"github.com/influxdata/go-syslog/v2"
+	syslogtesting "github.com/influxdata/go-syslog/v2/common/testing"
 	"github.com/influxdata/go-syslog/v2/rfc5424"
 	"github.com/stretchr/testify/assert"
 )
@@ -21,40 +20,6 @@ type testCase struct {
 
 var testCases []testCase
 
-const (
-	letterBytes   = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	letterIdxBits = 6                    // 6 bits to represent a letter index
-	letterIdxMask = 1<<letterIdxBits - 1 // All 1-bits, as many as letterIdxBits
-	letterIdxMax  = 63 / letterIdxBits   // Number of letter indices fitting in 63 bits
-)
-
-func getRandomString(n int) string {
-	src := rand.NewSource(time.Now().UnixNano())
-	b := make([]byte, n)
-	// A src.Int63() generates 63 random bits, enough for letterIdxMax characters
-	for i, cache, remain := n-1, src.Int63(), letterIdxMax; i >= 0; {
-		if remain == 0 {
-			cache, remain = src.Int63(), letterIdxMax
-		}
-		if idx := int(cache & letterIdxMask); idx < len(letterBytes) {
-			b[i] = letterBytes[idx]
-			i--
-		}
-		cache >>= letterIdxBits
-		remain--
-	}
-
-	return string(b)
-}
-
-func getStringAddress(str string) *string {
-	return &str
-}
-
-func getUint8Address(x uint8) *uint8 {
-	return &x
-}
-
 func getTimestampError(col int) error {
 	return fmt.Errorf("expecting a RFC3339MICRO timestamp or a nil value [col %d]", col)
 }
@@ -64,15 +29,6 @@ func getParsingError(col int) error {
 }
 
 func getTestCases() []testCase {
-	maxPriority := uint8(191)
-	maxVersion := uint16(999)
-	maxTimestamp := "2018-12-31T23:59:59.999999-23:59"
-	maxHostname := "abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabc"
-	maxAppname := "abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdef"
-	maxProcID := "abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzab"
-	maxMsgID := "abcdefghilmnopqrstuvzabcdefghilm"
-	message7681 := getRandomString(7681)
-
 	return []testCase{
 		{
 			"empty",
@@ -301,172 +257,258 @@ func getTestCases() []testCase {
 		},
 		{
 			"1st ok//max",
-			fmt.Sprintf("8192 <%d>%d %s %s %s %s %s - %s", maxPriority, maxVersion, maxTimestamp, maxHostname, maxAppname, maxProcID, maxMsgID, message7681),
+			fmt.Sprintf(
+				"8192 <%d>%d %s %s %s %s %s - %s",
+				syslogtesting.MaxPriority,
+				syslogtesting.MaxVersion,
+				syslogtesting.MaxRFC3339MicroTimestamp,
+				string(syslogtesting.MaxHostname),
+				string(syslogtesting.MaxAppname),
+				string(syslogtesting.MaxProcID),
+				string(syslogtesting.MaxMsgID),
+				string(syslogtesting.MaxMessage),
+			),
 			// results w/o best effort
 			[]syslog.Result{
 				{
 					Message: (&rfc5424.SyslogMessage{}).
-						SetPriority(maxPriority).
-						SetVersion(maxVersion).
-						SetTimestamp(maxTimestamp).
-						SetHostname(maxHostname).
-						SetAppname(maxAppname).
-						SetProcID(maxProcID).
-						SetMsgID(maxMsgID).
-						SetMessage(message7681),
+						SetPriority(syslogtesting.MaxPriority).
+						SetVersion(syslogtesting.MaxVersion).
+						SetTimestamp(syslogtesting.MaxRFC3339MicroTimestamp).
+						SetHostname(string(syslogtesting.MaxHostname)).
+						SetAppname(string(syslogtesting.MaxAppname)).
+						SetProcID(string(syslogtesting.MaxProcID)).
+						SetMsgID(string(syslogtesting.MaxMsgID)).
+						SetMessage(string(syslogtesting.MaxMessage)),
 				},
 			},
 			// results with best effort
 			[]syslog.Result{
 				{
 					Message: (&rfc5424.SyslogMessage{}).
-						SetPriority(maxPriority).
-						SetVersion(maxVersion).
-						SetTimestamp(maxTimestamp).
-						SetHostname(maxHostname).
-						SetAppname(maxAppname).
-						SetProcID(maxProcID).
-						SetMsgID(maxMsgID).
-						SetMessage(message7681),
+						SetPriority(syslogtesting.MaxPriority).
+						SetVersion(syslogtesting.MaxVersion).
+						SetTimestamp(syslogtesting.MaxRFC3339MicroTimestamp).
+						SetHostname(string(syslogtesting.MaxHostname)).
+						SetAppname(string(syslogtesting.MaxAppname)).
+						SetProcID(string(syslogtesting.MaxProcID)).
+						SetMsgID(string(syslogtesting.MaxMsgID)).
+						SetMessage(string(syslogtesting.MaxMessage)),
 				},
 			},
 		},
 		{
 			"1st ok/2nd ok//max/max",
-			fmt.Sprintf("8192 <%d>%d %s %s %s %s %s - %s8192 <%d>%d %s %s %s %s %s - %s", maxPriority, maxVersion, maxTimestamp, maxHostname, maxAppname, maxProcID, maxMsgID, message7681, maxPriority, maxVersion, maxTimestamp, maxHostname, maxAppname, maxProcID, maxMsgID, message7681),
+			fmt.Sprintf(
+				"8192 <%d>%d %s %s %s %s %s - %s8192 <%d>%d %s %s %s %s %s - %s",
+				syslogtesting.MaxPriority,
+				syslogtesting.MaxVersion,
+				syslogtesting.MaxRFC3339MicroTimestamp,
+				string(syslogtesting.MaxHostname),
+				string(syslogtesting.MaxAppname),
+				string(syslogtesting.MaxProcID),
+				string(syslogtesting.MaxMsgID),
+				string(syslogtesting.MaxMessage),
+				syslogtesting.MaxPriority,
+				syslogtesting.MaxVersion,
+				syslogtesting.MaxRFC3339MicroTimestamp,
+				string(syslogtesting.MaxHostname),
+				string(syslogtesting.MaxAppname),
+				string(syslogtesting.MaxProcID),
+				string(syslogtesting.MaxMsgID),
+				string(syslogtesting.MaxMessage),
+			),
 			// results w/o best effort
 			[]syslog.Result{
 				{
 					Message: (&rfc5424.SyslogMessage{}).
-						SetPriority(maxPriority).
-						SetVersion(maxVersion).
-						SetTimestamp(maxTimestamp).
-						SetHostname(maxHostname).
-						SetAppname(maxAppname).
-						SetProcID(maxProcID).
-						SetMsgID(maxMsgID).
-						SetMessage(message7681),
+						SetPriority(syslogtesting.MaxPriority).
+						SetVersion(syslogtesting.MaxVersion).
+						SetTimestamp(syslogtesting.MaxRFC3339MicroTimestamp).
+						SetHostname(string(syslogtesting.MaxHostname)).
+						SetAppname(string(syslogtesting.MaxAppname)).
+						SetProcID(string(syslogtesting.MaxProcID)).
+						SetMsgID(string(syslogtesting.MaxMsgID)).
+						SetMessage(string(syslogtesting.MaxMessage)),
 				},
 				{
 					Message: (&rfc5424.SyslogMessage{}).
-						SetPriority(maxPriority).
-						SetVersion(maxVersion).
-						SetTimestamp(maxTimestamp).
-						SetHostname(maxHostname).
-						SetAppname(maxAppname).
-						SetProcID(maxProcID).
-						SetMsgID(maxMsgID).
-						SetMessage(message7681),
+						SetPriority(syslogtesting.MaxPriority).
+						SetVersion(syslogtesting.MaxVersion).
+						SetTimestamp(syslogtesting.MaxRFC3339MicroTimestamp).
+						SetHostname(string(syslogtesting.MaxHostname)).
+						SetAppname(string(syslogtesting.MaxAppname)).
+						SetProcID(string(syslogtesting.MaxProcID)).
+						SetMsgID(string(syslogtesting.MaxMsgID)).
+						SetMessage(string(syslogtesting.MaxMessage)),
 				},
 			},
 			// results with best effort
 			[]syslog.Result{
 				{
 					Message: (&rfc5424.SyslogMessage{}).
-						SetPriority(maxPriority).
-						SetVersion(maxVersion).
-						SetTimestamp(maxTimestamp).
-						SetHostname(maxHostname).
-						SetAppname(maxAppname).
-						SetProcID(maxProcID).
-						SetMsgID(maxMsgID).
-						SetMessage(message7681),
+						SetPriority(syslogtesting.MaxPriority).
+						SetVersion(syslogtesting.MaxVersion).
+						SetTimestamp(syslogtesting.MaxRFC3339MicroTimestamp).
+						SetHostname(string(syslogtesting.MaxHostname)).
+						SetAppname(string(syslogtesting.MaxAppname)).
+						SetProcID(string(syslogtesting.MaxProcID)).
+						SetMsgID(string(syslogtesting.MaxMsgID)).
+						SetMessage(string(syslogtesting.MaxMessage)),
 				},
 				{
 					Message: (&rfc5424.SyslogMessage{}).
-						SetPriority(maxPriority).
-						SetVersion(maxVersion).
-						SetTimestamp(maxTimestamp).
-						SetHostname(maxHostname).
-						SetAppname(maxAppname).
-						SetProcID(maxProcID).
-						SetMsgID(maxMsgID).
-						SetMessage(message7681),
+						SetPriority(syslogtesting.MaxPriority).
+						SetVersion(syslogtesting.MaxVersion).
+						SetTimestamp(syslogtesting.MaxRFC3339MicroTimestamp).
+						SetHostname(string(syslogtesting.MaxHostname)).
+						SetAppname(string(syslogtesting.MaxAppname)).
+						SetProcID(string(syslogtesting.MaxProcID)).
+						SetMsgID(string(syslogtesting.MaxMsgID)).
+						SetMessage(string(syslogtesting.MaxMessage)),
 				},
 			},
 		},
 		{
 			"1st ok/2nd ok/3rd ok//max/no/max",
-			fmt.Sprintf("8192 <%d>%d %s %s %s %s %s - %s16 <1>1 - - - - - -8192 <%d>%d %s %s %s %s %s - %s", maxPriority, maxVersion, maxTimestamp, maxHostname, maxAppname, maxProcID, maxMsgID, message7681, maxPriority, maxVersion, maxTimestamp, maxHostname, maxAppname, maxProcID, maxMsgID, message7681),
+			fmt.Sprintf(
+				"8192 <%d>%d %s %s %s %s %s - %s16 <1>1 - - - - - -8192 <%d>%d %s %s %s %s %s - %s",
+				syslogtesting.MaxPriority,
+				syslogtesting.MaxVersion,
+				syslogtesting.MaxRFC3339MicroTimestamp,
+				string(syslogtesting.MaxHostname),
+				string(syslogtesting.MaxAppname),
+				string(syslogtesting.MaxProcID),
+				string(syslogtesting.MaxMsgID),
+				string(syslogtesting.MaxMessage),
+				syslogtesting.MaxPriority,
+				syslogtesting.MaxVersion,
+				syslogtesting.MaxRFC3339MicroTimestamp,
+				string(syslogtesting.MaxHostname),
+				string(syslogtesting.MaxAppname),
+				string(syslogtesting.MaxProcID),
+				string(syslogtesting.MaxMsgID),
+				string(syslogtesting.MaxMessage),
+			),
 			// results w/o best effort
 			[]syslog.Result{
 				{
 					Message: (&rfc5424.SyslogMessage{}).
-						SetPriority(maxPriority).
-						SetVersion(maxVersion).
-						SetTimestamp(maxTimestamp).
-						SetHostname(maxHostname).
-						SetAppname(maxAppname).
-						SetProcID(maxProcID).
-						SetMsgID(maxMsgID).
-						SetMessage(message7681),
+						SetPriority(syslogtesting.MaxPriority).
+						SetVersion(syslogtesting.MaxVersion).
+						SetTimestamp(syslogtesting.MaxRFC3339MicroTimestamp).
+						SetHostname(string(syslogtesting.MaxHostname)).
+						SetAppname(string(syslogtesting.MaxAppname)).
+						SetProcID(string(syslogtesting.MaxProcID)).
+						SetMsgID(string(syslogtesting.MaxMsgID)).
+						SetMessage(string(syslogtesting.MaxMessage)),
 				},
 				{
 					Message: (&rfc5424.SyslogMessage{}).SetPriority(1).SetVersion(1),
 				},
 				{
 					Message: (&rfc5424.SyslogMessage{}).
-						SetPriority(maxPriority).
-						SetVersion(maxVersion).
-						SetTimestamp(maxTimestamp).
-						SetHostname(maxHostname).
-						SetAppname(maxAppname).
-						SetProcID(maxProcID).
-						SetMsgID(maxMsgID).
-						SetMessage(message7681),
+						SetPriority(syslogtesting.MaxPriority).
+						SetVersion(syslogtesting.MaxVersion).
+						SetTimestamp(syslogtesting.MaxRFC3339MicroTimestamp).
+						SetHostname(string(syslogtesting.MaxHostname)).
+						SetAppname(string(syslogtesting.MaxAppname)).
+						SetProcID(string(syslogtesting.MaxProcID)).
+						SetMsgID(string(syslogtesting.MaxMsgID)).
+						SetMessage(string(syslogtesting.MaxMessage)),
 				},
 			},
 			// results with best effort
 			[]syslog.Result{
 				{
 					Message: (&rfc5424.SyslogMessage{}).
-						SetPriority(maxPriority).
-						SetVersion(maxVersion).
-						SetTimestamp(maxTimestamp).
-						SetHostname(maxHostname).
-						SetAppname(maxAppname).
-						SetProcID(maxProcID).
-						SetMsgID(maxMsgID).
-						SetMessage(message7681),
+						SetPriority(syslogtesting.MaxPriority).
+						SetVersion(syslogtesting.MaxVersion).
+						SetTimestamp(syslogtesting.MaxRFC3339MicroTimestamp).
+						SetHostname(string(syslogtesting.MaxHostname)).
+						SetAppname(string(syslogtesting.MaxAppname)).
+						SetProcID(string(syslogtesting.MaxProcID)).
+						SetMsgID(string(syslogtesting.MaxMsgID)).
+						SetMessage(string(syslogtesting.MaxMessage)),
 				},
 				{
 					Message: (&rfc5424.SyslogMessage{}).SetPriority(1).SetVersion(1),
 				},
 				{
 					Message: (&rfc5424.SyslogMessage{}).
-						SetPriority(maxPriority).
-						SetVersion(maxVersion).
-						SetTimestamp(maxTimestamp).
-						SetHostname(maxHostname).
-						SetAppname(maxAppname).
-						SetProcID(maxProcID).
-						SetMsgID(maxMsgID).
-						SetMessage(message7681),
+						SetPriority(syslogtesting.MaxPriority).
+						SetVersion(syslogtesting.MaxVersion).
+						SetTimestamp(syslogtesting.MaxRFC3339MicroTimestamp).
+						SetHostname(string(syslogtesting.MaxHostname)).
+						SetAppname(string(syslogtesting.MaxAppname)).
+						SetProcID(string(syslogtesting.MaxProcID)).
+						SetMsgID(string(syslogtesting.MaxMsgID)).
+						SetMessage(string(syslogtesting.MaxMessage)),
 				},
 			},
 		},
 		{
 			"1st ml//maxlen gt 8192", // maxlength greather than the buffer size
-			fmt.Sprintf("8193 <%d>%d %s %s %s %s %s - %s", maxPriority, maxVersion, maxTimestamp, maxHostname, maxAppname, maxProcID, maxMsgID, message7681),
+			fmt.Sprintf(
+				"8193 <%d>%d %s %s %s %s %s - %s",
+				syslogtesting.MaxPriority,
+				syslogtesting.MaxVersion,
+				syslogtesting.MaxRFC3339MicroTimestamp,
+				string(syslogtesting.MaxHostname),
+				string(syslogtesting.MaxAppname),
+				string(syslogtesting.MaxProcID),
+				string(syslogtesting.MaxMsgID),
+				string(syslogtesting.MaxMessage),
+			),
 			// results w/o best effort
 			[]syslog.Result{
 				{
-					Error: fmt.Errorf("found %s after \"%s\", expecting a %s containing %d octets", EOF, fmt.Sprintf("<%d>%d %s %s %s %s %s - %s", maxPriority, maxVersion, maxTimestamp, maxHostname, maxAppname, maxProcID, maxMsgID, message7681), SYSLOGMSG, 8193),
+					Error: fmt.Errorf(
+						"found %s after \"%s\", expecting a %s containing %d octets",
+						EOF,
+						fmt.Sprintf(
+							"<%d>%d %s %s %s %s %s - %s", syslogtesting.MaxPriority,
+							syslogtesting.MaxVersion,
+							syslogtesting.MaxRFC3339MicroTimestamp,
+							string(syslogtesting.MaxHostname),
+							string(syslogtesting.MaxAppname),
+							string(syslogtesting.MaxProcID),
+							string(syslogtesting.MaxMsgID),
+							string(syslogtesting.MaxMessage),
+						),
+						SYSLOGMSG,
+						8193,
+					),
 				},
 			},
 			// results with best effort
 			[]syslog.Result{
 				{
 					Message: (&rfc5424.SyslogMessage{}).
-						SetPriority(maxPriority).
-						SetVersion(maxVersion).
-						SetTimestamp(maxTimestamp).
-						SetHostname(maxHostname).
-						SetAppname(maxAppname).
-						SetProcID(maxProcID).
-						SetMsgID(maxMsgID).
-						SetMessage(message7681),
-					Error: fmt.Errorf("found %s after \"%s\", expecting a %s containing %d octets", EOF, fmt.Sprintf("<%d>%d %s %s %s %s %s - %s", maxPriority, maxVersion, maxTimestamp, maxHostname, maxAppname, maxProcID, maxMsgID, message7681), SYSLOGMSG, 8193),
+						SetPriority(syslogtesting.MaxPriority).
+						SetVersion(syslogtesting.MaxVersion).
+						SetTimestamp(syslogtesting.MaxRFC3339MicroTimestamp).
+						SetHostname(string(syslogtesting.MaxHostname)).
+						SetAppname(string(syslogtesting.MaxAppname)).
+						SetProcID(string(syslogtesting.MaxProcID)).
+						SetMsgID(string(syslogtesting.MaxMsgID)).
+						SetMessage(string(syslogtesting.MaxMessage)),
+					Error: fmt.Errorf(
+						"found %s after \"%s\", expecting a %s containing %d octets",
+						EOF,
+						fmt.Sprintf(
+							"<%d>%d %s %s %s %s %s - %s", syslogtesting.MaxPriority,
+							syslogtesting.MaxVersion,
+							syslogtesting.MaxRFC3339MicroTimestamp,
+							string(syslogtesting.MaxHostname),
+							string(syslogtesting.MaxAppname),
+							string(syslogtesting.MaxProcID),
+							string(syslogtesting.MaxMsgID),
+							string(syslogtesting.MaxMessage),
+						),
+						SYSLOGMSG,
+						8193,
+					),
 				},
 			},
 		},
