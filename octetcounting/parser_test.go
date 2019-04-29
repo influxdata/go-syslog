@@ -21,11 +21,11 @@ type testCase struct {
 var testCases []testCase
 
 func getTimestampError(col int) error {
-	return fmt.Errorf("expecting a RFC3339MICRO timestamp or a nil value [col %d]", col)
+	return fmt.Errorf(rfc5424.ErrTimestamp+rfc5424.ColumnPositionTemplate, col)
 }
 
 func getParsingError(col int) error {
-	return fmt.Errorf("parsing error [col %d]", col)
+	return fmt.Errorf(rfc5424.ErrParse+rfc5424.ColumnPositionTemplate, col)
 }
 
 func getTestCases() []testCase {
