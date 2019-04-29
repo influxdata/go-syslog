@@ -7,22 +7,40 @@ import (
 	syslog "github.com/influxdata/go-syslog/v2"
 )
 
-var (
-	errPrival         = "expecting a priority value in the range 1-191 or equal to 0 [col %d]"
-	errPri            = "expecting a priority value within angle brackets [col %d]"
-	errVersion        = "expecting a version value in the range 1-999 [col %d]"
-	errTimestamp      = "expecting a RFC3339MICRO timestamp or a nil value [col %d]"
-	errHostname       = "expecting an hostname (from 1 to max 255 US-ASCII characters) or a nil value [col %d]"
-	errAppname        = "expecting an app-name (from 1 to max 48 US-ASCII characters) or a nil value [col %d]"
-	errProcid         = "expecting a procid (from 1 to max 128 US-ASCII characters) or a nil value [col %d]"
-	errMsgid          = "expecting a msgid (from 1 to max 32 US-ASCII characters) or a nil value [col %d]"
-	errStructuredData = "expecting a structured data section containing one or more elements (`[id( key=\"value\")*]+`) or a nil value [col %d]"
-	errSdID           = "expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"` [col %d]"
-	errSdIDDuplicated = "duplicate structured data element id [col %d]"
-	errSdParam        = "expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters; key cannot contain `=`, ` `, `]`, and `\"`, while value cannot contain `]`, backslash, and `\"` unless escaped) [col %d]"
-	errMsg            = "expecting a free-form optional message in UTF-8 (starting with or without BOM) [col %d]"
-	errEscape         = "expecting chars `]`, `\"`, and `\\` to be escaped within param value [col %d]"
-	errParse          = "parsing error [col %d]"
+// ColumnPositionTemplate is the template used to communicate the column where errors occur.
+var ColumnPositionTemplate = " [col %d]"
+
+const (
+	// ErrPrival represents an error in the priority value (PRIVAL) inside the PRI part of the RFC5424 syslog message.
+	ErrPrival         = "expecting a priority value in the range 1-191 or equal to 0"
+	// ErrPri represents an error in the PRI part of the RFC5424 syslog message.
+	ErrPri            = "expecting a priority value within angle brackets"
+	// ErrVersion represents an error in the VERSION part of the RFC5424 syslog message.
+	ErrVersion        = "expecting a version value in the range 1-999"
+	// ErrTimestamp represents an error in the TIMESTAMP part of the RFC5424 syslog message.
+	ErrTimestamp      = "expecting a RFC3339MICRO timestamp or a nil value"
+	// ErrHostname represents an error in the HOSTNAME part of the RFC5424 syslog message.
+	ErrHostname       = "expecting an hostname (from 1 to max 255 US-ASCII characters) or a nil value"
+	// ErrAppname represents an error in the APP-NAME part of the RFC5424 syslog message.
+	ErrAppname        = "expecting an app-name (from 1 to max 48 US-ASCII characters) or a nil value"
+	// ErrProcID represents an error in the PROCID part of the RFC5424 syslog message.	
+	ErrProcID         = "expecting a procid (from 1 to max 128 US-ASCII characters) or a nil value"
+	// ErrMsgID represents an error in the MSGID part of the RFC5424 syslog message.	
+	ErrMsgID          = "expecting a msgid (from 1 to max 32 US-ASCII characters) or a nil value"
+	// ErrStructuredData represents an error in the STRUCTURED DATA part of the RFC5424 syslog message.	
+	ErrStructuredData = "expecting a structured data section containing one or more elements (`[id( key=\"value\")*]+`) or a nil value"
+	// ErrSdID represents an error regarding the ID of a STRUCTURED DATA element of the RFC5424 syslog message.	
+	ErrSdID           = "expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"`"
+	// ErrSdIDDuplicated represents an error occurring when two STRUCTURED DATA elementes have the same ID in a RFC5424 syslog message.	
+	ErrSdIDDuplicated = "duplicate structured data element id"
+	// ErrSdParam represents an error regarding a STRUCTURED DATA PARAM of the RFC5424 syslog message.	
+	ErrSdParam        = "expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters; key cannot contain `=`, ` `, `]`, and `\"`, while value cannot contain `]`, backslash, and `\"` unless escaped)"
+	// ErrMsg represents an error in the MESSAGE part of the RFC5424 syslog message.	
+	ErrMsg            = "expecting a free-form optional message in UTF-8 (starting with or without BOM)"
+	// ErrEscape represents the error for a RFC5424 syslog message occurring when a STRUCTURED DATA PARAM value contains '"', '\', or ']' not escaped.
+	ErrEscape         = "expecting chars `]`, `\"`, and `\\` to be escaped within param value"
+	// ErrParse represents a general parsing error for a RFC5424 syslog message.	
+	ErrParse          = "parsing error"
 )
 
 // RFC3339MICRO represents the timestamp format that RFC5424 mandates.
@@ -87,7 +105,7 @@ action ini_elements {
 action set_id {
 	if _, ok := output.structuredData[string(m.text())]; ok {
 		// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
-		m.err = fmt.Errorf(errSdIDDuplicated, m.p)
+		m.err = fmt.Errorf(ErrSdIDDuplicated + ColumnPositionTemplate, m.p)
 		fhold;
 		fgoto fail;
 	} else {
@@ -130,55 +148,55 @@ action set_msg {
 }
 
 action err_prival {
-	m.err = fmt.Errorf(errPrival, m.p)
+	m.err = fmt.Errorf(ErrPrival + ColumnPositionTemplate, m.p)
 	fhold;
     fgoto fail;
 }
 
 action err_pri {
-	m.err = fmt.Errorf(errPri, m.p)
+	m.err = fmt.Errorf(ErrPri + ColumnPositionTemplate, m.p)
 	fhold;
     fgoto fail;
 }
 
 action err_version {
-	m.err = fmt.Errorf(errVersion, m.p)
+	m.err = fmt.Errorf(ErrVersion + ColumnPositionTemplate, m.p)
 	fhold;
     fgoto fail;
 }
 
 action err_timestamp {
-	m.err = fmt.Errorf(errTimestamp, m.p)
+	m.err = fmt.Errorf(ErrTimestamp + ColumnPositionTemplate, m.p)
 	fhold;
     fgoto fail;
 }
 
 action err_hostname {
-	m.err = fmt.Errorf(errHostname, m.p)
+	m.err = fmt.Errorf(ErrHostname + ColumnPositionTemplate, m.p)
 	fhold;
     fgoto fail;
 }
 
 action err_appname {
-	m.err = fmt.Errorf(errAppname, m.p)
+	m.err = fmt.Errorf(ErrAppname + ColumnPositionTemplate, m.p)
 	fhold;
     fgoto fail;
 }
 
 action err_procid {
-	m.err = fmt.Errorf(errProcid, m.p)
+	m.err = fmt.Errorf(ErrProcID + ColumnPositionTemplate, m.p)
 	fhold;
     fgoto fail;
 }
 
 action err_msgid {
-	m.err = fmt.Errorf(errMsgid, m.p)
+	m.err = fmt.Errorf(ErrMsgID + ColumnPositionTemplate, m.p)
 	fhold;
     fgoto fail;
 }
 
 action err_structureddata {
-	m.err = fmt.Errorf(errStructuredData, m.p)
+	m.err = fmt.Errorf(ErrStructuredData + ColumnPositionTemplate, m.p)
 	fhold;
     fgoto fail;
 }
@@ -188,7 +206,7 @@ action err_sdid {
 	if len(output.structuredData) == 0 {
 		output.hasElements = false
 	}
-	m.err = fmt.Errorf(errSdID, m.p)
+	m.err = fmt.Errorf(ErrSdID + ColumnPositionTemplate, m.p)
 	fhold;
     fgoto fail;
 }
@@ -197,7 +215,7 @@ action err_sdparam {
 	if len(output.structuredData) > 0 {
 		delete(output.structuredData[m.currentelem], m.currentparam)
 	}
-	m.err = fmt.Errorf(errSdParam, m.p)
+	m.err = fmt.Errorf(ErrSdParam + ColumnPositionTemplate, m.p)
 	fhold;
     fgoto fail;
 }
@@ -209,19 +227,19 @@ action err_msg {
 		output.message = string(m.data[m.msgat:m.p])
 	}
 
-	m.err = fmt.Errorf(errMsg, m.p)
+	m.err = fmt.Errorf(ErrMsg + ColumnPositionTemplate, m.p)
 	fhold;
     fgoto fail;
 }
 
 action err_escape {
-	m.err = fmt.Errorf(errEscape, m.p)
+	m.err = fmt.Errorf(ErrEscape + ColumnPositionTemplate, m.p)
 	fhold;
     fgoto fail;
 }
 
 action err_parse {
-	m.err = fmt.Errorf(errParse, m.p)
+	m.err = fmt.Errorf(ErrParse + ColumnPositionTemplate, m.p)
 	fhold;
     fgoto fail;
 }
