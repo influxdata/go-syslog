@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/influxdata/go-syslog/v2"
+	syslogtesting "github.com/influxdata/go-syslog/v2/common/testing"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,7 +21,7 @@ func TestParserParse(t *testing.T) {
 	pBest := NewParser(WithBestEffort())
 	for _, tc := range testCases {
 		tc := tc
-		t.Run(rxpad(string(tc.input), 50), func(t *testing.T) {
+		t.Run(syslogtesting.RightPad(string(tc.input), 50), func(t *testing.T) {
 			t.Parallel()
 
 			message, merr := p.Parse(tc.input)
