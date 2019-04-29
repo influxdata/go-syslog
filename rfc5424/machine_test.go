@@ -24,7 +24,7 @@ var testCases = []testCase{
 		[]byte(""),
 		false,
 		nil,
-		"expecting a priority value within angle brackets [col 0]",
+		fmt.Sprintf(ErrPri+ColumnPositionTemplate, 0),
 		nil,
 	},
 	// Invalid, multiple syslog messages on multiple lines
@@ -33,7 +33,7 @@ var testCases = []testCase{
 		<2>1 - - - - - -`),
 		false,
 		nil,
-		"parsing error [col 16]",
+		fmt.Sprintf(ErrParse+ColumnPositionTemplate, 16),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			severity: syslogtesting.Uint8Address(1),
@@ -46,7 +46,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - \nhostname - - - -"),
 		false,
 		nil,
-		"expecting an hostname (from 1 to max 255 US-ASCII characters) or a nil value [col 7]",
+		fmt.Sprintf(ErrHostname+ColumnPositionTemplate, 7),
 		&SyslogMessage{
 			facility: syslogtesting.Uint8Address(0),
 			severity: syslogtesting.Uint8Address(1),
@@ -58,7 +58,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - host\x0Aname - - - -"),
 		false,
 		nil,
-		"expecting an hostname (from 1 to max 255 US-ASCII characters) or a nil value [col 11]",
+		fmt.Sprintf(ErrHostname+ColumnPositionTemplate, 11),
 		&SyslogMessage{
 			facility: syslogtesting.Uint8Address(0),
 			severity: syslogtesting.Uint8Address(1),
@@ -70,7 +70,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - - \nan - - -"),
 		false,
 		nil,
-		"expecting an app-name (from 1 to max 48 US-ASCII characters) or a nil value [col 9]",
+		fmt.Sprintf(ErrAppname+ColumnPositionTemplate, 9),
 		&SyslogMessage{
 			facility: syslogtesting.Uint8Address(0),
 			severity: syslogtesting.Uint8Address(1),
@@ -82,7 +82,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - - a\x0An - - -"),
 		false,
 		nil,
-		"expecting an app-name (from 1 to max 48 US-ASCII characters) or a nil value [col 10]",
+		fmt.Sprintf(ErrAppname+ColumnPositionTemplate, 10),
 		&SyslogMessage{
 			facility: syslogtesting.Uint8Address(0),
 			severity: syslogtesting.Uint8Address(1),
@@ -94,7 +94,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - - - \npid - -"),
 		false,
 		nil,
-		"expecting a procid (from 1 to max 128 US-ASCII characters) or a nil value [col 11]",
+		fmt.Sprintf(ErrProcID+ColumnPositionTemplate, 11),
 		&SyslogMessage{
 			facility: syslogtesting.Uint8Address(0),
 			severity: syslogtesting.Uint8Address(1),
@@ -106,7 +106,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - - - p\x0Aid - -"),
 		false,
 		nil,
-		"expecting a procid (from 1 to max 128 US-ASCII characters) or a nil value [col 12]",
+		fmt.Sprintf(ErrProcID+ColumnPositionTemplate, 12),
 		&SyslogMessage{
 			facility: syslogtesting.Uint8Address(0),
 			severity: syslogtesting.Uint8Address(1),
@@ -118,7 +118,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - - - - \nmid -"),
 		false,
 		nil,
-		"expecting a msgid (from 1 to max 32 US-ASCII characters) or a nil value [col 13]",
+		fmt.Sprintf(ErrMsgID+ColumnPositionTemplate, 13),
 		&SyslogMessage{
 			facility: syslogtesting.Uint8Address(0),
 			severity: syslogtesting.Uint8Address(1),
@@ -130,7 +130,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - - - - m\x0Aid -"),
 		false,
 		nil,
-		"expecting a msgid (from 1 to max 32 US-ASCII characters) or a nil value [col 14]",
+		fmt.Sprintf(ErrMsgID+ColumnPositionTemplate, 14),
 		&SyslogMessage{
 			facility: syslogtesting.Uint8Address(0),
 			severity: syslogtesting.Uint8Address(1),
@@ -143,7 +143,7 @@ var testCases = []testCase{
 		[]byte("(190>122 2018-11-22"),
 		false,
 		nil,
-		"expecting a priority value within angle brackets [col 0]",
+		fmt.Sprintf(ErrPri+ColumnPositionTemplate, 0),
 		nil,
 	},
 	// Malformed pri outputs wrong error
@@ -152,7 +152,7 @@ var testCases = []testCase{
 		false,
 		nil,
 		// (note) > machine can only understand that the ] char is not in the reachable states (just as any number would be in this situation), so it gives the error about the priority val submachine, not about the pri submachine (ie., <prival>)
-		"expecting a priority value in the range 1-191 or equal to 0 [col 3]",
+		fmt.Sprintf(ErrPrival+ColumnPositionTemplate, 3),
 		nil, // nil since cannot reach version
 	},
 	// Invalid, missing pri
@@ -160,7 +160,7 @@ var testCases = []testCase{
 		[]byte("122 - - - - - -"),
 		false,
 		nil,
-		"expecting a priority value within angle brackets [col 0]",
+		fmt.Sprintf(ErrPri+ColumnPositionTemplate, 0),
 		nil,
 	},
 	// Invalid, missing prival
@@ -168,7 +168,7 @@ var testCases = []testCase{
 		[]byte("<>122 2018-11-22"),
 		false,
 		nil,
-		"expecting a priority value in the range 1-191 or equal to 0 [col 1]",
+		fmt.Sprintf(ErrPrival+ColumnPositionTemplate, 1),
 		nil,
 	},
 	// Invalid, prival with too much digits
@@ -176,7 +176,7 @@ var testCases = []testCase{
 		[]byte("<19000021>122 2018-11-22"),
 		false,
 		nil,
-		"expecting a priority value in the range 1-191 or equal to 0 [col 4]",
+		fmt.Sprintf(ErrPrival+ColumnPositionTemplate, 4),
 		nil, // no valid partial message since was not able to reach and extract version (which is mandatory for a valid message)
 	},
 	// Invalid, prival too high
@@ -184,7 +184,7 @@ var testCases = []testCase{
 		[]byte("<192>122 2018-11-22"),
 		false,
 		nil,
-		"expecting a priority value in the range 1-191 or equal to 0 [col 3]",
+		fmt.Sprintf(ErrPrival+ColumnPositionTemplate, 3),
 		nil,
 	},
 	// Invalid, 0 starting prival
@@ -192,7 +192,7 @@ var testCases = []testCase{
 		[]byte("<002>122 2018-11-22"),
 		false,
 		nil,
-		"expecting a priority value in the range 1-191 or equal to 0 [col 2]",
+		fmt.Sprintf(ErrPrival+ColumnPositionTemplate, 2),
 		nil,
 	},
 	// Invalid, non numeric prival
@@ -200,7 +200,7 @@ var testCases = []testCase{
 		[]byte("<aaa>122 2018-11-22"),
 		false,
 		nil,
-		"expecting a priority value in the range 1-191 or equal to 0 [col 1]",
+		fmt.Sprintf(ErrPrival+ColumnPositionTemplate, 1),
 		nil,
 	},
 	// Invalid, missing version
@@ -208,7 +208,7 @@ var testCases = []testCase{
 		[]byte("<100> 2018-11-22"),
 		false,
 		nil,
-		"expecting a version value in the range 1-999 [col 5]",
+		fmt.Sprintf(ErrVersion+ColumnPositionTemplate, 5),
 		nil,
 	},
 	// Invalid, 0 version
@@ -216,7 +216,7 @@ var testCases = []testCase{
 		[]byte("<103>0 2018-11-22"),
 		false,
 		nil,
-		"expecting a version value in the range 1-999 [col 5]",
+		fmt.Sprintf(ErrVersion+ColumnPositionTemplate, 5),
 		nil,
 	},
 	// Invalid, out of range version
@@ -224,7 +224,7 @@ var testCases = []testCase{
 		[]byte("<101>1000 2018-11-22"),
 		false,
 		nil,
-		"expecting a version value in the range 1-999 [col 8]",
+		fmt.Sprintf(ErrVersion+ColumnPositionTemplate, 8),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(101),
 			facility: syslogtesting.Uint8Address(12),
@@ -237,7 +237,7 @@ var testCases = []testCase{
 		[]byte("<1>2 "),
 		false,
 		nil,
-		"expecting a RFC3339MICRO timestamp or a nil value [col 5]",
+		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 5),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -250,7 +250,7 @@ var testCases = []testCase{
 		[]byte("<1>1"),
 		false,
 		nil,
-		"parsing error [col 4]",
+		fmt.Sprintf(ErrParse+ColumnPositionTemplate, 4),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -263,7 +263,7 @@ var testCases = []testCase{
 	// 	[]byte("<3>22"),
 	// 	false,
 	// 	nil,
-	// 	"parsing error [col 6]",
+	// 	fmt.Sprintf(ErrParse+ColumnPositionTemplate, 6),
 	// 	(&SyslogMessage{}).SetPriority(3).SetVersion(22),
 	// },
 	// Invalid, non numeric (also partially) version
@@ -271,7 +271,7 @@ var testCases = []testCase{
 		[]byte("<1>3a"),
 		false,
 		nil,
-		"parsing error [col 4]",
+		fmt.Sprintf(ErrParse+ColumnPositionTemplate, 4),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -283,7 +283,7 @@ var testCases = []testCase{
 		[]byte("<1>4a "),
 		false,
 		nil,
-		"parsing error [col 4]",
+		fmt.Sprintf(ErrParse+ColumnPositionTemplate, 4),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -295,7 +295,7 @@ var testCases = []testCase{
 		[]byte("<102>abc 2018-11-22"),
 		false,
 		nil,
-		"expecting a version value in the range 1-999 [col 5]",
+		fmt.Sprintf(ErrVersion+ColumnPositionTemplate, 5),
 		nil,
 	},
 	// Invalid, letter rather than timestamp
@@ -303,7 +303,7 @@ var testCases = []testCase{
 		[]byte("<1>5 A"),
 		false,
 		nil,
-		"expecting a RFC3339MICRO timestamp or a nil value [col 5]",
+		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 5),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -316,7 +316,7 @@ var testCases = []testCase{
 		[]byte(`<29>1 2006-01-02t15:04:05Z - - - - -`),
 		false,
 		nil,
-		"expecting a RFC3339MICRO timestamp or a nil value [col 16]",
+		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 16),
 		&SyslogMessage{
 			facility: syslogtesting.Uint8Address(3),
 			severity: syslogtesting.Uint8Address(5),
@@ -328,7 +328,7 @@ var testCases = []testCase{
 		[]byte(`<29>2 2006-01-02T15:04:05z - - - - -`),
 		false,
 		nil,
-		"expecting a RFC3339MICRO timestamp or a nil value [col 25]",
+		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 25),
 		&SyslogMessage{
 			facility: syslogtesting.Uint8Address(3),
 			severity: syslogtesting.Uint8Address(5),
@@ -341,7 +341,7 @@ var testCases = []testCase{
 		[]byte("<101>123 2"),
 		false,
 		nil,
-		"expecting a RFC3339MICRO timestamp or a nil value [col 10]",
+		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 10),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(101),
 			facility: syslogtesting.Uint8Address(12),
@@ -353,7 +353,7 @@ var testCases = []testCase{
 		[]byte("<101>124 20"),
 		false,
 		nil,
-		"expecting a RFC3339MICRO timestamp or a nil value [col 11]",
+		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 11),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(101),
 			facility: syslogtesting.Uint8Address(12),
@@ -365,7 +365,7 @@ var testCases = []testCase{
 		[]byte("<101>125 201"),
 		false,
 		nil,
-		"expecting a RFC3339MICRO timestamp or a nil value [col 12]",
+		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 12),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(101),
 			facility: syslogtesting.Uint8Address(12),
@@ -377,7 +377,7 @@ var testCases = []testCase{
 		[]byte("<101>125 2013"),
 		false,
 		nil,
-		"expecting a RFC3339MICRO timestamp or a nil value [col 13]",
+		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 13),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(101),
 			facility: syslogtesting.Uint8Address(12),
@@ -389,7 +389,7 @@ var testCases = []testCase{
 		[]byte("<101>126 2013-"),
 		false,
 		nil,
-		"expecting a RFC3339MICRO timestamp or a nil value [col 14]",
+		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 14),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(101),
 			facility: syslogtesting.Uint8Address(12),
@@ -401,7 +401,7 @@ var testCases = []testCase{
 		[]byte("<101>122 201-11-22"),
 		false,
 		nil,
-		"expecting a RFC3339MICRO timestamp or a nil value [col 12]",
+		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 12),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(101),
 			facility: syslogtesting.Uint8Address(12),
@@ -413,7 +413,7 @@ var testCases = []testCase{
 		[]byte("<101>189 0-11-22"),
 		false,
 		nil,
-		"expecting a RFC3339MICRO timestamp or a nil value [col 10]",
+		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 10),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(101),
 			facility: syslogtesting.Uint8Address(12),
@@ -426,7 +426,7 @@ var testCases = []testCase{
 		[]byte("<101>122 2018-112-22"),
 		false,
 		nil,
-		"expecting a RFC3339MICRO timestamp or a nil value [col 16]",
+		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 16),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(101),
 			facility: syslogtesting.Uint8Address(12),
@@ -439,7 +439,7 @@ var testCases = []testCase{
 		[]byte("<101>123 2018-02-32"),
 		false,
 		nil,
-		"expecting a RFC3339MICRO timestamp or a nil value [col 18]",
+		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 18),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(101),
 			facility: syslogtesting.Uint8Address(12),
@@ -452,7 +452,7 @@ var testCases = []testCase{
 		[]byte("<101>124 2018-02-01:25:15Z"),
 		false,
 		nil,
-		"expecting a RFC3339MICRO timestamp or a nil value [col 19]",
+		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 19),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(101),
 			facility: syslogtesting.Uint8Address(12),
@@ -465,7 +465,7 @@ var testCases = []testCase{
 		[]byte("<101>125 2003-09-29T22:99:16Z"),
 		false,
 		nil,
-		"expecting a RFC3339MICRO timestamp or a nil value [col 23]",
+		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 23),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(101),
 			facility: syslogtesting.Uint8Address(12),
@@ -478,7 +478,7 @@ var testCases = []testCase{
 		[]byte("<101>126 2003-09-29T22:09:99Z"),
 		false,
 		nil,
-		"expecting a RFC3339MICRO timestamp or a nil value [col 26]",
+		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 26),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(101),
 			facility: syslogtesting.Uint8Address(12),
@@ -491,7 +491,7 @@ var testCases = []testCase{
 		[]byte("<101>127 2003-09-29T22:09:01.000000000009Z"),
 		false,
 		nil,
-		"expecting a RFC3339MICRO timestamp or a nil value [col 35]",
+		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 35),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(101),
 			facility: syslogtesting.Uint8Address(12),
@@ -503,7 +503,7 @@ var testCases = []testCase{
 		[]byte("<101>128 2003-09-29T22:09:01.Z"),
 		false,
 		nil,
-		"expecting a RFC3339MICRO timestamp or a nil value [col 29]",
+		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 29),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(101),
 			facility: syslogtesting.Uint8Address(12),
@@ -515,7 +515,7 @@ var testCases = []testCase{
 		[]byte("<101>28 2003-09-29T22:09:01."),
 		false,
 		nil,
-		"expecting a RFC3339MICRO timestamp or a nil value [col 28]",
+		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 28),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(101),
 			facility: syslogtesting.Uint8Address(12),
@@ -528,7 +528,7 @@ var testCases = []testCase{
 		[]byte("<101>129 2003-09-29T22:09:01A"),
 		false,
 		nil,
-		"expecting a RFC3339MICRO timestamp or a nil value [col 28]",
+		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 28),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(101),
 			facility: syslogtesting.Uint8Address(12),
@@ -540,7 +540,7 @@ var testCases = []testCase{
 		[]byte("<101>130 2003-08-24T05:14:15.000003-24:00"),
 		false,
 		nil,
-		"expecting a RFC3339MICRO timestamp or a nil value [col 37]",
+		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 37),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(101),
 			facility: syslogtesting.Uint8Address(12),
@@ -552,7 +552,7 @@ var testCases = []testCase{
 		[]byte("<101>131 2003-08-24T05:14:15.000003-60:00"),
 		false,
 		nil,
-		"expecting a RFC3339MICRO timestamp or a nil value [col 36]",
+		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 36),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(101),
 			facility: syslogtesting.Uint8Address(12),
@@ -564,7 +564,7 @@ var testCases = []testCase{
 		[]byte("<101>132 2003-08-24T05:14:15.000003-07:61"),
 		false,
 		nil,
-		"expecting a RFC3339MICRO timestamp or a nil value [col 39]",
+		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 39),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(101),
 			facility: syslogtesting.Uint8Address(12),
@@ -576,7 +576,7 @@ var testCases = []testCase{
 		[]byte(`<29>1 2006-01-02T15:04:05Z+07:00 - - - - -`),
 		false,
 		nil,
-		"parsing error [col 26]", // after the Z (valid and complete timestamp) it searches for a whitespace
+		fmt.Sprintf(ErrParse+ColumnPositionTemplate, 26), // after the Z (valid and complete timestamp) it searches for a whitespace
 		&SyslogMessage{
 			facility:  syslogtesting.Uint8Address(3),
 			severity:  syslogtesting.Uint8Address(5),
@@ -627,7 +627,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcX - - - -"),
 		false,
 		nil,
-		"expecting an hostname (from 1 to max 255 US-ASCII characters) or a nil value [col 262]",
+		fmt.Sprintf(ErrHostname+ColumnPositionTemplate, 262),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -639,7 +639,7 @@ var testCases = []testCase{
 		[]byte("<1>1 2003-09-29T22:14:16Z abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcX - - - -"),
 		false,
 		nil,
-		"expecting an hostname (from 1 to max 255 US-ASCII characters) or a nil value [col 281]",
+		fmt.Sprintf(ErrHostname+ColumnPositionTemplate, 281),
 		&SyslogMessage{
 			priority:  syslogtesting.Uint8Address(1),
 			facility:  syslogtesting.Uint8Address(0),
@@ -653,7 +653,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - - abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefX - - -"),
 		false,
 		nil,
-		"expecting an app-name (from 1 to max 48 US-ASCII characters) or a nil value [col 57]",
+		fmt.Sprintf(ErrAppname+ColumnPositionTemplate, 57),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -665,7 +665,7 @@ var testCases = []testCase{
 		[]byte("<1>1 2003-09-29T22:14:16Z - abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefX - - -"),
 		false,
 		nil,
-		"expecting an app-name (from 1 to max 48 US-ASCII characters) or a nil value [col 76]",
+		fmt.Sprintf(ErrAppname+ColumnPositionTemplate, 76),
 		&SyslogMessage{
 			priority:  syslogtesting.Uint8Address(1),
 			facility:  syslogtesting.Uint8Address(0),
@@ -678,7 +678,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - host abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefX - - -"),
 		false,
 		nil,
-		"expecting an app-name (from 1 to max 48 US-ASCII characters) or a nil value [col 60]",
+		fmt.Sprintf(ErrAppname+ColumnPositionTemplate, 60),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -691,7 +691,7 @@ var testCases = []testCase{
 		[]byte("<1>1 2003-09-29T22:14:16Z host abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefX - - -"),
 		false,
 		nil,
-		"expecting an app-name (from 1 to max 48 US-ASCII characters) or a nil value [col 79]",
+		fmt.Sprintf(ErrAppname+ColumnPositionTemplate, 79),
 		&SyslogMessage{
 			priority:  syslogtesting.Uint8Address(1),
 			facility:  syslogtesting.Uint8Address(0),
@@ -706,7 +706,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - - - abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabX - -"),
 		false,
 		nil,
-		"expecting a procid (from 1 to max 128 US-ASCII characters) or a nil value [col 139]",
+		fmt.Sprintf(ErrProcID+ColumnPositionTemplate, 139),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -719,7 +719,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - - - - abcdefghilmnopqrstuvzabcdefghilmX -"),
 		false,
 		nil,
-		"expecting a msgid (from 1 to max 32 US-ASCII characters) or a nil value [col 45]",
+		fmt.Sprintf(ErrMsgID+ColumnPositionTemplate, 45),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -732,7 +732,7 @@ var testCases = []testCase{
 		[]byte("<1>1 -   - - - -"),
 		false,
 		nil,
-		"expecting an hostname (from 1 to max 255 US-ASCII characters) or a nil value [col 7]",
+		fmt.Sprintf(ErrHostname+ColumnPositionTemplate, 7),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -744,7 +744,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - -   - - -"),
 		false,
 		nil,
-		"expecting an app-name (from 1 to max 48 US-ASCII characters) or a nil value [col 9]",
+		fmt.Sprintf(ErrAppname+ColumnPositionTemplate, 9),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -756,7 +756,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - - -   - -"),
 		false,
 		nil,
-		"expecting a procid (from 1 to max 128 US-ASCII characters) or a nil value [col 11]",
+		fmt.Sprintf(ErrProcID+ColumnPositionTemplate, 11),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -768,7 +768,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - - - -   -"),
 		false,
 		nil,
-		"expecting a msgid (from 1 to max 32 US-ASCII characters) or a nil value [col 13]",
+		fmt.Sprintf(ErrMsgID+ColumnPositionTemplate, 13),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -781,7 +781,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - - - - - X"),
 		false,
 		nil,
-		"expecting a structured data section containing one or more elements (`[id( key=\"value\")*]+`) or a nil value [col 15]",
+		fmt.Sprintf(ErrStructuredData+ColumnPositionTemplate, 15),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -794,7 +794,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - - - - - []"),
 		false,
 		nil,
-		"expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"` [col 16]",
+		fmt.Sprintf(ErrSdID+ColumnPositionTemplate, 16),
 		&SyslogMessage{
 			priority:       syslogtesting.Uint8Address(1),
 			facility:       syslogtesting.Uint8Address(0),
@@ -808,7 +808,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - - - - - [ ]"),
 		false,
 		nil,
-		"expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"` [col 16]",
+		fmt.Sprintf(ErrSdID+ColumnPositionTemplate, 16),
 		&SyslogMessage{
 			priority:       syslogtesting.Uint8Address(1),
 			facility:       syslogtesting.Uint8Address(0),
@@ -822,7 +822,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - - - - - [=]"),
 		false,
 		nil,
-		"expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"` [col 16]",
+		fmt.Sprintf(ErrSdID+ColumnPositionTemplate, 16),
 		&SyslogMessage{
 			priority:       syslogtesting.Uint8Address(1),
 			facility:       syslogtesting.Uint8Address(0),
@@ -836,7 +836,7 @@ var testCases = []testCase{
 		[]byte("<1>1 - - - - - []]"),
 		false,
 		nil,
-		"expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"` [col 16]",
+		fmt.Sprintf(ErrSdID+ColumnPositionTemplate, 16),
 		&SyslogMessage{
 			priority:       syslogtesting.Uint8Address(1),
 			facility:       syslogtesting.Uint8Address(0),
@@ -850,7 +850,7 @@ var testCases = []testCase{
 		[]byte(`<1>1 - - - - - ["]`),
 		false,
 		nil,
-		"expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"` [col 16]",
+		fmt.Sprintf(ErrSdID+ColumnPositionTemplate, 16),
 		&SyslogMessage{
 			priority:       syslogtesting.Uint8Address(1),
 			facility:       syslogtesting.Uint8Address(0),
@@ -864,7 +864,7 @@ var testCases = []testCase{
 		[]byte(`<1>1 - - - - - [abcdefghilmnopqrstuvzabcdefghilmX]`),
 		false,
 		nil,
-		"expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"` [col 48]",
+		fmt.Sprintf(ErrSdID+ColumnPositionTemplate, 48),
 		&SyslogMessage{
 			priority:       syslogtesting.Uint8Address(1),
 			facility:       syslogtesting.Uint8Address(0),
@@ -878,7 +878,7 @@ var testCases = []testCase{
 		[]byte(`<1>1 - - - - - [id abcdefghilmnopqrstuvzabcdefghilmX="val"]`),
 		false,
 		nil,
-		"expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters; key cannot contain `=`, ` `, `]`, and `\"`, while value cannot contain `]`, backslash, and `\"` unless escaped) [col 51]",
+		fmt.Sprintf(ErrSdParam+ColumnPositionTemplate, 51),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -1631,7 +1631,7 @@ var testCases = []testCase{
 		[]byte(`<29>3 2016-01-15T01:00:43Z hn S - - [meta escape="]"] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
 		nil,
-		"expecting chars `]`, `\"`, and `\\` to be escaped within param value [col 50]",
+		fmt.Sprintf(ErrEscape+ColumnPositionTemplate, 50),
 		&SyslogMessage{
 			facility:  syslogtesting.Uint8Address(3),
 			severity:  syslogtesting.Uint8Address(5),
@@ -1649,7 +1649,7 @@ var testCases = []testCase{
 		[]byte(`<29>5 2016-01-15T01:00:43Z hn S - - [meta escape="]q"] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
 		nil,
-		"expecting chars `]`, `\"`, and `\\` to be escaped within param value [col 50]",
+		fmt.Sprintf(ErrEscape+ColumnPositionTemplate, 50),
 		&SyslogMessage{
 			facility:  syslogtesting.Uint8Address(3),
 			severity:  syslogtesting.Uint8Address(5),
@@ -1667,7 +1667,7 @@ var testCases = []testCase{
 		[]byte(`<29>4 2016-01-15T01:00:43Z hn S - - [meta escape="p]"] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
 		nil,
-		"expecting chars `]`, `\"`, and `\\` to be escaped within param value [col 51]",
+		fmt.Sprintf(ErrEscape+ColumnPositionTemplate, 51),
 		&SyslogMessage{
 			facility:  syslogtesting.Uint8Address(3),
 			severity:  syslogtesting.Uint8Address(5),
@@ -1686,7 +1686,7 @@ var testCases = []testCase{
 		[]byte(`<29>4 2017-01-15T01:00:43Z hn S - - [meta escape="""] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
 		nil,
-		"expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters; key cannot contain `=`, ` `, `]`, and `\"`, while value cannot contain `]`, backslash, and `\"` unless escaped) [col 51]",
+		fmt.Sprintf(ErrSdParam+ColumnPositionTemplate, 51),
 		&SyslogMessage{
 			facility:  syslogtesting.Uint8Address(3),
 			severity:  syslogtesting.Uint8Address(5),
@@ -1704,7 +1704,7 @@ var testCases = []testCase{
 		[]byte(`<29>6 2016-01-15T01:00:43Z hn S - - [meta escape="a""] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
 		nil,
-		"expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters; key cannot contain `=`, ` `, `]`, and `\"`, while value cannot contain `]`, backslash, and `\"` unless escaped) [col 52]",
+		fmt.Sprintf(ErrSdParam+ColumnPositionTemplate, 52),
 		&SyslogMessage{
 			facility:  syslogtesting.Uint8Address(3),
 			severity:  syslogtesting.Uint8Address(5),
@@ -1722,7 +1722,7 @@ var testCases = []testCase{
 		[]byte(`<29>4 2018-01-15T01:00:43Z hn S - - [meta escape=""b"] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
 		nil,
-		"expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters; key cannot contain `=`, ` `, `]`, and `\"`, while value cannot contain `]`, backslash, and `\"` unless escaped) [col 51]",
+		fmt.Sprintf(ErrSdParam+ColumnPositionTemplate, 51),
 		&SyslogMessage{
 			facility:  syslogtesting.Uint8Address(3),
 			severity:  syslogtesting.Uint8Address(5),
@@ -1741,7 +1741,7 @@ var testCases = []testCase{
 		[]byte(`<29>5 2019-01-15T01:00:43Z hn S - - [meta escape="\"] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
 		nil,
-		"expecting chars `]`, `\"`, and `\\` to be escaped within param value [col 52]",
+		fmt.Sprintf(ErrEscape+ColumnPositionTemplate, 52),
 		&SyslogMessage{
 			facility:  syslogtesting.Uint8Address(3),
 			severity:  syslogtesting.Uint8Address(5),
@@ -1759,7 +1759,7 @@ var testCases = []testCase{
 		[]byte(`<29>7 2019-01-15T01:00:43Z hn S - - [meta escape="a\"] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
 		nil,
-		"expecting chars `]`, `\"`, and `\\` to be escaped within param value [col 53]",
+		fmt.Sprintf(ErrEscape+ColumnPositionTemplate, 53),
 		&SyslogMessage{
 			facility:  syslogtesting.Uint8Address(3),
 			severity:  syslogtesting.Uint8Address(5),
@@ -1777,7 +1777,7 @@ var testCases = []testCase{
 		[]byte(`<29>8 2016-01-15T01:00:43Z hn S - - [meta escape="\n"] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
 		nil,
-		"expecting chars `]`, `\"`, and `\\` to be escaped within param value [col 51]",
+		fmt.Sprintf(ErrEscape+ColumnPositionTemplate, 51),
 		&SyslogMessage{
 			facility:  syslogtesting.Uint8Address(3),
 			severity:  syslogtesting.Uint8Address(5),
@@ -2131,7 +2131,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xC1"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 20]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 20),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2144,7 +2144,7 @@ y`),
 		[]byte("<1>2 - - - - - - \xC1"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 17]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2156,7 +2156,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xc3\x28"), // invalid 2 octet sequence
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 21]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 21),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2169,7 +2169,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xc3\x28"), // invalid 2 octet sequence
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2182,7 +2182,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xa0\xa1"), // invalid sequence identifier
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 20]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 20),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2195,7 +2195,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xa0\xa1"), // invalid sequence identifier
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 17]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2207,7 +2207,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xe2\x28\xa1"), // invalid 3 octet sequence (2nd octet)
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 21]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 21),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2220,7 +2220,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xe2\x28\xa1"), // invalid 3 octet sequence (2nd octet)
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2233,7 +2233,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xe2\x82\x28"), // invalid 3 octet sequence (3nd octet)
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 22]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 22),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2246,7 +2246,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xe2\x82\x28"), // invalid 3 octet sequence (3nd octet)
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 19]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 19),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2259,7 +2259,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xf0\x28\x8c\xbc"), // invalid 4 octet sequence (2nd octet)
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 21]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 21),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2272,7 +2272,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xf0\x28\x8c\xbc"), // invalid 4 octet sequence (2nd octet)
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2285,7 +2285,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xf0\x90\x28\xbc"), // invalid 4 octet sequence (3nd octet)
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 22]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 22),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2298,7 +2298,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xf0\x90\x28\xbc"), // invalid 4 octet sequence (3nd octet)
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 19]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 19),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2311,7 +2311,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xf0\x28\x8c\x28"), // invalid 4 octet sequence (4nd octet)
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 21]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 21),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2324,7 +2324,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xf0\x28\x8c\x28"), // invalid 4 octet sequence (4nd octet)
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2338,7 +2338,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xfe\xfe\xff\xff"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 17]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2350,7 +2350,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xfe"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 17]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2362,7 +2362,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xff"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 17]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2375,7 +2375,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xfc\x80\x80\x80\x80\xaf"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 17]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2387,7 +2387,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xf8\x80\x80\x80\xaf"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 17]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2399,7 +2399,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xf0\x80\x80\xaf"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2412,7 +2412,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xe0\x80\xaf"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2425,7 +2425,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xc0\xaf"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 17]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2438,7 +2438,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xfc\x83\xbf\xbf\xbf\xbf"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 17]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2450,7 +2450,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xf8\x87\xbf\xbf\xbf"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 17]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2462,7 +2462,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xf0\x8f\xbf\xbf"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2475,7 +2475,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xe0\x9f\xbf"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2488,7 +2488,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xc1\xbf"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 17]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2502,7 +2502,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xed\xa0\x80"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2515,7 +2515,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xed\xa0\x80"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2528,7 +2528,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xed\xad\xbf"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2541,7 +2541,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xed\xae\x80"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2554,7 +2554,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xed\xaf\xbf"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2567,7 +2567,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xed\xb0\x80"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2580,7 +2580,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xed\xbe\x80"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2593,7 +2593,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xed\xbf\xbf"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2607,7 +2607,7 @@ y`),
 		[]byte("<1>1 - - - - - - \xed\xa0\x80\xed\xb0\x80"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 18]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2621,7 +2621,7 @@ y`),
 		[]byte("<1>1 - - - - - - valid\xEF\xBB\xBF\xC1"),
 		false,
 		nil,
-		"expecting a free-form optional message in UTF-8 (starting with or without BOM) [col 25]",
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 25),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2635,7 +2635,7 @@ y`),
 		[]byte("<1>10 -- - - - -"),
 		false,
 		nil,
-		"parsing error [col 7]",
+		fmt.Sprintf(ErrParse+ColumnPositionTemplate, 7),
 		&SyslogMessage{
 			priority: syslogtesting.Uint8Address(1),
 			facility: syslogtesting.Uint8Address(0),
@@ -2665,7 +2665,7 @@ func genIncompleteTimestampTestCases() []testCase {
 			input:        append(prefix, prev...),
 			valid:        false,
 			value:        nil,
-			errorString:  fmt.Sprintf("expecting a RFC3339MICRO timestamp or a nil value [col %d]", len(prefix)+i+1),
+			errorString:  fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, len(prefix)+i+1),
 			partialValue: mex,
 		}
 		tCases = append(tCases, tc)
