@@ -80,3 +80,8 @@ func TimeParse(layout, value string) *time.Time {
 	t, _ := time.Parse(layout, value)
 	return &t
 }
+
+// YearTime returns a time.Time of the given month, day, hour, minutes, and seconds for the current year (in UTC).
+func YearTime(mm, dd, hh, min, ss int) time.Time {
+	return time.Date(time.Now().Year(), time.Month(mm), dd, hh, min, ss, 0, time.UTC)
+}
