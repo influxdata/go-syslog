@@ -4,7 +4,8 @@ import (
 	"time"
 	"fmt"
 	
-	syslog "github.com/influxdata/go-syslog/v2"
+	"github.com/influxdata/go-syslog/v2"
+	"github.com/influxdata/go-syslog/v2/common"
 )
 
 // ColumnPositionTemplate is the template used to communicate the column where errors occur.
@@ -63,12 +64,12 @@ action markmsg {
 }
 
 action set_prival {
-	output.priority = uint8(unsafeUTF8DecimalCodePointsToInt(m.text()))
+	output.priority = uint8(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
 	output.prioritySet = true
 }
 
 action set_version {
-	output.version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
+	output.version = uint16(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
 }
 
 action set_timestamp {
@@ -137,7 +138,7 @@ action set_paramvalue {
 		
 		// Strip backslashes only when there are ...
 		if len(m.backslashat) > 0 {
-			text = rmchars(text, m.backslashat, m.pb)
+			text = common.RemoveBytes(text, m.backslashat, m.pb)
 		}
 		output.structuredData[m.currentelem][m.currentparam] = string(text)
 	}

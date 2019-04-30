@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	syslog "github.com/influxdata/go-syslog/v2"
+	"github.com/influxdata/go-syslog/v2"
+	"github.com/influxdata/go-syslog/v2/common"
 )
 
 // ColumnPositionTemplate is the template used to communicate the column where errors occur.
@@ -1708,7 +1709,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 	stCase3:
 
-		output.priority = uint8(unsafeUTF8DecimalCodePointsToInt(m.text()))
+		output.priority = uint8(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
 		output.prioritySet = true
 
 		if (m.data)[(m.p)] == 62 {
@@ -1735,7 +1736,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 	stCase5:
 
-		output.version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
+		output.version = uint16(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
 
 		if (m.data)[(m.p)] == 32 {
 			goto st6
@@ -2967,7 +2968,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 
 			// Strip backslashes only when there are ...
 			if len(m.backslashat) > 0 {
-				text = rmchars(text, m.backslashat, m.pb)
+				text = common.RemoveBytes(text, m.backslashat, m.pb)
 			}
 			output.structuredData[m.currentelem][m.currentparam] = string(text)
 		}
@@ -2983,7 +2984,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 
 			// Strip backslashes only when there are ...
 			if len(m.backslashat) > 0 {
-				text = rmchars(text, m.backslashat, m.pb)
+				text = common.RemoveBytes(text, m.backslashat, m.pb)
 			}
 			output.structuredData[m.currentelem][m.currentparam] = string(text)
 		}
@@ -9732,7 +9733,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 	stCase598:
 
-		output.version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
+		output.version = uint16(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
 
 		if (m.data)[(m.p)] == 32 {
 			goto st6
@@ -9747,7 +9748,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 	stCase599:
 
-		output.version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
+		output.version = uint16(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
 
 		if (m.data)[(m.p)] == 32 {
 			goto st6
@@ -9764,7 +9765,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 	stCase600:
 
-		output.priority = uint8(unsafeUTF8DecimalCodePointsToInt(m.text()))
+		output.priority = uint8(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
 		output.prioritySet = true
 
 		switch (m.data)[(m.p)] {
@@ -9788,7 +9789,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 	stCase601:
 
-		output.priority = uint8(unsafeUTF8DecimalCodePointsToInt(m.text()))
+		output.priority = uint8(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
 		output.prioritySet = true
 
 		if (m.data)[(m.p)] == 62 {
@@ -9804,7 +9805,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 	stCase602:
 
-		output.priority = uint8(unsafeUTF8DecimalCodePointsToInt(m.text()))
+		output.priority = uint8(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
 		output.prioritySet = true
 
 		if (m.data)[(m.p)] == 62 {
@@ -11693,7 +11694,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 
 			case 5:
 
-				output.version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
+				output.version = uint16(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
@@ -11955,7 +11956,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 					goto st607
 				}
 
-				output.version = uint16(unsafeUTF8DecimalCodePointsToInt(m.text()))
+				output.version = uint16(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--

@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/influxdata/go-syslog/v2"
-	syslogtesting "github.com/influxdata/go-syslog/v2/common/testing"
+	syslogtesting "github.com/influxdata/go-syslog/v2/testing"
 )
 
 // This is here to avoid compiler optimizations that
