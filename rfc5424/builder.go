@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"sort"
 	"time"
+
+	"github.com/influxdata/go-syslog/v2/common"
 )
 
 const builderStart int = 59
@@ -9412,7 +9414,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 				text := data[pb:p]
 				// Strip backslashes only when there are ...
 				if len(backslashes) > 0 {
-					text = rmchars(text, backslashes, pb)
+					text = common.RemoveBytes(text, backslashes, pb)
 				}
 				// Assuming SD map already exists, contains currentid key and currentparamname key (set from outside)
 				elements := *sm.structuredData
@@ -9432,7 +9434,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 				text := data[pb:p]
 				// Strip backslashes only when there are ...
 				if len(backslashes) > 0 {
-					text = rmchars(text, backslashes, pb)
+					text = common.RemoveBytes(text, backslashes, pb)
 				}
 				// Assuming SD map already exists, contains currentid key and currentparamname key (set from outside)
 				elements := *sm.structuredData
@@ -9591,7 +9593,7 @@ func (sm *SyslogMessage) String() (string, error) {
 			sort.Strings(names)
 
 			for _, name := range names {
-				sd += fmt.Sprintf(" %s=\"%s\"", name, escape(params[name]))
+				sd += fmt.Sprintf(" %s=\"%s\"", name, common.EscapeBytes(params[name]))
 			}
 			sd += "]"
 		}
