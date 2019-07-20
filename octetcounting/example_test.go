@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/davecgh/go-spew/spew"
-	syslog "github.com/influxdata/go-syslog/v2"
+	syslog "github.com/influxdata/go-syslog"
 )
 
 func output(out interface{}) {
