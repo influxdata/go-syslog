@@ -1,11 +1,12 @@
+//line rfc5424/machine.go.rl:1
 package rfc5424
 
 import (
 	"fmt"
 	"time"
 
-	"github.com/influxdata/go-syslog/v2"
-	"github.com/influxdata/go-syslog/v2/common"
+	"github.com/influxdata/go-syslog"
+	"github.com/influxdata/go-syslog/common"
 )
 
 // ColumnPositionTemplate is the template used to communicate the column where errors occur.
@@ -47,11 +48,16 @@ const (
 // RFC3339MICRO represents the timestamp format that RFC5424 mandates.
 const RFC3339MICRO = "2006-01-02T15:04:05.999999Z07:00"
 
-const start int = 1
-const firstFinal int = 603
+//line rfc5424/machine.go.rl:299
 
-const enFail int = 607
-const enMain int = 1
+//line rfc5424/machine.go:58
+const start int = 1
+const first_final int = 603
+
+const en_fail int = 607
+const en_main int = 1
+
+//line rfc5424/machine.go.rl:302
 
 type machine struct {
 	data         []byte
@@ -73,6 +79,16 @@ func NewMachine(options ...syslog.MachineOption) syslog.Machine {
 	for _, opt := range options {
 		opt(m)
 	}
+
+//line rfc5424/machine.go.rl:325
+
+//line rfc5424/machine.go.rl:326
+
+//line rfc5424/machine.go.rl:327
+
+//line rfc5424/machine.go.rl:328
+
+//line rfc5424/machine.go.rl:329
 
 	return m
 }
@@ -115,1239 +131,1244 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 	m.err = nil
 	output := &syslogMessage{}
 
+//line rfc5424/machine.go:142
 	{
 		m.cs = start
 	}
 
+//line rfc5424/machine.go.rl:372
+
+//line rfc5424/machine.go:149
 	{
 		if (m.p) == (m.pe) {
-			goto _testEof
+			goto _test_eof
 		}
 		switch m.cs {
 		case 1:
-			goto stCase1
+			goto st_case_1
 		case 0:
-			goto stCase0
+			goto st_case_0
 		case 2:
-			goto stCase2
+			goto st_case_2
 		case 3:
-			goto stCase3
+			goto st_case_3
 		case 4:
-			goto stCase4
+			goto st_case_4
 		case 5:
-			goto stCase5
+			goto st_case_5
 		case 6:
-			goto stCase6
+			goto st_case_6
 		case 7:
-			goto stCase7
+			goto st_case_7
 		case 8:
-			goto stCase8
+			goto st_case_8
 		case 9:
-			goto stCase9
+			goto st_case_9
 		case 10:
-			goto stCase10
+			goto st_case_10
 		case 11:
-			goto stCase11
+			goto st_case_11
 		case 12:
-			goto stCase12
+			goto st_case_12
 		case 13:
-			goto stCase13
+			goto st_case_13
 		case 14:
-			goto stCase14
+			goto st_case_14
 		case 15:
-			goto stCase15
+			goto st_case_15
 		case 16:
-			goto stCase16
+			goto st_case_16
 		case 603:
-			goto stCase603
+			goto st_case_603
 		case 604:
-			goto stCase604
+			goto st_case_604
 		case 605:
-			goto stCase605
+			goto st_case_605
 		case 17:
-			goto stCase17
+			goto st_case_17
 		case 18:
-			goto stCase18
+			goto st_case_18
 		case 19:
-			goto stCase19
+			goto st_case_19
 		case 20:
-			goto stCase20
+			goto st_case_20
 		case 21:
-			goto stCase21
+			goto st_case_21
 		case 22:
-			goto stCase22
+			goto st_case_22
 		case 23:
-			goto stCase23
+			goto st_case_23
 		case 24:
-			goto stCase24
+			goto st_case_24
 		case 25:
-			goto stCase25
+			goto st_case_25
 		case 26:
-			goto stCase26
+			goto st_case_26
 		case 27:
-			goto stCase27
+			goto st_case_27
 		case 28:
-			goto stCase28
+			goto st_case_28
 		case 29:
-			goto stCase29
+			goto st_case_29
 		case 30:
-			goto stCase30
+			goto st_case_30
 		case 31:
-			goto stCase31
+			goto st_case_31
 		case 32:
-			goto stCase32
+			goto st_case_32
 		case 33:
-			goto stCase33
+			goto st_case_33
 		case 34:
-			goto stCase34
+			goto st_case_34
 		case 35:
-			goto stCase35
+			goto st_case_35
 		case 36:
-			goto stCase36
+			goto st_case_36
 		case 37:
-			goto stCase37
+			goto st_case_37
 		case 38:
-			goto stCase38
+			goto st_case_38
 		case 39:
-			goto stCase39
+			goto st_case_39
 		case 40:
-			goto stCase40
+			goto st_case_40
 		case 41:
-			goto stCase41
+			goto st_case_41
 		case 42:
-			goto stCase42
+			goto st_case_42
 		case 43:
-			goto stCase43
+			goto st_case_43
 		case 44:
-			goto stCase44
+			goto st_case_44
 		case 45:
-			goto stCase45
+			goto st_case_45
 		case 46:
-			goto stCase46
+			goto st_case_46
 		case 47:
-			goto stCase47
+			goto st_case_47
 		case 48:
-			goto stCase48
+			goto st_case_48
 		case 49:
-			goto stCase49
+			goto st_case_49
 		case 50:
-			goto stCase50
+			goto st_case_50
 		case 51:
-			goto stCase51
+			goto st_case_51
 		case 52:
-			goto stCase52
+			goto st_case_52
 		case 53:
-			goto stCase53
+			goto st_case_53
 		case 54:
-			goto stCase54
+			goto st_case_54
 		case 55:
-			goto stCase55
+			goto st_case_55
 		case 56:
-			goto stCase56
+			goto st_case_56
 		case 57:
-			goto stCase57
+			goto st_case_57
 		case 58:
-			goto stCase58
+			goto st_case_58
 		case 59:
-			goto stCase59
+			goto st_case_59
 		case 60:
-			goto stCase60
+			goto st_case_60
 		case 61:
-			goto stCase61
+			goto st_case_61
 		case 62:
-			goto stCase62
+			goto st_case_62
 		case 606:
-			goto stCase606
+			goto st_case_606
 		case 63:
-			goto stCase63
+			goto st_case_63
 		case 64:
-			goto stCase64
+			goto st_case_64
 		case 65:
-			goto stCase65
+			goto st_case_65
 		case 66:
-			goto stCase66
+			goto st_case_66
 		case 67:
-			goto stCase67
+			goto st_case_67
 		case 68:
-			goto stCase68
+			goto st_case_68
 		case 69:
-			goto stCase69
+			goto st_case_69
 		case 70:
-			goto stCase70
+			goto st_case_70
 		case 71:
-			goto stCase71
+			goto st_case_71
 		case 72:
-			goto stCase72
+			goto st_case_72
 		case 73:
-			goto stCase73
+			goto st_case_73
 		case 74:
-			goto stCase74
+			goto st_case_74
 		case 75:
-			goto stCase75
+			goto st_case_75
 		case 76:
-			goto stCase76
+			goto st_case_76
 		case 77:
-			goto stCase77
+			goto st_case_77
 		case 78:
-			goto stCase78
+			goto st_case_78
 		case 79:
-			goto stCase79
+			goto st_case_79
 		case 80:
-			goto stCase80
+			goto st_case_80
 		case 81:
-			goto stCase81
+			goto st_case_81
 		case 82:
-			goto stCase82
+			goto st_case_82
 		case 83:
-			goto stCase83
+			goto st_case_83
 		case 84:
-			goto stCase84
+			goto st_case_84
 		case 85:
-			goto stCase85
+			goto st_case_85
 		case 86:
-			goto stCase86
+			goto st_case_86
 		case 87:
-			goto stCase87
+			goto st_case_87
 		case 88:
-			goto stCase88
+			goto st_case_88
 		case 89:
-			goto stCase89
+			goto st_case_89
 		case 90:
-			goto stCase90
+			goto st_case_90
 		case 91:
-			goto stCase91
+			goto st_case_91
 		case 92:
-			goto stCase92
+			goto st_case_92
 		case 93:
-			goto stCase93
+			goto st_case_93
 		case 94:
-			goto stCase94
+			goto st_case_94
 		case 95:
-			goto stCase95
+			goto st_case_95
 		case 96:
-			goto stCase96
+			goto st_case_96
 		case 97:
-			goto stCase97
+			goto st_case_97
 		case 98:
-			goto stCase98
+			goto st_case_98
 		case 99:
-			goto stCase99
+			goto st_case_99
 		case 100:
-			goto stCase100
+			goto st_case_100
 		case 101:
-			goto stCase101
+			goto st_case_101
 		case 102:
-			goto stCase102
+			goto st_case_102
 		case 103:
-			goto stCase103
+			goto st_case_103
 		case 104:
-			goto stCase104
+			goto st_case_104
 		case 105:
-			goto stCase105
+			goto st_case_105
 		case 106:
-			goto stCase106
+			goto st_case_106
 		case 107:
-			goto stCase107
+			goto st_case_107
 		case 108:
-			goto stCase108
+			goto st_case_108
 		case 109:
-			goto stCase109
+			goto st_case_109
 		case 110:
-			goto stCase110
+			goto st_case_110
 		case 111:
-			goto stCase111
+			goto st_case_111
 		case 112:
-			goto stCase112
+			goto st_case_112
 		case 113:
-			goto stCase113
+			goto st_case_113
 		case 114:
-			goto stCase114
+			goto st_case_114
 		case 115:
-			goto stCase115
+			goto st_case_115
 		case 116:
-			goto stCase116
+			goto st_case_116
 		case 117:
-			goto stCase117
+			goto st_case_117
 		case 118:
-			goto stCase118
+			goto st_case_118
 		case 119:
-			goto stCase119
+			goto st_case_119
 		case 120:
-			goto stCase120
+			goto st_case_120
 		case 121:
-			goto stCase121
+			goto st_case_121
 		case 122:
-			goto stCase122
+			goto st_case_122
 		case 123:
-			goto stCase123
+			goto st_case_123
 		case 124:
-			goto stCase124
+			goto st_case_124
 		case 125:
-			goto stCase125
+			goto st_case_125
 		case 126:
-			goto stCase126
+			goto st_case_126
 		case 127:
-			goto stCase127
+			goto st_case_127
 		case 128:
-			goto stCase128
+			goto st_case_128
 		case 129:
-			goto stCase129
+			goto st_case_129
 		case 130:
-			goto stCase130
+			goto st_case_130
 		case 131:
-			goto stCase131
+			goto st_case_131
 		case 132:
-			goto stCase132
+			goto st_case_132
 		case 133:
-			goto stCase133
+			goto st_case_133
 		case 134:
-			goto stCase134
+			goto st_case_134
 		case 135:
-			goto stCase135
+			goto st_case_135
 		case 136:
-			goto stCase136
+			goto st_case_136
 		case 137:
-			goto stCase137
+			goto st_case_137
 		case 138:
-			goto stCase138
+			goto st_case_138
 		case 139:
-			goto stCase139
+			goto st_case_139
 		case 140:
-			goto stCase140
+			goto st_case_140
 		case 141:
-			goto stCase141
+			goto st_case_141
 		case 142:
-			goto stCase142
+			goto st_case_142
 		case 143:
-			goto stCase143
+			goto st_case_143
 		case 144:
-			goto stCase144
+			goto st_case_144
 		case 145:
-			goto stCase145
+			goto st_case_145
 		case 146:
-			goto stCase146
+			goto st_case_146
 		case 147:
-			goto stCase147
+			goto st_case_147
 		case 148:
-			goto stCase148
+			goto st_case_148
 		case 149:
-			goto stCase149
+			goto st_case_149
 		case 150:
-			goto stCase150
+			goto st_case_150
 		case 151:
-			goto stCase151
+			goto st_case_151
 		case 152:
-			goto stCase152
+			goto st_case_152
 		case 153:
-			goto stCase153
+			goto st_case_153
 		case 154:
-			goto stCase154
+			goto st_case_154
 		case 155:
-			goto stCase155
+			goto st_case_155
 		case 156:
-			goto stCase156
+			goto st_case_156
 		case 157:
-			goto stCase157
+			goto st_case_157
 		case 158:
-			goto stCase158
+			goto st_case_158
 		case 159:
-			goto stCase159
+			goto st_case_159
 		case 160:
-			goto stCase160
+			goto st_case_160
 		case 161:
-			goto stCase161
+			goto st_case_161
 		case 162:
-			goto stCase162
+			goto st_case_162
 		case 163:
-			goto stCase163
+			goto st_case_163
 		case 164:
-			goto stCase164
+			goto st_case_164
 		case 165:
-			goto stCase165
+			goto st_case_165
 		case 166:
-			goto stCase166
+			goto st_case_166
 		case 167:
-			goto stCase167
+			goto st_case_167
 		case 168:
-			goto stCase168
+			goto st_case_168
 		case 169:
-			goto stCase169
+			goto st_case_169
 		case 170:
-			goto stCase170
+			goto st_case_170
 		case 171:
-			goto stCase171
+			goto st_case_171
 		case 172:
-			goto stCase172
+			goto st_case_172
 		case 173:
-			goto stCase173
+			goto st_case_173
 		case 174:
-			goto stCase174
+			goto st_case_174
 		case 175:
-			goto stCase175
+			goto st_case_175
 		case 176:
-			goto stCase176
+			goto st_case_176
 		case 177:
-			goto stCase177
+			goto st_case_177
 		case 178:
-			goto stCase178
+			goto st_case_178
 		case 179:
-			goto stCase179
+			goto st_case_179
 		case 180:
-			goto stCase180
+			goto st_case_180
 		case 181:
-			goto stCase181
+			goto st_case_181
 		case 182:
-			goto stCase182
+			goto st_case_182
 		case 183:
-			goto stCase183
+			goto st_case_183
 		case 184:
-			goto stCase184
+			goto st_case_184
 		case 185:
-			goto stCase185
+			goto st_case_185
 		case 186:
-			goto stCase186
+			goto st_case_186
 		case 187:
-			goto stCase187
+			goto st_case_187
 		case 188:
-			goto stCase188
+			goto st_case_188
 		case 189:
-			goto stCase189
+			goto st_case_189
 		case 190:
-			goto stCase190
+			goto st_case_190
 		case 191:
-			goto stCase191
+			goto st_case_191
 		case 192:
-			goto stCase192
+			goto st_case_192
 		case 193:
-			goto stCase193
+			goto st_case_193
 		case 194:
-			goto stCase194
+			goto st_case_194
 		case 195:
-			goto stCase195
+			goto st_case_195
 		case 196:
-			goto stCase196
+			goto st_case_196
 		case 197:
-			goto stCase197
+			goto st_case_197
 		case 198:
-			goto stCase198
+			goto st_case_198
 		case 199:
-			goto stCase199
+			goto st_case_199
 		case 200:
-			goto stCase200
+			goto st_case_200
 		case 201:
-			goto stCase201
+			goto st_case_201
 		case 202:
-			goto stCase202
+			goto st_case_202
 		case 203:
-			goto stCase203
+			goto st_case_203
 		case 204:
-			goto stCase204
+			goto st_case_204
 		case 205:
-			goto stCase205
+			goto st_case_205
 		case 206:
-			goto stCase206
+			goto st_case_206
 		case 207:
-			goto stCase207
+			goto st_case_207
 		case 208:
-			goto stCase208
+			goto st_case_208
 		case 209:
-			goto stCase209
+			goto st_case_209
 		case 210:
-			goto stCase210
+			goto st_case_210
 		case 211:
-			goto stCase211
+			goto st_case_211
 		case 212:
-			goto stCase212
+			goto st_case_212
 		case 213:
-			goto stCase213
+			goto st_case_213
 		case 214:
-			goto stCase214
+			goto st_case_214
 		case 215:
-			goto stCase215
+			goto st_case_215
 		case 216:
-			goto stCase216
+			goto st_case_216
 		case 217:
-			goto stCase217
+			goto st_case_217
 		case 218:
-			goto stCase218
+			goto st_case_218
 		case 219:
-			goto stCase219
+			goto st_case_219
 		case 220:
-			goto stCase220
+			goto st_case_220
 		case 221:
-			goto stCase221
+			goto st_case_221
 		case 222:
-			goto stCase222
+			goto st_case_222
 		case 223:
-			goto stCase223
+			goto st_case_223
 		case 224:
-			goto stCase224
+			goto st_case_224
 		case 225:
-			goto stCase225
+			goto st_case_225
 		case 226:
-			goto stCase226
+			goto st_case_226
 		case 227:
-			goto stCase227
+			goto st_case_227
 		case 228:
-			goto stCase228
+			goto st_case_228
 		case 229:
-			goto stCase229
+			goto st_case_229
 		case 230:
-			goto stCase230
+			goto st_case_230
 		case 231:
-			goto stCase231
+			goto st_case_231
 		case 232:
-			goto stCase232
+			goto st_case_232
 		case 233:
-			goto stCase233
+			goto st_case_233
 		case 234:
-			goto stCase234
+			goto st_case_234
 		case 235:
-			goto stCase235
+			goto st_case_235
 		case 236:
-			goto stCase236
+			goto st_case_236
 		case 237:
-			goto stCase237
+			goto st_case_237
 		case 238:
-			goto stCase238
+			goto st_case_238
 		case 239:
-			goto stCase239
+			goto st_case_239
 		case 240:
-			goto stCase240
+			goto st_case_240
 		case 241:
-			goto stCase241
+			goto st_case_241
 		case 242:
-			goto stCase242
+			goto st_case_242
 		case 243:
-			goto stCase243
+			goto st_case_243
 		case 244:
-			goto stCase244
+			goto st_case_244
 		case 245:
-			goto stCase245
+			goto st_case_245
 		case 246:
-			goto stCase246
+			goto st_case_246
 		case 247:
-			goto stCase247
+			goto st_case_247
 		case 248:
-			goto stCase248
+			goto st_case_248
 		case 249:
-			goto stCase249
+			goto st_case_249
 		case 250:
-			goto stCase250
+			goto st_case_250
 		case 251:
-			goto stCase251
+			goto st_case_251
 		case 252:
-			goto stCase252
+			goto st_case_252
 		case 253:
-			goto stCase253
+			goto st_case_253
 		case 254:
-			goto stCase254
+			goto st_case_254
 		case 255:
-			goto stCase255
+			goto st_case_255
 		case 256:
-			goto stCase256
+			goto st_case_256
 		case 257:
-			goto stCase257
+			goto st_case_257
 		case 258:
-			goto stCase258
+			goto st_case_258
 		case 259:
-			goto stCase259
+			goto st_case_259
 		case 260:
-			goto stCase260
+			goto st_case_260
 		case 261:
-			goto stCase261
+			goto st_case_261
 		case 262:
-			goto stCase262
+			goto st_case_262
 		case 263:
-			goto stCase263
+			goto st_case_263
 		case 264:
-			goto stCase264
+			goto st_case_264
 		case 265:
-			goto stCase265
+			goto st_case_265
 		case 266:
-			goto stCase266
+			goto st_case_266
 		case 267:
-			goto stCase267
+			goto st_case_267
 		case 268:
-			goto stCase268
+			goto st_case_268
 		case 269:
-			goto stCase269
+			goto st_case_269
 		case 270:
-			goto stCase270
+			goto st_case_270
 		case 271:
-			goto stCase271
+			goto st_case_271
 		case 272:
-			goto stCase272
+			goto st_case_272
 		case 273:
-			goto stCase273
+			goto st_case_273
 		case 274:
-			goto stCase274
+			goto st_case_274
 		case 275:
-			goto stCase275
+			goto st_case_275
 		case 276:
-			goto stCase276
+			goto st_case_276
 		case 277:
-			goto stCase277
+			goto st_case_277
 		case 278:
-			goto stCase278
+			goto st_case_278
 		case 279:
-			goto stCase279
+			goto st_case_279
 		case 280:
-			goto stCase280
+			goto st_case_280
 		case 281:
-			goto stCase281
+			goto st_case_281
 		case 282:
-			goto stCase282
+			goto st_case_282
 		case 283:
-			goto stCase283
+			goto st_case_283
 		case 284:
-			goto stCase284
+			goto st_case_284
 		case 285:
-			goto stCase285
+			goto st_case_285
 		case 286:
-			goto stCase286
+			goto st_case_286
 		case 287:
-			goto stCase287
+			goto st_case_287
 		case 288:
-			goto stCase288
+			goto st_case_288
 		case 289:
-			goto stCase289
+			goto st_case_289
 		case 290:
-			goto stCase290
+			goto st_case_290
 		case 291:
-			goto stCase291
+			goto st_case_291
 		case 292:
-			goto stCase292
+			goto st_case_292
 		case 293:
-			goto stCase293
+			goto st_case_293
 		case 294:
-			goto stCase294
+			goto st_case_294
 		case 295:
-			goto stCase295
+			goto st_case_295
 		case 296:
-			goto stCase296
+			goto st_case_296
 		case 297:
-			goto stCase297
+			goto st_case_297
 		case 298:
-			goto stCase298
+			goto st_case_298
 		case 299:
-			goto stCase299
+			goto st_case_299
 		case 300:
-			goto stCase300
+			goto st_case_300
 		case 301:
-			goto stCase301
+			goto st_case_301
 		case 302:
-			goto stCase302
+			goto st_case_302
 		case 303:
-			goto stCase303
+			goto st_case_303
 		case 304:
-			goto stCase304
+			goto st_case_304
 		case 305:
-			goto stCase305
+			goto st_case_305
 		case 306:
-			goto stCase306
+			goto st_case_306
 		case 307:
-			goto stCase307
+			goto st_case_307
 		case 308:
-			goto stCase308
+			goto st_case_308
 		case 309:
-			goto stCase309
+			goto st_case_309
 		case 310:
-			goto stCase310
+			goto st_case_310
 		case 311:
-			goto stCase311
+			goto st_case_311
 		case 312:
-			goto stCase312
+			goto st_case_312
 		case 313:
-			goto stCase313
+			goto st_case_313
 		case 314:
-			goto stCase314
+			goto st_case_314
 		case 315:
-			goto stCase315
+			goto st_case_315
 		case 316:
-			goto stCase316
+			goto st_case_316
 		case 317:
-			goto stCase317
+			goto st_case_317
 		case 318:
-			goto stCase318
+			goto st_case_318
 		case 319:
-			goto stCase319
+			goto st_case_319
 		case 320:
-			goto stCase320
+			goto st_case_320
 		case 321:
-			goto stCase321
+			goto st_case_321
 		case 322:
-			goto stCase322
+			goto st_case_322
 		case 323:
-			goto stCase323
+			goto st_case_323
 		case 324:
-			goto stCase324
+			goto st_case_324
 		case 325:
-			goto stCase325
+			goto st_case_325
 		case 326:
-			goto stCase326
+			goto st_case_326
 		case 327:
-			goto stCase327
+			goto st_case_327
 		case 328:
-			goto stCase328
+			goto st_case_328
 		case 329:
-			goto stCase329
+			goto st_case_329
 		case 330:
-			goto stCase330
+			goto st_case_330
 		case 331:
-			goto stCase331
+			goto st_case_331
 		case 332:
-			goto stCase332
+			goto st_case_332
 		case 333:
-			goto stCase333
+			goto st_case_333
 		case 334:
-			goto stCase334
+			goto st_case_334
 		case 335:
-			goto stCase335
+			goto st_case_335
 		case 336:
-			goto stCase336
+			goto st_case_336
 		case 337:
-			goto stCase337
+			goto st_case_337
 		case 338:
-			goto stCase338
+			goto st_case_338
 		case 339:
-			goto stCase339
+			goto st_case_339
 		case 340:
-			goto stCase340
+			goto st_case_340
 		case 341:
-			goto stCase341
+			goto st_case_341
 		case 342:
-			goto stCase342
+			goto st_case_342
 		case 343:
-			goto stCase343
+			goto st_case_343
 		case 344:
-			goto stCase344
+			goto st_case_344
 		case 345:
-			goto stCase345
+			goto st_case_345
 		case 346:
-			goto stCase346
+			goto st_case_346
 		case 347:
-			goto stCase347
+			goto st_case_347
 		case 348:
-			goto stCase348
+			goto st_case_348
 		case 349:
-			goto stCase349
+			goto st_case_349
 		case 350:
-			goto stCase350
+			goto st_case_350
 		case 351:
-			goto stCase351
+			goto st_case_351
 		case 352:
-			goto stCase352
+			goto st_case_352
 		case 353:
-			goto stCase353
+			goto st_case_353
 		case 354:
-			goto stCase354
+			goto st_case_354
 		case 355:
-			goto stCase355
+			goto st_case_355
 		case 356:
-			goto stCase356
+			goto st_case_356
 		case 357:
-			goto stCase357
+			goto st_case_357
 		case 358:
-			goto stCase358
+			goto st_case_358
 		case 359:
-			goto stCase359
+			goto st_case_359
 		case 360:
-			goto stCase360
+			goto st_case_360
 		case 361:
-			goto stCase361
+			goto st_case_361
 		case 362:
-			goto stCase362
+			goto st_case_362
 		case 363:
-			goto stCase363
+			goto st_case_363
 		case 364:
-			goto stCase364
+			goto st_case_364
 		case 365:
-			goto stCase365
+			goto st_case_365
 		case 366:
-			goto stCase366
+			goto st_case_366
 		case 367:
-			goto stCase367
+			goto st_case_367
 		case 368:
-			goto stCase368
+			goto st_case_368
 		case 369:
-			goto stCase369
+			goto st_case_369
 		case 370:
-			goto stCase370
+			goto st_case_370
 		case 371:
-			goto stCase371
+			goto st_case_371
 		case 372:
-			goto stCase372
+			goto st_case_372
 		case 373:
-			goto stCase373
+			goto st_case_373
 		case 374:
-			goto stCase374
+			goto st_case_374
 		case 375:
-			goto stCase375
+			goto st_case_375
 		case 376:
-			goto stCase376
+			goto st_case_376
 		case 377:
-			goto stCase377
+			goto st_case_377
 		case 378:
-			goto stCase378
+			goto st_case_378
 		case 379:
-			goto stCase379
+			goto st_case_379
 		case 380:
-			goto stCase380
+			goto st_case_380
 		case 381:
-			goto stCase381
+			goto st_case_381
 		case 382:
-			goto stCase382
+			goto st_case_382
 		case 383:
-			goto stCase383
+			goto st_case_383
 		case 384:
-			goto stCase384
+			goto st_case_384
 		case 385:
-			goto stCase385
+			goto st_case_385
 		case 386:
-			goto stCase386
+			goto st_case_386
 		case 387:
-			goto stCase387
+			goto st_case_387
 		case 388:
-			goto stCase388
+			goto st_case_388
 		case 389:
-			goto stCase389
+			goto st_case_389
 		case 390:
-			goto stCase390
+			goto st_case_390
 		case 391:
-			goto stCase391
+			goto st_case_391
 		case 392:
-			goto stCase392
+			goto st_case_392
 		case 393:
-			goto stCase393
+			goto st_case_393
 		case 394:
-			goto stCase394
+			goto st_case_394
 		case 395:
-			goto stCase395
+			goto st_case_395
 		case 396:
-			goto stCase396
+			goto st_case_396
 		case 397:
-			goto stCase397
+			goto st_case_397
 		case 398:
-			goto stCase398
+			goto st_case_398
 		case 399:
-			goto stCase399
+			goto st_case_399
 		case 400:
-			goto stCase400
+			goto st_case_400
 		case 401:
-			goto stCase401
+			goto st_case_401
 		case 402:
-			goto stCase402
+			goto st_case_402
 		case 403:
-			goto stCase403
+			goto st_case_403
 		case 404:
-			goto stCase404
+			goto st_case_404
 		case 405:
-			goto stCase405
+			goto st_case_405
 		case 406:
-			goto stCase406
+			goto st_case_406
 		case 407:
-			goto stCase407
+			goto st_case_407
 		case 408:
-			goto stCase408
+			goto st_case_408
 		case 409:
-			goto stCase409
+			goto st_case_409
 		case 410:
-			goto stCase410
+			goto st_case_410
 		case 411:
-			goto stCase411
+			goto st_case_411
 		case 412:
-			goto stCase412
+			goto st_case_412
 		case 413:
-			goto stCase413
+			goto st_case_413
 		case 414:
-			goto stCase414
+			goto st_case_414
 		case 415:
-			goto stCase415
+			goto st_case_415
 		case 416:
-			goto stCase416
+			goto st_case_416
 		case 417:
-			goto stCase417
+			goto st_case_417
 		case 418:
-			goto stCase418
+			goto st_case_418
 		case 419:
-			goto stCase419
+			goto st_case_419
 		case 420:
-			goto stCase420
+			goto st_case_420
 		case 421:
-			goto stCase421
+			goto st_case_421
 		case 422:
-			goto stCase422
+			goto st_case_422
 		case 423:
-			goto stCase423
+			goto st_case_423
 		case 424:
-			goto stCase424
+			goto st_case_424
 		case 425:
-			goto stCase425
+			goto st_case_425
 		case 426:
-			goto stCase426
+			goto st_case_426
 		case 427:
-			goto stCase427
+			goto st_case_427
 		case 428:
-			goto stCase428
+			goto st_case_428
 		case 429:
-			goto stCase429
+			goto st_case_429
 		case 430:
-			goto stCase430
+			goto st_case_430
 		case 431:
-			goto stCase431
+			goto st_case_431
 		case 432:
-			goto stCase432
+			goto st_case_432
 		case 433:
-			goto stCase433
+			goto st_case_433
 		case 434:
-			goto stCase434
+			goto st_case_434
 		case 435:
-			goto stCase435
+			goto st_case_435
 		case 436:
-			goto stCase436
+			goto st_case_436
 		case 437:
-			goto stCase437
+			goto st_case_437
 		case 438:
-			goto stCase438
+			goto st_case_438
 		case 439:
-			goto stCase439
+			goto st_case_439
 		case 440:
-			goto stCase440
+			goto st_case_440
 		case 441:
-			goto stCase441
+			goto st_case_441
 		case 442:
-			goto stCase442
+			goto st_case_442
 		case 443:
-			goto stCase443
+			goto st_case_443
 		case 444:
-			goto stCase444
+			goto st_case_444
 		case 445:
-			goto stCase445
+			goto st_case_445
 		case 446:
-			goto stCase446
+			goto st_case_446
 		case 447:
-			goto stCase447
+			goto st_case_447
 		case 448:
-			goto stCase448
+			goto st_case_448
 		case 449:
-			goto stCase449
+			goto st_case_449
 		case 450:
-			goto stCase450
+			goto st_case_450
 		case 451:
-			goto stCase451
+			goto st_case_451
 		case 452:
-			goto stCase452
+			goto st_case_452
 		case 453:
-			goto stCase453
+			goto st_case_453
 		case 454:
-			goto stCase454
+			goto st_case_454
 		case 455:
-			goto stCase455
+			goto st_case_455
 		case 456:
-			goto stCase456
+			goto st_case_456
 		case 457:
-			goto stCase457
+			goto st_case_457
 		case 458:
-			goto stCase458
+			goto st_case_458
 		case 459:
-			goto stCase459
+			goto st_case_459
 		case 460:
-			goto stCase460
+			goto st_case_460
 		case 461:
-			goto stCase461
+			goto st_case_461
 		case 462:
-			goto stCase462
+			goto st_case_462
 		case 463:
-			goto stCase463
+			goto st_case_463
 		case 464:
-			goto stCase464
+			goto st_case_464
 		case 465:
-			goto stCase465
+			goto st_case_465
 		case 466:
-			goto stCase466
+			goto st_case_466
 		case 467:
-			goto stCase467
+			goto st_case_467
 		case 468:
-			goto stCase468
+			goto st_case_468
 		case 469:
-			goto stCase469
+			goto st_case_469
 		case 470:
-			goto stCase470
+			goto st_case_470
 		case 471:
-			goto stCase471
+			goto st_case_471
 		case 472:
-			goto stCase472
+			goto st_case_472
 		case 473:
-			goto stCase473
+			goto st_case_473
 		case 474:
-			goto stCase474
+			goto st_case_474
 		case 475:
-			goto stCase475
+			goto st_case_475
 		case 476:
-			goto stCase476
+			goto st_case_476
 		case 477:
-			goto stCase477
+			goto st_case_477
 		case 478:
-			goto stCase478
+			goto st_case_478
 		case 479:
-			goto stCase479
+			goto st_case_479
 		case 480:
-			goto stCase480
+			goto st_case_480
 		case 481:
-			goto stCase481
+			goto st_case_481
 		case 482:
-			goto stCase482
+			goto st_case_482
 		case 483:
-			goto stCase483
+			goto st_case_483
 		case 484:
-			goto stCase484
+			goto st_case_484
 		case 485:
-			goto stCase485
+			goto st_case_485
 		case 486:
-			goto stCase486
+			goto st_case_486
 		case 487:
-			goto stCase487
+			goto st_case_487
 		case 488:
-			goto stCase488
+			goto st_case_488
 		case 489:
-			goto stCase489
+			goto st_case_489
 		case 490:
-			goto stCase490
+			goto st_case_490
 		case 491:
-			goto stCase491
+			goto st_case_491
 		case 492:
-			goto stCase492
+			goto st_case_492
 		case 493:
-			goto stCase493
+			goto st_case_493
 		case 494:
-			goto stCase494
+			goto st_case_494
 		case 495:
-			goto stCase495
+			goto st_case_495
 		case 496:
-			goto stCase496
+			goto st_case_496
 		case 497:
-			goto stCase497
+			goto st_case_497
 		case 498:
-			goto stCase498
+			goto st_case_498
 		case 499:
-			goto stCase499
+			goto st_case_499
 		case 500:
-			goto stCase500
+			goto st_case_500
 		case 501:
-			goto stCase501
+			goto st_case_501
 		case 502:
-			goto stCase502
+			goto st_case_502
 		case 503:
-			goto stCase503
+			goto st_case_503
 		case 504:
-			goto stCase504
+			goto st_case_504
 		case 505:
-			goto stCase505
+			goto st_case_505
 		case 506:
-			goto stCase506
+			goto st_case_506
 		case 507:
-			goto stCase507
+			goto st_case_507
 		case 508:
-			goto stCase508
+			goto st_case_508
 		case 509:
-			goto stCase509
+			goto st_case_509
 		case 510:
-			goto stCase510
+			goto st_case_510
 		case 511:
-			goto stCase511
+			goto st_case_511
 		case 512:
-			goto stCase512
+			goto st_case_512
 		case 513:
-			goto stCase513
+			goto st_case_513
 		case 514:
-			goto stCase514
+			goto st_case_514
 		case 515:
-			goto stCase515
+			goto st_case_515
 		case 516:
-			goto stCase516
+			goto st_case_516
 		case 517:
-			goto stCase517
+			goto st_case_517
 		case 518:
-			goto stCase518
+			goto st_case_518
 		case 519:
-			goto stCase519
+			goto st_case_519
 		case 520:
-			goto stCase520
+			goto st_case_520
 		case 521:
-			goto stCase521
+			goto st_case_521
 		case 522:
-			goto stCase522
+			goto st_case_522
 		case 523:
-			goto stCase523
+			goto st_case_523
 		case 524:
-			goto stCase524
+			goto st_case_524
 		case 525:
-			goto stCase525
+			goto st_case_525
 		case 526:
-			goto stCase526
+			goto st_case_526
 		case 527:
-			goto stCase527
+			goto st_case_527
 		case 528:
-			goto stCase528
+			goto st_case_528
 		case 529:
-			goto stCase529
+			goto st_case_529
 		case 530:
-			goto stCase530
+			goto st_case_530
 		case 531:
-			goto stCase531
+			goto st_case_531
 		case 532:
-			goto stCase532
+			goto st_case_532
 		case 533:
-			goto stCase533
+			goto st_case_533
 		case 534:
-			goto stCase534
+			goto st_case_534
 		case 535:
-			goto stCase535
+			goto st_case_535
 		case 536:
-			goto stCase536
+			goto st_case_536
 		case 537:
-			goto stCase537
+			goto st_case_537
 		case 538:
-			goto stCase538
+			goto st_case_538
 		case 539:
-			goto stCase539
+			goto st_case_539
 		case 540:
-			goto stCase540
+			goto st_case_540
 		case 541:
-			goto stCase541
+			goto st_case_541
 		case 542:
-			goto stCase542
+			goto st_case_542
 		case 543:
-			goto stCase543
+			goto st_case_543
 		case 544:
-			goto stCase544
+			goto st_case_544
 		case 545:
-			goto stCase545
+			goto st_case_545
 		case 546:
-			goto stCase546
+			goto st_case_546
 		case 547:
-			goto stCase547
+			goto st_case_547
 		case 548:
-			goto stCase548
+			goto st_case_548
 		case 549:
-			goto stCase549
+			goto st_case_549
 		case 550:
-			goto stCase550
+			goto st_case_550
 		case 551:
-			goto stCase551
+			goto st_case_551
 		case 552:
-			goto stCase552
+			goto st_case_552
 		case 553:
-			goto stCase553
+			goto st_case_553
 		case 554:
-			goto stCase554
+			goto st_case_554
 		case 555:
-			goto stCase555
+			goto st_case_555
 		case 556:
-			goto stCase556
+			goto st_case_556
 		case 557:
-			goto stCase557
+			goto st_case_557
 		case 558:
-			goto stCase558
+			goto st_case_558
 		case 559:
-			goto stCase559
+			goto st_case_559
 		case 560:
-			goto stCase560
+			goto st_case_560
 		case 561:
-			goto stCase561
+			goto st_case_561
 		case 562:
-			goto stCase562
+			goto st_case_562
 		case 563:
-			goto stCase563
+			goto st_case_563
 		case 564:
-			goto stCase564
+			goto st_case_564
 		case 565:
-			goto stCase565
+			goto st_case_565
 		case 566:
-			goto stCase566
+			goto st_case_566
 		case 567:
-			goto stCase567
+			goto st_case_567
 		case 568:
-			goto stCase568
+			goto st_case_568
 		case 569:
-			goto stCase569
+			goto st_case_569
 		case 570:
-			goto stCase570
+			goto st_case_570
 		case 571:
-			goto stCase571
+			goto st_case_571
 		case 572:
-			goto stCase572
+			goto st_case_572
 		case 573:
-			goto stCase573
+			goto st_case_573
 		case 574:
-			goto stCase574
+			goto st_case_574
 		case 575:
-			goto stCase575
+			goto st_case_575
 		case 576:
-			goto stCase576
+			goto st_case_576
 		case 577:
-			goto stCase577
+			goto st_case_577
 		case 578:
-			goto stCase578
+			goto st_case_578
 		case 579:
-			goto stCase579
+			goto st_case_579
 		case 580:
-			goto stCase580
+			goto st_case_580
 		case 581:
-			goto stCase581
+			goto st_case_581
 		case 582:
-			goto stCase582
+			goto st_case_582
 		case 583:
-			goto stCase583
+			goto st_case_583
 		case 584:
-			goto stCase584
+			goto st_case_584
 		case 585:
-			goto stCase585
+			goto st_case_585
 		case 586:
-			goto stCase586
+			goto st_case_586
 		case 587:
-			goto stCase587
+			goto st_case_587
 		case 588:
-			goto stCase588
+			goto st_case_588
 		case 589:
-			goto stCase589
+			goto st_case_589
 		case 590:
-			goto stCase590
+			goto st_case_590
 		case 591:
-			goto stCase591
+			goto st_case_591
 		case 592:
-			goto stCase592
+			goto st_case_592
 		case 593:
-			goto stCase593
+			goto st_case_593
 		case 594:
-			goto stCase594
+			goto st_case_594
 		case 595:
-			goto stCase595
+			goto st_case_595
 		case 596:
-			goto stCase596
+			goto st_case_596
 		case 597:
-			goto stCase597
+			goto st_case_597
 		case 598:
-			goto stCase598
+			goto st_case_598
 		case 599:
-			goto stCase599
+			goto st_case_599
 		case 600:
-			goto stCase600
+			goto st_case_600
 		case 601:
-			goto stCase601
+			goto st_case_601
 		case 602:
-			goto stCase602
+			goto st_case_602
 		case 607:
-			goto stCase607
+			goto st_case_607
 		}
-		goto stOut
-	stCase1:
+		goto st_out
+	st_case_1:
 		if (m.data)[(m.p)] == 60 {
 			goto st2
 		}
 		goto tr0
 	tr0:
+//line rfc5424/machine.go.rl:157
 
 		m.err = fmt.Errorf(ErrPri+ColumnPositionTemplate, m.p)
 		(m.p)--
@@ -1358,6 +1379,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 
 		goto st0
 	tr2:
+//line rfc5424/machine.go.rl:151
 
 		m.err = fmt.Errorf(ErrPrival+ColumnPositionTemplate, m.p)
 		(m.p)--
@@ -1366,12 +1388,16 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			goto st607
 		}
 
+//line rfc5424/machine.go.rl:157
+
 		m.err = fmt.Errorf(ErrPri+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
 			goto st607
 		}
+
+//line rfc5424/machine.go.rl:242
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
@@ -1382,6 +1408,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 
 		goto st0
 	tr7:
+//line rfc5424/machine.go.rl:163
 
 		m.err = fmt.Errorf(ErrVersion+ColumnPositionTemplate, m.p)
 		(m.p)--
@@ -1389,6 +1416,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		{
 			goto st607
 		}
+
+//line rfc5424/machine.go.rl:242
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
@@ -1399,6 +1428,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 
 		goto st0
 	tr9:
+//line rfc5424/machine.go.rl:242
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
@@ -1409,6 +1439,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 
 		goto st0
 	tr12:
+//line rfc5424/machine.go.rl:169
 
 		m.err = fmt.Errorf(ErrTimestamp+ColumnPositionTemplate, m.p)
 		(m.p)--
@@ -1416,6 +1447,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		{
 			goto st607
 		}
+
+//line rfc5424/machine.go.rl:242
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
@@ -1426,6 +1459,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 
 		goto st0
 	tr16:
+//line rfc5424/machine.go.rl:175
 
 		m.err = fmt.Errorf(ErrHostname+ColumnPositionTemplate, m.p)
 		(m.p)--
@@ -1433,6 +1467,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		{
 			goto st607
 		}
+
+//line rfc5424/machine.go.rl:242
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
@@ -1443,6 +1479,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 
 		goto st0
 	tr20:
+//line rfc5424/machine.go.rl:181
 
 		m.err = fmt.Errorf(ErrAppname+ColumnPositionTemplate, m.p)
 		(m.p)--
@@ -1450,6 +1487,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		{
 			goto st607
 		}
+
+//line rfc5424/machine.go.rl:242
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
@@ -1460,6 +1499,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 
 		goto st0
 	tr24:
+//line rfc5424/machine.go.rl:187
 
 		m.err = fmt.Errorf(ErrProcID+ColumnPositionTemplate, m.p)
 		(m.p)--
@@ -1467,6 +1507,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		{
 			goto st607
 		}
+
+//line rfc5424/machine.go.rl:242
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
@@ -1477,6 +1519,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 
 		goto st0
 	tr28:
+//line rfc5424/machine.go.rl:193
 
 		m.err = fmt.Errorf(ErrMsgID+ColumnPositionTemplate, m.p)
 		(m.p)--
@@ -1484,6 +1527,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		{
 			goto st607
 		}
+
+//line rfc5424/machine.go.rl:242
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
@@ -1494,6 +1539,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 
 		goto st0
 	tr30:
+//line rfc5424/machine.go.rl:193
 
 		m.err = fmt.Errorf(ErrMsgID+ColumnPositionTemplate, m.p)
 		(m.p)--
@@ -1504,6 +1550,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 
 		goto st0
 	tr33:
+//line rfc5424/machine.go.rl:199
 
 		m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 		(m.p)--
@@ -1514,6 +1561,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 
 		goto st0
 	tr36:
+//line rfc5424/machine.go.rl:224
 
 		// If error encountered within the message rule ...
 		if m.msgat > 0 {
@@ -1528,6 +1576,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			goto st607
 		}
 
+//line rfc5424/machine.go.rl:242
+
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
 
@@ -1537,6 +1587,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 
 		goto st0
 	tr40:
+//line rfc5424/machine.go.rl:205
 
 		delete(output.structuredData, m.currentelem)
 		if len(output.structuredData) == 0 {
@@ -1549,6 +1600,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			goto st607
 		}
 
+//line rfc5424/machine.go.rl:199
+
 		m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 		(m.p)--
 
@@ -1558,6 +1611,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 
 		goto st0
 	tr42:
+//line rfc5424/machine.go.rl:106
 
 		if _, ok := output.structuredData[string(m.text())]; ok {
 			// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
@@ -1574,6 +1628,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			m.currentelem = id
 		}
 
+//line rfc5424/machine.go.rl:205
+
 		delete(output.structuredData, m.currentelem)
 		if len(output.structuredData) == 0 {
 			output.hasElements = false
@@ -1585,6 +1641,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			goto st607
 		}
 
+//line rfc5424/machine.go.rl:199
+
 		m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 		(m.p)--
 
@@ -1594,6 +1652,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 
 		goto st0
 	tr46:
+//line rfc5424/machine.go.rl:215
 
 		if len(output.structuredData) > 0 {
 			delete(output.structuredData[m.currentelem], m.currentparam)
@@ -1604,6 +1663,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		{
 			goto st607
 		}
+
+//line rfc5424/machine.go.rl:199
 
 		m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 		(m.p)--
@@ -1614,6 +1675,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 
 		goto st0
 	tr84:
+//line rfc5424/machine.go.rl:236
 
 		m.err = fmt.Errorf(ErrEscape+ColumnPositionTemplate, m.p)
 		(m.p)--
@@ -1621,6 +1683,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		{
 			goto st607
 		}
+
+//line rfc5424/machine.go.rl:215
 
 		if len(output.structuredData) > 0 {
 			delete(output.structuredData[m.currentelem], m.currentparam)
@@ -1632,6 +1696,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			goto st607
 		}
 
+//line rfc5424/machine.go.rl:199
+
 		m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 		(m.p)--
 
@@ -1641,6 +1707,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 
 		goto st0
 	tr619:
+//line rfc5424/machine.go.rl:75
 
 		if t, e := time.Parse(RFC3339MICRO, string(m.text())); e != nil {
 			m.err = fmt.Errorf("%s [col %d]", e, m.p)
@@ -1654,6 +1721,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			output.timestampSet = true
 		}
 
+//line rfc5424/machine.go.rl:242
+
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
 
@@ -1663,6 +1732,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 
 		goto st0
 	tr645:
+//line rfc5424/machine.go.rl:199
 
 		m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 		(m.p)--
@@ -1670,6 +1740,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		{
 			goto st607
 		}
+
+//line rfc5424/machine.go.rl:242
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
@@ -1679,15 +1751,16 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 
 		goto st0
-	stCase0:
+//line rfc5424/machine.go:1692
+	st_case_0:
 	st0:
 		m.cs = 0
 		goto _out
 	st2:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof2
+			goto _test_eof2
 		}
-	stCase2:
+	st_case_2:
 		switch (m.data)[(m.p)] {
 		case 48:
 			goto tr3
@@ -1699,45 +1772,51 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 		goto tr2
 	tr3:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
 
 		goto st3
 	st3:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof3
+			goto _test_eof3
 		}
-	stCase3:
+	st_case_3:
+//line rfc5424/machine.go.rl:66
 
 		output.priority = uint8(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
 		output.prioritySet = true
 
+//line rfc5424/machine.go:1728
 		if (m.data)[(m.p)] == 62 {
 			goto st4
 		}
 		goto tr2
 	st4:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof4
+			goto _test_eof4
 		}
-	stCase4:
+	st_case_4:
 		if 49 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 57 {
 			goto tr8
 		}
 		goto tr7
 	tr8:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
 
 		goto st5
 	st5:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof5
+			goto _test_eof5
 		}
-	stCase5:
+	st_case_5:
+//line rfc5424/machine.go.rl:71
 
 		output.version = uint16(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
 
+//line rfc5424/machine.go:1757
 		if (m.data)[(m.p)] == 32 {
 			goto st6
 		}
@@ -1747,9 +1826,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr9
 	st6:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof6
+			goto _test_eof6
 		}
-	stCase6:
+	st_case_6:
 		if (m.data)[(m.p)] == 45 {
 			goto st7
 		}
@@ -1759,14 +1838,15 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr12
 	st7:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof7
+			goto _test_eof7
 		}
-	stCase7:
+	st_case_7:
 		if (m.data)[(m.p)] == 32 {
 			goto st8
 		}
 		goto tr9
 	tr620:
+//line rfc5424/machine.go.rl:75
 
 		if t, e := time.Parse(RFC3339MICRO, string(m.text())); e != nil {
 			m.err = fmt.Errorf("%s [col %d]", e, m.p)
@@ -1783,23 +1863,26 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto st8
 	st8:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof8
+			goto _test_eof8
 		}
-	stCase8:
+	st_case_8:
+//line rfc5424/machine.go:1805
 		if 33 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 126 {
 			goto tr17
 		}
 		goto tr16
 	tr17:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
 
 		goto st9
 	st9:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof9
+			goto _test_eof9
 		}
-	stCase9:
+	st_case_9:
+//line rfc5424/machine.go:1821
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -1808,29 +1891,33 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 		goto tr16
 	tr18:
+//line rfc5424/machine.go.rl:86
 
 		output.hostname = string(m.text())
 
 		goto st10
 	st10:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof10
+			goto _test_eof10
 		}
-	stCase10:
+	st_case_10:
+//line rfc5424/machine.go:1840
 		if 33 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 126 {
 			goto tr21
 		}
 		goto tr20
 	tr21:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
 
 		goto st11
 	st11:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof11
+			goto _test_eof11
 		}
-	stCase11:
+	st_case_11:
+//line rfc5424/machine.go:1856
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -1839,29 +1926,33 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 		goto tr20
 	tr22:
+//line rfc5424/machine.go.rl:90
 
 		output.appname = string(m.text())
 
 		goto st12
 	st12:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof12
+			goto _test_eof12
 		}
-	stCase12:
+	st_case_12:
+//line rfc5424/machine.go:1875
 		if 33 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 126 {
 			goto tr25
 		}
 		goto tr24
 	tr25:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
 
 		goto st13
 	st13:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof13
+			goto _test_eof13
 		}
-	stCase13:
+	st_case_13:
+//line rfc5424/machine.go:1891
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -1870,29 +1961,33 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 		goto tr24
 	tr26:
+//line rfc5424/machine.go.rl:94
 
 		output.procID = string(m.text())
 
 		goto st14
 	st14:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof14
+			goto _test_eof14
 		}
-	stCase14:
+	st_case_14:
+//line rfc5424/machine.go:1910
 		if 33 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 126 {
 			goto tr29
 		}
 		goto tr28
 	tr29:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
 
 		goto st15
 	st15:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof15
+			goto _test_eof15
 		}
-	stCase15:
+	st_case_15:
+//line rfc5424/machine.go:1926
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -1901,15 +1996,17 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 		goto tr30
 	tr31:
+//line rfc5424/machine.go.rl:98
 
 		output.msgID = string(m.text())
 
 		goto st16
 	st16:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof16
+			goto _test_eof16
 		}
-	stCase16:
+	st_case_16:
+//line rfc5424/machine.go:1945
 		switch (m.data)[(m.p)] {
 		case 45:
 			goto st603
@@ -1919,18 +2016,18 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr33
 	st603:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof603
+			goto _test_eof603
 		}
-	stCase603:
+	st_case_603:
 		if (m.data)[(m.p)] == 32 {
 			goto st604
 		}
 		goto tr9
 	st604:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof604
+			goto _test_eof604
 		}
-	stCase604:
+	st_case_604:
 		switch (m.data)[(m.p)] {
 		case 224:
 			goto tr634
@@ -1965,17 +2062,21 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 		goto tr632
 	tr632:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
+
+//line rfc5424/machine.go.rl:62
 
 		m.msgat = m.p
 
 		goto st605
 	st605:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof605
+			goto _test_eof605
 		}
-	stCase605:
+	st_case_605:
+//line rfc5424/machine.go:2015
 		switch (m.data)[(m.p)] {
 		case 224:
 			goto st18
@@ -2010,127 +2111,157 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 		goto st605
 	tr633:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
+
+//line rfc5424/machine.go.rl:62
 
 		m.msgat = m.p
 
 		goto st17
 	st17:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof17
+			goto _test_eof17
 		}
-	stCase17:
+	st_case_17:
+//line rfc5424/machine.go:2064
 		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
 			goto st605
 		}
 		goto tr36
 	tr634:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
+
+//line rfc5424/machine.go.rl:62
 
 		m.msgat = m.p
 
 		goto st18
 	st18:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof18
+			goto _test_eof18
 		}
-	stCase18:
+	st_case_18:
+//line rfc5424/machine.go:2084
 		if 160 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
 			goto st17
 		}
 		goto tr36
 	tr635:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
+
+//line rfc5424/machine.go.rl:62
 
 		m.msgat = m.p
 
 		goto st19
 	st19:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof19
+			goto _test_eof19
 		}
-	stCase19:
+	st_case_19:
+//line rfc5424/machine.go:2104
 		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
 			goto st17
 		}
 		goto tr36
 	tr636:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
+
+//line rfc5424/machine.go.rl:62
 
 		m.msgat = m.p
 
 		goto st20
 	st20:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof20
+			goto _test_eof20
 		}
-	stCase20:
+	st_case_20:
+//line rfc5424/machine.go:2124
 		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 159 {
 			goto st17
 		}
 		goto tr36
 	tr637:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
+
+//line rfc5424/machine.go.rl:62
 
 		m.msgat = m.p
 
 		goto st21
 	st21:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof21
+			goto _test_eof21
 		}
-	stCase21:
+	st_case_21:
+//line rfc5424/machine.go:2144
 		if 144 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
 			goto st19
 		}
 		goto tr36
 	tr638:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
+
+//line rfc5424/machine.go.rl:62
 
 		m.msgat = m.p
 
 		goto st22
 	st22:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof22
+			goto _test_eof22
 		}
-	stCase22:
+	st_case_22:
+//line rfc5424/machine.go:2164
 		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
 			goto st19
 		}
 		goto tr36
 	tr639:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
+
+//line rfc5424/machine.go.rl:62
 
 		m.msgat = m.p
 
 		goto st23
 	st23:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof23
+			goto _test_eof23
 		}
-	stCase23:
+	st_case_23:
+//line rfc5424/machine.go:2184
 		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 143 {
 			goto st19
 		}
 		goto tr36
 	tr35:
+//line rfc5424/machine.go.rl:102
 
 		output.structuredData = map[string]map[string]string{}
 
 		goto st24
 	st24:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof24
+			goto _test_eof24
 		}
-	stCase24:
+	st_case_24:
+//line rfc5424/machine.go:2200
 		if (m.data)[(m.p)] == 33 {
 			goto tr41
 		}
@@ -2148,15 +2279,17 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 		goto tr40
 	tr41:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
 
 		goto st25
 	st25:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof25
+			goto _test_eof25
 		}
-	stCase25:
+	st_case_25:
+//line rfc5424/machine.go:2228
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -2175,6 +2308,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 		goto tr42
 	tr43:
+//line rfc5424/machine.go.rl:106
 
 		if _, ok := output.structuredData[string(m.text())]; ok {
 			// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
@@ -2194,9 +2328,10 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto st26
 	st26:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof26
+			goto _test_eof26
 		}
-	stCase26:
+	st_case_26:
+//line rfc5424/machine.go:2268
 		if (m.data)[(m.p)] == 33 {
 			goto tr47
 		}
@@ -2214,17 +2349,21 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 		goto tr46
 	tr47:
+//line rfc5424/machine.go.rl:120
 
 		m.backslashat = []int{}
+
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
 
 		goto st27
 	st27:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof27
+			goto _test_eof27
 		}
-	stCase27:
+	st_case_27:
+//line rfc5424/machine.go:2300
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st28
@@ -2242,9 +2381,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st28:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof28
+			goto _test_eof28
 		}
-	stCase28:
+	st_case_28:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st29
@@ -2262,9 +2401,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st29:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof29
+			goto _test_eof29
 		}
-	stCase29:
+	st_case_29:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st30
@@ -2282,9 +2421,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st30:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof30
+			goto _test_eof30
 		}
-	stCase30:
+	st_case_30:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st31
@@ -2302,9 +2441,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st31:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof31
+			goto _test_eof31
 		}
-	stCase31:
+	st_case_31:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st32
@@ -2322,9 +2461,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st32:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof32
+			goto _test_eof32
 		}
-	stCase32:
+	st_case_32:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st33
@@ -2342,9 +2481,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st33:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof33
+			goto _test_eof33
 		}
-	stCase33:
+	st_case_33:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st34
@@ -2362,9 +2501,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st34:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof34
+			goto _test_eof34
 		}
-	stCase34:
+	st_case_34:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st35
@@ -2382,9 +2521,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st35:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof35
+			goto _test_eof35
 		}
-	stCase35:
+	st_case_35:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st36
@@ -2402,9 +2541,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st36:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof36
+			goto _test_eof36
 		}
-	stCase36:
+	st_case_36:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st37
@@ -2422,9 +2561,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st37:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof37
+			goto _test_eof37
 		}
-	stCase37:
+	st_case_37:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st38
@@ -2442,9 +2581,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st38:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof38
+			goto _test_eof38
 		}
-	stCase38:
+	st_case_38:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st39
@@ -2462,9 +2601,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st39:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof39
+			goto _test_eof39
 		}
-	stCase39:
+	st_case_39:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st40
@@ -2482,9 +2621,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st40:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof40
+			goto _test_eof40
 		}
-	stCase40:
+	st_case_40:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st41
@@ -2502,9 +2641,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st41:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof41
+			goto _test_eof41
 		}
-	stCase41:
+	st_case_41:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st42
@@ -2522,9 +2661,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st42:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof42
+			goto _test_eof42
 		}
-	stCase42:
+	st_case_42:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st43
@@ -2542,9 +2681,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st43:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof43
+			goto _test_eof43
 		}
-	stCase43:
+	st_case_43:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st44
@@ -2562,9 +2701,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st44:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof44
+			goto _test_eof44
 		}
-	stCase44:
+	st_case_44:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st45
@@ -2582,9 +2721,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st45:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof45
+			goto _test_eof45
 		}
-	stCase45:
+	st_case_45:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st46
@@ -2602,9 +2741,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st46:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof46
+			goto _test_eof46
 		}
-	stCase46:
+	st_case_46:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st47
@@ -2622,9 +2761,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st47:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof47
+			goto _test_eof47
 		}
-	stCase47:
+	st_case_47:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st48
@@ -2642,9 +2781,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st48:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof48
+			goto _test_eof48
 		}
-	stCase48:
+	st_case_48:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st49
@@ -2662,9 +2801,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st49:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof49
+			goto _test_eof49
 		}
-	stCase49:
+	st_case_49:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st50
@@ -2682,9 +2821,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st50:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof50
+			goto _test_eof50
 		}
-	stCase50:
+	st_case_50:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st51
@@ -2702,9 +2841,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st51:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof51
+			goto _test_eof51
 		}
-	stCase51:
+	st_case_51:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st52
@@ -2722,9 +2861,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st52:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof52
+			goto _test_eof52
 		}
-	stCase52:
+	st_case_52:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st53
@@ -2742,9 +2881,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st53:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof53
+			goto _test_eof53
 		}
-	stCase53:
+	st_case_53:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st54
@@ -2762,9 +2901,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st54:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof54
+			goto _test_eof54
 		}
-	stCase54:
+	st_case_54:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st55
@@ -2782,9 +2921,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st55:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof55
+			goto _test_eof55
 		}
-	stCase55:
+	st_case_55:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st56
@@ -2802,9 +2941,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st56:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof56
+			goto _test_eof56
 		}
-	stCase56:
+	st_case_56:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st57
@@ -2822,9 +2961,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st57:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof57
+			goto _test_eof57
 		}
-	stCase57:
+	st_case_57:
 		switch (m.data)[(m.p)] {
 		case 33:
 			goto st58
@@ -2842,32 +2981,34 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr46
 	st58:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof58
+			goto _test_eof58
 		}
-	stCase58:
+	st_case_58:
 		if (m.data)[(m.p)] == 61 {
 			goto tr49
 		}
 		goto tr46
 	tr49:
+//line rfc5424/machine.go.rl:128
 
 		m.currentparam = string(m.text())
 
 		goto st59
 	st59:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof59
+			goto _test_eof59
 		}
-	stCase59:
+	st_case_59:
+//line rfc5424/machine.go:2936
 		if (m.data)[(m.p)] == 34 {
 			goto st60
 		}
 		goto tr46
 	st60:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof60
+			goto _test_eof60
 		}
-	stCase60:
+	st_case_60:
 		switch (m.data)[(m.p)] {
 		case 34:
 			goto tr82
@@ -2908,15 +3049,17 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 		goto tr81
 	tr81:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
 
 		goto st61
 	st61:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof61
+			goto _test_eof61
 		}
-	stCase61:
+	st_case_61:
+//line rfc5424/machine.go:2996
 		switch (m.data)[(m.p)] {
 		case 34:
 			goto tr93
@@ -2957,8 +3100,11 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 		goto st61
 	tr82:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
+
+//line rfc5424/machine.go.rl:132
 
 		if output.hasElements {
 			// (fixme) > what if SD-PARAM-NAME already exist for the current element (ie., current SD-ID)?
@@ -2975,6 +3121,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 
 		goto st62
 	tr93:
+//line rfc5424/machine.go.rl:132
 
 		if output.hasElements {
 			// (fixme) > what if SD-PARAM-NAME already exist for the current element (ie., current SD-ID)?
@@ -2992,9 +3139,10 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto st62
 	st62:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof62
+			goto _test_eof62
 		}
-	stCase62:
+	st_case_62:
+//line rfc5424/machine.go:3079
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto st26
@@ -3003,6 +3151,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 		goto tr46
 	tr45:
+//line rfc5424/machine.go.rl:106
 
 		if _, ok := output.structuredData[string(m.text())]; ok {
 			// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
@@ -3022,9 +3171,10 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto st606
 	st606:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof606
+			goto _test_eof606
 		}
-	stCase606:
+	st_case_606:
+//line rfc5424/machine.go:3109
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto st604
@@ -3033,22 +3183,27 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 		goto tr645
 	tr83:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
+
+//line rfc5424/machine.go.rl:124
 
 		m.backslashat = append(m.backslashat, m.p)
 
 		goto st63
 	tr94:
+//line rfc5424/machine.go.rl:124
 
 		m.backslashat = append(m.backslashat, m.p)
 
 		goto st63
 	st63:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof63
+			goto _test_eof63
 		}
-	stCase63:
+	st_case_63:
+//line rfc5424/machine.go:3138
 		if (m.data)[(m.p)] == 34 {
 			goto st61
 		}
@@ -3057,108 +3212,122 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 		goto tr84
 	tr85:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
 
 		goto st64
 	st64:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof64
+			goto _test_eof64
 		}
-	stCase64:
+	st_case_64:
+//line rfc5424/machine.go:3157
 		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
 			goto st61
 		}
 		goto tr46
 	tr86:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
 
 		goto st65
 	st65:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof65
+			goto _test_eof65
 		}
-	stCase65:
+	st_case_65:
+//line rfc5424/machine.go:3173
 		if 160 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
 			goto st64
 		}
 		goto tr46
 	tr87:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
 
 		goto st66
 	st66:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof66
+			goto _test_eof66
 		}
-	stCase66:
+	st_case_66:
+//line rfc5424/machine.go:3189
 		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
 			goto st64
 		}
 		goto tr46
 	tr88:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
 
 		goto st67
 	st67:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof67
+			goto _test_eof67
 		}
-	stCase67:
+	st_case_67:
+//line rfc5424/machine.go:3205
 		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 159 {
 			goto st64
 		}
 		goto tr46
 	tr89:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
 
 		goto st68
 	st68:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof68
+			goto _test_eof68
 		}
-	stCase68:
+	st_case_68:
+//line rfc5424/machine.go:3221
 		if 144 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
 			goto st66
 		}
 		goto tr46
 	tr90:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
 
 		goto st69
 	st69:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof69
+			goto _test_eof69
 		}
-	stCase69:
+	st_case_69:
+//line rfc5424/machine.go:3237
 		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
 			goto st66
 		}
 		goto tr46
 	tr91:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
 
 		goto st70
 	st70:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof70
+			goto _test_eof70
 		}
-	stCase70:
+	st_case_70:
+//line rfc5424/machine.go:3253
 		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 143 {
 			goto st66
 		}
 		goto tr46
 	st71:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof71
+			goto _test_eof71
 		}
-	stCase71:
+	st_case_71:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3178,9 +3347,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st72:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof72
+			goto _test_eof72
 		}
-	stCase72:
+	st_case_72:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3200,9 +3369,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st73:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof73
+			goto _test_eof73
 		}
-	stCase73:
+	st_case_73:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3222,9 +3391,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st74:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof74
+			goto _test_eof74
 		}
-	stCase74:
+	st_case_74:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3244,9 +3413,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st75:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof75
+			goto _test_eof75
 		}
-	stCase75:
+	st_case_75:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3266,9 +3435,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st76:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof76
+			goto _test_eof76
 		}
-	stCase76:
+	st_case_76:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3288,9 +3457,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st77:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof77
+			goto _test_eof77
 		}
-	stCase77:
+	st_case_77:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3310,9 +3479,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st78:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof78
+			goto _test_eof78
 		}
-	stCase78:
+	st_case_78:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3332,9 +3501,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st79:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof79
+			goto _test_eof79
 		}
-	stCase79:
+	st_case_79:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3354,9 +3523,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st80:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof80
+			goto _test_eof80
 		}
-	stCase80:
+	st_case_80:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3376,9 +3545,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st81:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof81
+			goto _test_eof81
 		}
-	stCase81:
+	st_case_81:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3398,9 +3567,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st82:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof82
+			goto _test_eof82
 		}
-	stCase82:
+	st_case_82:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3420,9 +3589,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st83:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof83
+			goto _test_eof83
 		}
-	stCase83:
+	st_case_83:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3442,9 +3611,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st84:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof84
+			goto _test_eof84
 		}
-	stCase84:
+	st_case_84:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3464,9 +3633,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st85:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof85
+			goto _test_eof85
 		}
-	stCase85:
+	st_case_85:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3486,9 +3655,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st86:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof86
+			goto _test_eof86
 		}
-	stCase86:
+	st_case_86:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3508,9 +3677,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st87:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof87
+			goto _test_eof87
 		}
-	stCase87:
+	st_case_87:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3530,9 +3699,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st88:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof88
+			goto _test_eof88
 		}
-	stCase88:
+	st_case_88:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3552,9 +3721,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st89:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof89
+			goto _test_eof89
 		}
-	stCase89:
+	st_case_89:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3574,9 +3743,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st90:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof90
+			goto _test_eof90
 		}
-	stCase90:
+	st_case_90:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3596,9 +3765,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st91:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof91
+			goto _test_eof91
 		}
-	stCase91:
+	st_case_91:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3618,9 +3787,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st92:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof92
+			goto _test_eof92
 		}
-	stCase92:
+	st_case_92:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3640,9 +3809,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st93:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof93
+			goto _test_eof93
 		}
-	stCase93:
+	st_case_93:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3662,9 +3831,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st94:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof94
+			goto _test_eof94
 		}
-	stCase94:
+	st_case_94:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3684,9 +3853,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st95:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof95
+			goto _test_eof95
 		}
-	stCase95:
+	st_case_95:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3706,9 +3875,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st96:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof96
+			goto _test_eof96
 		}
-	stCase96:
+	st_case_96:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3728,9 +3897,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st97:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof97
+			goto _test_eof97
 		}
-	stCase97:
+	st_case_97:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3750,9 +3919,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st98:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof98
+			goto _test_eof98
 		}
-	stCase98:
+	st_case_98:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3772,9 +3941,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st99:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof99
+			goto _test_eof99
 		}
-	stCase99:
+	st_case_99:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3794,9 +3963,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st100:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof100
+			goto _test_eof100
 		}
-	stCase100:
+	st_case_100:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3816,9 +3985,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st101:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof101
+			goto _test_eof101
 		}
-	stCase101:
+	st_case_101:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto tr43
@@ -3828,9 +3997,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr42
 	st102:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof102
+			goto _test_eof102
 		}
-	stCase102:
+	st_case_102:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -3840,9 +4009,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st103:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof103
+			goto _test_eof103
 		}
-	stCase103:
+	st_case_103:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -3852,9 +4021,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st104:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof104
+			goto _test_eof104
 		}
-	stCase104:
+	st_case_104:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -3864,9 +4033,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st105:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof105
+			goto _test_eof105
 		}
-	stCase105:
+	st_case_105:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -3876,9 +4045,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st106:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof106
+			goto _test_eof106
 		}
-	stCase106:
+	st_case_106:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -3888,9 +4057,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st107:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof107
+			goto _test_eof107
 		}
-	stCase107:
+	st_case_107:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -3900,9 +4069,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st108:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof108
+			goto _test_eof108
 		}
-	stCase108:
+	st_case_108:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -3912,9 +4081,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st109:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof109
+			goto _test_eof109
 		}
-	stCase109:
+	st_case_109:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -3924,9 +4093,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st110:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof110
+			goto _test_eof110
 		}
-	stCase110:
+	st_case_110:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -3936,9 +4105,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st111:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof111
+			goto _test_eof111
 		}
-	stCase111:
+	st_case_111:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -3948,9 +4117,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st112:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof112
+			goto _test_eof112
 		}
-	stCase112:
+	st_case_112:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -3960,9 +4129,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st113:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof113
+			goto _test_eof113
 		}
-	stCase113:
+	st_case_113:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -3972,9 +4141,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st114:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof114
+			goto _test_eof114
 		}
-	stCase114:
+	st_case_114:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -3984,9 +4153,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st115:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof115
+			goto _test_eof115
 		}
-	stCase115:
+	st_case_115:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -3996,9 +4165,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st116:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof116
+			goto _test_eof116
 		}
-	stCase116:
+	st_case_116:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -4008,9 +4177,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st117:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof117
+			goto _test_eof117
 		}
-	stCase117:
+	st_case_117:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -4020,9 +4189,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st118:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof118
+			goto _test_eof118
 		}
-	stCase118:
+	st_case_118:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -4032,9 +4201,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st119:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof119
+			goto _test_eof119
 		}
-	stCase119:
+	st_case_119:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -4044,9 +4213,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st120:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof120
+			goto _test_eof120
 		}
-	stCase120:
+	st_case_120:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -4056,9 +4225,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st121:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof121
+			goto _test_eof121
 		}
-	stCase121:
+	st_case_121:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -4068,9 +4237,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st122:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof122
+			goto _test_eof122
 		}
-	stCase122:
+	st_case_122:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -4080,9 +4249,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st123:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof123
+			goto _test_eof123
 		}
-	stCase123:
+	st_case_123:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -4092,9 +4261,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st124:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof124
+			goto _test_eof124
 		}
-	stCase124:
+	st_case_124:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -4104,9 +4273,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st125:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof125
+			goto _test_eof125
 		}
-	stCase125:
+	st_case_125:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -4116,9 +4285,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st126:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof126
+			goto _test_eof126
 		}
-	stCase126:
+	st_case_126:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -4128,9 +4297,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st127:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof127
+			goto _test_eof127
 		}
-	stCase127:
+	st_case_127:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -4140,9 +4309,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st128:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof128
+			goto _test_eof128
 		}
-	stCase128:
+	st_case_128:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -4152,9 +4321,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st129:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof129
+			goto _test_eof129
 		}
-	stCase129:
+	st_case_129:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -4164,9 +4333,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st130:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof130
+			goto _test_eof130
 		}
-	stCase130:
+	st_case_130:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -4176,9 +4345,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st131:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof131
+			goto _test_eof131
 		}
-	stCase131:
+	st_case_131:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
@@ -4188,18 +4357,18 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr30
 	st132:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof132
+			goto _test_eof132
 		}
-	stCase132:
+	st_case_132:
 		if (m.data)[(m.p)] == 32 {
 			goto tr31
 		}
 		goto tr30
 	st133:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof133
+			goto _test_eof133
 		}
-	stCase133:
+	st_case_133:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4209,9 +4378,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st134:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof134
+			goto _test_eof134
 		}
-	stCase134:
+	st_case_134:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4221,9 +4390,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st135:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof135
+			goto _test_eof135
 		}
-	stCase135:
+	st_case_135:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4233,9 +4402,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st136:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof136
+			goto _test_eof136
 		}
-	stCase136:
+	st_case_136:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4245,9 +4414,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st137:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof137
+			goto _test_eof137
 		}
-	stCase137:
+	st_case_137:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4257,9 +4426,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st138:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof138
+			goto _test_eof138
 		}
-	stCase138:
+	st_case_138:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4269,9 +4438,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st139:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof139
+			goto _test_eof139
 		}
-	stCase139:
+	st_case_139:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4281,9 +4450,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st140:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof140
+			goto _test_eof140
 		}
-	stCase140:
+	st_case_140:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4293,9 +4462,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st141:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof141
+			goto _test_eof141
 		}
-	stCase141:
+	st_case_141:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4305,9 +4474,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st142:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof142
+			goto _test_eof142
 		}
-	stCase142:
+	st_case_142:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4317,9 +4486,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st143:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof143
+			goto _test_eof143
 		}
-	stCase143:
+	st_case_143:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4329,9 +4498,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st144:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof144
+			goto _test_eof144
 		}
-	stCase144:
+	st_case_144:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4341,9 +4510,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st145:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof145
+			goto _test_eof145
 		}
-	stCase145:
+	st_case_145:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4353,9 +4522,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st146:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof146
+			goto _test_eof146
 		}
-	stCase146:
+	st_case_146:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4365,9 +4534,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st147:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof147
+			goto _test_eof147
 		}
-	stCase147:
+	st_case_147:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4377,9 +4546,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st148:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof148
+			goto _test_eof148
 		}
-	stCase148:
+	st_case_148:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4389,9 +4558,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st149:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof149
+			goto _test_eof149
 		}
-	stCase149:
+	st_case_149:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4401,9 +4570,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st150:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof150
+			goto _test_eof150
 		}
-	stCase150:
+	st_case_150:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4413,9 +4582,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st151:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof151
+			goto _test_eof151
 		}
-	stCase151:
+	st_case_151:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4425,9 +4594,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st152:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof152
+			goto _test_eof152
 		}
-	stCase152:
+	st_case_152:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4437,9 +4606,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st153:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof153
+			goto _test_eof153
 		}
-	stCase153:
+	st_case_153:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4449,9 +4618,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st154:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof154
+			goto _test_eof154
 		}
-	stCase154:
+	st_case_154:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4461,9 +4630,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st155:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof155
+			goto _test_eof155
 		}
-	stCase155:
+	st_case_155:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4473,9 +4642,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st156:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof156
+			goto _test_eof156
 		}
-	stCase156:
+	st_case_156:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4485,9 +4654,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st157:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof157
+			goto _test_eof157
 		}
-	stCase157:
+	st_case_157:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4497,9 +4666,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st158:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof158
+			goto _test_eof158
 		}
-	stCase158:
+	st_case_158:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4509,9 +4678,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st159:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof159
+			goto _test_eof159
 		}
-	stCase159:
+	st_case_159:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4521,9 +4690,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st160:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof160
+			goto _test_eof160
 		}
-	stCase160:
+	st_case_160:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4533,9 +4702,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st161:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof161
+			goto _test_eof161
 		}
-	stCase161:
+	st_case_161:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4545,9 +4714,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st162:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof162
+			goto _test_eof162
 		}
-	stCase162:
+	st_case_162:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4557,9 +4726,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st163:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof163
+			goto _test_eof163
 		}
-	stCase163:
+	st_case_163:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4569,9 +4738,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st164:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof164
+			goto _test_eof164
 		}
-	stCase164:
+	st_case_164:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4581,9 +4750,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st165:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof165
+			goto _test_eof165
 		}
-	stCase165:
+	st_case_165:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4593,9 +4762,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st166:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof166
+			goto _test_eof166
 		}
-	stCase166:
+	st_case_166:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4605,9 +4774,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st167:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof167
+			goto _test_eof167
 		}
-	stCase167:
+	st_case_167:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4617,9 +4786,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st168:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof168
+			goto _test_eof168
 		}
-	stCase168:
+	st_case_168:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4629,9 +4798,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st169:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof169
+			goto _test_eof169
 		}
-	stCase169:
+	st_case_169:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4641,9 +4810,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st170:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof170
+			goto _test_eof170
 		}
-	stCase170:
+	st_case_170:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4653,9 +4822,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st171:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof171
+			goto _test_eof171
 		}
-	stCase171:
+	st_case_171:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4665,9 +4834,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st172:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof172
+			goto _test_eof172
 		}
-	stCase172:
+	st_case_172:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4677,9 +4846,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st173:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof173
+			goto _test_eof173
 		}
-	stCase173:
+	st_case_173:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4689,9 +4858,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st174:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof174
+			goto _test_eof174
 		}
-	stCase174:
+	st_case_174:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4701,9 +4870,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st175:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof175
+			goto _test_eof175
 		}
-	stCase175:
+	st_case_175:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4713,9 +4882,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st176:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof176
+			goto _test_eof176
 		}
-	stCase176:
+	st_case_176:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4725,9 +4894,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st177:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof177
+			goto _test_eof177
 		}
-	stCase177:
+	st_case_177:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4737,9 +4906,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st178:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof178
+			goto _test_eof178
 		}
-	stCase178:
+	st_case_178:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4749,9 +4918,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st179:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof179
+			goto _test_eof179
 		}
-	stCase179:
+	st_case_179:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4761,9 +4930,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st180:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof180
+			goto _test_eof180
 		}
-	stCase180:
+	st_case_180:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4773,9 +4942,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st181:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof181
+			goto _test_eof181
 		}
-	stCase181:
+	st_case_181:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4785,9 +4954,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st182:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof182
+			goto _test_eof182
 		}
-	stCase182:
+	st_case_182:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4797,9 +4966,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st183:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof183
+			goto _test_eof183
 		}
-	stCase183:
+	st_case_183:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4809,9 +4978,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st184:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof184
+			goto _test_eof184
 		}
-	stCase184:
+	st_case_184:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4821,9 +4990,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st185:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof185
+			goto _test_eof185
 		}
-	stCase185:
+	st_case_185:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4833,9 +5002,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st186:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof186
+			goto _test_eof186
 		}
-	stCase186:
+	st_case_186:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4845,9 +5014,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st187:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof187
+			goto _test_eof187
 		}
-	stCase187:
+	st_case_187:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4857,9 +5026,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st188:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof188
+			goto _test_eof188
 		}
-	stCase188:
+	st_case_188:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4869,9 +5038,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st189:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof189
+			goto _test_eof189
 		}
-	stCase189:
+	st_case_189:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4881,9 +5050,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st190:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof190
+			goto _test_eof190
 		}
-	stCase190:
+	st_case_190:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4893,9 +5062,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st191:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof191
+			goto _test_eof191
 		}
-	stCase191:
+	st_case_191:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4905,9 +5074,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st192:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof192
+			goto _test_eof192
 		}
-	stCase192:
+	st_case_192:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4917,9 +5086,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st193:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof193
+			goto _test_eof193
 		}
-	stCase193:
+	st_case_193:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4929,9 +5098,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st194:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof194
+			goto _test_eof194
 		}
-	stCase194:
+	st_case_194:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4941,9 +5110,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st195:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof195
+			goto _test_eof195
 		}
-	stCase195:
+	st_case_195:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4953,9 +5122,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st196:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof196
+			goto _test_eof196
 		}
-	stCase196:
+	st_case_196:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4965,9 +5134,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st197:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof197
+			goto _test_eof197
 		}
-	stCase197:
+	st_case_197:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4977,9 +5146,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st198:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof198
+			goto _test_eof198
 		}
-	stCase198:
+	st_case_198:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -4989,9 +5158,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st199:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof199
+			goto _test_eof199
 		}
-	stCase199:
+	st_case_199:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5001,9 +5170,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st200:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof200
+			goto _test_eof200
 		}
-	stCase200:
+	st_case_200:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5013,9 +5182,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st201:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof201
+			goto _test_eof201
 		}
-	stCase201:
+	st_case_201:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5025,9 +5194,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st202:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof202
+			goto _test_eof202
 		}
-	stCase202:
+	st_case_202:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5037,9 +5206,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st203:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof203
+			goto _test_eof203
 		}
-	stCase203:
+	st_case_203:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5049,9 +5218,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st204:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof204
+			goto _test_eof204
 		}
-	stCase204:
+	st_case_204:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5061,9 +5230,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st205:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof205
+			goto _test_eof205
 		}
-	stCase205:
+	st_case_205:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5073,9 +5242,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st206:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof206
+			goto _test_eof206
 		}
-	stCase206:
+	st_case_206:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5085,9 +5254,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st207:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof207
+			goto _test_eof207
 		}
-	stCase207:
+	st_case_207:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5097,9 +5266,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st208:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof208
+			goto _test_eof208
 		}
-	stCase208:
+	st_case_208:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5109,9 +5278,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st209:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof209
+			goto _test_eof209
 		}
-	stCase209:
+	st_case_209:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5121,9 +5290,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st210:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof210
+			goto _test_eof210
 		}
-	stCase210:
+	st_case_210:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5133,9 +5302,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st211:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof211
+			goto _test_eof211
 		}
-	stCase211:
+	st_case_211:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5145,9 +5314,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st212:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof212
+			goto _test_eof212
 		}
-	stCase212:
+	st_case_212:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5157,9 +5326,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st213:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof213
+			goto _test_eof213
 		}
-	stCase213:
+	st_case_213:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5169,9 +5338,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st214:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof214
+			goto _test_eof214
 		}
-	stCase214:
+	st_case_214:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5181,9 +5350,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st215:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof215
+			goto _test_eof215
 		}
-	stCase215:
+	st_case_215:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5193,9 +5362,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st216:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof216
+			goto _test_eof216
 		}
-	stCase216:
+	st_case_216:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5205,9 +5374,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st217:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof217
+			goto _test_eof217
 		}
-	stCase217:
+	st_case_217:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5217,9 +5386,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st218:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof218
+			goto _test_eof218
 		}
-	stCase218:
+	st_case_218:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5229,9 +5398,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st219:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof219
+			goto _test_eof219
 		}
-	stCase219:
+	st_case_219:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5241,9 +5410,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st220:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof220
+			goto _test_eof220
 		}
-	stCase220:
+	st_case_220:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5253,9 +5422,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st221:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof221
+			goto _test_eof221
 		}
-	stCase221:
+	st_case_221:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5265,9 +5434,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st222:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof222
+			goto _test_eof222
 		}
-	stCase222:
+	st_case_222:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5277,9 +5446,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st223:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof223
+			goto _test_eof223
 		}
-	stCase223:
+	st_case_223:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5289,9 +5458,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st224:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof224
+			goto _test_eof224
 		}
-	stCase224:
+	st_case_224:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5301,9 +5470,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st225:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof225
+			goto _test_eof225
 		}
-	stCase225:
+	st_case_225:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5313,9 +5482,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st226:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof226
+			goto _test_eof226
 		}
-	stCase226:
+	st_case_226:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5325,9 +5494,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st227:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof227
+			goto _test_eof227
 		}
-	stCase227:
+	st_case_227:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5337,9 +5506,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st228:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof228
+			goto _test_eof228
 		}
-	stCase228:
+	st_case_228:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5349,9 +5518,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st229:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof229
+			goto _test_eof229
 		}
-	stCase229:
+	st_case_229:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5361,9 +5530,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st230:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof230
+			goto _test_eof230
 		}
-	stCase230:
+	st_case_230:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5373,9 +5542,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st231:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof231
+			goto _test_eof231
 		}
-	stCase231:
+	st_case_231:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5385,9 +5554,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st232:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof232
+			goto _test_eof232
 		}
-	stCase232:
+	st_case_232:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5397,9 +5566,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st233:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof233
+			goto _test_eof233
 		}
-	stCase233:
+	st_case_233:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5409,9 +5578,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st234:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof234
+			goto _test_eof234
 		}
-	stCase234:
+	st_case_234:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5421,9 +5590,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st235:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof235
+			goto _test_eof235
 		}
-	stCase235:
+	st_case_235:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5433,9 +5602,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st236:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof236
+			goto _test_eof236
 		}
-	stCase236:
+	st_case_236:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5445,9 +5614,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st237:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof237
+			goto _test_eof237
 		}
-	stCase237:
+	st_case_237:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5457,9 +5626,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st238:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof238
+			goto _test_eof238
 		}
-	stCase238:
+	st_case_238:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5469,9 +5638,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st239:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof239
+			goto _test_eof239
 		}
-	stCase239:
+	st_case_239:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5481,9 +5650,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st240:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof240
+			goto _test_eof240
 		}
-	stCase240:
+	st_case_240:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5493,9 +5662,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st241:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof241
+			goto _test_eof241
 		}
-	stCase241:
+	st_case_241:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5505,9 +5674,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st242:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof242
+			goto _test_eof242
 		}
-	stCase242:
+	st_case_242:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5517,9 +5686,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st243:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof243
+			goto _test_eof243
 		}
-	stCase243:
+	st_case_243:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5529,9 +5698,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st244:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof244
+			goto _test_eof244
 		}
-	stCase244:
+	st_case_244:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5541,9 +5710,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st245:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof245
+			goto _test_eof245
 		}
-	stCase245:
+	st_case_245:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5553,9 +5722,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st246:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof246
+			goto _test_eof246
 		}
-	stCase246:
+	st_case_246:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5565,9 +5734,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st247:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof247
+			goto _test_eof247
 		}
-	stCase247:
+	st_case_247:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5577,9 +5746,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st248:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof248
+			goto _test_eof248
 		}
-	stCase248:
+	st_case_248:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5589,9 +5758,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st249:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof249
+			goto _test_eof249
 		}
-	stCase249:
+	st_case_249:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5601,9 +5770,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st250:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof250
+			goto _test_eof250
 		}
-	stCase250:
+	st_case_250:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5613,9 +5782,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st251:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof251
+			goto _test_eof251
 		}
-	stCase251:
+	st_case_251:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5625,9 +5794,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st252:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof252
+			goto _test_eof252
 		}
-	stCase252:
+	st_case_252:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5637,9 +5806,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st253:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof253
+			goto _test_eof253
 		}
-	stCase253:
+	st_case_253:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5649,9 +5818,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st254:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof254
+			goto _test_eof254
 		}
-	stCase254:
+	st_case_254:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5661,9 +5830,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st255:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof255
+			goto _test_eof255
 		}
-	stCase255:
+	st_case_255:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5673,9 +5842,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st256:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof256
+			goto _test_eof256
 		}
-	stCase256:
+	st_case_256:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5685,9 +5854,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st257:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof257
+			goto _test_eof257
 		}
-	stCase257:
+	st_case_257:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5697,9 +5866,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st258:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof258
+			goto _test_eof258
 		}
-	stCase258:
+	st_case_258:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
@@ -5709,18 +5878,18 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr24
 	st259:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof259
+			goto _test_eof259
 		}
-	stCase259:
+	st_case_259:
 		if (m.data)[(m.p)] == 32 {
 			goto tr26
 		}
 		goto tr24
 	st260:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof260
+			goto _test_eof260
 		}
-	stCase260:
+	st_case_260:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -5730,9 +5899,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st261:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof261
+			goto _test_eof261
 		}
-	stCase261:
+	st_case_261:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -5742,9 +5911,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st262:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof262
+			goto _test_eof262
 		}
-	stCase262:
+	st_case_262:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -5754,9 +5923,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st263:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof263
+			goto _test_eof263
 		}
-	stCase263:
+	st_case_263:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -5766,9 +5935,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st264:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof264
+			goto _test_eof264
 		}
-	stCase264:
+	st_case_264:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -5778,9 +5947,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st265:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof265
+			goto _test_eof265
 		}
-	stCase265:
+	st_case_265:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -5790,9 +5959,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st266:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof266
+			goto _test_eof266
 		}
-	stCase266:
+	st_case_266:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -5802,9 +5971,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st267:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof267
+			goto _test_eof267
 		}
-	stCase267:
+	st_case_267:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -5814,9 +5983,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st268:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof268
+			goto _test_eof268
 		}
-	stCase268:
+	st_case_268:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -5826,9 +5995,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st269:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof269
+			goto _test_eof269
 		}
-	stCase269:
+	st_case_269:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -5838,9 +6007,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st270:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof270
+			goto _test_eof270
 		}
-	stCase270:
+	st_case_270:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -5850,9 +6019,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st271:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof271
+			goto _test_eof271
 		}
-	stCase271:
+	st_case_271:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -5862,9 +6031,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st272:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof272
+			goto _test_eof272
 		}
-	stCase272:
+	st_case_272:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -5874,9 +6043,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st273:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof273
+			goto _test_eof273
 		}
-	stCase273:
+	st_case_273:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -5886,9 +6055,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st274:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof274
+			goto _test_eof274
 		}
-	stCase274:
+	st_case_274:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -5898,9 +6067,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st275:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof275
+			goto _test_eof275
 		}
-	stCase275:
+	st_case_275:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -5910,9 +6079,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st276:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof276
+			goto _test_eof276
 		}
-	stCase276:
+	st_case_276:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -5922,9 +6091,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st277:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof277
+			goto _test_eof277
 		}
-	stCase277:
+	st_case_277:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -5934,9 +6103,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st278:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof278
+			goto _test_eof278
 		}
-	stCase278:
+	st_case_278:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -5946,9 +6115,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st279:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof279
+			goto _test_eof279
 		}
-	stCase279:
+	st_case_279:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -5958,9 +6127,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st280:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof280
+			goto _test_eof280
 		}
-	stCase280:
+	st_case_280:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -5970,9 +6139,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st281:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof281
+			goto _test_eof281
 		}
-	stCase281:
+	st_case_281:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -5982,9 +6151,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st282:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof282
+			goto _test_eof282
 		}
-	stCase282:
+	st_case_282:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -5994,9 +6163,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st283:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof283
+			goto _test_eof283
 		}
-	stCase283:
+	st_case_283:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -6006,9 +6175,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st284:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof284
+			goto _test_eof284
 		}
-	stCase284:
+	st_case_284:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -6018,9 +6187,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st285:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof285
+			goto _test_eof285
 		}
-	stCase285:
+	st_case_285:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -6030,9 +6199,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st286:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof286
+			goto _test_eof286
 		}
-	stCase286:
+	st_case_286:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -6042,9 +6211,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st287:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof287
+			goto _test_eof287
 		}
-	stCase287:
+	st_case_287:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -6054,9 +6223,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st288:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof288
+			goto _test_eof288
 		}
-	stCase288:
+	st_case_288:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -6066,9 +6235,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st289:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof289
+			goto _test_eof289
 		}
-	stCase289:
+	st_case_289:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -6078,9 +6247,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st290:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof290
+			goto _test_eof290
 		}
-	stCase290:
+	st_case_290:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -6090,9 +6259,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st291:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof291
+			goto _test_eof291
 		}
-	stCase291:
+	st_case_291:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -6102,9 +6271,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st292:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof292
+			goto _test_eof292
 		}
-	stCase292:
+	st_case_292:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -6114,9 +6283,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st293:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof293
+			goto _test_eof293
 		}
-	stCase293:
+	st_case_293:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -6126,9 +6295,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st294:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof294
+			goto _test_eof294
 		}
-	stCase294:
+	st_case_294:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -6138,9 +6307,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st295:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof295
+			goto _test_eof295
 		}
-	stCase295:
+	st_case_295:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -6150,9 +6319,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st296:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof296
+			goto _test_eof296
 		}
-	stCase296:
+	st_case_296:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -6162,9 +6331,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st297:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof297
+			goto _test_eof297
 		}
-	stCase297:
+	st_case_297:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -6174,9 +6343,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st298:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof298
+			goto _test_eof298
 		}
-	stCase298:
+	st_case_298:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -6186,9 +6355,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st299:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof299
+			goto _test_eof299
 		}
-	stCase299:
+	st_case_299:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -6198,9 +6367,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st300:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof300
+			goto _test_eof300
 		}
-	stCase300:
+	st_case_300:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -6210,9 +6379,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st301:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof301
+			goto _test_eof301
 		}
-	stCase301:
+	st_case_301:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -6222,9 +6391,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st302:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof302
+			goto _test_eof302
 		}
-	stCase302:
+	st_case_302:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -6234,9 +6403,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st303:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof303
+			goto _test_eof303
 		}
-	stCase303:
+	st_case_303:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -6246,9 +6415,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st304:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof304
+			goto _test_eof304
 		}
-	stCase304:
+	st_case_304:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -6258,9 +6427,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st305:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof305
+			goto _test_eof305
 		}
-	stCase305:
+	st_case_305:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
@@ -6270,18 +6439,18 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr20
 	st306:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof306
+			goto _test_eof306
 		}
-	stCase306:
+	st_case_306:
 		if (m.data)[(m.p)] == 32 {
 			goto tr22
 		}
 		goto tr20
 	st307:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof307
+			goto _test_eof307
 		}
-	stCase307:
+	st_case_307:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6291,9 +6460,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st308:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof308
+			goto _test_eof308
 		}
-	stCase308:
+	st_case_308:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6303,9 +6472,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st309:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof309
+			goto _test_eof309
 		}
-	stCase309:
+	st_case_309:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6315,9 +6484,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st310:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof310
+			goto _test_eof310
 		}
-	stCase310:
+	st_case_310:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6327,9 +6496,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st311:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof311
+			goto _test_eof311
 		}
-	stCase311:
+	st_case_311:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6339,9 +6508,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st312:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof312
+			goto _test_eof312
 		}
-	stCase312:
+	st_case_312:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6351,9 +6520,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st313:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof313
+			goto _test_eof313
 		}
-	stCase313:
+	st_case_313:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6363,9 +6532,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st314:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof314
+			goto _test_eof314
 		}
-	stCase314:
+	st_case_314:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6375,9 +6544,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st315:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof315
+			goto _test_eof315
 		}
-	stCase315:
+	st_case_315:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6387,9 +6556,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st316:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof316
+			goto _test_eof316
 		}
-	stCase316:
+	st_case_316:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6399,9 +6568,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st317:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof317
+			goto _test_eof317
 		}
-	stCase317:
+	st_case_317:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6411,9 +6580,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st318:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof318
+			goto _test_eof318
 		}
-	stCase318:
+	st_case_318:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6423,9 +6592,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st319:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof319
+			goto _test_eof319
 		}
-	stCase319:
+	st_case_319:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6435,9 +6604,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st320:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof320
+			goto _test_eof320
 		}
-	stCase320:
+	st_case_320:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6447,9 +6616,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st321:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof321
+			goto _test_eof321
 		}
-	stCase321:
+	st_case_321:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6459,9 +6628,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st322:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof322
+			goto _test_eof322
 		}
-	stCase322:
+	st_case_322:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6471,9 +6640,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st323:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof323
+			goto _test_eof323
 		}
-	stCase323:
+	st_case_323:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6483,9 +6652,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st324:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof324
+			goto _test_eof324
 		}
-	stCase324:
+	st_case_324:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6495,9 +6664,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st325:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof325
+			goto _test_eof325
 		}
-	stCase325:
+	st_case_325:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6507,9 +6676,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st326:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof326
+			goto _test_eof326
 		}
-	stCase326:
+	st_case_326:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6519,9 +6688,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st327:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof327
+			goto _test_eof327
 		}
-	stCase327:
+	st_case_327:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6531,9 +6700,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st328:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof328
+			goto _test_eof328
 		}
-	stCase328:
+	st_case_328:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6543,9 +6712,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st329:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof329
+			goto _test_eof329
 		}
-	stCase329:
+	st_case_329:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6555,9 +6724,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st330:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof330
+			goto _test_eof330
 		}
-	stCase330:
+	st_case_330:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6567,9 +6736,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st331:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof331
+			goto _test_eof331
 		}
-	stCase331:
+	st_case_331:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6579,9 +6748,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st332:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof332
+			goto _test_eof332
 		}
-	stCase332:
+	st_case_332:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6591,9 +6760,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st333:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof333
+			goto _test_eof333
 		}
-	stCase333:
+	st_case_333:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6603,9 +6772,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st334:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof334
+			goto _test_eof334
 		}
-	stCase334:
+	st_case_334:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6615,9 +6784,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st335:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof335
+			goto _test_eof335
 		}
-	stCase335:
+	st_case_335:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6627,9 +6796,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st336:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof336
+			goto _test_eof336
 		}
-	stCase336:
+	st_case_336:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6639,9 +6808,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st337:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof337
+			goto _test_eof337
 		}
-	stCase337:
+	st_case_337:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6651,9 +6820,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st338:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof338
+			goto _test_eof338
 		}
-	stCase338:
+	st_case_338:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6663,9 +6832,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st339:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof339
+			goto _test_eof339
 		}
-	stCase339:
+	st_case_339:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6675,9 +6844,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st340:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof340
+			goto _test_eof340
 		}
-	stCase340:
+	st_case_340:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6687,9 +6856,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st341:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof341
+			goto _test_eof341
 		}
-	stCase341:
+	st_case_341:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6699,9 +6868,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st342:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof342
+			goto _test_eof342
 		}
-	stCase342:
+	st_case_342:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6711,9 +6880,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st343:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof343
+			goto _test_eof343
 		}
-	stCase343:
+	st_case_343:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6723,9 +6892,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st344:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof344
+			goto _test_eof344
 		}
-	stCase344:
+	st_case_344:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6735,9 +6904,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st345:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof345
+			goto _test_eof345
 		}
-	stCase345:
+	st_case_345:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6747,9 +6916,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st346:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof346
+			goto _test_eof346
 		}
-	stCase346:
+	st_case_346:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6759,9 +6928,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st347:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof347
+			goto _test_eof347
 		}
-	stCase347:
+	st_case_347:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6771,9 +6940,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st348:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof348
+			goto _test_eof348
 		}
-	stCase348:
+	st_case_348:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6783,9 +6952,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st349:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof349
+			goto _test_eof349
 		}
-	stCase349:
+	st_case_349:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6795,9 +6964,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st350:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof350
+			goto _test_eof350
 		}
-	stCase350:
+	st_case_350:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6807,9 +6976,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st351:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof351
+			goto _test_eof351
 		}
-	stCase351:
+	st_case_351:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6819,9 +6988,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st352:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof352
+			goto _test_eof352
 		}
-	stCase352:
+	st_case_352:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6831,9 +7000,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st353:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof353
+			goto _test_eof353
 		}
-	stCase353:
+	st_case_353:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6843,9 +7012,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st354:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof354
+			goto _test_eof354
 		}
-	stCase354:
+	st_case_354:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6855,9 +7024,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st355:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof355
+			goto _test_eof355
 		}
-	stCase355:
+	st_case_355:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6867,9 +7036,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st356:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof356
+			goto _test_eof356
 		}
-	stCase356:
+	st_case_356:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6879,9 +7048,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st357:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof357
+			goto _test_eof357
 		}
-	stCase357:
+	st_case_357:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6891,9 +7060,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st358:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof358
+			goto _test_eof358
 		}
-	stCase358:
+	st_case_358:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6903,9 +7072,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st359:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof359
+			goto _test_eof359
 		}
-	stCase359:
+	st_case_359:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6915,9 +7084,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st360:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof360
+			goto _test_eof360
 		}
-	stCase360:
+	st_case_360:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6927,9 +7096,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st361:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof361
+			goto _test_eof361
 		}
-	stCase361:
+	st_case_361:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6939,9 +7108,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st362:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof362
+			goto _test_eof362
 		}
-	stCase362:
+	st_case_362:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6951,9 +7120,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st363:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof363
+			goto _test_eof363
 		}
-	stCase363:
+	st_case_363:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6963,9 +7132,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st364:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof364
+			goto _test_eof364
 		}
-	stCase364:
+	st_case_364:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6975,9 +7144,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st365:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof365
+			goto _test_eof365
 		}
-	stCase365:
+	st_case_365:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6987,9 +7156,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st366:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof366
+			goto _test_eof366
 		}
-	stCase366:
+	st_case_366:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -6999,9 +7168,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st367:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof367
+			goto _test_eof367
 		}
-	stCase367:
+	st_case_367:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7011,9 +7180,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st368:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof368
+			goto _test_eof368
 		}
-	stCase368:
+	st_case_368:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7023,9 +7192,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st369:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof369
+			goto _test_eof369
 		}
-	stCase369:
+	st_case_369:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7035,9 +7204,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st370:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof370
+			goto _test_eof370
 		}
-	stCase370:
+	st_case_370:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7047,9 +7216,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st371:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof371
+			goto _test_eof371
 		}
-	stCase371:
+	st_case_371:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7059,9 +7228,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st372:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof372
+			goto _test_eof372
 		}
-	stCase372:
+	st_case_372:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7071,9 +7240,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st373:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof373
+			goto _test_eof373
 		}
-	stCase373:
+	st_case_373:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7083,9 +7252,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st374:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof374
+			goto _test_eof374
 		}
-	stCase374:
+	st_case_374:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7095,9 +7264,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st375:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof375
+			goto _test_eof375
 		}
-	stCase375:
+	st_case_375:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7107,9 +7276,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st376:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof376
+			goto _test_eof376
 		}
-	stCase376:
+	st_case_376:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7119,9 +7288,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st377:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof377
+			goto _test_eof377
 		}
-	stCase377:
+	st_case_377:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7131,9 +7300,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st378:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof378
+			goto _test_eof378
 		}
-	stCase378:
+	st_case_378:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7143,9 +7312,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st379:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof379
+			goto _test_eof379
 		}
-	stCase379:
+	st_case_379:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7155,9 +7324,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st380:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof380
+			goto _test_eof380
 		}
-	stCase380:
+	st_case_380:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7167,9 +7336,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st381:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof381
+			goto _test_eof381
 		}
-	stCase381:
+	st_case_381:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7179,9 +7348,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st382:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof382
+			goto _test_eof382
 		}
-	stCase382:
+	st_case_382:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7191,9 +7360,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st383:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof383
+			goto _test_eof383
 		}
-	stCase383:
+	st_case_383:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7203,9 +7372,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st384:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof384
+			goto _test_eof384
 		}
-	stCase384:
+	st_case_384:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7215,9 +7384,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st385:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof385
+			goto _test_eof385
 		}
-	stCase385:
+	st_case_385:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7227,9 +7396,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st386:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof386
+			goto _test_eof386
 		}
-	stCase386:
+	st_case_386:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7239,9 +7408,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st387:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof387
+			goto _test_eof387
 		}
-	stCase387:
+	st_case_387:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7251,9 +7420,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st388:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof388
+			goto _test_eof388
 		}
-	stCase388:
+	st_case_388:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7263,9 +7432,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st389:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof389
+			goto _test_eof389
 		}
-	stCase389:
+	st_case_389:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7275,9 +7444,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st390:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof390
+			goto _test_eof390
 		}
-	stCase390:
+	st_case_390:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7287,9 +7456,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st391:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof391
+			goto _test_eof391
 		}
-	stCase391:
+	st_case_391:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7299,9 +7468,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st392:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof392
+			goto _test_eof392
 		}
-	stCase392:
+	st_case_392:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7311,9 +7480,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st393:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof393
+			goto _test_eof393
 		}
-	stCase393:
+	st_case_393:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7323,9 +7492,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st394:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof394
+			goto _test_eof394
 		}
-	stCase394:
+	st_case_394:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7335,9 +7504,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st395:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof395
+			goto _test_eof395
 		}
-	stCase395:
+	st_case_395:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7347,9 +7516,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st396:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof396
+			goto _test_eof396
 		}
-	stCase396:
+	st_case_396:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7359,9 +7528,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st397:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof397
+			goto _test_eof397
 		}
-	stCase397:
+	st_case_397:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7371,9 +7540,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st398:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof398
+			goto _test_eof398
 		}
-	stCase398:
+	st_case_398:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7383,9 +7552,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st399:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof399
+			goto _test_eof399
 		}
-	stCase399:
+	st_case_399:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7395,9 +7564,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st400:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof400
+			goto _test_eof400
 		}
-	stCase400:
+	st_case_400:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7407,9 +7576,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st401:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof401
+			goto _test_eof401
 		}
-	stCase401:
+	st_case_401:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7419,9 +7588,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st402:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof402
+			goto _test_eof402
 		}
-	stCase402:
+	st_case_402:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7431,9 +7600,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st403:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof403
+			goto _test_eof403
 		}
-	stCase403:
+	st_case_403:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7443,9 +7612,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st404:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof404
+			goto _test_eof404
 		}
-	stCase404:
+	st_case_404:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7455,9 +7624,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st405:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof405
+			goto _test_eof405
 		}
-	stCase405:
+	st_case_405:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7467,9 +7636,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st406:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof406
+			goto _test_eof406
 		}
-	stCase406:
+	st_case_406:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7479,9 +7648,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st407:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof407
+			goto _test_eof407
 		}
-	stCase407:
+	st_case_407:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7491,9 +7660,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st408:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof408
+			goto _test_eof408
 		}
-	stCase408:
+	st_case_408:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7503,9 +7672,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st409:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof409
+			goto _test_eof409
 		}
-	stCase409:
+	st_case_409:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7515,9 +7684,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st410:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof410
+			goto _test_eof410
 		}
-	stCase410:
+	st_case_410:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7527,9 +7696,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st411:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof411
+			goto _test_eof411
 		}
-	stCase411:
+	st_case_411:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7539,9 +7708,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st412:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof412
+			goto _test_eof412
 		}
-	stCase412:
+	st_case_412:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7551,9 +7720,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st413:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof413
+			goto _test_eof413
 		}
-	stCase413:
+	st_case_413:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7563,9 +7732,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st414:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof414
+			goto _test_eof414
 		}
-	stCase414:
+	st_case_414:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7575,9 +7744,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st415:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof415
+			goto _test_eof415
 		}
-	stCase415:
+	st_case_415:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7587,9 +7756,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st416:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof416
+			goto _test_eof416
 		}
-	stCase416:
+	st_case_416:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7599,9 +7768,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st417:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof417
+			goto _test_eof417
 		}
-	stCase417:
+	st_case_417:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7611,9 +7780,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st418:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof418
+			goto _test_eof418
 		}
-	stCase418:
+	st_case_418:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7623,9 +7792,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st419:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof419
+			goto _test_eof419
 		}
-	stCase419:
+	st_case_419:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7635,9 +7804,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st420:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof420
+			goto _test_eof420
 		}
-	stCase420:
+	st_case_420:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7647,9 +7816,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st421:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof421
+			goto _test_eof421
 		}
-	stCase421:
+	st_case_421:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7659,9 +7828,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st422:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof422
+			goto _test_eof422
 		}
-	stCase422:
+	st_case_422:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7671,9 +7840,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st423:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof423
+			goto _test_eof423
 		}
-	stCase423:
+	st_case_423:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7683,9 +7852,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st424:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof424
+			goto _test_eof424
 		}
-	stCase424:
+	st_case_424:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7695,9 +7864,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st425:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof425
+			goto _test_eof425
 		}
-	stCase425:
+	st_case_425:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7707,9 +7876,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st426:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof426
+			goto _test_eof426
 		}
-	stCase426:
+	st_case_426:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7719,9 +7888,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st427:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof427
+			goto _test_eof427
 		}
-	stCase427:
+	st_case_427:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7731,9 +7900,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st428:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof428
+			goto _test_eof428
 		}
-	stCase428:
+	st_case_428:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7743,9 +7912,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st429:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof429
+			goto _test_eof429
 		}
-	stCase429:
+	st_case_429:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7755,9 +7924,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st430:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof430
+			goto _test_eof430
 		}
-	stCase430:
+	st_case_430:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7767,9 +7936,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st431:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof431
+			goto _test_eof431
 		}
-	stCase431:
+	st_case_431:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7779,9 +7948,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st432:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof432
+			goto _test_eof432
 		}
-	stCase432:
+	st_case_432:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7791,9 +7960,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st433:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof433
+			goto _test_eof433
 		}
-	stCase433:
+	st_case_433:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7803,9 +7972,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st434:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof434
+			goto _test_eof434
 		}
-	stCase434:
+	st_case_434:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7815,9 +7984,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st435:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof435
+			goto _test_eof435
 		}
-	stCase435:
+	st_case_435:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7827,9 +7996,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st436:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof436
+			goto _test_eof436
 		}
-	stCase436:
+	st_case_436:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7839,9 +8008,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st437:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof437
+			goto _test_eof437
 		}
-	stCase437:
+	st_case_437:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7851,9 +8020,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st438:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof438
+			goto _test_eof438
 		}
-	stCase438:
+	st_case_438:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7863,9 +8032,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st439:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof439
+			goto _test_eof439
 		}
-	stCase439:
+	st_case_439:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7875,9 +8044,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st440:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof440
+			goto _test_eof440
 		}
-	stCase440:
+	st_case_440:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7887,9 +8056,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st441:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof441
+			goto _test_eof441
 		}
-	stCase441:
+	st_case_441:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7899,9 +8068,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st442:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof442
+			goto _test_eof442
 		}
-	stCase442:
+	st_case_442:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7911,9 +8080,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st443:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof443
+			goto _test_eof443
 		}
-	stCase443:
+	st_case_443:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7923,9 +8092,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st444:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof444
+			goto _test_eof444
 		}
-	stCase444:
+	st_case_444:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7935,9 +8104,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st445:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof445
+			goto _test_eof445
 		}
-	stCase445:
+	st_case_445:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7947,9 +8116,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st446:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof446
+			goto _test_eof446
 		}
-	stCase446:
+	st_case_446:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7959,9 +8128,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st447:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof447
+			goto _test_eof447
 		}
-	stCase447:
+	st_case_447:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7971,9 +8140,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st448:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof448
+			goto _test_eof448
 		}
-	stCase448:
+	st_case_448:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7983,9 +8152,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st449:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof449
+			goto _test_eof449
 		}
-	stCase449:
+	st_case_449:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -7995,9 +8164,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st450:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof450
+			goto _test_eof450
 		}
-	stCase450:
+	st_case_450:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8007,9 +8176,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st451:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof451
+			goto _test_eof451
 		}
-	stCase451:
+	st_case_451:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8019,9 +8188,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st452:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof452
+			goto _test_eof452
 		}
-	stCase452:
+	st_case_452:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8031,9 +8200,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st453:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof453
+			goto _test_eof453
 		}
-	stCase453:
+	st_case_453:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8043,9 +8212,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st454:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof454
+			goto _test_eof454
 		}
-	stCase454:
+	st_case_454:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8055,9 +8224,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st455:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof455
+			goto _test_eof455
 		}
-	stCase455:
+	st_case_455:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8067,9 +8236,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st456:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof456
+			goto _test_eof456
 		}
-	stCase456:
+	st_case_456:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8079,9 +8248,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st457:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof457
+			goto _test_eof457
 		}
-	stCase457:
+	st_case_457:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8091,9 +8260,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st458:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof458
+			goto _test_eof458
 		}
-	stCase458:
+	st_case_458:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8103,9 +8272,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st459:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof459
+			goto _test_eof459
 		}
-	stCase459:
+	st_case_459:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8115,9 +8284,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st460:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof460
+			goto _test_eof460
 		}
-	stCase460:
+	st_case_460:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8127,9 +8296,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st461:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof461
+			goto _test_eof461
 		}
-	stCase461:
+	st_case_461:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8139,9 +8308,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st462:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof462
+			goto _test_eof462
 		}
-	stCase462:
+	st_case_462:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8151,9 +8320,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st463:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof463
+			goto _test_eof463
 		}
-	stCase463:
+	st_case_463:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8163,9 +8332,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st464:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof464
+			goto _test_eof464
 		}
-	stCase464:
+	st_case_464:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8175,9 +8344,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st465:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof465
+			goto _test_eof465
 		}
-	stCase465:
+	st_case_465:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8187,9 +8356,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st466:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof466
+			goto _test_eof466
 		}
-	stCase466:
+	st_case_466:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8199,9 +8368,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st467:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof467
+			goto _test_eof467
 		}
-	stCase467:
+	st_case_467:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8211,9 +8380,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st468:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof468
+			goto _test_eof468
 		}
-	stCase468:
+	st_case_468:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8223,9 +8392,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st469:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof469
+			goto _test_eof469
 		}
-	stCase469:
+	st_case_469:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8235,9 +8404,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st470:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof470
+			goto _test_eof470
 		}
-	stCase470:
+	st_case_470:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8247,9 +8416,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st471:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof471
+			goto _test_eof471
 		}
-	stCase471:
+	st_case_471:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8259,9 +8428,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st472:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof472
+			goto _test_eof472
 		}
-	stCase472:
+	st_case_472:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8271,9 +8440,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st473:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof473
+			goto _test_eof473
 		}
-	stCase473:
+	st_case_473:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8283,9 +8452,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st474:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof474
+			goto _test_eof474
 		}
-	stCase474:
+	st_case_474:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8295,9 +8464,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st475:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof475
+			goto _test_eof475
 		}
-	stCase475:
+	st_case_475:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8307,9 +8476,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st476:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof476
+			goto _test_eof476
 		}
-	stCase476:
+	st_case_476:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8319,9 +8488,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st477:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof477
+			goto _test_eof477
 		}
-	stCase477:
+	st_case_477:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8331,9 +8500,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st478:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof478
+			goto _test_eof478
 		}
-	stCase478:
+	st_case_478:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8343,9 +8512,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st479:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof479
+			goto _test_eof479
 		}
-	stCase479:
+	st_case_479:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8355,9 +8524,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st480:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof480
+			goto _test_eof480
 		}
-	stCase480:
+	st_case_480:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8367,9 +8536,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st481:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof481
+			goto _test_eof481
 		}
-	stCase481:
+	st_case_481:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8379,9 +8548,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st482:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof482
+			goto _test_eof482
 		}
-	stCase482:
+	st_case_482:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8391,9 +8560,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st483:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof483
+			goto _test_eof483
 		}
-	stCase483:
+	st_case_483:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8403,9 +8572,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st484:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof484
+			goto _test_eof484
 		}
-	stCase484:
+	st_case_484:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8415,9 +8584,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st485:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof485
+			goto _test_eof485
 		}
-	stCase485:
+	st_case_485:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8427,9 +8596,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st486:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof486
+			goto _test_eof486
 		}
-	stCase486:
+	st_case_486:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8439,9 +8608,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st487:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof487
+			goto _test_eof487
 		}
-	stCase487:
+	st_case_487:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8451,9 +8620,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st488:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof488
+			goto _test_eof488
 		}
-	stCase488:
+	st_case_488:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8463,9 +8632,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st489:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof489
+			goto _test_eof489
 		}
-	stCase489:
+	st_case_489:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8475,9 +8644,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st490:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof490
+			goto _test_eof490
 		}
-	stCase490:
+	st_case_490:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8487,9 +8656,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st491:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof491
+			goto _test_eof491
 		}
-	stCase491:
+	st_case_491:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8499,9 +8668,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st492:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof492
+			goto _test_eof492
 		}
-	stCase492:
+	st_case_492:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8511,9 +8680,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st493:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof493
+			goto _test_eof493
 		}
-	stCase493:
+	st_case_493:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8523,9 +8692,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st494:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof494
+			goto _test_eof494
 		}
-	stCase494:
+	st_case_494:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8535,9 +8704,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st495:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof495
+			goto _test_eof495
 		}
-	stCase495:
+	st_case_495:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8547,9 +8716,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st496:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof496
+			goto _test_eof496
 		}
-	stCase496:
+	st_case_496:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8559,9 +8728,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st497:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof497
+			goto _test_eof497
 		}
-	stCase497:
+	st_case_497:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8571,9 +8740,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st498:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof498
+			goto _test_eof498
 		}
-	stCase498:
+	st_case_498:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8583,9 +8752,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st499:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof499
+			goto _test_eof499
 		}
-	stCase499:
+	st_case_499:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8595,9 +8764,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st500:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof500
+			goto _test_eof500
 		}
-	stCase500:
+	st_case_500:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8607,9 +8776,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st501:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof501
+			goto _test_eof501
 		}
-	stCase501:
+	st_case_501:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8619,9 +8788,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st502:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof502
+			goto _test_eof502
 		}
-	stCase502:
+	st_case_502:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8631,9 +8800,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st503:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof503
+			goto _test_eof503
 		}
-	stCase503:
+	st_case_503:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8643,9 +8812,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st504:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof504
+			goto _test_eof504
 		}
-	stCase504:
+	st_case_504:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8655,9 +8824,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st505:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof505
+			goto _test_eof505
 		}
-	stCase505:
+	st_case_505:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8667,9 +8836,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st506:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof506
+			goto _test_eof506
 		}
-	stCase506:
+	st_case_506:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8679,9 +8848,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st507:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof507
+			goto _test_eof507
 		}
-	stCase507:
+	st_case_507:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8691,9 +8860,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st508:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof508
+			goto _test_eof508
 		}
-	stCase508:
+	st_case_508:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8703,9 +8872,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st509:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof509
+			goto _test_eof509
 		}
-	stCase509:
+	st_case_509:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8715,9 +8884,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st510:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof510
+			goto _test_eof510
 		}
-	stCase510:
+	st_case_510:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8727,9 +8896,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st511:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof511
+			goto _test_eof511
 		}
-	stCase511:
+	st_case_511:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8739,9 +8908,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st512:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof512
+			goto _test_eof512
 		}
-	stCase512:
+	st_case_512:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8751,9 +8920,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st513:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof513
+			goto _test_eof513
 		}
-	stCase513:
+	st_case_513:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8763,9 +8932,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st514:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof514
+			goto _test_eof514
 		}
-	stCase514:
+	st_case_514:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8775,9 +8944,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st515:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof515
+			goto _test_eof515
 		}
-	stCase515:
+	st_case_515:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8787,9 +8956,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st516:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof516
+			goto _test_eof516
 		}
-	stCase516:
+	st_case_516:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8799,9 +8968,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st517:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof517
+			goto _test_eof517
 		}
-	stCase517:
+	st_case_517:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8811,9 +8980,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st518:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof518
+			goto _test_eof518
 		}
-	stCase518:
+	st_case_518:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8823,9 +8992,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st519:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof519
+			goto _test_eof519
 		}
-	stCase519:
+	st_case_519:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8835,9 +9004,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st520:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof520
+			goto _test_eof520
 		}
-	stCase520:
+	st_case_520:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8847,9 +9016,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st521:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof521
+			goto _test_eof521
 		}
-	stCase521:
+	st_case_521:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8859,9 +9028,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st522:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof522
+			goto _test_eof522
 		}
-	stCase522:
+	st_case_522:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8871,9 +9040,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st523:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof523
+			goto _test_eof523
 		}
-	stCase523:
+	st_case_523:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8883,9 +9052,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st524:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof524
+			goto _test_eof524
 		}
-	stCase524:
+	st_case_524:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8895,9 +9064,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st525:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof525
+			goto _test_eof525
 		}
-	stCase525:
+	st_case_525:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8907,9 +9076,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st526:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof526
+			goto _test_eof526
 		}
-	stCase526:
+	st_case_526:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8919,9 +9088,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st527:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof527
+			goto _test_eof527
 		}
-	stCase527:
+	st_case_527:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8931,9 +9100,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st528:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof528
+			goto _test_eof528
 		}
-	stCase528:
+	st_case_528:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8943,9 +9112,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st529:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof529
+			goto _test_eof529
 		}
-	stCase529:
+	st_case_529:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8955,9 +9124,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st530:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof530
+			goto _test_eof530
 		}
-	stCase530:
+	st_case_530:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8967,9 +9136,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st531:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof531
+			goto _test_eof531
 		}
-	stCase531:
+	st_case_531:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8979,9 +9148,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st532:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof532
+			goto _test_eof532
 		}
-	stCase532:
+	st_case_532:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -8991,9 +9160,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st533:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof533
+			goto _test_eof533
 		}
-	stCase533:
+	st_case_533:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9003,9 +9172,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st534:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof534
+			goto _test_eof534
 		}
-	stCase534:
+	st_case_534:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9015,9 +9184,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st535:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof535
+			goto _test_eof535
 		}
-	stCase535:
+	st_case_535:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9027,9 +9196,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st536:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof536
+			goto _test_eof536
 		}
-	stCase536:
+	st_case_536:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9039,9 +9208,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st537:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof537
+			goto _test_eof537
 		}
-	stCase537:
+	st_case_537:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9051,9 +9220,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st538:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof538
+			goto _test_eof538
 		}
-	stCase538:
+	st_case_538:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9063,9 +9232,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st539:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof539
+			goto _test_eof539
 		}
-	stCase539:
+	st_case_539:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9075,9 +9244,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st540:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof540
+			goto _test_eof540
 		}
-	stCase540:
+	st_case_540:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9087,9 +9256,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st541:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof541
+			goto _test_eof541
 		}
-	stCase541:
+	st_case_541:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9099,9 +9268,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st542:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof542
+			goto _test_eof542
 		}
-	stCase542:
+	st_case_542:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9111,9 +9280,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st543:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof543
+			goto _test_eof543
 		}
-	stCase543:
+	st_case_543:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9123,9 +9292,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st544:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof544
+			goto _test_eof544
 		}
-	stCase544:
+	st_case_544:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9135,9 +9304,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st545:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof545
+			goto _test_eof545
 		}
-	stCase545:
+	st_case_545:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9147,9 +9316,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st546:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof546
+			goto _test_eof546
 		}
-	stCase546:
+	st_case_546:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9159,9 +9328,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st547:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof547
+			goto _test_eof547
 		}
-	stCase547:
+	st_case_547:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9171,9 +9340,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st548:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof548
+			goto _test_eof548
 		}
-	stCase548:
+	st_case_548:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9183,9 +9352,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st549:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof549
+			goto _test_eof549
 		}
-	stCase549:
+	st_case_549:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9195,9 +9364,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st550:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof550
+			goto _test_eof550
 		}
-	stCase550:
+	st_case_550:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9207,9 +9376,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st551:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof551
+			goto _test_eof551
 		}
-	stCase551:
+	st_case_551:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9219,9 +9388,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st552:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof552
+			goto _test_eof552
 		}
-	stCase552:
+	st_case_552:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9231,9 +9400,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st553:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof553
+			goto _test_eof553
 		}
-	stCase553:
+	st_case_553:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9243,9 +9412,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st554:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof554
+			goto _test_eof554
 		}
-	stCase554:
+	st_case_554:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9255,9 +9424,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st555:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof555
+			goto _test_eof555
 		}
-	stCase555:
+	st_case_555:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9267,9 +9436,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st556:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof556
+			goto _test_eof556
 		}
-	stCase556:
+	st_case_556:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9279,9 +9448,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st557:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof557
+			goto _test_eof557
 		}
-	stCase557:
+	st_case_557:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9291,9 +9460,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st558:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof558
+			goto _test_eof558
 		}
-	stCase558:
+	st_case_558:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9303,9 +9472,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st559:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof559
+			goto _test_eof559
 		}
-	stCase559:
+	st_case_559:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
@@ -9315,59 +9484,61 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr16
 	st560:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof560
+			goto _test_eof560
 		}
-	stCase560:
+	st_case_560:
 		if (m.data)[(m.p)] == 32 {
 			goto tr18
 		}
 		goto tr16
 	tr14:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
 
 		goto st561
 	st561:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof561
+			goto _test_eof561
 		}
-	stCase561:
+	st_case_561:
+//line rfc5424/machine.go:9437
 		if 48 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 57 {
 			goto st562
 		}
 		goto tr12
 	st562:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof562
+			goto _test_eof562
 		}
-	stCase562:
+	st_case_562:
 		if 48 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 57 {
 			goto st563
 		}
 		goto tr12
 	st563:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof563
+			goto _test_eof563
 		}
-	stCase563:
+	st_case_563:
 		if 48 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 57 {
 			goto st564
 		}
 		goto tr12
 	st564:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof564
+			goto _test_eof564
 		}
-	stCase564:
+	st_case_564:
 		if (m.data)[(m.p)] == 45 {
 			goto st565
 		}
 		goto tr12
 	st565:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof565
+			goto _test_eof565
 		}
-	stCase565:
+	st_case_565:
 		switch (m.data)[(m.p)] {
 		case 48:
 			goto st566
@@ -9377,27 +9548,27 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr12
 	st566:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof566
+			goto _test_eof566
 		}
-	stCase566:
+	st_case_566:
 		if 49 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 57 {
 			goto st567
 		}
 		goto tr12
 	st567:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof567
+			goto _test_eof567
 		}
-	stCase567:
+	st_case_567:
 		if (m.data)[(m.p)] == 45 {
 			goto st568
 		}
 		goto tr12
 	st568:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof568
+			goto _test_eof568
 		}
-	stCase568:
+	st_case_568:
 		switch (m.data)[(m.p)] {
 		case 48:
 			goto st569
@@ -9410,27 +9581,27 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr12
 	st569:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof569
+			goto _test_eof569
 		}
-	stCase569:
+	st_case_569:
 		if 49 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 57 {
 			goto st570
 		}
 		goto tr12
 	st570:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof570
+			goto _test_eof570
 		}
-	stCase570:
+	st_case_570:
 		if (m.data)[(m.p)] == 84 {
 			goto st571
 		}
 		goto tr12
 	st571:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof571
+			goto _test_eof571
 		}
-	stCase571:
+	st_case_571:
 		if (m.data)[(m.p)] == 50 {
 			goto st594
 		}
@@ -9440,72 +9611,72 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr12
 	st572:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof572
+			goto _test_eof572
 		}
-	stCase572:
+	st_case_572:
 		if 48 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 57 {
 			goto st573
 		}
 		goto tr12
 	st573:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof573
+			goto _test_eof573
 		}
-	stCase573:
+	st_case_573:
 		if (m.data)[(m.p)] == 58 {
 			goto st574
 		}
 		goto tr12
 	st574:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof574
+			goto _test_eof574
 		}
-	stCase574:
+	st_case_574:
 		if 48 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 53 {
 			goto st575
 		}
 		goto tr12
 	st575:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof575
+			goto _test_eof575
 		}
-	stCase575:
+	st_case_575:
 		if 48 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 57 {
 			goto st576
 		}
 		goto tr12
 	st576:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof576
+			goto _test_eof576
 		}
-	stCase576:
+	st_case_576:
 		if (m.data)[(m.p)] == 58 {
 			goto st577
 		}
 		goto tr12
 	st577:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof577
+			goto _test_eof577
 		}
-	stCase577:
+	st_case_577:
 		if 48 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 53 {
 			goto st578
 		}
 		goto tr12
 	st578:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof578
+			goto _test_eof578
 		}
-	stCase578:
+	st_case_578:
 		if 48 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 57 {
 			goto st579
 		}
 		goto tr12
 	st579:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof579
+			goto _test_eof579
 		}
-	stCase579:
+	st_case_579:
 		switch (m.data)[(m.p)] {
 		case 43:
 			goto st580
@@ -9519,9 +9690,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr12
 	st580:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof580
+			goto _test_eof580
 		}
-	stCase580:
+	st_case_580:
 		if (m.data)[(m.p)] == 50 {
 			goto st586
 		}
@@ -9531,72 +9702,72 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr12
 	st581:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof581
+			goto _test_eof581
 		}
-	stCase581:
+	st_case_581:
 		if 48 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 57 {
 			goto st582
 		}
 		goto tr12
 	st582:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof582
+			goto _test_eof582
 		}
-	stCase582:
+	st_case_582:
 		if (m.data)[(m.p)] == 58 {
 			goto st583
 		}
 		goto tr12
 	st583:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof583
+			goto _test_eof583
 		}
-	stCase583:
+	st_case_583:
 		if 48 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 53 {
 			goto st584
 		}
 		goto tr12
 	st584:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof584
+			goto _test_eof584
 		}
-	stCase584:
+	st_case_584:
 		if 48 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 57 {
 			goto st585
 		}
 		goto tr12
 	st585:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof585
+			goto _test_eof585
 		}
-	stCase585:
+	st_case_585:
 		if (m.data)[(m.p)] == 32 {
 			goto tr620
 		}
 		goto tr619
 	st586:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof586
+			goto _test_eof586
 		}
-	stCase586:
+	st_case_586:
 		if 48 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 51 {
 			goto st582
 		}
 		goto tr12
 	st587:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof587
+			goto _test_eof587
 		}
-	stCase587:
+	st_case_587:
 		if 48 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 57 {
 			goto st588
 		}
 		goto tr12
 	st588:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof588
+			goto _test_eof588
 		}
-	stCase588:
+	st_case_588:
 		switch (m.data)[(m.p)] {
 		case 43:
 			goto st580
@@ -9611,9 +9782,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr12
 	st589:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof589
+			goto _test_eof589
 		}
-	stCase589:
+	st_case_589:
 		switch (m.data)[(m.p)] {
 		case 43:
 			goto st580
@@ -9628,9 +9799,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr12
 	st590:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof590
+			goto _test_eof590
 		}
-	stCase590:
+	st_case_590:
 		switch (m.data)[(m.p)] {
 		case 43:
 			goto st580
@@ -9645,9 +9816,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr12
 	st591:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof591
+			goto _test_eof591
 		}
-	stCase591:
+	st_case_591:
 		switch (m.data)[(m.p)] {
 		case 43:
 			goto st580
@@ -9662,9 +9833,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr12
 	st592:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof592
+			goto _test_eof592
 		}
-	stCase592:
+	st_case_592:
 		switch (m.data)[(m.p)] {
 		case 43:
 			goto st580
@@ -9679,9 +9850,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr12
 	st593:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof593
+			goto _test_eof593
 		}
-	stCase593:
+	st_case_593:
 		switch (m.data)[(m.p)] {
 		case 43:
 			goto st580
@@ -9693,48 +9864,50 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr12
 	st594:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof594
+			goto _test_eof594
 		}
-	stCase594:
+	st_case_594:
 		if 48 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 51 {
 			goto st573
 		}
 		goto tr12
 	st595:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof595
+			goto _test_eof595
 		}
-	stCase595:
+	st_case_595:
 		if 48 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 57 {
 			goto st570
 		}
 		goto tr12
 	st596:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof596
+			goto _test_eof596
 		}
-	stCase596:
+	st_case_596:
 		if 48 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 49 {
 			goto st570
 		}
 		goto tr12
 	st597:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof597
+			goto _test_eof597
 		}
-	stCase597:
+	st_case_597:
 		if 48 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 50 {
 			goto st567
 		}
 		goto tr12
 	st598:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof598
+			goto _test_eof598
 		}
-	stCase598:
+	st_case_598:
+//line rfc5424/machine.go.rl:71
 
 		output.version = uint16(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
 
+//line rfc5424/machine.go:9842
 		if (m.data)[(m.p)] == 32 {
 			goto st6
 		}
@@ -9744,30 +9917,35 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr7
 	st599:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof599
+			goto _test_eof599
 		}
-	stCase599:
+	st_case_599:
+//line rfc5424/machine.go.rl:71
 
 		output.version = uint16(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
 
+//line rfc5424/machine.go:9859
 		if (m.data)[(m.p)] == 32 {
 			goto st6
 		}
 		goto tr7
 	tr4:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
 
 		goto st600
 	st600:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof600
+			goto _test_eof600
 		}
-	stCase600:
+	st_case_600:
+//line rfc5424/machine.go.rl:66
 
 		output.priority = uint8(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
 		output.prioritySet = true
 
+//line rfc5424/machine.go:9880
 		switch (m.data)[(m.p)] {
 		case 57:
 			goto st602
@@ -9779,19 +9957,22 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 		goto tr2
 	tr5:
+//line rfc5424/machine.go.rl:58
 
 		m.pb = m.p
 
 		goto st601
 	st601:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof601
+			goto _test_eof601
 		}
-	stCase601:
+	st_case_601:
+//line rfc5424/machine.go.rl:66
 
 		output.priority = uint8(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
 		output.prioritySet = true
 
+//line rfc5424/machine.go:9907
 		if (m.data)[(m.p)] == 62 {
 			goto st4
 		}
@@ -9801,13 +9982,15 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr2
 	st602:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof602
+			goto _test_eof602
 		}
-	stCase602:
+	st_case_602:
+//line rfc5424/machine.go.rl:66
 
 		output.priority = uint8(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
 		output.prioritySet = true
 
+//line rfc5424/machine.go:9925
 		if (m.data)[(m.p)] == 62 {
 			goto st4
 		}
@@ -9817,9 +10000,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto tr2
 	st607:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof607
+			goto _test_eof607
 		}
-	stCase607:
+	st_case_607:
 		switch (m.data)[(m.p)] {
 		case 10:
 			goto st0
@@ -9827,1836 +10010,1838 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			goto st0
 		}
 		goto st607
-	stOut:
-	_testEof2:
+	st_out:
+	_test_eof2:
 		m.cs = 2
-		goto _testEof
-	_testEof3:
+		goto _test_eof
+	_test_eof3:
 		m.cs = 3
-		goto _testEof
-	_testEof4:
+		goto _test_eof
+	_test_eof4:
 		m.cs = 4
-		goto _testEof
-	_testEof5:
+		goto _test_eof
+	_test_eof5:
 		m.cs = 5
-		goto _testEof
-	_testEof6:
+		goto _test_eof
+	_test_eof6:
 		m.cs = 6
-		goto _testEof
-	_testEof7:
+		goto _test_eof
+	_test_eof7:
 		m.cs = 7
-		goto _testEof
-	_testEof8:
+		goto _test_eof
+	_test_eof8:
 		m.cs = 8
-		goto _testEof
-	_testEof9:
+		goto _test_eof
+	_test_eof9:
 		m.cs = 9
-		goto _testEof
-	_testEof10:
+		goto _test_eof
+	_test_eof10:
 		m.cs = 10
-		goto _testEof
-	_testEof11:
+		goto _test_eof
+	_test_eof11:
 		m.cs = 11
-		goto _testEof
-	_testEof12:
+		goto _test_eof
+	_test_eof12:
 		m.cs = 12
-		goto _testEof
-	_testEof13:
+		goto _test_eof
+	_test_eof13:
 		m.cs = 13
-		goto _testEof
-	_testEof14:
+		goto _test_eof
+	_test_eof14:
 		m.cs = 14
-		goto _testEof
-	_testEof15:
+		goto _test_eof
+	_test_eof15:
 		m.cs = 15
-		goto _testEof
-	_testEof16:
+		goto _test_eof
+	_test_eof16:
 		m.cs = 16
-		goto _testEof
-	_testEof603:
+		goto _test_eof
+	_test_eof603:
 		m.cs = 603
-		goto _testEof
-	_testEof604:
+		goto _test_eof
+	_test_eof604:
 		m.cs = 604
-		goto _testEof
-	_testEof605:
+		goto _test_eof
+	_test_eof605:
 		m.cs = 605
-		goto _testEof
-	_testEof17:
+		goto _test_eof
+	_test_eof17:
 		m.cs = 17
-		goto _testEof
-	_testEof18:
+		goto _test_eof
+	_test_eof18:
 		m.cs = 18
-		goto _testEof
-	_testEof19:
+		goto _test_eof
+	_test_eof19:
 		m.cs = 19
-		goto _testEof
-	_testEof20:
+		goto _test_eof
+	_test_eof20:
 		m.cs = 20
-		goto _testEof
-	_testEof21:
+		goto _test_eof
+	_test_eof21:
 		m.cs = 21
-		goto _testEof
-	_testEof22:
+		goto _test_eof
+	_test_eof22:
 		m.cs = 22
-		goto _testEof
-	_testEof23:
+		goto _test_eof
+	_test_eof23:
 		m.cs = 23
-		goto _testEof
-	_testEof24:
+		goto _test_eof
+	_test_eof24:
 		m.cs = 24
-		goto _testEof
-	_testEof25:
+		goto _test_eof
+	_test_eof25:
 		m.cs = 25
-		goto _testEof
-	_testEof26:
+		goto _test_eof
+	_test_eof26:
 		m.cs = 26
-		goto _testEof
-	_testEof27:
+		goto _test_eof
+	_test_eof27:
 		m.cs = 27
-		goto _testEof
-	_testEof28:
+		goto _test_eof
+	_test_eof28:
 		m.cs = 28
-		goto _testEof
-	_testEof29:
+		goto _test_eof
+	_test_eof29:
 		m.cs = 29
-		goto _testEof
-	_testEof30:
+		goto _test_eof
+	_test_eof30:
 		m.cs = 30
-		goto _testEof
-	_testEof31:
+		goto _test_eof
+	_test_eof31:
 		m.cs = 31
-		goto _testEof
-	_testEof32:
+		goto _test_eof
+	_test_eof32:
 		m.cs = 32
-		goto _testEof
-	_testEof33:
+		goto _test_eof
+	_test_eof33:
 		m.cs = 33
-		goto _testEof
-	_testEof34:
+		goto _test_eof
+	_test_eof34:
 		m.cs = 34
-		goto _testEof
-	_testEof35:
+		goto _test_eof
+	_test_eof35:
 		m.cs = 35
-		goto _testEof
-	_testEof36:
+		goto _test_eof
+	_test_eof36:
 		m.cs = 36
-		goto _testEof
-	_testEof37:
+		goto _test_eof
+	_test_eof37:
 		m.cs = 37
-		goto _testEof
-	_testEof38:
+		goto _test_eof
+	_test_eof38:
 		m.cs = 38
-		goto _testEof
-	_testEof39:
+		goto _test_eof
+	_test_eof39:
 		m.cs = 39
-		goto _testEof
-	_testEof40:
+		goto _test_eof
+	_test_eof40:
 		m.cs = 40
-		goto _testEof
-	_testEof41:
+		goto _test_eof
+	_test_eof41:
 		m.cs = 41
-		goto _testEof
-	_testEof42:
+		goto _test_eof
+	_test_eof42:
 		m.cs = 42
-		goto _testEof
-	_testEof43:
+		goto _test_eof
+	_test_eof43:
 		m.cs = 43
-		goto _testEof
-	_testEof44:
+		goto _test_eof
+	_test_eof44:
 		m.cs = 44
-		goto _testEof
-	_testEof45:
+		goto _test_eof
+	_test_eof45:
 		m.cs = 45
-		goto _testEof
-	_testEof46:
+		goto _test_eof
+	_test_eof46:
 		m.cs = 46
-		goto _testEof
-	_testEof47:
+		goto _test_eof
+	_test_eof47:
 		m.cs = 47
-		goto _testEof
-	_testEof48:
+		goto _test_eof
+	_test_eof48:
 		m.cs = 48
-		goto _testEof
-	_testEof49:
+		goto _test_eof
+	_test_eof49:
 		m.cs = 49
-		goto _testEof
-	_testEof50:
+		goto _test_eof
+	_test_eof50:
 		m.cs = 50
-		goto _testEof
-	_testEof51:
+		goto _test_eof
+	_test_eof51:
 		m.cs = 51
-		goto _testEof
-	_testEof52:
+		goto _test_eof
+	_test_eof52:
 		m.cs = 52
-		goto _testEof
-	_testEof53:
+		goto _test_eof
+	_test_eof53:
 		m.cs = 53
-		goto _testEof
-	_testEof54:
+		goto _test_eof
+	_test_eof54:
 		m.cs = 54
-		goto _testEof
-	_testEof55:
+		goto _test_eof
+	_test_eof55:
 		m.cs = 55
-		goto _testEof
-	_testEof56:
+		goto _test_eof
+	_test_eof56:
 		m.cs = 56
-		goto _testEof
-	_testEof57:
+		goto _test_eof
+	_test_eof57:
 		m.cs = 57
-		goto _testEof
-	_testEof58:
+		goto _test_eof
+	_test_eof58:
 		m.cs = 58
-		goto _testEof
-	_testEof59:
+		goto _test_eof
+	_test_eof59:
 		m.cs = 59
-		goto _testEof
-	_testEof60:
+		goto _test_eof
+	_test_eof60:
 		m.cs = 60
-		goto _testEof
-	_testEof61:
+		goto _test_eof
+	_test_eof61:
 		m.cs = 61
-		goto _testEof
-	_testEof62:
+		goto _test_eof
+	_test_eof62:
 		m.cs = 62
-		goto _testEof
-	_testEof606:
+		goto _test_eof
+	_test_eof606:
 		m.cs = 606
-		goto _testEof
-	_testEof63:
+		goto _test_eof
+	_test_eof63:
 		m.cs = 63
-		goto _testEof
-	_testEof64:
+		goto _test_eof
+	_test_eof64:
 		m.cs = 64
-		goto _testEof
-	_testEof65:
+		goto _test_eof
+	_test_eof65:
 		m.cs = 65
-		goto _testEof
-	_testEof66:
+		goto _test_eof
+	_test_eof66:
 		m.cs = 66
-		goto _testEof
-	_testEof67:
+		goto _test_eof
+	_test_eof67:
 		m.cs = 67
-		goto _testEof
-	_testEof68:
+		goto _test_eof
+	_test_eof68:
 		m.cs = 68
-		goto _testEof
-	_testEof69:
+		goto _test_eof
+	_test_eof69:
 		m.cs = 69
-		goto _testEof
-	_testEof70:
+		goto _test_eof
+	_test_eof70:
 		m.cs = 70
-		goto _testEof
-	_testEof71:
+		goto _test_eof
+	_test_eof71:
 		m.cs = 71
-		goto _testEof
-	_testEof72:
+		goto _test_eof
+	_test_eof72:
 		m.cs = 72
-		goto _testEof
-	_testEof73:
+		goto _test_eof
+	_test_eof73:
 		m.cs = 73
-		goto _testEof
-	_testEof74:
+		goto _test_eof
+	_test_eof74:
 		m.cs = 74
-		goto _testEof
-	_testEof75:
+		goto _test_eof
+	_test_eof75:
 		m.cs = 75
-		goto _testEof
-	_testEof76:
+		goto _test_eof
+	_test_eof76:
 		m.cs = 76
-		goto _testEof
-	_testEof77:
+		goto _test_eof
+	_test_eof77:
 		m.cs = 77
-		goto _testEof
-	_testEof78:
+		goto _test_eof
+	_test_eof78:
 		m.cs = 78
-		goto _testEof
-	_testEof79:
+		goto _test_eof
+	_test_eof79:
 		m.cs = 79
-		goto _testEof
-	_testEof80:
+		goto _test_eof
+	_test_eof80:
 		m.cs = 80
-		goto _testEof
-	_testEof81:
+		goto _test_eof
+	_test_eof81:
 		m.cs = 81
-		goto _testEof
-	_testEof82:
+		goto _test_eof
+	_test_eof82:
 		m.cs = 82
-		goto _testEof
-	_testEof83:
+		goto _test_eof
+	_test_eof83:
 		m.cs = 83
-		goto _testEof
-	_testEof84:
+		goto _test_eof
+	_test_eof84:
 		m.cs = 84
-		goto _testEof
-	_testEof85:
+		goto _test_eof
+	_test_eof85:
 		m.cs = 85
-		goto _testEof
-	_testEof86:
+		goto _test_eof
+	_test_eof86:
 		m.cs = 86
-		goto _testEof
-	_testEof87:
+		goto _test_eof
+	_test_eof87:
 		m.cs = 87
-		goto _testEof
-	_testEof88:
+		goto _test_eof
+	_test_eof88:
 		m.cs = 88
-		goto _testEof
-	_testEof89:
+		goto _test_eof
+	_test_eof89:
 		m.cs = 89
-		goto _testEof
-	_testEof90:
+		goto _test_eof
+	_test_eof90:
 		m.cs = 90
-		goto _testEof
-	_testEof91:
+		goto _test_eof
+	_test_eof91:
 		m.cs = 91
-		goto _testEof
-	_testEof92:
+		goto _test_eof
+	_test_eof92:
 		m.cs = 92
-		goto _testEof
-	_testEof93:
+		goto _test_eof
+	_test_eof93:
 		m.cs = 93
-		goto _testEof
-	_testEof94:
+		goto _test_eof
+	_test_eof94:
 		m.cs = 94
-		goto _testEof
-	_testEof95:
+		goto _test_eof
+	_test_eof95:
 		m.cs = 95
-		goto _testEof
-	_testEof96:
+		goto _test_eof
+	_test_eof96:
 		m.cs = 96
-		goto _testEof
-	_testEof97:
+		goto _test_eof
+	_test_eof97:
 		m.cs = 97
-		goto _testEof
-	_testEof98:
+		goto _test_eof
+	_test_eof98:
 		m.cs = 98
-		goto _testEof
-	_testEof99:
+		goto _test_eof
+	_test_eof99:
 		m.cs = 99
-		goto _testEof
-	_testEof100:
+		goto _test_eof
+	_test_eof100:
 		m.cs = 100
-		goto _testEof
-	_testEof101:
+		goto _test_eof
+	_test_eof101:
 		m.cs = 101
-		goto _testEof
-	_testEof102:
+		goto _test_eof
+	_test_eof102:
 		m.cs = 102
-		goto _testEof
-	_testEof103:
+		goto _test_eof
+	_test_eof103:
 		m.cs = 103
-		goto _testEof
-	_testEof104:
+		goto _test_eof
+	_test_eof104:
 		m.cs = 104
-		goto _testEof
-	_testEof105:
+		goto _test_eof
+	_test_eof105:
 		m.cs = 105
-		goto _testEof
-	_testEof106:
+		goto _test_eof
+	_test_eof106:
 		m.cs = 106
-		goto _testEof
-	_testEof107:
+		goto _test_eof
+	_test_eof107:
 		m.cs = 107
-		goto _testEof
-	_testEof108:
+		goto _test_eof
+	_test_eof108:
 		m.cs = 108
-		goto _testEof
-	_testEof109:
+		goto _test_eof
+	_test_eof109:
 		m.cs = 109
-		goto _testEof
-	_testEof110:
+		goto _test_eof
+	_test_eof110:
 		m.cs = 110
-		goto _testEof
-	_testEof111:
+		goto _test_eof
+	_test_eof111:
 		m.cs = 111
-		goto _testEof
-	_testEof112:
+		goto _test_eof
+	_test_eof112:
 		m.cs = 112
-		goto _testEof
-	_testEof113:
+		goto _test_eof
+	_test_eof113:
 		m.cs = 113
-		goto _testEof
-	_testEof114:
+		goto _test_eof
+	_test_eof114:
 		m.cs = 114
-		goto _testEof
-	_testEof115:
+		goto _test_eof
+	_test_eof115:
 		m.cs = 115
-		goto _testEof
-	_testEof116:
+		goto _test_eof
+	_test_eof116:
 		m.cs = 116
-		goto _testEof
-	_testEof117:
+		goto _test_eof
+	_test_eof117:
 		m.cs = 117
-		goto _testEof
-	_testEof118:
+		goto _test_eof
+	_test_eof118:
 		m.cs = 118
-		goto _testEof
-	_testEof119:
+		goto _test_eof
+	_test_eof119:
 		m.cs = 119
-		goto _testEof
-	_testEof120:
+		goto _test_eof
+	_test_eof120:
 		m.cs = 120
-		goto _testEof
-	_testEof121:
+		goto _test_eof
+	_test_eof121:
 		m.cs = 121
-		goto _testEof
-	_testEof122:
+		goto _test_eof
+	_test_eof122:
 		m.cs = 122
-		goto _testEof
-	_testEof123:
+		goto _test_eof
+	_test_eof123:
 		m.cs = 123
-		goto _testEof
-	_testEof124:
+		goto _test_eof
+	_test_eof124:
 		m.cs = 124
-		goto _testEof
-	_testEof125:
+		goto _test_eof
+	_test_eof125:
 		m.cs = 125
-		goto _testEof
-	_testEof126:
+		goto _test_eof
+	_test_eof126:
 		m.cs = 126
-		goto _testEof
-	_testEof127:
+		goto _test_eof
+	_test_eof127:
 		m.cs = 127
-		goto _testEof
-	_testEof128:
+		goto _test_eof
+	_test_eof128:
 		m.cs = 128
-		goto _testEof
-	_testEof129:
+		goto _test_eof
+	_test_eof129:
 		m.cs = 129
-		goto _testEof
-	_testEof130:
+		goto _test_eof
+	_test_eof130:
 		m.cs = 130
-		goto _testEof
-	_testEof131:
+		goto _test_eof
+	_test_eof131:
 		m.cs = 131
-		goto _testEof
-	_testEof132:
+		goto _test_eof
+	_test_eof132:
 		m.cs = 132
-		goto _testEof
-	_testEof133:
+		goto _test_eof
+	_test_eof133:
 		m.cs = 133
-		goto _testEof
-	_testEof134:
+		goto _test_eof
+	_test_eof134:
 		m.cs = 134
-		goto _testEof
-	_testEof135:
+		goto _test_eof
+	_test_eof135:
 		m.cs = 135
-		goto _testEof
-	_testEof136:
+		goto _test_eof
+	_test_eof136:
 		m.cs = 136
-		goto _testEof
-	_testEof137:
+		goto _test_eof
+	_test_eof137:
 		m.cs = 137
-		goto _testEof
-	_testEof138:
+		goto _test_eof
+	_test_eof138:
 		m.cs = 138
-		goto _testEof
-	_testEof139:
+		goto _test_eof
+	_test_eof139:
 		m.cs = 139
-		goto _testEof
-	_testEof140:
+		goto _test_eof
+	_test_eof140:
 		m.cs = 140
-		goto _testEof
-	_testEof141:
+		goto _test_eof
+	_test_eof141:
 		m.cs = 141
-		goto _testEof
-	_testEof142:
+		goto _test_eof
+	_test_eof142:
 		m.cs = 142
-		goto _testEof
-	_testEof143:
+		goto _test_eof
+	_test_eof143:
 		m.cs = 143
-		goto _testEof
-	_testEof144:
+		goto _test_eof
+	_test_eof144:
 		m.cs = 144
-		goto _testEof
-	_testEof145:
+		goto _test_eof
+	_test_eof145:
 		m.cs = 145
-		goto _testEof
-	_testEof146:
+		goto _test_eof
+	_test_eof146:
 		m.cs = 146
-		goto _testEof
-	_testEof147:
+		goto _test_eof
+	_test_eof147:
 		m.cs = 147
-		goto _testEof
-	_testEof148:
+		goto _test_eof
+	_test_eof148:
 		m.cs = 148
-		goto _testEof
-	_testEof149:
+		goto _test_eof
+	_test_eof149:
 		m.cs = 149
-		goto _testEof
-	_testEof150:
+		goto _test_eof
+	_test_eof150:
 		m.cs = 150
-		goto _testEof
-	_testEof151:
+		goto _test_eof
+	_test_eof151:
 		m.cs = 151
-		goto _testEof
-	_testEof152:
+		goto _test_eof
+	_test_eof152:
 		m.cs = 152
-		goto _testEof
-	_testEof153:
+		goto _test_eof
+	_test_eof153:
 		m.cs = 153
-		goto _testEof
-	_testEof154:
+		goto _test_eof
+	_test_eof154:
 		m.cs = 154
-		goto _testEof
-	_testEof155:
+		goto _test_eof
+	_test_eof155:
 		m.cs = 155
-		goto _testEof
-	_testEof156:
+		goto _test_eof
+	_test_eof156:
 		m.cs = 156
-		goto _testEof
-	_testEof157:
+		goto _test_eof
+	_test_eof157:
 		m.cs = 157
-		goto _testEof
-	_testEof158:
+		goto _test_eof
+	_test_eof158:
 		m.cs = 158
-		goto _testEof
-	_testEof159:
+		goto _test_eof
+	_test_eof159:
 		m.cs = 159
-		goto _testEof
-	_testEof160:
+		goto _test_eof
+	_test_eof160:
 		m.cs = 160
-		goto _testEof
-	_testEof161:
+		goto _test_eof
+	_test_eof161:
 		m.cs = 161
-		goto _testEof
-	_testEof162:
+		goto _test_eof
+	_test_eof162:
 		m.cs = 162
-		goto _testEof
-	_testEof163:
+		goto _test_eof
+	_test_eof163:
 		m.cs = 163
-		goto _testEof
-	_testEof164:
+		goto _test_eof
+	_test_eof164:
 		m.cs = 164
-		goto _testEof
-	_testEof165:
+		goto _test_eof
+	_test_eof165:
 		m.cs = 165
-		goto _testEof
-	_testEof166:
+		goto _test_eof
+	_test_eof166:
 		m.cs = 166
-		goto _testEof
-	_testEof167:
+		goto _test_eof
+	_test_eof167:
 		m.cs = 167
-		goto _testEof
-	_testEof168:
+		goto _test_eof
+	_test_eof168:
 		m.cs = 168
-		goto _testEof
-	_testEof169:
+		goto _test_eof
+	_test_eof169:
 		m.cs = 169
-		goto _testEof
-	_testEof170:
+		goto _test_eof
+	_test_eof170:
 		m.cs = 170
-		goto _testEof
-	_testEof171:
+		goto _test_eof
+	_test_eof171:
 		m.cs = 171
-		goto _testEof
-	_testEof172:
+		goto _test_eof
+	_test_eof172:
 		m.cs = 172
-		goto _testEof
-	_testEof173:
+		goto _test_eof
+	_test_eof173:
 		m.cs = 173
-		goto _testEof
-	_testEof174:
+		goto _test_eof
+	_test_eof174:
 		m.cs = 174
-		goto _testEof
-	_testEof175:
+		goto _test_eof
+	_test_eof175:
 		m.cs = 175
-		goto _testEof
-	_testEof176:
+		goto _test_eof
+	_test_eof176:
 		m.cs = 176
-		goto _testEof
-	_testEof177:
+		goto _test_eof
+	_test_eof177:
 		m.cs = 177
-		goto _testEof
-	_testEof178:
+		goto _test_eof
+	_test_eof178:
 		m.cs = 178
-		goto _testEof
-	_testEof179:
+		goto _test_eof
+	_test_eof179:
 		m.cs = 179
-		goto _testEof
-	_testEof180:
+		goto _test_eof
+	_test_eof180:
 		m.cs = 180
-		goto _testEof
-	_testEof181:
+		goto _test_eof
+	_test_eof181:
 		m.cs = 181
-		goto _testEof
-	_testEof182:
+		goto _test_eof
+	_test_eof182:
 		m.cs = 182
-		goto _testEof
-	_testEof183:
+		goto _test_eof
+	_test_eof183:
 		m.cs = 183
-		goto _testEof
-	_testEof184:
+		goto _test_eof
+	_test_eof184:
 		m.cs = 184
-		goto _testEof
-	_testEof185:
+		goto _test_eof
+	_test_eof185:
 		m.cs = 185
-		goto _testEof
-	_testEof186:
+		goto _test_eof
+	_test_eof186:
 		m.cs = 186
-		goto _testEof
-	_testEof187:
+		goto _test_eof
+	_test_eof187:
 		m.cs = 187
-		goto _testEof
-	_testEof188:
+		goto _test_eof
+	_test_eof188:
 		m.cs = 188
-		goto _testEof
-	_testEof189:
+		goto _test_eof
+	_test_eof189:
 		m.cs = 189
-		goto _testEof
-	_testEof190:
+		goto _test_eof
+	_test_eof190:
 		m.cs = 190
-		goto _testEof
-	_testEof191:
+		goto _test_eof
+	_test_eof191:
 		m.cs = 191
-		goto _testEof
-	_testEof192:
+		goto _test_eof
+	_test_eof192:
 		m.cs = 192
-		goto _testEof
-	_testEof193:
+		goto _test_eof
+	_test_eof193:
 		m.cs = 193
-		goto _testEof
-	_testEof194:
+		goto _test_eof
+	_test_eof194:
 		m.cs = 194
-		goto _testEof
-	_testEof195:
+		goto _test_eof
+	_test_eof195:
 		m.cs = 195
-		goto _testEof
-	_testEof196:
+		goto _test_eof
+	_test_eof196:
 		m.cs = 196
-		goto _testEof
-	_testEof197:
+		goto _test_eof
+	_test_eof197:
 		m.cs = 197
-		goto _testEof
-	_testEof198:
+		goto _test_eof
+	_test_eof198:
 		m.cs = 198
-		goto _testEof
-	_testEof199:
+		goto _test_eof
+	_test_eof199:
 		m.cs = 199
-		goto _testEof
-	_testEof200:
+		goto _test_eof
+	_test_eof200:
 		m.cs = 200
-		goto _testEof
-	_testEof201:
+		goto _test_eof
+	_test_eof201:
 		m.cs = 201
-		goto _testEof
-	_testEof202:
+		goto _test_eof
+	_test_eof202:
 		m.cs = 202
-		goto _testEof
-	_testEof203:
+		goto _test_eof
+	_test_eof203:
 		m.cs = 203
-		goto _testEof
-	_testEof204:
+		goto _test_eof
+	_test_eof204:
 		m.cs = 204
-		goto _testEof
-	_testEof205:
+		goto _test_eof
+	_test_eof205:
 		m.cs = 205
-		goto _testEof
-	_testEof206:
+		goto _test_eof
+	_test_eof206:
 		m.cs = 206
-		goto _testEof
-	_testEof207:
+		goto _test_eof
+	_test_eof207:
 		m.cs = 207
-		goto _testEof
-	_testEof208:
+		goto _test_eof
+	_test_eof208:
 		m.cs = 208
-		goto _testEof
-	_testEof209:
+		goto _test_eof
+	_test_eof209:
 		m.cs = 209
-		goto _testEof
-	_testEof210:
+		goto _test_eof
+	_test_eof210:
 		m.cs = 210
-		goto _testEof
-	_testEof211:
+		goto _test_eof
+	_test_eof211:
 		m.cs = 211
-		goto _testEof
-	_testEof212:
+		goto _test_eof
+	_test_eof212:
 		m.cs = 212
-		goto _testEof
-	_testEof213:
+		goto _test_eof
+	_test_eof213:
 		m.cs = 213
-		goto _testEof
-	_testEof214:
+		goto _test_eof
+	_test_eof214:
 		m.cs = 214
-		goto _testEof
-	_testEof215:
+		goto _test_eof
+	_test_eof215:
 		m.cs = 215
-		goto _testEof
-	_testEof216:
+		goto _test_eof
+	_test_eof216:
 		m.cs = 216
-		goto _testEof
-	_testEof217:
+		goto _test_eof
+	_test_eof217:
 		m.cs = 217
-		goto _testEof
-	_testEof218:
+		goto _test_eof
+	_test_eof218:
 		m.cs = 218
-		goto _testEof
-	_testEof219:
+		goto _test_eof
+	_test_eof219:
 		m.cs = 219
-		goto _testEof
-	_testEof220:
+		goto _test_eof
+	_test_eof220:
 		m.cs = 220
-		goto _testEof
-	_testEof221:
+		goto _test_eof
+	_test_eof221:
 		m.cs = 221
-		goto _testEof
-	_testEof222:
+		goto _test_eof
+	_test_eof222:
 		m.cs = 222
-		goto _testEof
-	_testEof223:
+		goto _test_eof
+	_test_eof223:
 		m.cs = 223
-		goto _testEof
-	_testEof224:
+		goto _test_eof
+	_test_eof224:
 		m.cs = 224
-		goto _testEof
-	_testEof225:
+		goto _test_eof
+	_test_eof225:
 		m.cs = 225
-		goto _testEof
-	_testEof226:
+		goto _test_eof
+	_test_eof226:
 		m.cs = 226
-		goto _testEof
-	_testEof227:
+		goto _test_eof
+	_test_eof227:
 		m.cs = 227
-		goto _testEof
-	_testEof228:
+		goto _test_eof
+	_test_eof228:
 		m.cs = 228
-		goto _testEof
-	_testEof229:
+		goto _test_eof
+	_test_eof229:
 		m.cs = 229
-		goto _testEof
-	_testEof230:
+		goto _test_eof
+	_test_eof230:
 		m.cs = 230
-		goto _testEof
-	_testEof231:
+		goto _test_eof
+	_test_eof231:
 		m.cs = 231
-		goto _testEof
-	_testEof232:
+		goto _test_eof
+	_test_eof232:
 		m.cs = 232
-		goto _testEof
-	_testEof233:
+		goto _test_eof
+	_test_eof233:
 		m.cs = 233
-		goto _testEof
-	_testEof234:
+		goto _test_eof
+	_test_eof234:
 		m.cs = 234
-		goto _testEof
-	_testEof235:
+		goto _test_eof
+	_test_eof235:
 		m.cs = 235
-		goto _testEof
-	_testEof236:
+		goto _test_eof
+	_test_eof236:
 		m.cs = 236
-		goto _testEof
-	_testEof237:
+		goto _test_eof
+	_test_eof237:
 		m.cs = 237
-		goto _testEof
-	_testEof238:
+		goto _test_eof
+	_test_eof238:
 		m.cs = 238
-		goto _testEof
-	_testEof239:
+		goto _test_eof
+	_test_eof239:
 		m.cs = 239
-		goto _testEof
-	_testEof240:
+		goto _test_eof
+	_test_eof240:
 		m.cs = 240
-		goto _testEof
-	_testEof241:
+		goto _test_eof
+	_test_eof241:
 		m.cs = 241
-		goto _testEof
-	_testEof242:
+		goto _test_eof
+	_test_eof242:
 		m.cs = 242
-		goto _testEof
-	_testEof243:
+		goto _test_eof
+	_test_eof243:
 		m.cs = 243
-		goto _testEof
-	_testEof244:
+		goto _test_eof
+	_test_eof244:
 		m.cs = 244
-		goto _testEof
-	_testEof245:
+		goto _test_eof
+	_test_eof245:
 		m.cs = 245
-		goto _testEof
-	_testEof246:
+		goto _test_eof
+	_test_eof246:
 		m.cs = 246
-		goto _testEof
-	_testEof247:
+		goto _test_eof
+	_test_eof247:
 		m.cs = 247
-		goto _testEof
-	_testEof248:
+		goto _test_eof
+	_test_eof248:
 		m.cs = 248
-		goto _testEof
-	_testEof249:
+		goto _test_eof
+	_test_eof249:
 		m.cs = 249
-		goto _testEof
-	_testEof250:
+		goto _test_eof
+	_test_eof250:
 		m.cs = 250
-		goto _testEof
-	_testEof251:
+		goto _test_eof
+	_test_eof251:
 		m.cs = 251
-		goto _testEof
-	_testEof252:
+		goto _test_eof
+	_test_eof252:
 		m.cs = 252
-		goto _testEof
-	_testEof253:
+		goto _test_eof
+	_test_eof253:
 		m.cs = 253
-		goto _testEof
-	_testEof254:
+		goto _test_eof
+	_test_eof254:
 		m.cs = 254
-		goto _testEof
-	_testEof255:
+		goto _test_eof
+	_test_eof255:
 		m.cs = 255
-		goto _testEof
-	_testEof256:
+		goto _test_eof
+	_test_eof256:
 		m.cs = 256
-		goto _testEof
-	_testEof257:
+		goto _test_eof
+	_test_eof257:
 		m.cs = 257
-		goto _testEof
-	_testEof258:
+		goto _test_eof
+	_test_eof258:
 		m.cs = 258
-		goto _testEof
-	_testEof259:
+		goto _test_eof
+	_test_eof259:
 		m.cs = 259
-		goto _testEof
-	_testEof260:
+		goto _test_eof
+	_test_eof260:
 		m.cs = 260
-		goto _testEof
-	_testEof261:
+		goto _test_eof
+	_test_eof261:
 		m.cs = 261
-		goto _testEof
-	_testEof262:
+		goto _test_eof
+	_test_eof262:
 		m.cs = 262
-		goto _testEof
-	_testEof263:
+		goto _test_eof
+	_test_eof263:
 		m.cs = 263
-		goto _testEof
-	_testEof264:
+		goto _test_eof
+	_test_eof264:
 		m.cs = 264
-		goto _testEof
-	_testEof265:
+		goto _test_eof
+	_test_eof265:
 		m.cs = 265
-		goto _testEof
-	_testEof266:
+		goto _test_eof
+	_test_eof266:
 		m.cs = 266
-		goto _testEof
-	_testEof267:
+		goto _test_eof
+	_test_eof267:
 		m.cs = 267
-		goto _testEof
-	_testEof268:
+		goto _test_eof
+	_test_eof268:
 		m.cs = 268
-		goto _testEof
-	_testEof269:
+		goto _test_eof
+	_test_eof269:
 		m.cs = 269
-		goto _testEof
-	_testEof270:
+		goto _test_eof
+	_test_eof270:
 		m.cs = 270
-		goto _testEof
-	_testEof271:
+		goto _test_eof
+	_test_eof271:
 		m.cs = 271
-		goto _testEof
-	_testEof272:
+		goto _test_eof
+	_test_eof272:
 		m.cs = 272
-		goto _testEof
-	_testEof273:
+		goto _test_eof
+	_test_eof273:
 		m.cs = 273
-		goto _testEof
-	_testEof274:
+		goto _test_eof
+	_test_eof274:
 		m.cs = 274
-		goto _testEof
-	_testEof275:
+		goto _test_eof
+	_test_eof275:
 		m.cs = 275
-		goto _testEof
-	_testEof276:
+		goto _test_eof
+	_test_eof276:
 		m.cs = 276
-		goto _testEof
-	_testEof277:
+		goto _test_eof
+	_test_eof277:
 		m.cs = 277
-		goto _testEof
-	_testEof278:
+		goto _test_eof
+	_test_eof278:
 		m.cs = 278
-		goto _testEof
-	_testEof279:
+		goto _test_eof
+	_test_eof279:
 		m.cs = 279
-		goto _testEof
-	_testEof280:
+		goto _test_eof
+	_test_eof280:
 		m.cs = 280
-		goto _testEof
-	_testEof281:
+		goto _test_eof
+	_test_eof281:
 		m.cs = 281
-		goto _testEof
-	_testEof282:
+		goto _test_eof
+	_test_eof282:
 		m.cs = 282
-		goto _testEof
-	_testEof283:
+		goto _test_eof
+	_test_eof283:
 		m.cs = 283
-		goto _testEof
-	_testEof284:
+		goto _test_eof
+	_test_eof284:
 		m.cs = 284
-		goto _testEof
-	_testEof285:
+		goto _test_eof
+	_test_eof285:
 		m.cs = 285
-		goto _testEof
-	_testEof286:
+		goto _test_eof
+	_test_eof286:
 		m.cs = 286
-		goto _testEof
-	_testEof287:
+		goto _test_eof
+	_test_eof287:
 		m.cs = 287
-		goto _testEof
-	_testEof288:
+		goto _test_eof
+	_test_eof288:
 		m.cs = 288
-		goto _testEof
-	_testEof289:
+		goto _test_eof
+	_test_eof289:
 		m.cs = 289
-		goto _testEof
-	_testEof290:
+		goto _test_eof
+	_test_eof290:
 		m.cs = 290
-		goto _testEof
-	_testEof291:
+		goto _test_eof
+	_test_eof291:
 		m.cs = 291
-		goto _testEof
-	_testEof292:
+		goto _test_eof
+	_test_eof292:
 		m.cs = 292
-		goto _testEof
-	_testEof293:
+		goto _test_eof
+	_test_eof293:
 		m.cs = 293
-		goto _testEof
-	_testEof294:
+		goto _test_eof
+	_test_eof294:
 		m.cs = 294
-		goto _testEof
-	_testEof295:
+		goto _test_eof
+	_test_eof295:
 		m.cs = 295
-		goto _testEof
-	_testEof296:
+		goto _test_eof
+	_test_eof296:
 		m.cs = 296
-		goto _testEof
-	_testEof297:
+		goto _test_eof
+	_test_eof297:
 		m.cs = 297
-		goto _testEof
-	_testEof298:
+		goto _test_eof
+	_test_eof298:
 		m.cs = 298
-		goto _testEof
-	_testEof299:
+		goto _test_eof
+	_test_eof299:
 		m.cs = 299
-		goto _testEof
-	_testEof300:
+		goto _test_eof
+	_test_eof300:
 		m.cs = 300
-		goto _testEof
-	_testEof301:
+		goto _test_eof
+	_test_eof301:
 		m.cs = 301
-		goto _testEof
-	_testEof302:
+		goto _test_eof
+	_test_eof302:
 		m.cs = 302
-		goto _testEof
-	_testEof303:
+		goto _test_eof
+	_test_eof303:
 		m.cs = 303
-		goto _testEof
-	_testEof304:
+		goto _test_eof
+	_test_eof304:
 		m.cs = 304
-		goto _testEof
-	_testEof305:
+		goto _test_eof
+	_test_eof305:
 		m.cs = 305
-		goto _testEof
-	_testEof306:
+		goto _test_eof
+	_test_eof306:
 		m.cs = 306
-		goto _testEof
-	_testEof307:
+		goto _test_eof
+	_test_eof307:
 		m.cs = 307
-		goto _testEof
-	_testEof308:
+		goto _test_eof
+	_test_eof308:
 		m.cs = 308
-		goto _testEof
-	_testEof309:
+		goto _test_eof
+	_test_eof309:
 		m.cs = 309
-		goto _testEof
-	_testEof310:
+		goto _test_eof
+	_test_eof310:
 		m.cs = 310
-		goto _testEof
-	_testEof311:
+		goto _test_eof
+	_test_eof311:
 		m.cs = 311
-		goto _testEof
-	_testEof312:
+		goto _test_eof
+	_test_eof312:
 		m.cs = 312
-		goto _testEof
-	_testEof313:
+		goto _test_eof
+	_test_eof313:
 		m.cs = 313
-		goto _testEof
-	_testEof314:
+		goto _test_eof
+	_test_eof314:
 		m.cs = 314
-		goto _testEof
-	_testEof315:
+		goto _test_eof
+	_test_eof315:
 		m.cs = 315
-		goto _testEof
-	_testEof316:
+		goto _test_eof
+	_test_eof316:
 		m.cs = 316
-		goto _testEof
-	_testEof317:
+		goto _test_eof
+	_test_eof317:
 		m.cs = 317
-		goto _testEof
-	_testEof318:
+		goto _test_eof
+	_test_eof318:
 		m.cs = 318
-		goto _testEof
-	_testEof319:
+		goto _test_eof
+	_test_eof319:
 		m.cs = 319
-		goto _testEof
-	_testEof320:
+		goto _test_eof
+	_test_eof320:
 		m.cs = 320
-		goto _testEof
-	_testEof321:
+		goto _test_eof
+	_test_eof321:
 		m.cs = 321
-		goto _testEof
-	_testEof322:
+		goto _test_eof
+	_test_eof322:
 		m.cs = 322
-		goto _testEof
-	_testEof323:
+		goto _test_eof
+	_test_eof323:
 		m.cs = 323
-		goto _testEof
-	_testEof324:
+		goto _test_eof
+	_test_eof324:
 		m.cs = 324
-		goto _testEof
-	_testEof325:
+		goto _test_eof
+	_test_eof325:
 		m.cs = 325
-		goto _testEof
-	_testEof326:
+		goto _test_eof
+	_test_eof326:
 		m.cs = 326
-		goto _testEof
-	_testEof327:
+		goto _test_eof
+	_test_eof327:
 		m.cs = 327
-		goto _testEof
-	_testEof328:
+		goto _test_eof
+	_test_eof328:
 		m.cs = 328
-		goto _testEof
-	_testEof329:
+		goto _test_eof
+	_test_eof329:
 		m.cs = 329
-		goto _testEof
-	_testEof330:
+		goto _test_eof
+	_test_eof330:
 		m.cs = 330
-		goto _testEof
-	_testEof331:
+		goto _test_eof
+	_test_eof331:
 		m.cs = 331
-		goto _testEof
-	_testEof332:
+		goto _test_eof
+	_test_eof332:
 		m.cs = 332
-		goto _testEof
-	_testEof333:
+		goto _test_eof
+	_test_eof333:
 		m.cs = 333
-		goto _testEof
-	_testEof334:
+		goto _test_eof
+	_test_eof334:
 		m.cs = 334
-		goto _testEof
-	_testEof335:
+		goto _test_eof
+	_test_eof335:
 		m.cs = 335
-		goto _testEof
-	_testEof336:
+		goto _test_eof
+	_test_eof336:
 		m.cs = 336
-		goto _testEof
-	_testEof337:
+		goto _test_eof
+	_test_eof337:
 		m.cs = 337
-		goto _testEof
-	_testEof338:
+		goto _test_eof
+	_test_eof338:
 		m.cs = 338
-		goto _testEof
-	_testEof339:
+		goto _test_eof
+	_test_eof339:
 		m.cs = 339
-		goto _testEof
-	_testEof340:
+		goto _test_eof
+	_test_eof340:
 		m.cs = 340
-		goto _testEof
-	_testEof341:
+		goto _test_eof
+	_test_eof341:
 		m.cs = 341
-		goto _testEof
-	_testEof342:
+		goto _test_eof
+	_test_eof342:
 		m.cs = 342
-		goto _testEof
-	_testEof343:
+		goto _test_eof
+	_test_eof343:
 		m.cs = 343
-		goto _testEof
-	_testEof344:
+		goto _test_eof
+	_test_eof344:
 		m.cs = 344
-		goto _testEof
-	_testEof345:
+		goto _test_eof
+	_test_eof345:
 		m.cs = 345
-		goto _testEof
-	_testEof346:
+		goto _test_eof
+	_test_eof346:
 		m.cs = 346
-		goto _testEof
-	_testEof347:
+		goto _test_eof
+	_test_eof347:
 		m.cs = 347
-		goto _testEof
-	_testEof348:
+		goto _test_eof
+	_test_eof348:
 		m.cs = 348
-		goto _testEof
-	_testEof349:
+		goto _test_eof
+	_test_eof349:
 		m.cs = 349
-		goto _testEof
-	_testEof350:
+		goto _test_eof
+	_test_eof350:
 		m.cs = 350
-		goto _testEof
-	_testEof351:
+		goto _test_eof
+	_test_eof351:
 		m.cs = 351
-		goto _testEof
-	_testEof352:
+		goto _test_eof
+	_test_eof352:
 		m.cs = 352
-		goto _testEof
-	_testEof353:
+		goto _test_eof
+	_test_eof353:
 		m.cs = 353
-		goto _testEof
-	_testEof354:
+		goto _test_eof
+	_test_eof354:
 		m.cs = 354
-		goto _testEof
-	_testEof355:
+		goto _test_eof
+	_test_eof355:
 		m.cs = 355
-		goto _testEof
-	_testEof356:
+		goto _test_eof
+	_test_eof356:
 		m.cs = 356
-		goto _testEof
-	_testEof357:
+		goto _test_eof
+	_test_eof357:
 		m.cs = 357
-		goto _testEof
-	_testEof358:
+		goto _test_eof
+	_test_eof358:
 		m.cs = 358
-		goto _testEof
-	_testEof359:
+		goto _test_eof
+	_test_eof359:
 		m.cs = 359
-		goto _testEof
-	_testEof360:
+		goto _test_eof
+	_test_eof360:
 		m.cs = 360
-		goto _testEof
-	_testEof361:
+		goto _test_eof
+	_test_eof361:
 		m.cs = 361
-		goto _testEof
-	_testEof362:
+		goto _test_eof
+	_test_eof362:
 		m.cs = 362
-		goto _testEof
-	_testEof363:
+		goto _test_eof
+	_test_eof363:
 		m.cs = 363
-		goto _testEof
-	_testEof364:
+		goto _test_eof
+	_test_eof364:
 		m.cs = 364
-		goto _testEof
-	_testEof365:
+		goto _test_eof
+	_test_eof365:
 		m.cs = 365
-		goto _testEof
-	_testEof366:
+		goto _test_eof
+	_test_eof366:
 		m.cs = 366
-		goto _testEof
-	_testEof367:
+		goto _test_eof
+	_test_eof367:
 		m.cs = 367
-		goto _testEof
-	_testEof368:
+		goto _test_eof
+	_test_eof368:
 		m.cs = 368
-		goto _testEof
-	_testEof369:
+		goto _test_eof
+	_test_eof369:
 		m.cs = 369
-		goto _testEof
-	_testEof370:
+		goto _test_eof
+	_test_eof370:
 		m.cs = 370
-		goto _testEof
-	_testEof371:
+		goto _test_eof
+	_test_eof371:
 		m.cs = 371
-		goto _testEof
-	_testEof372:
+		goto _test_eof
+	_test_eof372:
 		m.cs = 372
-		goto _testEof
-	_testEof373:
+		goto _test_eof
+	_test_eof373:
 		m.cs = 373
-		goto _testEof
-	_testEof374:
+		goto _test_eof
+	_test_eof374:
 		m.cs = 374
-		goto _testEof
-	_testEof375:
+		goto _test_eof
+	_test_eof375:
 		m.cs = 375
-		goto _testEof
-	_testEof376:
+		goto _test_eof
+	_test_eof376:
 		m.cs = 376
-		goto _testEof
-	_testEof377:
+		goto _test_eof
+	_test_eof377:
 		m.cs = 377
-		goto _testEof
-	_testEof378:
+		goto _test_eof
+	_test_eof378:
 		m.cs = 378
-		goto _testEof
-	_testEof379:
+		goto _test_eof
+	_test_eof379:
 		m.cs = 379
-		goto _testEof
-	_testEof380:
+		goto _test_eof
+	_test_eof380:
 		m.cs = 380
-		goto _testEof
-	_testEof381:
+		goto _test_eof
+	_test_eof381:
 		m.cs = 381
-		goto _testEof
-	_testEof382:
+		goto _test_eof
+	_test_eof382:
 		m.cs = 382
-		goto _testEof
-	_testEof383:
+		goto _test_eof
+	_test_eof383:
 		m.cs = 383
-		goto _testEof
-	_testEof384:
+		goto _test_eof
+	_test_eof384:
 		m.cs = 384
-		goto _testEof
-	_testEof385:
+		goto _test_eof
+	_test_eof385:
 		m.cs = 385
-		goto _testEof
-	_testEof386:
+		goto _test_eof
+	_test_eof386:
 		m.cs = 386
-		goto _testEof
-	_testEof387:
+		goto _test_eof
+	_test_eof387:
 		m.cs = 387
-		goto _testEof
-	_testEof388:
+		goto _test_eof
+	_test_eof388:
 		m.cs = 388
-		goto _testEof
-	_testEof389:
+		goto _test_eof
+	_test_eof389:
 		m.cs = 389
-		goto _testEof
-	_testEof390:
+		goto _test_eof
+	_test_eof390:
 		m.cs = 390
-		goto _testEof
-	_testEof391:
+		goto _test_eof
+	_test_eof391:
 		m.cs = 391
-		goto _testEof
-	_testEof392:
+		goto _test_eof
+	_test_eof392:
 		m.cs = 392
-		goto _testEof
-	_testEof393:
+		goto _test_eof
+	_test_eof393:
 		m.cs = 393
-		goto _testEof
-	_testEof394:
+		goto _test_eof
+	_test_eof394:
 		m.cs = 394
-		goto _testEof
-	_testEof395:
+		goto _test_eof
+	_test_eof395:
 		m.cs = 395
-		goto _testEof
-	_testEof396:
+		goto _test_eof
+	_test_eof396:
 		m.cs = 396
-		goto _testEof
-	_testEof397:
+		goto _test_eof
+	_test_eof397:
 		m.cs = 397
-		goto _testEof
-	_testEof398:
+		goto _test_eof
+	_test_eof398:
 		m.cs = 398
-		goto _testEof
-	_testEof399:
+		goto _test_eof
+	_test_eof399:
 		m.cs = 399
-		goto _testEof
-	_testEof400:
+		goto _test_eof
+	_test_eof400:
 		m.cs = 400
-		goto _testEof
-	_testEof401:
+		goto _test_eof
+	_test_eof401:
 		m.cs = 401
-		goto _testEof
-	_testEof402:
+		goto _test_eof
+	_test_eof402:
 		m.cs = 402
-		goto _testEof
-	_testEof403:
+		goto _test_eof
+	_test_eof403:
 		m.cs = 403
-		goto _testEof
-	_testEof404:
+		goto _test_eof
+	_test_eof404:
 		m.cs = 404
-		goto _testEof
-	_testEof405:
+		goto _test_eof
+	_test_eof405:
 		m.cs = 405
-		goto _testEof
-	_testEof406:
+		goto _test_eof
+	_test_eof406:
 		m.cs = 406
-		goto _testEof
-	_testEof407:
+		goto _test_eof
+	_test_eof407:
 		m.cs = 407
-		goto _testEof
-	_testEof408:
+		goto _test_eof
+	_test_eof408:
 		m.cs = 408
-		goto _testEof
-	_testEof409:
+		goto _test_eof
+	_test_eof409:
 		m.cs = 409
-		goto _testEof
-	_testEof410:
+		goto _test_eof
+	_test_eof410:
 		m.cs = 410
-		goto _testEof
-	_testEof411:
+		goto _test_eof
+	_test_eof411:
 		m.cs = 411
-		goto _testEof
-	_testEof412:
+		goto _test_eof
+	_test_eof412:
 		m.cs = 412
-		goto _testEof
-	_testEof413:
+		goto _test_eof
+	_test_eof413:
 		m.cs = 413
-		goto _testEof
-	_testEof414:
+		goto _test_eof
+	_test_eof414:
 		m.cs = 414
-		goto _testEof
-	_testEof415:
+		goto _test_eof
+	_test_eof415:
 		m.cs = 415
-		goto _testEof
-	_testEof416:
+		goto _test_eof
+	_test_eof416:
 		m.cs = 416
-		goto _testEof
-	_testEof417:
+		goto _test_eof
+	_test_eof417:
 		m.cs = 417
-		goto _testEof
-	_testEof418:
+		goto _test_eof
+	_test_eof418:
 		m.cs = 418
-		goto _testEof
-	_testEof419:
+		goto _test_eof
+	_test_eof419:
 		m.cs = 419
-		goto _testEof
-	_testEof420:
+		goto _test_eof
+	_test_eof420:
 		m.cs = 420
-		goto _testEof
-	_testEof421:
+		goto _test_eof
+	_test_eof421:
 		m.cs = 421
-		goto _testEof
-	_testEof422:
+		goto _test_eof
+	_test_eof422:
 		m.cs = 422
-		goto _testEof
-	_testEof423:
+		goto _test_eof
+	_test_eof423:
 		m.cs = 423
-		goto _testEof
-	_testEof424:
+		goto _test_eof
+	_test_eof424:
 		m.cs = 424
-		goto _testEof
-	_testEof425:
+		goto _test_eof
+	_test_eof425:
 		m.cs = 425
-		goto _testEof
-	_testEof426:
+		goto _test_eof
+	_test_eof426:
 		m.cs = 426
-		goto _testEof
-	_testEof427:
+		goto _test_eof
+	_test_eof427:
 		m.cs = 427
-		goto _testEof
-	_testEof428:
+		goto _test_eof
+	_test_eof428:
 		m.cs = 428
-		goto _testEof
-	_testEof429:
+		goto _test_eof
+	_test_eof429:
 		m.cs = 429
-		goto _testEof
-	_testEof430:
+		goto _test_eof
+	_test_eof430:
 		m.cs = 430
-		goto _testEof
-	_testEof431:
+		goto _test_eof
+	_test_eof431:
 		m.cs = 431
-		goto _testEof
-	_testEof432:
+		goto _test_eof
+	_test_eof432:
 		m.cs = 432
-		goto _testEof
-	_testEof433:
+		goto _test_eof
+	_test_eof433:
 		m.cs = 433
-		goto _testEof
-	_testEof434:
+		goto _test_eof
+	_test_eof434:
 		m.cs = 434
-		goto _testEof
-	_testEof435:
+		goto _test_eof
+	_test_eof435:
 		m.cs = 435
-		goto _testEof
-	_testEof436:
+		goto _test_eof
+	_test_eof436:
 		m.cs = 436
-		goto _testEof
-	_testEof437:
+		goto _test_eof
+	_test_eof437:
 		m.cs = 437
-		goto _testEof
-	_testEof438:
+		goto _test_eof
+	_test_eof438:
 		m.cs = 438
-		goto _testEof
-	_testEof439:
+		goto _test_eof
+	_test_eof439:
 		m.cs = 439
-		goto _testEof
-	_testEof440:
+		goto _test_eof
+	_test_eof440:
 		m.cs = 440
-		goto _testEof
-	_testEof441:
+		goto _test_eof
+	_test_eof441:
 		m.cs = 441
-		goto _testEof
-	_testEof442:
+		goto _test_eof
+	_test_eof442:
 		m.cs = 442
-		goto _testEof
-	_testEof443:
+		goto _test_eof
+	_test_eof443:
 		m.cs = 443
-		goto _testEof
-	_testEof444:
+		goto _test_eof
+	_test_eof444:
 		m.cs = 444
-		goto _testEof
-	_testEof445:
+		goto _test_eof
+	_test_eof445:
 		m.cs = 445
-		goto _testEof
-	_testEof446:
+		goto _test_eof
+	_test_eof446:
 		m.cs = 446
-		goto _testEof
-	_testEof447:
+		goto _test_eof
+	_test_eof447:
 		m.cs = 447
-		goto _testEof
-	_testEof448:
+		goto _test_eof
+	_test_eof448:
 		m.cs = 448
-		goto _testEof
-	_testEof449:
+		goto _test_eof
+	_test_eof449:
 		m.cs = 449
-		goto _testEof
-	_testEof450:
+		goto _test_eof
+	_test_eof450:
 		m.cs = 450
-		goto _testEof
-	_testEof451:
+		goto _test_eof
+	_test_eof451:
 		m.cs = 451
-		goto _testEof
-	_testEof452:
+		goto _test_eof
+	_test_eof452:
 		m.cs = 452
-		goto _testEof
-	_testEof453:
+		goto _test_eof
+	_test_eof453:
 		m.cs = 453
-		goto _testEof
-	_testEof454:
+		goto _test_eof
+	_test_eof454:
 		m.cs = 454
-		goto _testEof
-	_testEof455:
+		goto _test_eof
+	_test_eof455:
 		m.cs = 455
-		goto _testEof
-	_testEof456:
+		goto _test_eof
+	_test_eof456:
 		m.cs = 456
-		goto _testEof
-	_testEof457:
+		goto _test_eof
+	_test_eof457:
 		m.cs = 457
-		goto _testEof
-	_testEof458:
+		goto _test_eof
+	_test_eof458:
 		m.cs = 458
-		goto _testEof
-	_testEof459:
+		goto _test_eof
+	_test_eof459:
 		m.cs = 459
-		goto _testEof
-	_testEof460:
+		goto _test_eof
+	_test_eof460:
 		m.cs = 460
-		goto _testEof
-	_testEof461:
+		goto _test_eof
+	_test_eof461:
 		m.cs = 461
-		goto _testEof
-	_testEof462:
+		goto _test_eof
+	_test_eof462:
 		m.cs = 462
-		goto _testEof
-	_testEof463:
+		goto _test_eof
+	_test_eof463:
 		m.cs = 463
-		goto _testEof
-	_testEof464:
+		goto _test_eof
+	_test_eof464:
 		m.cs = 464
-		goto _testEof
-	_testEof465:
+		goto _test_eof
+	_test_eof465:
 		m.cs = 465
-		goto _testEof
-	_testEof466:
+		goto _test_eof
+	_test_eof466:
 		m.cs = 466
-		goto _testEof
-	_testEof467:
+		goto _test_eof
+	_test_eof467:
 		m.cs = 467
-		goto _testEof
-	_testEof468:
+		goto _test_eof
+	_test_eof468:
 		m.cs = 468
-		goto _testEof
-	_testEof469:
+		goto _test_eof
+	_test_eof469:
 		m.cs = 469
-		goto _testEof
-	_testEof470:
+		goto _test_eof
+	_test_eof470:
 		m.cs = 470
-		goto _testEof
-	_testEof471:
+		goto _test_eof
+	_test_eof471:
 		m.cs = 471
-		goto _testEof
-	_testEof472:
+		goto _test_eof
+	_test_eof472:
 		m.cs = 472
-		goto _testEof
-	_testEof473:
+		goto _test_eof
+	_test_eof473:
 		m.cs = 473
-		goto _testEof
-	_testEof474:
+		goto _test_eof
+	_test_eof474:
 		m.cs = 474
-		goto _testEof
-	_testEof475:
+		goto _test_eof
+	_test_eof475:
 		m.cs = 475
-		goto _testEof
-	_testEof476:
+		goto _test_eof
+	_test_eof476:
 		m.cs = 476
-		goto _testEof
-	_testEof477:
+		goto _test_eof
+	_test_eof477:
 		m.cs = 477
-		goto _testEof
-	_testEof478:
+		goto _test_eof
+	_test_eof478:
 		m.cs = 478
-		goto _testEof
-	_testEof479:
+		goto _test_eof
+	_test_eof479:
 		m.cs = 479
-		goto _testEof
-	_testEof480:
+		goto _test_eof
+	_test_eof480:
 		m.cs = 480
-		goto _testEof
-	_testEof481:
+		goto _test_eof
+	_test_eof481:
 		m.cs = 481
-		goto _testEof
-	_testEof482:
+		goto _test_eof
+	_test_eof482:
 		m.cs = 482
-		goto _testEof
-	_testEof483:
+		goto _test_eof
+	_test_eof483:
 		m.cs = 483
-		goto _testEof
-	_testEof484:
+		goto _test_eof
+	_test_eof484:
 		m.cs = 484
-		goto _testEof
-	_testEof485:
+		goto _test_eof
+	_test_eof485:
 		m.cs = 485
-		goto _testEof
-	_testEof486:
+		goto _test_eof
+	_test_eof486:
 		m.cs = 486
-		goto _testEof
-	_testEof487:
+		goto _test_eof
+	_test_eof487:
 		m.cs = 487
-		goto _testEof
-	_testEof488:
+		goto _test_eof
+	_test_eof488:
 		m.cs = 488
-		goto _testEof
-	_testEof489:
+		goto _test_eof
+	_test_eof489:
 		m.cs = 489
-		goto _testEof
-	_testEof490:
+		goto _test_eof
+	_test_eof490:
 		m.cs = 490
-		goto _testEof
-	_testEof491:
+		goto _test_eof
+	_test_eof491:
 		m.cs = 491
-		goto _testEof
-	_testEof492:
+		goto _test_eof
+	_test_eof492:
 		m.cs = 492
-		goto _testEof
-	_testEof493:
+		goto _test_eof
+	_test_eof493:
 		m.cs = 493
-		goto _testEof
-	_testEof494:
+		goto _test_eof
+	_test_eof494:
 		m.cs = 494
-		goto _testEof
-	_testEof495:
+		goto _test_eof
+	_test_eof495:
 		m.cs = 495
-		goto _testEof
-	_testEof496:
+		goto _test_eof
+	_test_eof496:
 		m.cs = 496
-		goto _testEof
-	_testEof497:
+		goto _test_eof
+	_test_eof497:
 		m.cs = 497
-		goto _testEof
-	_testEof498:
+		goto _test_eof
+	_test_eof498:
 		m.cs = 498
-		goto _testEof
-	_testEof499:
+		goto _test_eof
+	_test_eof499:
 		m.cs = 499
-		goto _testEof
-	_testEof500:
+		goto _test_eof
+	_test_eof500:
 		m.cs = 500
-		goto _testEof
-	_testEof501:
+		goto _test_eof
+	_test_eof501:
 		m.cs = 501
-		goto _testEof
-	_testEof502:
+		goto _test_eof
+	_test_eof502:
 		m.cs = 502
-		goto _testEof
-	_testEof503:
+		goto _test_eof
+	_test_eof503:
 		m.cs = 503
-		goto _testEof
-	_testEof504:
+		goto _test_eof
+	_test_eof504:
 		m.cs = 504
-		goto _testEof
-	_testEof505:
+		goto _test_eof
+	_test_eof505:
 		m.cs = 505
-		goto _testEof
-	_testEof506:
+		goto _test_eof
+	_test_eof506:
 		m.cs = 506
-		goto _testEof
-	_testEof507:
+		goto _test_eof
+	_test_eof507:
 		m.cs = 507
-		goto _testEof
-	_testEof508:
+		goto _test_eof
+	_test_eof508:
 		m.cs = 508
-		goto _testEof
-	_testEof509:
+		goto _test_eof
+	_test_eof509:
 		m.cs = 509
-		goto _testEof
-	_testEof510:
+		goto _test_eof
+	_test_eof510:
 		m.cs = 510
-		goto _testEof
-	_testEof511:
+		goto _test_eof
+	_test_eof511:
 		m.cs = 511
-		goto _testEof
-	_testEof512:
+		goto _test_eof
+	_test_eof512:
 		m.cs = 512
-		goto _testEof
-	_testEof513:
+		goto _test_eof
+	_test_eof513:
 		m.cs = 513
-		goto _testEof
-	_testEof514:
+		goto _test_eof
+	_test_eof514:
 		m.cs = 514
-		goto _testEof
-	_testEof515:
+		goto _test_eof
+	_test_eof515:
 		m.cs = 515
-		goto _testEof
-	_testEof516:
+		goto _test_eof
+	_test_eof516:
 		m.cs = 516
-		goto _testEof
-	_testEof517:
+		goto _test_eof
+	_test_eof517:
 		m.cs = 517
-		goto _testEof
-	_testEof518:
+		goto _test_eof
+	_test_eof518:
 		m.cs = 518
-		goto _testEof
-	_testEof519:
+		goto _test_eof
+	_test_eof519:
 		m.cs = 519
-		goto _testEof
-	_testEof520:
+		goto _test_eof
+	_test_eof520:
 		m.cs = 520
-		goto _testEof
-	_testEof521:
+		goto _test_eof
+	_test_eof521:
 		m.cs = 521
-		goto _testEof
-	_testEof522:
+		goto _test_eof
+	_test_eof522:
 		m.cs = 522
-		goto _testEof
-	_testEof523:
+		goto _test_eof
+	_test_eof523:
 		m.cs = 523
-		goto _testEof
-	_testEof524:
+		goto _test_eof
+	_test_eof524:
 		m.cs = 524
-		goto _testEof
-	_testEof525:
+		goto _test_eof
+	_test_eof525:
 		m.cs = 525
-		goto _testEof
-	_testEof526:
+		goto _test_eof
+	_test_eof526:
 		m.cs = 526
-		goto _testEof
-	_testEof527:
+		goto _test_eof
+	_test_eof527:
 		m.cs = 527
-		goto _testEof
-	_testEof528:
+		goto _test_eof
+	_test_eof528:
 		m.cs = 528
-		goto _testEof
-	_testEof529:
+		goto _test_eof
+	_test_eof529:
 		m.cs = 529
-		goto _testEof
-	_testEof530:
+		goto _test_eof
+	_test_eof530:
 		m.cs = 530
-		goto _testEof
-	_testEof531:
+		goto _test_eof
+	_test_eof531:
 		m.cs = 531
-		goto _testEof
-	_testEof532:
+		goto _test_eof
+	_test_eof532:
 		m.cs = 532
-		goto _testEof
-	_testEof533:
+		goto _test_eof
+	_test_eof533:
 		m.cs = 533
-		goto _testEof
-	_testEof534:
+		goto _test_eof
+	_test_eof534:
 		m.cs = 534
-		goto _testEof
-	_testEof535:
+		goto _test_eof
+	_test_eof535:
 		m.cs = 535
-		goto _testEof
-	_testEof536:
+		goto _test_eof
+	_test_eof536:
 		m.cs = 536
-		goto _testEof
-	_testEof537:
+		goto _test_eof
+	_test_eof537:
 		m.cs = 537
-		goto _testEof
-	_testEof538:
+		goto _test_eof
+	_test_eof538:
 		m.cs = 538
-		goto _testEof
-	_testEof539:
+		goto _test_eof
+	_test_eof539:
 		m.cs = 539
-		goto _testEof
-	_testEof540:
+		goto _test_eof
+	_test_eof540:
 		m.cs = 540
-		goto _testEof
-	_testEof541:
+		goto _test_eof
+	_test_eof541:
 		m.cs = 541
-		goto _testEof
-	_testEof542:
+		goto _test_eof
+	_test_eof542:
 		m.cs = 542
-		goto _testEof
-	_testEof543:
+		goto _test_eof
+	_test_eof543:
 		m.cs = 543
-		goto _testEof
-	_testEof544:
+		goto _test_eof
+	_test_eof544:
 		m.cs = 544
-		goto _testEof
-	_testEof545:
+		goto _test_eof
+	_test_eof545:
 		m.cs = 545
-		goto _testEof
-	_testEof546:
+		goto _test_eof
+	_test_eof546:
 		m.cs = 546
-		goto _testEof
-	_testEof547:
+		goto _test_eof
+	_test_eof547:
 		m.cs = 547
-		goto _testEof
-	_testEof548:
+		goto _test_eof
+	_test_eof548:
 		m.cs = 548
-		goto _testEof
-	_testEof549:
+		goto _test_eof
+	_test_eof549:
 		m.cs = 549
-		goto _testEof
-	_testEof550:
+		goto _test_eof
+	_test_eof550:
 		m.cs = 550
-		goto _testEof
-	_testEof551:
+		goto _test_eof
+	_test_eof551:
 		m.cs = 551
-		goto _testEof
-	_testEof552:
+		goto _test_eof
+	_test_eof552:
 		m.cs = 552
-		goto _testEof
-	_testEof553:
+		goto _test_eof
+	_test_eof553:
 		m.cs = 553
-		goto _testEof
-	_testEof554:
+		goto _test_eof
+	_test_eof554:
 		m.cs = 554
-		goto _testEof
-	_testEof555:
+		goto _test_eof
+	_test_eof555:
 		m.cs = 555
-		goto _testEof
-	_testEof556:
+		goto _test_eof
+	_test_eof556:
 		m.cs = 556
-		goto _testEof
-	_testEof557:
+		goto _test_eof
+	_test_eof557:
 		m.cs = 557
-		goto _testEof
-	_testEof558:
+		goto _test_eof
+	_test_eof558:
 		m.cs = 558
-		goto _testEof
-	_testEof559:
+		goto _test_eof
+	_test_eof559:
 		m.cs = 559
-		goto _testEof
-	_testEof560:
+		goto _test_eof
+	_test_eof560:
 		m.cs = 560
-		goto _testEof
-	_testEof561:
+		goto _test_eof
+	_test_eof561:
 		m.cs = 561
-		goto _testEof
-	_testEof562:
+		goto _test_eof
+	_test_eof562:
 		m.cs = 562
-		goto _testEof
-	_testEof563:
+		goto _test_eof
+	_test_eof563:
 		m.cs = 563
-		goto _testEof
-	_testEof564:
+		goto _test_eof
+	_test_eof564:
 		m.cs = 564
-		goto _testEof
-	_testEof565:
+		goto _test_eof
+	_test_eof565:
 		m.cs = 565
-		goto _testEof
-	_testEof566:
+		goto _test_eof
+	_test_eof566:
 		m.cs = 566
-		goto _testEof
-	_testEof567:
+		goto _test_eof
+	_test_eof567:
 		m.cs = 567
-		goto _testEof
-	_testEof568:
+		goto _test_eof
+	_test_eof568:
 		m.cs = 568
-		goto _testEof
-	_testEof569:
+		goto _test_eof
+	_test_eof569:
 		m.cs = 569
-		goto _testEof
-	_testEof570:
+		goto _test_eof
+	_test_eof570:
 		m.cs = 570
-		goto _testEof
-	_testEof571:
+		goto _test_eof
+	_test_eof571:
 		m.cs = 571
-		goto _testEof
-	_testEof572:
+		goto _test_eof
+	_test_eof572:
 		m.cs = 572
-		goto _testEof
-	_testEof573:
+		goto _test_eof
+	_test_eof573:
 		m.cs = 573
-		goto _testEof
-	_testEof574:
+		goto _test_eof
+	_test_eof574:
 		m.cs = 574
-		goto _testEof
-	_testEof575:
+		goto _test_eof
+	_test_eof575:
 		m.cs = 575
-		goto _testEof
-	_testEof576:
+		goto _test_eof
+	_test_eof576:
 		m.cs = 576
-		goto _testEof
-	_testEof577:
+		goto _test_eof
+	_test_eof577:
 		m.cs = 577
-		goto _testEof
-	_testEof578:
+		goto _test_eof
+	_test_eof578:
 		m.cs = 578
-		goto _testEof
-	_testEof579:
+		goto _test_eof
+	_test_eof579:
 		m.cs = 579
-		goto _testEof
-	_testEof580:
+		goto _test_eof
+	_test_eof580:
 		m.cs = 580
-		goto _testEof
-	_testEof581:
+		goto _test_eof
+	_test_eof581:
 		m.cs = 581
-		goto _testEof
-	_testEof582:
+		goto _test_eof
+	_test_eof582:
 		m.cs = 582
-		goto _testEof
-	_testEof583:
+		goto _test_eof
+	_test_eof583:
 		m.cs = 583
-		goto _testEof
-	_testEof584:
+		goto _test_eof
+	_test_eof584:
 		m.cs = 584
-		goto _testEof
-	_testEof585:
+		goto _test_eof
+	_test_eof585:
 		m.cs = 585
-		goto _testEof
-	_testEof586:
+		goto _test_eof
+	_test_eof586:
 		m.cs = 586
-		goto _testEof
-	_testEof587:
+		goto _test_eof
+	_test_eof587:
 		m.cs = 587
-		goto _testEof
-	_testEof588:
+		goto _test_eof
+	_test_eof588:
 		m.cs = 588
-		goto _testEof
-	_testEof589:
+		goto _test_eof
+	_test_eof589:
 		m.cs = 589
-		goto _testEof
-	_testEof590:
+		goto _test_eof
+	_test_eof590:
 		m.cs = 590
-		goto _testEof
-	_testEof591:
+		goto _test_eof
+	_test_eof591:
 		m.cs = 591
-		goto _testEof
-	_testEof592:
+		goto _test_eof
+	_test_eof592:
 		m.cs = 592
-		goto _testEof
-	_testEof593:
+		goto _test_eof
+	_test_eof593:
 		m.cs = 593
-		goto _testEof
-	_testEof594:
+		goto _test_eof
+	_test_eof594:
 		m.cs = 594
-		goto _testEof
-	_testEof595:
+		goto _test_eof
+	_test_eof595:
 		m.cs = 595
-		goto _testEof
-	_testEof596:
+		goto _test_eof
+	_test_eof596:
 		m.cs = 596
-		goto _testEof
-	_testEof597:
+		goto _test_eof
+	_test_eof597:
 		m.cs = 597
-		goto _testEof
-	_testEof598:
+		goto _test_eof
+	_test_eof598:
 		m.cs = 598
-		goto _testEof
-	_testEof599:
+		goto _test_eof
+	_test_eof599:
 		m.cs = 599
-		goto _testEof
-	_testEof600:
+		goto _test_eof
+	_test_eof600:
 		m.cs = 600
-		goto _testEof
-	_testEof601:
+		goto _test_eof
+	_test_eof601:
 		m.cs = 601
-		goto _testEof
-	_testEof602:
+		goto _test_eof
+	_test_eof602:
 		m.cs = 602
-		goto _testEof
-	_testEof607:
+		goto _test_eof
+	_test_eof607:
 		m.cs = 607
-		goto _testEof
+		goto _test_eof
 
-	_testEof:
+	_test_eof:
 		{
 		}
 		if (m.p) == (m.eof) {
 			switch m.cs {
 			case 605:
+//line rfc5424/machine.go.rl:147
 
 				output.message = string(m.text())
 
 			case 1:
+//line rfc5424/machine.go.rl:157
 
 				m.err = fmt.Errorf(ErrPri+ColumnPositionTemplate, m.p)
 				(m.p)--
@@ -11666,6 +11851,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				}
 
 			case 15, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132:
+//line rfc5424/machine.go.rl:193
 
 				m.err = fmt.Errorf(ErrMsgID+ColumnPositionTemplate, m.p)
 				(m.p)--
@@ -11675,6 +11861,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				}
 
 			case 16:
+//line rfc5424/machine.go.rl:199
 
 				m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 				(m.p)--
@@ -11684,6 +11871,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				}
 
 			case 7:
+//line rfc5424/machine.go.rl:242
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
@@ -11693,8 +11881,11 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				}
 
 			case 5:
+//line rfc5424/machine.go.rl:71
 
 				output.version = uint16(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
+
+//line rfc5424/machine.go.rl:242
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
@@ -11704,6 +11895,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				}
 
 			case 585:
+//line rfc5424/machine.go.rl:75
 
 				if t, e := time.Parse(RFC3339MICRO, string(m.text())); e != nil {
 					m.err = fmt.Errorf("%s [col %d]", e, m.p)
@@ -11717,6 +11909,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 					output.timestampSet = true
 				}
 
+//line rfc5424/machine.go.rl:242
+
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
 
@@ -11725,6 +11919,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				}
 
 			case 4:
+//line rfc5424/machine.go.rl:163
 
 				m.err = fmt.Errorf(ErrVersion+ColumnPositionTemplate, m.p)
 				(m.p)--
@@ -11732,6 +11927,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				{
 					goto st607
 				}
+
+//line rfc5424/machine.go.rl:242
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
@@ -11741,6 +11938,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				}
 
 			case 6, 561, 562, 563, 564, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 580, 581, 582, 583, 584, 586, 587, 588, 589, 590, 591, 592, 593, 594, 595, 596, 597:
+//line rfc5424/machine.go.rl:169
 
 				m.err = fmt.Errorf(ErrTimestamp+ColumnPositionTemplate, m.p)
 				(m.p)--
@@ -11748,6 +11946,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				{
 					goto st607
 				}
+
+//line rfc5424/machine.go.rl:242
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
@@ -11757,6 +11957,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				}
 
 			case 8, 9, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545, 546, 547, 548, 549, 550, 551, 552, 553, 554, 555, 556, 557, 558, 559, 560:
+//line rfc5424/machine.go.rl:175
 
 				m.err = fmt.Errorf(ErrHostname+ColumnPositionTemplate, m.p)
 				(m.p)--
@@ -11764,6 +11965,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				{
 					goto st607
 				}
+
+//line rfc5424/machine.go.rl:242
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
@@ -11773,6 +11976,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				}
 
 			case 10, 11, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306:
+//line rfc5424/machine.go.rl:181
 
 				m.err = fmt.Errorf(ErrAppname+ColumnPositionTemplate, m.p)
 				(m.p)--
@@ -11780,6 +11984,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				{
 					goto st607
 				}
+
+//line rfc5424/machine.go.rl:242
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
@@ -11789,6 +11995,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				}
 
 			case 12, 13, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259:
+//line rfc5424/machine.go.rl:187
 
 				m.err = fmt.Errorf(ErrProcID+ColumnPositionTemplate, m.p)
 				(m.p)--
@@ -11796,6 +12003,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				{
 					goto st607
 				}
+
+//line rfc5424/machine.go.rl:242
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
@@ -11805,6 +12014,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				}
 
 			case 14:
+//line rfc5424/machine.go.rl:193
 
 				m.err = fmt.Errorf(ErrMsgID+ColumnPositionTemplate, m.p)
 				(m.p)--
@@ -11812,6 +12022,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				{
 					goto st607
 				}
+
+//line rfc5424/machine.go.rl:242
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
@@ -11821,6 +12033,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				}
 
 			case 24:
+//line rfc5424/machine.go.rl:205
 
 				delete(output.structuredData, m.currentelem)
 				if len(output.structuredData) == 0 {
@@ -11833,6 +12046,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 					goto st607
 				}
 
+//line rfc5424/machine.go.rl:199
+
 				m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 				(m.p)--
 
@@ -11841,6 +12056,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				}
 
 			case 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 62, 64, 65, 66, 67, 68, 69, 70:
+//line rfc5424/machine.go.rl:215
 
 				if len(output.structuredData) > 0 {
 					delete(output.structuredData[m.currentelem], m.currentparam)
@@ -11852,6 +12068,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 					goto st607
 				}
 
+//line rfc5424/machine.go.rl:199
+
 				m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 				(m.p)--
 
@@ -11860,6 +12078,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				}
 
 			case 17, 18, 19, 20, 21, 22, 23:
+//line rfc5424/machine.go.rl:224
 
 				// If error encountered within the message rule ...
 				if m.msgat > 0 {
@@ -11874,6 +12093,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 					goto st607
 				}
 
+//line rfc5424/machine.go.rl:242
+
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
 
@@ -11882,14 +12103,20 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				}
 
 			case 604:
+//line rfc5424/machine.go.rl:58
 
 				m.pb = m.p
 
+//line rfc5424/machine.go.rl:62
+
 				m.msgat = m.p
+
+//line rfc5424/machine.go.rl:147
 
 				output.message = string(m.text())
 
 			case 25, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101:
+//line rfc5424/machine.go.rl:106
 
 				if _, ok := output.structuredData[string(m.text())]; ok {
 					// As per RFC5424 section 6.3.2 SD-ID MUST NOT exist more than once in a message
@@ -11906,6 +12133,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 					m.currentelem = id
 				}
 
+//line rfc5424/machine.go.rl:205
+
 				delete(output.structuredData, m.currentelem)
 				if len(output.structuredData) == 0 {
 					output.hasElements = false
@@ -11917,6 +12146,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 					goto st607
 				}
 
+//line rfc5424/machine.go.rl:199
+
 				m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 				(m.p)--
 
@@ -11925,6 +12156,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				}
 
 			case 2, 3, 600, 601, 602:
+//line rfc5424/machine.go.rl:151
 
 				m.err = fmt.Errorf(ErrPrival+ColumnPositionTemplate, m.p)
 				(m.p)--
@@ -11933,12 +12165,16 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 					goto st607
 				}
 
+//line rfc5424/machine.go.rl:157
+
 				m.err = fmt.Errorf(ErrPri+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
 					goto st607
 				}
+
+//line rfc5424/machine.go.rl:242
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
@@ -11948,6 +12184,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				}
 
 			case 598, 599:
+//line rfc5424/machine.go.rl:163
 
 				m.err = fmt.Errorf(ErrVersion+ColumnPositionTemplate, m.p)
 				(m.p)--
@@ -11956,7 +12193,11 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 					goto st607
 				}
 
+//line rfc5424/machine.go.rl:71
+
 				output.version = uint16(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
+
+//line rfc5424/machine.go.rl:242
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
@@ -11966,6 +12207,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				}
 
 			case 60, 61, 63:
+//line rfc5424/machine.go.rl:236
 
 				m.err = fmt.Errorf(ErrEscape+ColumnPositionTemplate, m.p)
 				(m.p)--
@@ -11973,6 +12215,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				{
 					goto st607
 				}
+
+//line rfc5424/machine.go.rl:215
 
 				if len(output.structuredData) > 0 {
 					delete(output.structuredData[m.currentelem], m.currentparam)
@@ -11984,6 +12228,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 					goto st607
 				}
 
+//line rfc5424/machine.go.rl:199
+
 				m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 				(m.p)--
 
@@ -11991,6 +12237,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 					goto st607
 				}
 
+//line rfc5424/machine.go:10886
 			}
 		}
 
@@ -11999,7 +12246,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 	}
 
-	if m.cs < firstFinal || m.cs == enFail {
+//line rfc5424/machine.go.rl:373
+
+	if m.cs < first_final || m.cs == en_fail {
 		if m.bestEffort && output.valid() {
 			// An error occurred but partial parsing is on and partial message is minimally valid
 			return output.export(), m.err
