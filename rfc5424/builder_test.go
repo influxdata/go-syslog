@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/influxdata/go-syslog"
+	"github.com/influxdata/go-syslog/v2"
 	"github.com/stretchr/testify/assert"
 )
 
