@@ -4,7 +4,7 @@ RAGEL := ragel -I common
 export GO_TEST=env GOTRACEBACK=all GO111MODULE=on go test $(GO_ARGS)
 
 .PHONY: build
-build: rfc5424/machine.go rfc5424/builder.go nontransparent/parser.go
+build: rfc5424/machine.go rfc5424/builder.go nontransparent/parser.go rfc3164/machine.go
 	@gofmt -w -s ./rfc5424
 	@gofmt -w -s ./octetcounting
 	@gofmt -w -s ./nontransparent
@@ -13,12 +13,21 @@ rfc5424/machine.go: rfc5424/machine.go.rl common/common.rl
 
 rfc5424/builder.go: rfc5424/builder.go.rl common/common.rl
 
+rfc3164/machine.go: rfc3164/machine.go.rl common/common.rl
+
+nontransparent/parser.go: nontransparent/parser.go.rl
+
 rfc5424/builder.go rfc5424/machine.go:
 	$(RAGEL) -Z -G2 -e -o $@ $<
 	@sed -i '/^\/\/line/d' $@
 	$(MAKE) file=$@ snake2camel
 
-nontransparent/parser.go: nontransparent/parser.go.rl
+rfc3164/machine.go:
+	$(RAGEL) -Z -G2 -e -o $@ $<
+	@sed -i '/^\/\/line/d' $@
+	$(MAKE) file=$@ snake2camel
+
+nontransparent/parser.go:
 	$(RAGEL) -Z -G2 -e -o $@ $<
 	@sed -i '/^\/\/line/d' $@
 	$(MAKE) file=$@ snake2camel
@@ -110,6 +119,6 @@ dots: docs
 graph: dots docs/rfc5424_pri.png docs/rfc5424_version.png docs/rfc5424_timestamp.png docs/rfc5424_hostname.png docs/rfc5424_appname.png docs/rfc5424_procid.png docs/rfc5424_msgid.png docs/rfc5424_structureddata.png docs/rfc5424_msg.png
 
 .PHONY: clean
-clean: rfc5424/machine.go nontransparent/parser.go
+clean: rfc5424/machine.go rfc5424/builder.go nontransparent/parser.go rfc3164/machine.go
 	@rm -f $?
 	@rm -rf docs
