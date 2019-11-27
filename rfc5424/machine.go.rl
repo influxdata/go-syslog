@@ -247,8 +247,6 @@ action err_parse {
 
 nilvalue = '-';
 
-nonzerodigit = '1'..'9';
-
 pri = ('<' prival >mark %from(set_prival) $err(err_prival) '>') @err(err_pri);
 
 version = (nonzerodigit digit{0,2} <err(err_version)) >mark %from(set_version) %eof(set_version) @err(err_version);

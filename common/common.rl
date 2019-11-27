@@ -16,14 +16,19 @@ bs = 0x5C;
 # ", ], \
 toescape = (dq | csb | bs);
 
+# 1..9
+nonzerodigit = '1'..'9';
+
 # 0..59
 sexagesimal = '0'..'5' . '0'..'9';
 
 # 01..31
-datemday = ('0' . '1'..'9' | '1'..'2' . '0'..'9' | '3' . '0'..'1');
+datemday = ('0' . nonzerodigit | '1'..'2' . '0'..'9' | '3' . '0'..'1');
 
 # 01..12
-datemonth = ('0' . '1'..'9' | '1' . '0'..'2');
+datemonth = ('0' . nonzerodigit | '1' . '0'..'2');
+
+datemmm = ('Jan' | 'Feb' | 'Mar' | 'Apr' | 'May' | 'Jun' | 'Jul' | 'Aug' | 'Sep' | 'Oct' | 'Nov' | 'Dec');
 
 datefullyear = digit{4};
 
@@ -42,7 +47,9 @@ timenumoffset = ('+' | '-') timehour ':' timeminute;
 
 timeoffset = 'Z' | timenumoffset;
 
-partialtime = timehour ':' timeminute ':' timesecond . timesecfrac?;
+hhmmss = timehour ':' timeminute ':' timesecond;
+
+partialtime = hhmmss . timesecfrac?;
 
 fulltime = partialtime . timeoffset;
 

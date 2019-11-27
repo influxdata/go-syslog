@@ -30,7 +30,7 @@ var (
 %%{
 machine rfc3164;
 
-include rfc5424 "rfc5424.rl";
+include common "common.rl";
 
 # unsigned alphabet
 alphtype uint8;
@@ -114,14 +114,9 @@ action err_content {
     fgoto fail;
 }
 
-mmm = ('Jan' | 'Feb' | 'Mar' | 'Apr' | 'May' | 'Jun' | 'Jul' | 'Aug' | 'Sep' | 'Oct' | 'Nov' | 'Dec');
+pri = ('<' prival >mark %from(set_prival) $err(err_prival) '>') @err(err_pri);
 
-# " 1".."31"
-dd = (sp . '1'..'9' | '1'..'2' . '0'..'9' | '3' . '0'..'1');
-
-pri = ('<' prival >mark %set_prival $err(err_prival) '>') @err(err_pri);
-
-timestamp = (mmm sp dd sp timehour ':' timeminute ':' timesecond) >mark %set_timestamp @err(err_timestamp);
+timestamp = (datemmm sp datemday sp hhmmss) >mark %set_timestamp @err(err_timestamp);
 
 # (todo) > RFC3164 says something about its maximum length?
 hostname = hostnamerange >mark %set_hostname $err(err_hostname);
