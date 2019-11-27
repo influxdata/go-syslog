@@ -1,4 +1,4 @@
-module github.com/influxdata/go-syslog/v2
+module github.com/influxdata/go-syslog
 
 require (
 	github.com/davecgh/go-spew v1.1.1

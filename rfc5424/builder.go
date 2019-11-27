@@ -5,7 +5,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/influxdata/go-syslog/v2/common"
+	"github.com/influxdata/go-syslog/common"
 )
 
 const builder_start int = 59

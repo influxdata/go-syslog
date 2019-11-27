@@ -2,10 +2,10 @@ package nontransparent
 
 import (
     "io"
-
+    
     parser "github.com/leodido/ragel-machinery/parser"
-    syslog "github.com/influxdata/go-syslog/v2"
-    "github.com/influxdata/go-syslog/v2/rfc5424"
+    syslog "github.com/influxdata/go-syslog"
+    "github.com/influxdata/go-syslog/rfc5424"
 )
 
 %%{
@@ -22,13 +22,13 @@ action on_init {
     if len(m.candidate) > 0 {
         m.process()
     }
-    m.candidate = make([]byte, 0)
+    m.candidate = make([]byte, 0)    
 }
 
 t = 10 when { m.trailertyp == LF } |
     00 when { m.trailertyp == NUL };
 
-main :=
+main := 
     start: (
         '<' >on_init (any)* -> trailer
     ),
