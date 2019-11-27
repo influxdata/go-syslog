@@ -15,7 +15,7 @@ type parser struct {
 // NewParser creates a syslog.Machine that parses RFC3164 syslog messages.
 func NewParser(options ...syslog.MachineOption) syslog.Machine {
 	p := &parser{
-		machine: NewMachine(),
+		machine: NewMachine(options...).(*machine),
 	}
 
 	return p
