@@ -6,6 +6,7 @@ export GO_TEST=env GOTRACEBACK=all GO111MODULE=on go test $(GO_ARGS)
 .PHONY: build
 build: rfc5424/machine.go rfc5424/builder.go nontransparent/parser.go rfc3164/machine.go
 	@gofmt -w -s ./rfc5424
+	@gofmt -w -s ./rfc3164
 	@gofmt -w -s ./octetcounting
 	@gofmt -w -s ./nontransparent
 
