@@ -3,18 +3,10 @@ package rfc3164
 import (
     "fmt"
     "time"
-)
 
-func unsafeUTF8DecimalCodePointsToInt(chars []uint8) int {
-    out := 0
-    ord := 1
-    for i := len(chars) - 1; i >= 0; i-- {
-        curchar := int(chars[i])
-        out += (curchar - '0') * ord
-        ord *= 10
-    }
-    return out
-}
+    "github.com/influxdata/go-syslog/v2"
+	"github.com/influxdata/go-syslog/v2/common"
+)
 
 var (
     errPrival         = "expecting a priority value in the range 1-191 or equal to 0 [col %d]"
@@ -40,8 +32,8 @@ action mark {
 }
 
 action set_prival {
-    output.priority = uint8(unsafeUTF8DecimalCodePointsToInt(m.text()))
-    output.prioritySet = true
+    output.priority = uint8(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
+	output.prioritySet = true
 }
 
 action set_timestamp {
@@ -60,8 +52,7 @@ action set_hostname {
 }
 
 action set_tag {
-    fmt.Println(">", string(m.text()))
-    output.tag += string(m.text())
+    output.tag = string(m.text())
 }
 
 action set_content {
@@ -127,11 +118,13 @@ tag = alnum{1,32} >mark %set_tag @err(err_tag);
 visible = print | 0x80..0xFF;
 
 # The first not alphanumeric character start the content part of the message part
-content = !alnum @err(err_contentstart) >mark print* %set_content @err(err_content);
+contentval = !alnum @err(err_contentstart) >mark print* %set_content @err(err_content);
+
+content = '[' contentval ']';
 
 mex = visible+ >mark %set_message;
 
-msg = tag content? mex;
+msg = (tag content? ':' sp)? mex;
 
 fail := (any - [\n\r])* @err{ fgoto main; };
 
@@ -198,7 +191,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
     %% write exec;
 
     if m.cs < first_final || m.cs == en_fail {
-    	if m.bestEffprt != nil && output.valid() {
+    	if m.bestEffort != nil && output.valid() {
     		// An error occurred but partial parsing is on and partial message is minimally valid
     		return output.export(), m.err
     	}
