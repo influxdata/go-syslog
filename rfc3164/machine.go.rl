@@ -147,6 +147,30 @@ type machine struct {
     p, pe, eof   int
     pb           int
     err          error
+    bestEffort 	 bool
+}
+
+// NewMachine creates a new FSM able to parse RFC3164 syslog messages.
+func NewMachine(options ...syslog.MachineOption) syslog.Machine {
+	m := &machine{}
+
+	%% access m.;
+	%% variable p m.p;
+	%% variable pe m.pe;
+	%% variable eof m.eof;
+	%% variable data m.data;
+
+	return m
+}
+
+// WithBestEffort enables best effort mode.
+func (m *machine) WithBestEffort() {
+	m.bestEffort = true
+}
+
+// HasBestEffort tells whether the receiving machine has best effort mode on or off.
+func (m *machine) HasBestEffort() bool {
+	return m.bestEffort
 }
 
 // Err returns the error that occurred on the last call to Parse.
@@ -160,21 +184,8 @@ func (m *machine) text() []byte {
     return m.data[m.pb:m.p]
 }
 
-// NewMachine creates a new FSM able to parse RFC5424 syslog messages.
-func NewMachine() *machine {
-	m := &machine{}
-
-	%% access m.;
-	%% variable p m.p;
-	%% variable pe m.pe;
-	%% variable eof m.eof;
-	%% variable data m.data;
-
-	return m
-}
-
 // Parse parses the input byte array as a RFC3164 syslog message.
-func (m *machine) Parse(input []byte, bestEffort *bool) (*syslogMessage, error) {
+func (m *machine) Parse(input []byte) (syslog.Message, error) {
     m.data = input
     m.p = 0
     m.pb = 0
@@ -186,20 +197,14 @@ func (m *machine) Parse(input []byte, bestEffort *bool) (*syslogMessage, error) 
     %% write init;
     %% write exec;
 
-    // if m.cs < first_final || m.cs == en_fail {
-    // 	if bestEffort != nil && *bestEffort && output.valid() {
-    // 		// An error occurred but partial parsing is on and partial message is minimally valid
-    // 		return output.export(), m.err
-    // 	}
-    // 	return nil, m.err
-    // }
-
-    if m.cs < first_final {
-        return nil, m.err
+    if m.cs < first_final || m.cs == en_fail {
+    	if m.bestEffprt != nil && output.valid() {
+    		// An error occurred but partial parsing is on and partial message is minimally valid
+    		return output.export(), m.err
+    	}
+    	return nil, m.err
     }
 
-    return output, nil
-
-    // return output.export(), nil
+    return output.export(), nil
 }
 
