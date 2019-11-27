@@ -77,6 +77,7 @@ func NewMachine(options ...syslog.MachineOption) syslog.Machine {
 	return m
 }
 
+// WithBestEffort enables best effort mode.
 func (m *machine) WithBestEffort() {
 	m.bestEffort = true
 }
