@@ -122,16 +122,16 @@ timestamp = (datemmm sp datemday sp hhmmss) >mark %set_timestamp @err(err_timest
 hostname = hostnamerange >mark %set_hostname $err(err_hostname);
 
 # Section 4.1.3
-# tag = alnum{1,32} >mark %set_tag @err(err_tag);
+tag = alnum{1,32} >mark %set_tag @err(err_tag);
 
-# visible = print | 0x80..0xFF;
+visible = print | 0x80..0xFF;
 
 # The first not alphanumeric character start the content part of the message part
-# content = !alnum @err(err_contentstart) >mark print* %set_content @err(err_content);
+content = !alnum @err(err_contentstart) >mark print* %set_content @err(err_content);
 
-# msg = tag content;
+mex = visible+ >mark %set_message;
 
-msg = (print | 0x80..0xFF)+ >mark %set_message;
+msg = tag content? mex;
 
 fail := (any - [\n\r])* @err{ fgoto main; };
 
