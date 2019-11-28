@@ -12001,7 +12001,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 	}
 
 	if m.cs < firstFinal || m.cs == enFail {
-		if m.bestEffort && output.valid() {
+		if m.bestEffort && output.minimal() {
 			// An error occurred but partial parsing is on and partial message is minimally valid
 			return output.export(), m.err
 		}

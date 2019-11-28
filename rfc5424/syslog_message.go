@@ -2,6 +2,8 @@ package rfc5424
 
 import (
 	"time"
+
+	"github.com/influxdata/go-syslog/v2/common"
 )
 
 type syslogMessage struct {
@@ -19,22 +21,17 @@ type syslogMessage struct {
 	message        string
 }
 
-func (sm *syslogMessage) valid() bool {
-	if sm.prioritySet && sm.version > 0 && sm.version <= 999 {
-		return true
-	}
-
-	return false
+func (sm *syslogMessage) minimal() bool {
+	return sm.prioritySet && common.ValidPriority(sm.priority) && common.ValidVersion(sm.version)
 }
 
+// export is meant to be called on minimally-valid messages
+// thus it presumes priority and version values exists and are correct
 func (sm *syslogMessage) export() *SyslogMessage {
 	out := &SyslogMessage{}
-	if sm.prioritySet {
-		out.setPriority(sm.priority)
-	}
-	if sm.version > 0 && sm.version <= 999 {
-		out.version = sm.version
-	}
+	out.setPriority(sm.priority)
+	out.version = sm.version
+
 	if sm.timestampSet {
 		out.timestamp = &sm.timestamp
 	}
@@ -60,7 +57,7 @@ func (sm *syslogMessage) export() *SyslogMessage {
 	return out
 }
 
-// SyslogMessage represents a syslog message.
+// SyslogMessage represents a RFC5424 syslog message.
 type SyslogMessage struct {
 	priority       *uint8
 	facility       *uint8
@@ -80,12 +77,7 @@ type SyslogMessage struct {
 // A minimally well-formed syslog message contains at least a priority ([1, 191] or 0) and the version (]0, 999]).
 func (sm *SyslogMessage) Valid() bool {
 	// A nil priority or a 0 version means that the message is not valid
-	// Not checking the priority range since it's parser responsibility
-	if sm.priority != nil && *sm.priority >= 0 && *sm.priority <= 191 && sm.version > 0 && sm.version <= 999 {
-		return true
-	}
-
-	return false
+	return sm.priority != nil && common.ValidPriority(*sm.priority) && common.ValidVersion(sm.version)
 }
 
 // Priority returns the syslog priority or nil when not set
@@ -97,6 +89,7 @@ func (sm *SyslogMessage) Priority() *uint8 {
 func (sm *SyslogMessage) Version() uint16 {
 	return sm.version
 }
+
 func (sm *SyslogMessage) setPriority(value uint8) {
 	sm.priority = &value
 	facility := uint8(value / 8)
