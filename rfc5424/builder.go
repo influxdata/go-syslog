@@ -9463,7 +9463,7 @@ func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
 //
 // It ignores incorrect priority values (range [0, 191]).
 func (sm *SyslogMessage) SetPriority(value uint8) *SyslogMessage {
-	if value >= 0 && value <= 191 {
+	if common.ValidPriority(value) {
 		sm.setPriority(value)
 	}
 
@@ -9474,7 +9474,7 @@ func (sm *SyslogMessage) SetPriority(value uint8) *SyslogMessage {
 //
 // It ignores incorrect version values (range ]0, 999]).
 func (sm *SyslogMessage) SetVersion(value uint16) *SyslogMessage {
-	if value > 0 && value <= 999 {
+	if common.ValidVersion(value) {
 		sm.version = value
 	}
 
