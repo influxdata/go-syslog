@@ -34,12 +34,7 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrParse+ColumnPositionTemplate, 16),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			severity: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	// Invalid, new lines allowed only within message part
 	{
@@ -47,96 +42,56 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrHostname+ColumnPositionTemplate, 7),
-		&SyslogMessage{
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			priority: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 - host\x0Aname - - - -"),
 		false,
 		nil,
 		fmt.Sprintf(ErrHostname+ColumnPositionTemplate, 11),
-		&SyslogMessage{
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			priority: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 - - \nan - - -"),
 		false,
 		nil,
 		fmt.Sprintf(ErrAppname+ColumnPositionTemplate, 9),
-		&SyslogMessage{
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			priority: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 - - a\x0An - - -"),
 		false,
 		nil,
 		fmt.Sprintf(ErrAppname+ColumnPositionTemplate, 10),
-		&SyslogMessage{
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			priority: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 - - - \npid - -"),
 		false,
 		nil,
 		fmt.Sprintf(ErrProcID+ColumnPositionTemplate, 11),
-		&SyslogMessage{
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			priority: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 - - - p\x0Aid - -"),
 		false,
 		nil,
 		fmt.Sprintf(ErrProcID+ColumnPositionTemplate, 12),
-		&SyslogMessage{
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			priority: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 - - - - \nmid -"),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsgID+ColumnPositionTemplate, 13),
-		&SyslogMessage{
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			priority: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 - - - - m\x0Aid -"),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsgID+ColumnPositionTemplate, 14),
-		&SyslogMessage{
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			priority: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	// Invalid, malformed pri
 	{
@@ -225,12 +180,7 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrVersion+ColumnPositionTemplate, 8),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(101),
-			facility: syslogtesting.Uint8Address(12),
-			severity: syslogtesting.Uint8Address(5),
-			version:  100,
-		},
+		(&SyslogMessage{}).SetVersion(100).SetPriority(101),
 	},
 	// Invalid, truncated after version whitespace
 	{
@@ -238,12 +188,7 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 5),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  2,
-		},
+		(&SyslogMessage{}).SetVersion(2).SetPriority(1),
 	},
 	// Invalid, truncated after version
 	{
@@ -251,12 +196,7 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrParse+ColumnPositionTemplate, 4),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	// fixme(leodido) > when space after multi-digit version is missing, the version error handler launches (should not)
 	// {
@@ -264,7 +204,7 @@ var testCases = []testCase{
 	// 	false,
 	// 	nil,
 	// 	fmt.Sprintf(ErrParse+ColumnPositionTemplate, 6),
-	// 	(&SyslogMessage{}).SetPriority(3).SetVersion(22),
+	// 	(&SyslogMessage{}).SetVersion(22).SetPriority(3),
 	// },
 	// Invalid, non numeric (also partially) version
 	{
@@ -272,24 +212,14 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrParse+ColumnPositionTemplate, 4),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  3,
-		},
+		(&SyslogMessage{}).SetVersion(3).SetPriority(1),
 	},
 	{
 		[]byte("<1>4a "),
 		false,
 		nil,
 		fmt.Sprintf(ErrParse+ColumnPositionTemplate, 4),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  4,
-		},
+		(&SyslogMessage{}).SetVersion(4).SetPriority(1),
 	},
 	{
 		[]byte("<102>abc 2018-11-22"),
@@ -304,12 +234,7 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 5),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  5,
-		},
+		(&SyslogMessage{}).SetVersion(5).SetPriority(1),
 	},
 	// Invalid, timestamp T and Z must be uppercase
 	{
@@ -317,24 +242,14 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 16),
-		&SyslogMessage{
-			facility: syslogtesting.Uint8Address(3),
-			severity: syslogtesting.Uint8Address(5),
-			priority: syslogtesting.Uint8Address(29),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(29),
 	},
 	{
 		[]byte(`<29>2 2006-01-02T15:04:05z - - - - -`),
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 25),
-		&SyslogMessage{
-			facility: syslogtesting.Uint8Address(3),
-			severity: syslogtesting.Uint8Address(5),
-			priority: syslogtesting.Uint8Address(29),
-			version:  2,
-		},
+		(&SyslogMessage{}).SetVersion(2).SetPriority(29),
 	},
 	// Invalid, wrong year
 	{
@@ -342,97 +257,57 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 10),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(101),
-			facility: syslogtesting.Uint8Address(12),
-			severity: syslogtesting.Uint8Address(5),
-			version:  123,
-		},
+		(&SyslogMessage{}).SetVersion(123).SetPriority(101),
 	},
 	{
 		[]byte("<101>124 20"),
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 11),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(101),
-			facility: syslogtesting.Uint8Address(12),
-			severity: syslogtesting.Uint8Address(5),
-			version:  124,
-		},
+		(&SyslogMessage{}).SetVersion(124).SetPriority(101),
 	},
 	{
 		[]byte("<101>125 201"),
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 12),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(101),
-			facility: syslogtesting.Uint8Address(12),
-			severity: syslogtesting.Uint8Address(5),
-			version:  125,
-		},
+		(&SyslogMessage{}).SetVersion(125).SetPriority(101),
 	},
 	{
 		[]byte("<101>125 2013"),
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 13),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(101),
-			facility: syslogtesting.Uint8Address(12),
-			severity: syslogtesting.Uint8Address(5),
-			version:  125,
-		},
+		(&SyslogMessage{}).SetVersion(125).SetPriority(101),
 	},
 	{
 		[]byte("<101>126 2013-"),
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 14),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(101),
-			facility: syslogtesting.Uint8Address(12),
-			severity: syslogtesting.Uint8Address(5),
-			version:  126,
-		},
+		(&SyslogMessage{}).SetVersion(126).SetPriority(101),
 	},
 	{
 		[]byte("<101>122 201-11-22"),
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 12),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(101),
-			facility: syslogtesting.Uint8Address(12),
-			severity: syslogtesting.Uint8Address(5),
-			version:  122,
-		},
+		(&SyslogMessage{}).SetVersion(122).SetPriority(101),
 	},
 	{
 		[]byte("<101>189 0-11-22"),
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 10),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(101),
-			facility: syslogtesting.Uint8Address(12),
-			severity: syslogtesting.Uint8Address(5),
-			version:  189,
-		},
+		(&SyslogMessage{}).SetVersion(189).SetPriority(101),
 	},
 	// Invalid, wrong month
 	{
-		[]byte("<101>122 2018-112-22"),
+		[]byte("<101>121 2018-112-22"),
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 16),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(101),
-			facility: syslogtesting.Uint8Address(12),
-			severity: syslogtesting.Uint8Address(5),
-			version:  122,
-		},
+		(&SyslogMessage{}).SetVersion(121).SetPriority(101),
 	},
 	// Invalid, wrong day
 	{
@@ -440,12 +315,7 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 18),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(101),
-			facility: syslogtesting.Uint8Address(12),
-			severity: syslogtesting.Uint8Address(5),
-			version:  123,
-		},
+		(&SyslogMessage{}).SetVersion(123).SetPriority(101),
 	},
 	// Invalid, wrong hour
 	{
@@ -453,12 +323,7 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 19),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(101),
-			facility: syslogtesting.Uint8Address(12),
-			severity: syslogtesting.Uint8Address(5),
-			version:  124,
-		},
+		(&SyslogMessage{}).SetVersion(124).SetPriority(101),
 	},
 	// Invalid, wrong minutes
 	{
@@ -466,12 +331,7 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 23),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(101),
-			facility: syslogtesting.Uint8Address(12),
-			severity: syslogtesting.Uint8Address(5),
-			version:  125,
-		},
+		(&SyslogMessage{}).SetVersion(125).SetPriority(101),
 	},
 	// Invalid, wrong seconds
 	{
@@ -479,12 +339,7 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 26),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(101),
-			facility: syslogtesting.Uint8Address(12),
-			severity: syslogtesting.Uint8Address(5),
-			version:  126,
-		},
+		(&SyslogMessage{}).SetVersion(126).SetPriority(101),
 	},
 	// Invalid, wrong sec fraction
 	{
@@ -492,36 +347,21 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 35),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(101),
-			facility: syslogtesting.Uint8Address(12),
-			severity: syslogtesting.Uint8Address(5),
-			version:  127,
-		},
+		(&SyslogMessage{}).SetVersion(127).SetPriority(101),
 	},
 	{
 		[]byte("<101>128 2003-09-29T22:09:01.Z"),
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 29),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(101),
-			facility: syslogtesting.Uint8Address(12),
-			severity: syslogtesting.Uint8Address(5),
-			version:  128,
-		},
+		(&SyslogMessage{}).SetVersion(128).SetPriority(101),
 	},
 	{
 		[]byte("<101>28 2003-09-29T22:09:01."),
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 28),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(101),
-			facility: syslogtesting.Uint8Address(12),
-			severity: syslogtesting.Uint8Address(5),
-			version:  28,
-		},
+		(&SyslogMessage{}).SetVersion(28).SetPriority(101),
 	},
 	// Invalid, wrong time offset
 	{
@@ -529,61 +369,35 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 28),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(101),
-			facility: syslogtesting.Uint8Address(12),
-			severity: syslogtesting.Uint8Address(5),
-			version:  129,
-		},
+		(&SyslogMessage{}).SetVersion(129).SetPriority(101),
 	},
 	{
 		[]byte("<101>130 2003-08-24T05:14:15.000003-24:00"),
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 37),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(101),
-			facility: syslogtesting.Uint8Address(12),
-			severity: syslogtesting.Uint8Address(5),
-			version:  130,
-		},
+		(&SyslogMessage{}).SetVersion(130).SetPriority(101),
 	},
 	{
 		[]byte("<101>131 2003-08-24T05:14:15.000003-60:00"),
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 36),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(101),
-			facility: syslogtesting.Uint8Address(12),
-			severity: syslogtesting.Uint8Address(5),
-			version:  131,
-		},
+		(&SyslogMessage{}).SetVersion(131).SetPriority(101),
 	},
 	{
 		[]byte("<101>132 2003-08-24T05:14:15.000003-07:61"),
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 39),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(101),
-			facility: syslogtesting.Uint8Address(12),
-			severity: syslogtesting.Uint8Address(5),
-			version:  132,
-		},
+		(&SyslogMessage{}).SetVersion(132).SetPriority(101),
 	},
 	{
 		[]byte(`<29>1 2006-01-02T15:04:05Z+07:00 - - - - -`),
 		false,
 		nil,
 		fmt.Sprintf(ErrParse+ColumnPositionTemplate, 26), // after the Z (valid and complete timestamp) it searches for a whitespace
-		&SyslogMessage{
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			priority:  syslogtesting.Uint8Address(29),
-			version:   1,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2006-01-02T15:04:05Z"),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetTimestamp("2006-01-02T15:04:05Z").SetPriority(29),
 	},
 	// Invalid, non existing dates
 	{
@@ -591,36 +405,21 @@ var testCases = []testCase{
 		false,
 		nil,
 		"parsing time \"2003-09-31T22:14:15.003Z\": day out of range [col 32]",
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(101),
-			facility: syslogtesting.Uint8Address(12),
-			severity: syslogtesting.Uint8Address(5),
-			version:  11,
-		},
+		(&SyslogMessage{}).SetVersion(11).SetPriority(101),
 	},
 	{
 		[]byte("<101>12 2003-09-31T22:14:16Z"),
 		false,
 		nil,
 		"parsing time \"2003-09-31T22:14:16Z\": day out of range [col 28]",
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(101),
-			facility: syslogtesting.Uint8Address(12),
-			severity: syslogtesting.Uint8Address(5),
-			version:  12,
-		},
+		(&SyslogMessage{}).SetVersion(12).SetPriority(101),
 	},
 	{
 		[]byte("<101>12 2018-02-29T22:14:16+01:00"),
 		false,
 		nil,
 		"parsing time \"2018-02-29T22:14:16+01:00\": day out of range [col 33]",
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(101),
-			facility: syslogtesting.Uint8Address(12),
-			severity: syslogtesting.Uint8Address(5),
-			version:  12,
-		},
+		(&SyslogMessage{}).SetVersion(12).SetPriority(101),
 	},
 	// Invalid, hostname too long
 	{
@@ -628,25 +427,14 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrHostname+ColumnPositionTemplate, 262),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 2003-09-29T22:14:16Z abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcX - - - -"),
 		false,
 		nil,
 		fmt.Sprintf(ErrHostname+ColumnPositionTemplate, 281),
-		&SyslogMessage{
-			priority:  syslogtesting.Uint8Address(1),
-			facility:  syslogtesting.Uint8Address(0),
-			severity:  syslogtesting.Uint8Address(1),
-			version:   1,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2003-09-29T22:14:16Z"),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetTimestamp("2003-09-29T22:14:16Z").SetPriority(1),
 	},
 	// Invalid, appname too long
 	{
@@ -654,52 +442,28 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrAppname+ColumnPositionTemplate, 57),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 2003-09-29T22:14:16Z - abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefX - - -"),
 		false,
 		nil,
 		fmt.Sprintf(ErrAppname+ColumnPositionTemplate, 76),
-		&SyslogMessage{
-			priority:  syslogtesting.Uint8Address(1),
-			facility:  syslogtesting.Uint8Address(0),
-			severity:  syslogtesting.Uint8Address(1),
-			version:   1,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2003-09-29T22:14:16Z"),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetTimestamp("2003-09-29T22:14:16Z").SetPriority(1),
 	},
 	{
 		[]byte("<1>1 - host abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefX - - -"),
 		false,
 		nil,
 		fmt.Sprintf(ErrAppname+ColumnPositionTemplate, 60),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			hostname: syslogtesting.StringAddress("host"),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetHostname("host").SetPriority(1),
 	},
 	{
-		[]byte("<1>1 2003-09-29T22:14:16Z host abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefX - - -"),
+		[]byte("<1>1 2004-09-29T22:14:16Z host abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefX - - -"),
 		false,
 		nil,
 		fmt.Sprintf(ErrAppname+ColumnPositionTemplate, 79),
-		&SyslogMessage{
-			priority:  syslogtesting.Uint8Address(1),
-			facility:  syslogtesting.Uint8Address(0),
-			severity:  syslogtesting.Uint8Address(1),
-			version:   1,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2003-09-29T22:14:16Z"),
-			hostname:  syslogtesting.StringAddress("host"),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetTimestamp("2004-09-29T22:14:16Z").SetHostname("host").SetPriority(1),
 	},
 	// Invalid, procid too long
 	{
@@ -707,12 +471,7 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrProcID+ColumnPositionTemplate, 139),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	// Invalid, msgid too long
 	{
@@ -720,12 +479,7 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrMsgID+ColumnPositionTemplate, 45),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	// Not print US-ASCII chars for hostname, appname, procid, and msgid
 	{
@@ -733,48 +487,28 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrHostname+ColumnPositionTemplate, 7),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 - -   - - -"),
 		false,
 		nil,
 		fmt.Sprintf(ErrAppname+ColumnPositionTemplate, 9),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 - - -   - -"),
 		false,
 		nil,
 		fmt.Sprintf(ErrProcID+ColumnPositionTemplate, 11),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 - - - -   -"),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsgID+ColumnPositionTemplate, 13),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	// Invalid, with malformed structured data
 	{
@@ -782,12 +516,7 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrStructuredData+ColumnPositionTemplate, 15),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	// Invalid, with empty structured data
 	{
@@ -795,13 +524,7 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrSdID+ColumnPositionTemplate, 16),
-		&SyslogMessage{
-			priority:       syslogtesting.Uint8Address(1),
-			facility:       syslogtesting.Uint8Address(0),
-			severity:       syslogtesting.Uint8Address(1),
-			version:        1,
-			structuredData: nil,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	// Invalid, with structured data id containing space
 	{
@@ -809,13 +532,7 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrSdID+ColumnPositionTemplate, 16),
-		&SyslogMessage{
-			priority:       syslogtesting.Uint8Address(1),
-			facility:       syslogtesting.Uint8Address(0),
-			severity:       syslogtesting.Uint8Address(1),
-			version:        1,
-			structuredData: nil,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	// Invalid, with structured data id containing =
 	{
@@ -823,13 +540,7 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrSdID+ColumnPositionTemplate, 16),
-		&SyslogMessage{
-			priority:       syslogtesting.Uint8Address(1),
-			facility:       syslogtesting.Uint8Address(0),
-			severity:       syslogtesting.Uint8Address(1),
-			version:        1,
-			structuredData: nil,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	// Invalid, with structured data id containing ]
 	{
@@ -837,27 +548,15 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrSdID+ColumnPositionTemplate, 16),
-		&SyslogMessage{
-			priority:       syslogtesting.Uint8Address(1),
-			facility:       syslogtesting.Uint8Address(0),
-			severity:       syslogtesting.Uint8Address(1),
-			version:        1,
-			structuredData: nil,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	// Invalid, with structured data id containing "
 	{
-		[]byte(`<1>1 - - - - - ["]`),
+		[]byte(`<6>1 - - - - - ["]`),
 		false,
 		nil,
 		fmt.Sprintf(ErrSdID+ColumnPositionTemplate, 16),
-		&SyslogMessage{
-			priority:       syslogtesting.Uint8Address(1),
-			facility:       syslogtesting.Uint8Address(0),
-			severity:       syslogtesting.Uint8Address(1),
-			version:        1,
-			structuredData: nil,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(6),
 	},
 	// Invalid, too long structured data id
 	{
@@ -865,13 +564,7 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrSdID+ColumnPositionTemplate, 48),
-		&SyslogMessage{
-			priority:       syslogtesting.Uint8Address(1),
-			facility:       syslogtesting.Uint8Address(0),
-			severity:       syslogtesting.Uint8Address(1),
-			version:        1,
-			structuredData: nil,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	// Invalid, too long structured data param key
 	{
@@ -879,38 +572,20 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrSdParam+ColumnPositionTemplate, 51),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			structuredData: &map[string]map[string]string{
-				"id": {},
-			},
-		},
+		(&SyslogMessage{}).SetVersion(1).SetElementID("id").SetPriority(1),
 	},
 	// Valid, minimal
 	{
-		[]byte("<1>1 - - - - - -"),
+		[]byte("<10>1 - - - - - -"),
 		true,
-		&SyslogMessage{
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			priority: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(10),
 		"",
 		nil,
 	},
 	{
 		[]byte("<0>1 - - - - - -"),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(0),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(0),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(0),
 		"",
 		nil,
 	},
@@ -918,24 +593,15 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>1 2016-02-21T04:32:57+00:00 web1 someservice - - [origin x-service="someservice"][meta sequenceId="14125553"] 127.0.0.1 - - 1456029177 "GET /v1/ok HTTP/1.1" 200 145 "-" "hacheck 0.9.0" 24306 127.0.0.1:40124 575`),
 		true,
-		&SyslogMessage{
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			priority:  syslogtesting.Uint8Address(29),
-			version:   1,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2016-02-21T04:32:57+00:00"),
-			hostname:  syslogtesting.StringAddress("web1"),
-			appname:   syslogtesting.StringAddress("someservice"),
-			structuredData: &map[string]map[string]string{
-				"origin": {
-					"x-service": "someservice",
-				},
-				"meta": {
-					"sequenceId": "14125553",
-				},
-			},
-			message: syslogtesting.StringAddress(`127.0.0.1 - - 1456029177 "GET /v1/ok HTTP/1.1" 200 145 "-" "hacheck 0.9.0" 24306 127.0.0.1:40124 575`),
-		},
+		(&SyslogMessage{}).
+			SetVersion(1).
+			SetHostname("web1").
+			SetAppname("someservice").
+			SetTimestamp("2016-02-21T04:32:57+00:00").
+			SetParameter("origin", "x-service", "someservice").
+			SetParameter("meta", "sequenceId", "14125553").
+			SetMessage(`127.0.0.1 - - 1456029177 "GET /v1/ok HTTP/1.1" 200 145 "-" "hacheck 0.9.0" 24306 127.0.0.1:40124 575`).
+			SetPriority(29),
 		"",
 		nil,
 	},
@@ -943,58 +609,39 @@ var testCases = []testCase{
 	{
 		[]byte("<1>100 - host-name - - - -"),
 		true,
-		&SyslogMessage{
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			priority: syslogtesting.Uint8Address(1),
-			version:  100,
-			hostname: syslogtesting.StringAddress("host-name"),
-		},
+		(&SyslogMessage{}).SetVersion(100).SetHostname("host-name").SetPriority(1),
 		"",
 		nil,
 	},
 	{
 		[]byte("<1>101 - host-name app-name - - -"),
 		true,
-		&SyslogMessage{
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			priority: syslogtesting.Uint8Address(1),
-			version:  101,
-			hostname: syslogtesting.StringAddress("host-name"),
-			appname:  syslogtesting.StringAddress("app-name"),
-		},
+		(&SyslogMessage{}).SetVersion(101).SetHostname("host-name").SetAppname("app-name").SetPriority(1),
 		"",
 		nil,
 	},
 	{
 		[]byte("<1>102 - host-name app-name proc-id - -"),
 		true,
-		&SyslogMessage{
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			priority: syslogtesting.Uint8Address(1),
-			version:  102,
-			hostname: syslogtesting.StringAddress("host-name"),
-			appname:  syslogtesting.StringAddress("app-name"),
-			procID:   syslogtesting.StringAddress("proc-id"),
-		},
+		(&SyslogMessage{}).
+			SetVersion(102).
+			SetHostname("host-name").
+			SetAppname("app-name").
+			SetProcID("proc-id").
+			SetPriority(1),
 		"",
 		nil,
 	},
 	{
 		[]byte("<1>103 - host-name app-name proc-id msg-id -"),
 		true,
-		&SyslogMessage{
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			priority: syslogtesting.Uint8Address(1),
-			version:  103,
-			hostname: syslogtesting.StringAddress("host-name"),
-			appname:  syslogtesting.StringAddress("app-name"),
-			procID:   syslogtesting.StringAddress("proc-id"),
-			msgID:    syslogtesting.StringAddress("msg-id"),
-		},
+		(&SyslogMessage{}).
+			SetVersion(103).
+			SetHostname("host-name").
+			SetAppname("app-name").
+			SetProcID("proc-id").
+			SetMsgID("msg-id").
+			SetPriority(1),
 		"",
 		nil,
 	},
@@ -1002,17 +649,14 @@ var testCases = []testCase{
 	{
 		[]byte("<191>999 2018-12-31T23:59:59.999999-23:59 abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabc abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdef abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzab abcdefghilmnopqrstuvzabcdefghilm -"),
 		true,
-		&SyslogMessage{
-			priority:  syslogtesting.Uint8Address(191),
-			facility:  syslogtesting.Uint8Address(23),
-			severity:  syslogtesting.Uint8Address(7),
-			version:   999,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2018-12-31T23:59:59.999999-23:59"),
-			hostname:  syslogtesting.StringAddress("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabc"),
-			appname:   syslogtesting.StringAddress("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdef"),
-			procID:    syslogtesting.StringAddress("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzab"),
-			msgID:     syslogtesting.StringAddress("abcdefghilmnopqrstuvzabcdefghilm"),
-		},
+		(&SyslogMessage{}).
+			SetVersion(999).
+			SetHostname("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabc").
+			SetAppname("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdef").
+			SetTimestamp("2018-12-31T23:59:59.999999-23:59").
+			SetProcID("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzab").
+			SetMsgID("abcdefghilmnopqrstuvzabcdefghilm").
+			SetPriority(191),
 		"",
 		nil,
 	},
@@ -1020,27 +664,18 @@ var testCases = []testCase{
 	{
 		[]byte(`<191>999 2018-12-31T23:59:59.999999-23:59 abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabc abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdef abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzab abcdefghilmnopqrstuvzabcdefghilm [an@id key1="val1" key2="val2"][another@id key1="val1"] Some message "GET"`),
 		true,
-		&SyslogMessage{
-			priority:  syslogtesting.Uint8Address(191),
-			facility:  syslogtesting.Uint8Address(23),
-			severity:  syslogtesting.Uint8Address(7),
-			version:   999,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2018-12-31T23:59:59.999999-23:59"),
-			hostname:  syslogtesting.StringAddress("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabc"),
-			appname:   syslogtesting.StringAddress("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdef"),
-			procID:    syslogtesting.StringAddress("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzab"),
-			msgID:     syslogtesting.StringAddress("abcdefghilmnopqrstuvzabcdefghilm"),
-			structuredData: &map[string]map[string]string{
-				"an@id": {
-					"key1": "val1",
-					"key2": "val2",
-				},
-				"another@id": {
-					"key1": "val1",
-				},
-			},
-			message: syslogtesting.StringAddress(`Some message "GET"`),
-		},
+		(&SyslogMessage{}).
+			SetVersion(999).
+			SetHostname("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabc").
+			SetAppname("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdef").
+			SetTimestamp("2018-12-31T23:59:59.999999-23:59").
+			SetProcID("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzab").
+			SetMsgID("abcdefghilmnopqrstuvzabcdefghilm").
+			SetParameter("an@id", "key1", "val1").
+			SetParameter("an@id", "key2", "val2").
+			SetParameter("another@id", "key1", "val1").
+			SetMessage(`Some message "GET"`).
+			SetPriority(191),
 		"",
 		nil,
 	},
@@ -1048,19 +683,14 @@ var testCases = []testCase{
 	{
 		[]byte("<34>1 2003-10-11T22:14:15.003Z mymachine.example.com su - ID47 - BOM'su root' failed for lonvick on /dev/pts/8"),
 		true,
-		&SyslogMessage{
-			facility:       syslogtesting.Uint8Address(4),
-			severity:       syslogtesting.Uint8Address(2),
-			priority:       syslogtesting.Uint8Address(34),
-			version:        1,
-			timestamp:      syslogtesting.TimeParse(RFC3339MICRO, "2003-10-11T22:14:15.003Z"),
-			hostname:       syslogtesting.StringAddress("mymachine.example.com"),
-			appname:        syslogtesting.StringAddress("su"),
-			procID:         nil,
-			msgID:          syslogtesting.StringAddress("ID47"),
-			structuredData: nil,
-			message:        syslogtesting.StringAddress("BOM'su root' failed for lonvick on /dev/pts/8"),
-		},
+		(&SyslogMessage{}).
+			SetVersion(1).
+			SetHostname("mymachine.example.com").
+			SetAppname("su").
+			SetTimestamp("2003-10-11T22:14:15.003Z").
+			SetMsgID("ID47").
+			SetMessage("BOM'su root' failed for lonvick on /dev/pts/8").
+			SetPriority(34),
 		"",
 		nil,
 	},
@@ -1068,19 +698,13 @@ var testCases = []testCase{
 	{
 		[]byte("<187>222 - mymachine.example.com su - ID47 - 'su root' failed for lonvick on /dev/pts/8"),
 		true,
-		&SyslogMessage{
-			facility:       syslogtesting.Uint8Address(23),
-			severity:       syslogtesting.Uint8Address(3),
-			priority:       syslogtesting.Uint8Address(187),
-			version:        222,
-			timestamp:      nil,
-			hostname:       syslogtesting.StringAddress("mymachine.example.com"),
-			appname:        syslogtesting.StringAddress("su"),
-			procID:         nil,
-			msgID:          syslogtesting.StringAddress("ID47"),
-			structuredData: nil,
-			message:        syslogtesting.StringAddress("'su root' failed for lonvick on /dev/pts/8"),
-		},
+		(&SyslogMessage{}).
+			SetVersion(222).
+			SetHostname("mymachine.example.com").
+			SetAppname("su").
+			SetMsgID("ID47").
+			SetMessage("'su root' failed for lonvick on /dev/pts/8").
+			SetPriority(187),
 		"",
 		nil,
 	},
@@ -1088,19 +712,14 @@ var testCases = []testCase{
 	{
 		[]byte("<165>1 2003-08-24T05:14:15.000003-07:00 192.0.2.1 myproc 8710 - - %% Time to make the do-nuts."),
 		true,
-		&SyslogMessage{
-			facility:       syslogtesting.Uint8Address(20),
-			severity:       syslogtesting.Uint8Address(5),
-			priority:       syslogtesting.Uint8Address(165),
-			version:        1,
-			timestamp:      syslogtesting.TimeParse(RFC3339MICRO, "2003-08-24T05:14:15.000003-07:00"),
-			hostname:       syslogtesting.StringAddress("192.0.2.1"),
-			appname:        syslogtesting.StringAddress("myproc"),
-			procID:         syslogtesting.StringAddress("8710"),
-			msgID:          nil,
-			structuredData: nil,
-			message:        syslogtesting.StringAddress("%% Time to make the do-nuts."),
-		},
+		(&SyslogMessage{}).
+			SetVersion(1).
+			SetHostname("192.0.2.1").
+			SetAppname("myproc").
+			SetTimestamp("2003-08-24T05:14:15.000003-07:00").
+			SetProcID("8710").
+			SetMessage("%% Time to make the do-nuts.").
+			SetPriority(165),
 		"",
 		nil,
 	},
@@ -1108,61 +727,37 @@ var testCases = []testCase{
 	{
 		[]byte("<165>2 2003-08-24T05:14:15.000003-07:00 - - - - -"),
 		true,
-		&SyslogMessage{
-			facility:       syslogtesting.Uint8Address(20),
-			severity:       syslogtesting.Uint8Address(5),
-			priority:       syslogtesting.Uint8Address(165),
-			version:        2,
-			timestamp:      syslogtesting.TimeParse(RFC3339MICRO, "2003-08-24T05:14:15.000003-07:00"),
-			hostname:       nil,
-			appname:        nil,
-			procID:         nil,
-			msgID:          nil,
-			structuredData: nil,
-			message:        nil,
-		},
+		(&SyslogMessage{}).
+			SetVersion(2).
+			SetTimestamp("2003-08-24T05:14:15.000003-07:00").
+			SetPriority(165),
 		"",
 		nil,
 	},
 	// Valid, w/o structure data, w/o hostname, w/o appname, w/o procid, w/o msgid, empty msg
 	{
-		[]byte("<165>222 2003-08-24T05:14:15.000003-07:00 - - - - - "),
+		[]byte("<165>222 2003-08-24T05:14:15.000002-01:00 - - - - - "),
 		true,
-		&SyslogMessage{
-			facility:       syslogtesting.Uint8Address(20),
-			severity:       syslogtesting.Uint8Address(5),
-			priority:       syslogtesting.Uint8Address(165),
-			version:        222,
-			timestamp:      syslogtesting.TimeParse(RFC3339MICRO, "2003-08-24T05:14:15.000003-07:00"),
-			hostname:       nil,
-			appname:        nil,
-			procID:         nil,
-			msgID:          nil,
-			structuredData: nil,
-			message:        nil,
-		},
+		(&SyslogMessage{}).
+			SetVersion(222).
+			SetTimestamp("2003-08-24T05:14:15.000002-01:00").
+			SetPriority(165),
 		"",
 		nil,
 	},
 	// Valid, with structured data is, w/o structured data params
 	{
-		[]byte("<78>1 2016-01-15T00:04:01+00:00 host1 CROND 10391 - [sdid] some_message"),
+		[]byte("<78>5 2016-01-15T00:04:01+00:00 host1 CROND 10391 - [sdid] some_message"),
 		true,
-		&SyslogMessage{
-			facility:  syslogtesting.Uint8Address(9),
-			severity:  syslogtesting.Uint8Address(6),
-			priority:  syslogtesting.Uint8Address(78),
-			version:   1,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2016-01-15T00:04:01+00:00"),
-			hostname:  syslogtesting.StringAddress("host1"),
-			appname:   syslogtesting.StringAddress("CROND"),
-			procID:    syslogtesting.StringAddress("10391"),
-			msgID:     nil,
-			structuredData: &map[string]map[string]string{
-				"sdid": {},
-			},
-			message: syslogtesting.StringAddress("some_message"),
-		},
+		(&SyslogMessage{}).
+			SetVersion(5).
+			SetHostname("host1").
+			SetAppname("CROND").
+			SetTimestamp("2016-01-15T00:04:01+00:00").
+			SetProcID("10391").
+			SetMessage("some_message").
+			SetElementID("sdid").
+			SetPriority(78),
 		"",
 		nil,
 	},
@@ -1170,23 +765,15 @@ var testCases = []testCase{
 	{
 		[]byte(`<78>1 2016-01-15T00:04:01+00:00 host1 CROND 10391 - [sdid x="⌘"] some_message`),
 		true,
-		&SyslogMessage{
-			facility:  syslogtesting.Uint8Address(9),
-			severity:  syslogtesting.Uint8Address(6),
-			priority:  syslogtesting.Uint8Address(78),
-			version:   1,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2016-01-15T00:04:01+00:00"),
-			hostname:  syslogtesting.StringAddress("host1"),
-			appname:   syslogtesting.StringAddress("CROND"),
-			procID:    syslogtesting.StringAddress("10391"),
-			msgID:     nil,
-			structuredData: &map[string]map[string]string{
-				"sdid": {
-					"x": "⌘",
-				},
-			},
-			message: syslogtesting.StringAddress("some_message"),
-		},
+		(&SyslogMessage{}).
+			SetVersion(1).
+			SetHostname("host1").
+			SetAppname("CROND").
+			SetTimestamp("2016-01-15T00:04:01+00:00").
+			SetProcID("10391").
+			SetMessage("some_message").
+			SetParameter("sdid", "x", "⌘").
+			SetPriority(78),
 		"",
 		nil,
 	},
@@ -1194,23 +781,15 @@ var testCases = []testCase{
 	{
 		[]byte(`<78>2 2016-01-15T00:04:01+00:00 host1 CROND 10391 - [sdid x="hey \\u2318 hey"] some_message`),
 		true,
-		&SyslogMessage{
-			facility:  syslogtesting.Uint8Address(9),
-			severity:  syslogtesting.Uint8Address(6),
-			priority:  syslogtesting.Uint8Address(78),
-			version:   2,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2016-01-15T00:04:01+00:00"),
-			hostname:  syslogtesting.StringAddress("host1"),
-			appname:   syslogtesting.StringAddress("CROND"),
-			procID:    syslogtesting.StringAddress("10391"),
-			msgID:     nil,
-			structuredData: &map[string]map[string]string{
-				"sdid": {
-					"x": `hey \u2318 hey`,
-				},
-			},
-			message: syslogtesting.StringAddress("some_message"),
-		},
+		(&SyslogMessage{}).
+			SetVersion(2).
+			SetHostname("host1").
+			SetAppname("CROND").
+			SetTimestamp("2016-01-15T00:04:01+00:00").
+			SetProcID("10391").
+			SetMessage("some_message").
+			SetParameter("sdid", "x", `hey \\u2318 hey`).
+			SetPriority(78),
 		"",
 		nil,
 	},
@@ -1218,131 +797,87 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>50 2016-01-15T01:00:43Z hn S - - [meta es="\\valid"] 127.0.0.1 - - 1452819643 "GET"`),
 		true,
-		&SyslogMessage{
-			priority:  syslogtesting.Uint8Address(29),
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			version:   50,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
-			hostname:  syslogtesting.StringAddress("hn"),
-			appname:   syslogtesting.StringAddress("S"),
-			structuredData: &map[string]map[string]string{
-				"meta": {
-					"es": `\valid`,
-				},
-			},
-			message: syslogtesting.StringAddress(`127.0.0.1 - - 1452819643 "GET"`),
-		},
+		(&SyslogMessage{}).
+			SetVersion(50).
+			SetHostname("hn").
+			SetAppname("S").
+			SetTimestamp("2016-01-15T01:00:43Z").
+			SetMessage(`127.0.0.1 - - 1452819643 "GET"`).
+			SetParameter("meta", "es", `\\valid`).
+			SetPriority(29),
 		"",
 		nil,
 	},
 	{
 		[]byte(`<29>52 2016-01-15T01:00:43Z hn S - - [meta one="\\one" two="\\two"] 127.0.0.1 - - 1452819643 "GET"`),
 		true,
-		&SyslogMessage{
-			priority:  syslogtesting.Uint8Address(29),
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			version:   52,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
-			hostname:  syslogtesting.StringAddress("hn"),
-			appname:   syslogtesting.StringAddress("S"),
-			structuredData: &map[string]map[string]string{
-				"meta": {
-					"one": `\one`,
-					"two": `\two`,
-				},
-			},
-			message: syslogtesting.StringAddress(`127.0.0.1 - - 1452819643 "GET"`),
-		},
+		(&SyslogMessage{}).
+			SetVersion(52).
+			SetHostname("hn").
+			SetAppname("S").
+			SetTimestamp("2016-01-15T01:00:43Z").
+			SetMessage(`127.0.0.1 - - 1452819643 "GET"`).
+			SetParameter("meta", "one", `\\one`).
+			SetParameter("meta", "two", `\\two`).
+			SetPriority(29),
 		"",
 		nil,
 	},
 	{
 		[]byte(`<29>53 2016-01-15T01:00:43Z hn S - - [meta one="\\one"][other two="\\two" double="\\a\\b"] 127.0.0.1 - - 1452819643 "GET"`),
 		true,
-		&SyslogMessage{
-			priority:  syslogtesting.Uint8Address(29),
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			version:   53,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
-			hostname:  syslogtesting.StringAddress("hn"),
-			appname:   syslogtesting.StringAddress("S"),
-			structuredData: &map[string]map[string]string{
-				"meta": {
-					"one": `\one`,
-				},
-				"other": {
-					"two":    `\two`,
-					"double": `\a\b`,
-				},
-			},
-			message: syslogtesting.StringAddress(`127.0.0.1 - - 1452819643 "GET"`),
-		},
+		(&SyslogMessage{}).
+			SetVersion(53).
+			SetTimestamp("2016-01-15T01:00:43Z").
+			SetHostname("hn").
+			SetAppname("S").
+			SetMessage(`127.0.0.1 - - 1452819643 "GET"`).
+			SetParameter("meta", "one", `\\one`).
+			SetParameter("other", "two", `\\two`).
+			SetParameter("other", "double", `\\a\\b`).
+			SetPriority(29),
 		"",
 		nil,
 	},
 	{
 		[]byte(`<29>51 2016-01-15T01:00:43Z hn S - - [meta es="\\double\\slash"] 127.0.0.1 - - 1452819643 "GET"`),
 		true,
-		&SyslogMessage{
-			priority:  syslogtesting.Uint8Address(29),
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			version:   51,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
-			hostname:  syslogtesting.StringAddress("hn"),
-			appname:   syslogtesting.StringAddress("S"),
-			structuredData: &map[string]map[string]string{
-				"meta": {
-					"es": `\double\slash`,
-				},
-			},
-			message: syslogtesting.StringAddress(`127.0.0.1 - - 1452819643 "GET"`),
-		},
+		(&SyslogMessage{}).
+			SetVersion(51).
+			SetTimestamp("2016-01-15T01:00:43Z").
+			SetHostname("hn").
+			SetAppname("S").
+			SetMessage(`127.0.0.1 - - 1452819643 "GET"`).
+			SetParameter("meta", "es", `\\double\\slash`).
+			SetPriority(29),
 		"",
 		nil,
 	},
 	{
 		[]byte(`<29>54 2016-01-15T01:00:43Z hn S - - [meta es="in \\middle of the string"] 127.0.0.1 - - 1452819643 "GET"`),
 		true,
-		&SyslogMessage{
-			priority:  syslogtesting.Uint8Address(29),
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			version:   54,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
-			hostname:  syslogtesting.StringAddress("hn"),
-			appname:   syslogtesting.StringAddress("S"),
-			structuredData: &map[string]map[string]string{
-				"meta": {
-					"es": `in \middle of the string`,
-				},
-			},
-			message: syslogtesting.StringAddress(`127.0.0.1 - - 1452819643 "GET"`),
-		},
+		(&SyslogMessage{}).
+			SetVersion(54).
+			SetTimestamp("2016-01-15T01:00:43Z").
+			SetHostname("hn").
+			SetAppname("S").
+			SetMessage(`127.0.0.1 - - 1452819643 "GET"`).
+			SetParameter("meta", "es", `in \\middle of the string`).
+			SetPriority(29),
 		"",
 		nil,
 	},
 	{
 		[]byte(`<29>55 2016-01-15T01:00:43Z hn S - - [meta es="at the \\end"] 127.0.0.1 - - 1452819643 "GET"`),
 		true,
-		&SyslogMessage{
-			priority:  syslogtesting.Uint8Address(29),
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			version:   55,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
-			hostname:  syslogtesting.StringAddress("hn"),
-			appname:   syslogtesting.StringAddress("S"),
-			structuredData: &map[string]map[string]string{
-				"meta": {
-					"es": `at the \end`,
-				},
-			},
-			message: syslogtesting.StringAddress(`127.0.0.1 - - 1452819643 "GET"`),
-		},
+		(&SyslogMessage{}).
+			SetVersion(55).
+			SetTimestamp("2016-01-15T01:00:43Z").
+			SetHostname("hn").
+			SetAppname("S").
+			SetMessage(`127.0.0.1 - - 1452819643 "GET"`).
+			SetParameter("meta", "es", `at the \\end`).
+			SetPriority(29),
 		"",
 		nil,
 	},
@@ -1350,21 +885,14 @@ var testCases = []testCase{
 	{
 		[]byte("<29>50 2016-01-15T01:00:43Z hn S - - [meta es=\"\t5Ὂg̀9!℃ᾭGa b\"] 127.0.0.1 - - 1452819643 \"GET\""),
 		true,
-		&SyslogMessage{
-			priority:  syslogtesting.Uint8Address(29),
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			version:   50,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
-			hostname:  syslogtesting.StringAddress("hn"),
-			appname:   syslogtesting.StringAddress("S"),
-			structuredData: &map[string]map[string]string{
-				"meta": {
-					"es": "\t5Ὂg̀9!℃ᾭGa b",
-				},
-			},
-			message: syslogtesting.StringAddress(`127.0.0.1 - - 1452819643 "GET"`),
-		},
+		(&SyslogMessage{}).
+			SetVersion(50).
+			SetTimestamp("2016-01-15T01:00:43Z").
+			SetHostname("hn").
+			SetAppname("S").
+			SetMessage(`127.0.0.1 - - 1452819643 "GET"`).
+			SetParameter("meta", "es", "\t5Ὂg̀9!℃ᾭGa b").
+			SetPriority(29),
 		"",
 		nil,
 	},
@@ -1372,25 +900,16 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>50 2016-01-15T01:00:43Z hn S - - [meta gr="κόσμε" es="ñ"][beta pr="₡"] 𐌼 "GET"`),
 		true,
-		&SyslogMessage{
-			priority:  syslogtesting.Uint8Address(29),
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			version:   50,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
-			hostname:  syslogtesting.StringAddress("hn"),
-			appname:   syslogtesting.StringAddress("S"),
-			structuredData: &map[string]map[string]string{
-				"meta": {
-					"gr": "κόσμε",
-					"es": "ñ",
-				},
-				"beta": {
-					"pr": "₡",
-				},
-			},
-			message: syslogtesting.StringAddress(`𐌼 "GET"`),
-		},
+		(&SyslogMessage{}).
+			SetVersion(50).
+			SetTimestamp("2016-01-15T01:00:43Z").
+			SetHostname("hn").
+			SetAppname("S").
+			SetMessage(`𐌼 "GET"`).
+			SetParameter("meta", "gr", "κόσμε").
+			SetParameter("meta", "es", "ñ").
+			SetParameter("beta", "pr", "₡").
+			SetPriority(29),
 		"",
 		nil,
 	},
@@ -1398,28 +917,17 @@ var testCases = []testCase{
 	{
 		[]byte("<165>3 2003-10-11T22:14:15.003Z example.com evnts - ID27 [exampleSDID@32473 iut=\"3\" eventSource=\"Application\" eventID=\"1011\"][examplePriority@32473 class=\"high\"]"),
 		true,
-		&SyslogMessage{
-			facility:  syslogtesting.Uint8Address(20),
-			severity:  syslogtesting.Uint8Address(5),
-			priority:  syslogtesting.Uint8Address(165),
-			version:   3,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2003-10-11T22:14:15.003Z"),
-			hostname:  syslogtesting.StringAddress("example.com"),
-			appname:   syslogtesting.StringAddress("evnts"),
-			procID:    nil,
-			msgID:     syslogtesting.StringAddress("ID27"),
-			structuredData: &map[string]map[string]string{
-				"exampleSDID@32473": {
-					"iut":         "3",
-					"eventSource": "Application",
-					"eventID":     "1011",
-				},
-				"examplePriority@32473": {
-					"class": "high",
-				},
-			},
-			message: nil,
-		},
+		(&SyslogMessage{}).
+			SetVersion(3).
+			SetTimestamp("2003-10-11T22:14:15.003Z").
+			SetHostname("example.com").
+			SetAppname("evnts").
+			SetMsgID("ID27").
+			SetParameter("exampleSDID@32473", "iut", "3").
+			SetParameter("exampleSDID@32473", "eventSource", "Application").
+			SetParameter("exampleSDID@32473", "eventID", "1011").
+			SetParameter("examplePriority@32473", "class", "high").
+			SetPriority(165),
 		"",
 		nil,
 	},
@@ -1429,65 +937,45 @@ var testCases = []testCase{
 		false,
 		nil,
 		"duplicate structured data element id [col 66]",
-		&SyslogMessage{
-			priority:  syslogtesting.Uint8Address(165),
-			facility:  syslogtesting.Uint8Address(20),
-			severity:  syslogtesting.Uint8Address(5),
-			version:   3,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2003-10-11T22:14:15.003Z"),
-			hostname:  syslogtesting.StringAddress("example.com"),
-			appname:   syslogtesting.StringAddress("evnts"),
-			msgID:     syslogtesting.StringAddress("ID27"),
-			structuredData: &map[string]map[string]string{
-				"id1": {},
-			},
-		},
+		(&SyslogMessage{}).
+			SetVersion(3).
+			SetTimestamp("2003-10-11T22:14:15.003Z").
+			SetHostname("example.com").
+			SetAppname("evnts").
+			SetMsgID("ID27").
+			SetElementID("id1").
+			SetPriority(165),
 	},
 	// Invalid, with duplicated structured data id
 	{
-		[]byte("<165>3 2003-10-11T22:14:15.003Z example.com evnts - ID27 [dupe e=\"1\"][id1][dupe class=\"l\"]"),
+		[]byte("<165>3 2003-10-12T22:14:15.003Z example.com evnts - ID27 [dupe e=\"1\"][id1][dupe class=\"l\"]"),
 		false,
 		nil,
 		"duplicate structured data element id [col 79]",
-		&SyslogMessage{
-			priority:  syslogtesting.Uint8Address(165),
-			facility:  syslogtesting.Uint8Address(20),
-			severity:  syslogtesting.Uint8Address(5),
-			version:   3,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2003-10-11T22:14:15.003Z"),
-			hostname:  syslogtesting.StringAddress("example.com"),
-			appname:   syslogtesting.StringAddress("evnts"),
-			msgID:     syslogtesting.StringAddress("ID27"),
-			structuredData: &map[string]map[string]string{
-				"id1": {},
-				"dupe": {
-					"e": "1",
-				},
-			},
-		},
+		(&SyslogMessage{}).
+			SetVersion(3).
+			SetTimestamp("2003-10-12T22:14:15.003Z").
+			SetHostname("example.com").
+			SetAppname("evnts").
+			SetMsgID("ID27").
+			SetElementID("id1").
+			SetParameter("dupe", "e", "1").
+			SetPriority(165),
 	},
 	// Valid, with structured data w/o msg
 	{
 		[]byte(`<165>4 2003-10-11T22:14:15.003Z mymachine.it e - 1 [ex@32473 iut="3" eventSource="A"] An application event log entry...`),
 		true,
-		&SyslogMessage{
-			facility:  syslogtesting.Uint8Address(20),
-			severity:  syslogtesting.Uint8Address(5),
-			priority:  syslogtesting.Uint8Address(165),
-			version:   4,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2003-10-11T22:14:15.003Z"),
-			hostname:  syslogtesting.StringAddress("mymachine.it"),
-			appname:   syslogtesting.StringAddress("e"),
-			procID:    nil,
-			msgID:     syslogtesting.StringAddress("1"),
-			structuredData: &map[string]map[string]string{
-				"ex@32473": {
-					"iut":         "3",
-					"eventSource": "A",
-				},
-			},
-			message: syslogtesting.StringAddress("An application event log entry..."),
-		},
+		(&SyslogMessage{}).
+			SetVersion(4).
+			SetMessage("An application event log entry...").
+			SetTimestamp("2003-10-11T22:14:15.003Z").
+			SetHostname("mymachine.it").
+			SetAppname("e").
+			SetMsgID("1").
+			SetParameter("ex@32473", "iut", "3").
+			SetParameter("ex@32473", "eventSource", "A").
+			SetPriority(165),
 		"",
 		nil,
 	},
@@ -1495,26 +983,16 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>1 2016-01-15T01:00:43Z some-host-name SEKRETPROGRAM prg - [origin x-service="svcname"][meta sequenceId="1"] 127.0.0.1 - - 1452819643 "GET"`),
 		true,
-		&SyslogMessage{
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			priority:  syslogtesting.Uint8Address(29),
-			version:   1,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
-			hostname:  syslogtesting.StringAddress("some-host-name"),
-			appname:   syslogtesting.StringAddress("SEKRETPROGRAM"),
-			procID:    syslogtesting.StringAddress("prg"),
-			msgID:     nil,
-			structuredData: &map[string]map[string]string{
-				"origin": {
-					"x-service": "svcname",
-				},
-				"meta": {
-					"sequenceId": "1",
-				},
-			},
-			message: syslogtesting.StringAddress("127.0.0.1 - - 1452819643 \"GET\""),
-		},
+		(&SyslogMessage{}).
+			SetVersion(1).
+			SetMessage("127.0.0.1 - - 1452819643 \"GET\"").
+			SetTimestamp("2016-01-15T01:00:43Z").
+			SetHostname("some-host-name").
+			SetAppname("SEKRETPROGRAM").
+			SetProcID("prg").
+			SetParameter("origin", "x-service", "svcname").
+			SetParameter("meta", "sequenceId", "1").
+			SetPriority(29),
 		"",
 		nil,
 	},
@@ -1522,107 +1000,36 @@ var testCases = []testCase{
 	{
 		[]byte(`<1>1 - - - - - [id pk=""]`),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			structuredData: &map[string]map[string]string{
-				"id": {
-					"pk": "",
-				},
-			},
-		},
+		(&SyslogMessage{}).SetVersion(1).SetParameter("id", "pk", "").SetPriority(1),
 		"",
 		nil,
 	},
 	// Valid, with escaped character within param value
 	{
-		[]byte(`<29>2 2016-01-15T01:00:43Z some-host-name SEKRETPROGRAM prg - [meta escape="\]"] some "mex"`),
+		[]byte(`<29>2 2016-01-15T01:00:44Z some-host-name SEKRETPROGRAM prg - [meta escape="\]"] some "mex"`),
 		true,
-		&SyslogMessage{
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			priority:  syslogtesting.Uint8Address(29),
-			version:   2,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
-			hostname:  syslogtesting.StringAddress("some-host-name"),
-			appname:   syslogtesting.StringAddress("SEKRETPROGRAM"),
-			procID:    syslogtesting.StringAddress("prg"),
-			msgID:     nil,
-			structuredData: &map[string]map[string]string{
-				"meta": {
-					"escape": "]",
-				},
-			},
-			message: syslogtesting.StringAddress(`some "mex"`),
-		},
+		(&SyslogMessage{}).SetVersion(2).SetMessage(`some "mex"`).SetTimestamp("2016-01-15T01:00:44Z").SetHostname("some-host-name").SetAppname("SEKRETPROGRAM").SetProcID("prg").SetParameter("meta", "escape", `\]`).SetPriority(29),
 		"",
 		nil,
 	},
 	{
 		[]byte(`<29>2 2016-01-15T01:00:43Z some-host-name SEKRETPROGRAM prg - [meta escape="\\"]`),
 		true,
-		&SyslogMessage{
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			priority:  syslogtesting.Uint8Address(29),
-			version:   2,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
-			hostname:  syslogtesting.StringAddress("some-host-name"),
-			appname:   syslogtesting.StringAddress("SEKRETPROGRAM"),
-			procID:    syslogtesting.StringAddress("prg"),
-			msgID:     nil,
-			structuredData: &map[string]map[string]string{
-				"meta": {
-					"escape": `\`,
-				},
-			},
-		},
+		(&SyslogMessage{}).SetVersion(2).SetTimestamp("2016-01-15T01:00:43Z").SetHostname("some-host-name").SetAppname("SEKRETPROGRAM").SetProcID("prg").SetParameter("meta", "escape", `\\`).SetPriority(29),
 		"",
 		nil,
 	},
 	{
 		[]byte(`<29>2 2016-01-15T01:00:43Z some-host-name SEKRETPROGRAM prg - [meta escape="\""]`),
 		true,
-		&SyslogMessage{
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			priority:  syslogtesting.Uint8Address(29),
-			version:   2,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
-			hostname:  syslogtesting.StringAddress("some-host-name"),
-			appname:   syslogtesting.StringAddress("SEKRETPROGRAM"),
-			procID:    syslogtesting.StringAddress("prg"),
-			msgID:     nil,
-			structuredData: &map[string]map[string]string{
-				"meta": {
-					"escape": `"`,
-				},
-			},
-		},
+		(&SyslogMessage{}).SetVersion(2).SetTimestamp("2016-01-15T01:00:43Z").SetHostname("some-host-name").SetAppname("SEKRETPROGRAM").SetProcID("prg").SetParameter("meta", "escape", `\"`).SetPriority(29),
 		"",
 		nil,
 	},
 	{
 		[]byte(`<29>2 2016-01-15T01:00:43Z some-host-name SEKRETPROGRAM prg - [meta escape="\]\"\\\\\]\""]`),
 		true,
-		&SyslogMessage{
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			priority:  syslogtesting.Uint8Address(29),
-			version:   2,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
-			hostname:  syslogtesting.StringAddress("some-host-name"),
-			appname:   syslogtesting.StringAddress("SEKRETPROGRAM"),
-			procID:    syslogtesting.StringAddress("prg"),
-			msgID:     nil,
-			structuredData: &map[string]map[string]string{
-				"meta": {
-					"escape": `]"\\]"`,
-				},
-			},
-		},
+		(&SyslogMessage{}).SetVersion(2).SetTimestamp("2016-01-15T01:00:43Z").SetHostname("some-host-name").SetAppname("SEKRETPROGRAM").SetProcID("prg").SetParameter("meta", "escape", `\]\"\\\\\]\"`).SetPriority(29),
 		"",
 		nil,
 	},
@@ -1632,54 +1039,21 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrEscape+ColumnPositionTemplate, 50),
-		&SyslogMessage{
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			priority:  syslogtesting.Uint8Address(29),
-			version:   3,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
-			hostname:  syslogtesting.StringAddress("hn"),
-			appname:   syslogtesting.StringAddress("S"),
-			structuredData: &map[string]map[string]string{
-				"meta": {},
-			},
-		},
+		(&SyslogMessage{}).SetVersion(3).SetTimestamp("2016-01-15T01:00:43Z").SetHostname("hn").SetAppname("S").SetElementID("meta").SetPriority(29),
 	},
 	{
 		[]byte(`<29>5 2016-01-15T01:00:43Z hn S - - [meta escape="]q"] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
 		nil,
 		fmt.Sprintf(ErrEscape+ColumnPositionTemplate, 50),
-		&SyslogMessage{
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			priority:  syslogtesting.Uint8Address(29),
-			version:   5,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
-			hostname:  syslogtesting.StringAddress("hn"),
-			appname:   syslogtesting.StringAddress("S"),
-			structuredData: &map[string]map[string]string{
-				"meta": {},
-			},
-		},
+		(&SyslogMessage{}).SetVersion(5).SetTimestamp("2016-01-15T01:00:43Z").SetHostname("hn").SetAppname("S").SetElementID("meta").SetPriority(29),
 	},
 	{
 		[]byte(`<29>4 2016-01-15T01:00:43Z hn S - - [meta escape="p]"] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
 		nil,
 		fmt.Sprintf(ErrEscape+ColumnPositionTemplate, 51),
-		&SyslogMessage{
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			priority:  syslogtesting.Uint8Address(29),
-			version:   4,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
-			hostname:  syslogtesting.StringAddress("hn"),
-			appname:   syslogtesting.StringAddress("S"),
-			structuredData: &map[string]map[string]string{
-				"meta": {},
-			},
-		},
+		(&SyslogMessage{}).SetVersion(4).SetTimestamp("2016-01-15T01:00:43Z").SetHostname("hn").SetAppname("S").SetElementID("meta").SetPriority(29),
 	},
 	// Invalid, param value can not contain doublequote char - ie., ""
 	{
@@ -1687,54 +1061,21 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrSdParam+ColumnPositionTemplate, 51),
-		&SyslogMessage{
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			priority:  syslogtesting.Uint8Address(29),
-			version:   4,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2017-01-15T01:00:43Z"),
-			hostname:  syslogtesting.StringAddress("hn"),
-			appname:   syslogtesting.StringAddress("S"),
-			structuredData: &map[string]map[string]string{
-				"meta": {},
-			},
-		},
+		(&SyslogMessage{}).SetVersion(4).SetTimestamp("2017-01-15T01:00:43Z").SetHostname("hn").SetAppname("S").SetElementID("meta").SetPriority(29),
 	},
 	{
 		[]byte(`<29>6 2016-01-15T01:00:43Z hn S - - [meta escape="a""] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
 		nil,
 		fmt.Sprintf(ErrSdParam+ColumnPositionTemplate, 52),
-		&SyslogMessage{
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			priority:  syslogtesting.Uint8Address(29),
-			version:   6,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
-			hostname:  syslogtesting.StringAddress("hn"),
-			appname:   syslogtesting.StringAddress("S"),
-			structuredData: &map[string]map[string]string{
-				"meta": {},
-			},
-		},
+		(&SyslogMessage{}).SetVersion(6).SetTimestamp("2016-01-15T01:00:43Z").SetHostname("hn").SetAppname("S").SetElementID("meta").SetPriority(29),
 	},
 	{
 		[]byte(`<29>4 2018-01-15T01:00:43Z hn S - - [meta escape=""b"] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
 		nil,
 		fmt.Sprintf(ErrSdParam+ColumnPositionTemplate, 51),
-		&SyslogMessage{
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			priority:  syslogtesting.Uint8Address(29),
-			version:   4,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2018-01-15T01:00:43Z"),
-			hostname:  syslogtesting.StringAddress("hn"),
-			appname:   syslogtesting.StringAddress("S"),
-			structuredData: &map[string]map[string]string{
-				"meta": {},
-			},
-		},
+		(&SyslogMessage{}).SetVersion(4).SetTimestamp("2018-01-15T01:00:43Z").SetHostname("hn").SetAppname("S").SetElementID("meta").SetPriority(29),
 	},
 	// Invalid, param value can not contain backslash - ie., \
 	{
@@ -1742,66 +1083,27 @@ var testCases = []testCase{
 		false,
 		nil,
 		fmt.Sprintf(ErrEscape+ColumnPositionTemplate, 52),
-		&SyslogMessage{
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			priority:  syslogtesting.Uint8Address(29),
-			version:   5,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2019-01-15T01:00:43Z"),
-			hostname:  syslogtesting.StringAddress("hn"),
-			appname:   syslogtesting.StringAddress("S"),
-			structuredData: &map[string]map[string]string{
-				"meta": {},
-			},
-		},
+		(&SyslogMessage{}).SetVersion(5).SetTimestamp("2019-01-15T01:00:43Z").SetHostname("hn").SetAppname("S").SetElementID("meta").SetPriority(29),
 	},
 	{
 		[]byte(`<29>7 2019-01-15T01:00:43Z hn S - - [meta escape="a\"] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
 		nil,
 		fmt.Sprintf(ErrEscape+ColumnPositionTemplate, 53),
-		&SyslogMessage{
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			priority:  syslogtesting.Uint8Address(29),
-			version:   7,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2019-01-15T01:00:43Z"),
-			hostname:  syslogtesting.StringAddress("hn"),
-			appname:   syslogtesting.StringAddress("S"),
-			structuredData: &map[string]map[string]string{
-				"meta": {},
-			},
-		},
+		(&SyslogMessage{}).SetVersion(7).SetTimestamp("2016-01-15T01:00:43Z").SetHostname("hn").SetTimestamp("2019-01-15T01:00:43Z").SetAppname("S").SetElementID("meta").SetPriority(29),
 	},
 	{
 		[]byte(`<29>8 2016-01-15T01:00:43Z hn S - - [meta escape="\n"] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
 		nil,
 		fmt.Sprintf(ErrEscape+ColumnPositionTemplate, 51),
-		&SyslogMessage{
-			facility:  syslogtesting.Uint8Address(3),
-			severity:  syslogtesting.Uint8Address(5),
-			priority:  syslogtesting.Uint8Address(29),
-			version:   8,
-			timestamp: syslogtesting.TimeParse(RFC3339MICRO, "2016-01-15T01:00:43Z"),
-			hostname:  syslogtesting.StringAddress("hn"),
-			appname:   syslogtesting.StringAddress("S"),
-			structuredData: &map[string]map[string]string{
-				"meta": {},
-			},
-		},
+		(&SyslogMessage{}).SetVersion(8).SetTimestamp("2016-01-15T01:00:43Z").SetHostname("hn").SetAppname("S").SetElementID("meta").SetPriority(29),
 	},
 	// Valid, message starting with byte order mark (BOM, \uFEFF)
 	{
-		[]byte("<1>1 - - - - - - \xEF\xBB\xBF"),
+		[]byte("<1>8 - - - - - - \xEF\xBB\xBF"),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\ufeff"),
-		},
+		(&SyslogMessage{}).SetVersion(8).SetMessage("\ufeff").SetPriority(1),
 		"",
 		nil,
 	},
@@ -1809,13 +1111,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - κόσμε"),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("κόσμε"),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetMessage("κόσμε").SetPriority(1),
 		"",
 		nil,
 	},
@@ -1823,13 +1119,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - "),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress(""),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetMessage("").SetPriority(1),
 		"",
 		nil,
 	},
@@ -1837,13 +1127,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - \xc3\xb1"),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("ñ"),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetMessage("ñ").SetPriority(1),
 		"",
 		nil,
 	},
@@ -1851,27 +1135,15 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - \xe2\x82\xa1"),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("₡"),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetMessage("₡").SetPriority(1),
 		"",
 		nil,
 	},
 	// Valid, gothic letter (4 octet sequence)
 	{
-		[]byte("<1>1 - - - - - - \xEF\xBB\xBF \xf0\x90\x8c\xbc"),
+		[]byte("<3>1 - - - - - - \xEF\xBB\xBF \xf0\x90\x8c\xbc"),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\ufeff 𐌼"),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetMessage("\ufeff 𐌼").SetPriority(3),
 		"",
 		nil,
 	},
@@ -1879,13 +1151,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - \xC8\x80\x30\x30\x30"),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("Ȁ000"),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetMessage("Ȁ000").SetPriority(1),
 		"",
 		nil,
 	},
@@ -1893,13 +1159,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - \xE4\x80\x80\x30\x30\x30"),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("䀀000"),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetMessage("䀀000").SetPriority(1),
 		"",
 		nil,
 	},
@@ -1907,26 +1167,14 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - \xC4\x90\x30\x30\x30"),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("Đ000"),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetMessage("Đ000").SetPriority(1),
 		"",
 		nil,
 	},
 	{
 		[]byte("<1>1 - - - - - - \x0D\x37\x46\x46"),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\r7FF"),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetMessage("\r7FF").SetPriority(1),
 		"",
 		nil,
 	},
@@ -1934,13 +1182,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - யாமறிந்த மொழிகளிலே தமிழ்மொழி போல் இனிதாவது எங்கும் காணோம், பாமரராய் விலங்குகளாய், உலகனைத்தும் இகழ்ச்சிசொலப் பான்மை கெட்டு, நாமமது தமிழரெனக் கொண்டு இங்கு வாழ்ந்திடுதல் நன்றோ? சொல்லீர்! தேமதுரத் தமிழோசை உலகமெலாம் பரவும்வகை செய்தல் வேண்டும்."),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("யாமறிந்த மொழிகளிலே தமிழ்மொழி போல் இனிதாவது எங்கும் காணோம், பாமரராய் விலங்குகளாய், உலகனைத்தும் இகழ்ச்சிசொலப் பான்மை கெட்டு, நாமமது தமிழரெனக் கொண்டு இங்கு வாழ்ந்திடுதல் நன்றோ? சொல்லீர்! தேமதுரத் தமிழோசை உலகமெலாம் பரவும்வகை செய்தல் வேண்டும்."),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetMessage("யாமறிந்த மொழிகளிலே தமிழ்மொழி போல் இனிதாவது எங்கும் காணோம், பாமரராய் விலங்குகளாய், உலகனைத்தும் இகழ்ச்சிசொலப் பான்மை கெட்டு, நாமமது தமிழரெனக் கொண்டு இங்கு வாழ்ந்திடுதல் நன்றோ? சொல்லீர்! தேமதுரத் தமிழோசை உலகமெலாம் பரவும்வகை செய்தல் வேண்டும்.").SetPriority(1),
 		"",
 		nil,
 	},
@@ -1948,13 +1190,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - Sôn bôn de magnà el véder, el me fa minga mal."),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("Sôn bôn de magnà el véder, el me fa minga mal."),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetMessage("Sôn bôn de magnà el véder, el me fa minga mal.").SetPriority(1),
 		"",
 		nil,
 	},
@@ -1962,13 +1198,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - Me posso magna' er vetro, e nun me fa male."),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("Me posso magna' er vetro, e nun me fa male."),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetMessage("Me posso magna' er vetro, e nun me fa male.").SetPriority(1),
 		"",
 		nil,
 	},
@@ -1976,13 +1206,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - ⠊⠀⠉⠁⠝⠀⠑⠁⠞⠀⠛⠇⠁⠎⠎⠀⠁⠝⠙⠀⠊⠞⠀⠙⠕⠑⠎⠝⠞⠀⠓⠥⠗⠞⠀⠍⠑"),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("⠊⠀⠉⠁⠝⠀⠑⠁⠞⠀⠛⠇⠁⠎⠎⠀⠁⠝⠙⠀⠊⠞⠀⠙⠕⠑⠎⠝⠞⠀⠓⠥⠗⠞⠀⠍⠑"),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetMessage("⠊⠀⠉⠁⠝⠀⠑⠁⠞⠀⠛⠇⠁⠎⠎⠀⠁⠝⠙⠀⠊⠞⠀⠙⠕⠑⠎⠝⠞⠀⠓⠥⠗⠞⠀⠍⠑").SetPriority(1),
 		"",
 		nil,
 	},
@@ -1990,13 +1214,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - काचं शक्नोम्यत्तुम् । नोपहिनस्ति माम् ॥"),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("काचं शक्नोम्यत्तुम् । नोपहिनस्ति माम् ॥"),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetMessage("काचं शक्नोम्यत्तुम् । नोपहिनस्ति माम् ॥").SetPriority(1),
 		"",
 		nil,
 	},
@@ -2004,13 +1222,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - میں کانچ کھا سکتا ہوں اور مجھے تکلیف نہیں ہوتی ۔"),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("میں کانچ کھا سکتا ہوں اور مجھے تکلیف نہیں ہوتی ۔"),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetMessage("میں کانچ کھا سکتا ہوں اور مجھے تکلیف نہیں ہوتی ۔").SetPriority(1),
 		"",
 		nil,
 	},
@@ -2018,13 +1230,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - איך קען עסן גלאָז און עס טוט מיר נישט װײ."),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("איך קען עסן גלאָז און עס טוט מיר נישט װײ."),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetMessage("איך קען עסן גלאָז און עס טוט מיר נישט װײ.").SetPriority(1),
 		"",
 		nil,
 	},
@@ -2032,13 +1238,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - Mogę jeść szkło, i mi nie szkodzi."),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("Mogę jeść szkło, i mi nie szkodzi."),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetMessage("Mogę jeść szkło, i mi nie szkodzi.").SetPriority(1),
 		"",
 		nil,
 	},
@@ -2046,13 +1246,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - 私はガラスを食べられます。それは私を傷つけません。"),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("私はガラスを食べられます。それは私を傷つけません。"),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetMessage("私はガラスを食べられます。それは私を傷つけません。").SetPriority(1),
 		"",
 		nil,
 	},
@@ -2060,13 +1254,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - أنا قادر على أكل الزجاج و هذا لا يؤلمني."),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("أنا قادر على أكل الزجاج و هذا لا يؤلمني."),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetMessage("أنا قادر على أكل الزجاج و هذا لا يؤلمني.").SetPriority(1),
 		"",
 		nil,
 	},
@@ -2074,13 +1262,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - абвгдеёжзийклмнопрстуфхцчшщъыьэюя"),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("абвгдеёжзийклмнопрстуфхцчшщъыьэюя"),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetMessage("абвгдеёжзийклмнопрстуфхцчшщъыьэюя").SetPriority(1),
 		"",
 		nil,
 	},
@@ -2088,13 +1270,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - ԰ԱԲԳԴԵԶԷԸԹԺԻԼԽԾԿՀՁՂՃՄՅՆՇՈՉՊՋՌՍՎՏՐՑՒՓՔՕՖ՗՘ՙ՚՛՜՝՞՟աբգդեզէըթիլխծկհձղճմյնշոչպջռսվտրցւփքօֆևֈ։֊֋֌֍֎֏"),
 		true,
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\u0530ԱԲԳԴԵԶԷԸԹԺԻԼԽԾԿՀՁՂՃՄՅՆՇՈՉՊՋՌՍՎՏՐՑՒՓՔՕՖ\u0557\u0558ՙ՚՛՜՝՞՟աբգդեզէըթիլխծկհձղճմյնշոչպջռսվտրցւփքօֆև\u0588։֊\u058b\u058c֍֎֏"),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetMessage("\u0530ԱԲԳԴԵԶԷԸԹԺԻԼԽԾԿՀՁՂՃՄՅՆՇՈՉՊՋՌՍՎՏՐՑՒՓՔՕՖ\u0557\u0558ՙ՚՛՜՝՞՟աբգդեզէըթիլխծկհձղճմյնշոչպջռսվտրցւփքօֆև\u0588։֊\u058b\u058c֍֎֏").SetPriority(1),
 		"",
 		nil,
 	},
@@ -2102,27 +1278,15 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - x\x0Ay"),
 		true,
-		&SyslogMessage{
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			priority: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("x\ny"),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetMessage("x\ny").SetPriority(1),
 		"",
 		nil,
 	},
 	{
-		[]byte(`<1>2 - - - - - - x
+		[]byte(`<1>3 - - - - - - x
 y`),
 		true,
-		&SyslogMessage{
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			priority: syslogtesting.Uint8Address(1),
-			version:  2,
-			message:  syslogtesting.StringAddress("x\ny"),
-		},
+		(&SyslogMessage{}).SetVersion(3).SetMessage("x\ny").SetPriority(1),
 		"",
 		nil,
 	},
@@ -2132,206 +1296,112 @@ y`),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 20),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xEF\xBB\xBF"),
-		},
+		(&SyslogMessage{}).SetVersion(1).SetMessage("\xEF\xBB\xBF").SetPriority(1),
 	},
 	{
 		[]byte("<1>2 - - - - - - \xC1"),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  2,
-		},
+		(&SyslogMessage{}).SetVersion(2).SetPriority(1),
 	},
 	{
-		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xc3\x28"), // invalid 2 octet sequence
+		[]byte("<1>4 - - - - - - \xEF\xBB\xBF\xc3\x28"), // invalid 2 octet sequence
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 21),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xEF\xBB\xBF\xc3"),
-		},
+		genMessageWithPartialMessage(1, 4, syslogtesting.StringAddress("\xEF\xBB\xBF\xc3")),
 	},
 	{
 		[]byte("<1>1 - - - - - - \xc3\x28"), // invalid 2 octet sequence
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xc3"),
-		},
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xc3")),
 	},
 	{
-		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xa0\xa1"), // invalid sequence identifier
+		[]byte("<7>1 - - - - - - \xEF\xBB\xBF\xa0\xa1"), // invalid sequence identifier
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 20),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xEF\xBB\xBF"),
-		},
+		genMessageWithPartialMessage(7, 1, syslogtesting.StringAddress("\xEF\xBB\xBF")),
 	},
 	{
 		[]byte("<1>1 - - - - - - \xa0\xa1"), // invalid sequence identifier
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xe2\x28\xa1"), // invalid 3 octet sequence (2nd octet)
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 21),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xEF\xBB\xBF\xe2"),
-		},
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xEF\xBB\xBF\xe2")),
 	},
 	{
-		[]byte("<1>1 - - - - - - \xe2\x28\xa1"), // invalid 3 octet sequence (2nd octet)
+		[]byte("<5>1 - - - - - - \xe2\x28\xa1"), // invalid 3 octet sequence (2nd octet)
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xe2"),
-		},
+		genMessageWithPartialMessage(5, 1, syslogtesting.StringAddress("\xe2")),
 	},
 	{
-		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xe2\x82\x28"), // invalid 3 octet sequence (3nd octet)
+		[]byte("<6>1 - - - - - - \xEF\xBB\xBF\xe2\x82\x28"), // invalid 3 octet sequence (3nd octet)
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 22),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xEF\xBB\xBF\xe2\x82"),
-		},
+		genMessageWithPartialMessage(6, 1, syslogtesting.StringAddress("\xEF\xBB\xBF\xe2\x82")),
 	},
 	{
-		[]byte("<1>1 - - - - - - \xe2\x82\x28"), // invalid 3 octet sequence (3nd octet)
+		[]byte("<1>9 - - - - - - \xe2\x82\x28"), // invalid 3 octet sequence (3nd octet)
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 19),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xe2\x82"),
-		},
+		genMessageWithPartialMessage(1, 9, syslogtesting.StringAddress("\xe2\x82")),
 	},
 	{
 		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xf0\x28\x8c\xbc"), // invalid 4 octet sequence (2nd octet)
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 21),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xEF\xBB\xBF\xf0"),
-		},
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xEF\xBB\xBF\xf0")),
 	},
 	{
-		[]byte("<1>1 - - - - - - \xf0\x28\x8c\xbc"), // invalid 4 octet sequence (2nd octet)
+		[]byte("<1>10 - - - - - - \xf0\x28\x8c\xbc"), // invalid 4 octet sequence (2nd octet)
 		false,
 		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xf0"),
-		},
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 19),
+		genMessageWithPartialMessage(1, 10, syslogtesting.StringAddress("\xf0")),
 	},
 	{
 		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xf0\x90\x28\xbc"), // invalid 4 octet sequence (3nd octet)
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 22),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xEF\xBB\xBF\xf0\x90"),
-		},
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xEF\xBB\xBF\xf0\x90")),
 	},
 	{
 		[]byte("<1>1 - - - - - - \xf0\x90\x28\xbc"), // invalid 4 octet sequence (3nd octet)
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 19),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xf0\x90"),
-		},
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xf0\x90")),
 	},
 	{
 		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xf0\x28\x8c\x28"), // invalid 4 octet sequence (4nd octet)
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 21),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xEF\xBB\xBF\xf0"),
-		},
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xEF\xBB\xBF\xf0")),
 	},
 	{
 		[]byte("<1>1 - - - - - - \xf0\x28\x8c\x28"), // invalid 4 octet sequence (4nd octet)
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xf0"),
-		},
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xf0")),
 	},
 	// Invalid, impossible bytes
 	{
@@ -2339,36 +1409,21 @@ y`),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 - - - - - - \xfe"),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 - - - - - - \xff"),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	// Invalid, overlong sequences
 	{
@@ -2376,62 +1431,35 @@ y`),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 - - - - - - \xf8\x80\x80\x80\xaf"),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
-		[]byte("<1>1 - - - - - - \xf0\x80\x80\xaf"),
+		[]byte("<1>3 - - - - - - \xf0\x80\x80\xaf"),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xf0"),
-		},
+		genMessageWithPartialMessage(1, 3, syslogtesting.StringAddress("\xf0")),
 	},
 	{
-		[]byte("<1>1 - - - - - - \xe0\x80\xaf"),
+		[]byte("<1>3 - - - - - - \xe0\x80\xaf"),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xe0"),
-		},
+		genMessageWithPartialMessage(1, 3, syslogtesting.StringAddress("\xe0")),
 	},
 	{
 		[]byte("<1>1 - - - - - - \xc0\xaf"),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	// Invalid, maximum overlong sequences
 	{
@@ -2439,63 +1467,35 @@ y`),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 - - - - - - \xf8\x87\xbf\xbf\xbf"),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 - - - - - - \xf0\x8f\xbf\xbf"),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xf0"),
-		},
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xf0")),
 	},
 	{
 		[]byte("<1>1 - - - - - - \xe0\x9f\xbf"),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xe0"),
-		},
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xe0")),
 	},
 	{
 		[]byte("<1>1 - - - - - - \xc1\xbf"),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  nil,
-		},
+		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	// Invalid, illegal code positions, single utf-16 surrogates
 	{
@@ -2503,104 +1503,56 @@ y`),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xed"),
-		},
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xed")),
 	},
 	{
 		[]byte("<1>1 - - - - - - \xed\xa0\x80"),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xed"),
-		},
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xed")),
 	},
 	{
 		[]byte("<1>1 - - - - - - \xed\xad\xbf"),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xed"),
-		},
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xed")),
 	},
 	{
 		[]byte("<1>1 - - - - - - \xed\xae\x80"),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xed"),
-		},
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xed")),
 	},
 	{
-		[]byte("<1>1 - - - - - - \xed\xaf\xbf"),
+		[]byte("<22>23 - - - - - - \xed\xaf\xbf"),
 		false,
 		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xed"),
-		},
+		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 20),
+		genMessageWithPartialMessage(22, 23, syslogtesting.StringAddress("\xed")),
 	},
 	{
 		[]byte("<1>1 - - - - - - \xed\xb0\x80"),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xed"),
-		},
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xed")),
 	},
 	{
 		[]byte("<1>1 - - - - - - \xed\xbe\x80"),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xed"),
-		},
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xed")),
 	},
 	{
 		[]byte("<1>1 - - - - - - \xed\xbf\xbf"),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xed"),
-		},
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xed")),
 	},
 	// Invalid, illegal code positions, paired utf-16 surrogates
 	{
@@ -2608,13 +1560,7 @@ y`),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("\xed"),
-		},
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xed")),
 	},
 	// Invalid, out of range code within message after valid string
 	{
@@ -2622,13 +1568,7 @@ y`),
 		false,
 		nil,
 		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 25),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  1,
-			message:  syslogtesting.StringAddress("valid\ufeff"),
-		},
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("valid\ufeff")),
 	},
 	// Invalid, missing whitespace after nil timestamp
 	{
@@ -2636,27 +1576,22 @@ y`),
 		false,
 		nil,
 		fmt.Sprintf(ErrParse+ColumnPositionTemplate, 7),
-		&SyslogMessage{
-			priority: syslogtesting.Uint8Address(1),
-			facility: syslogtesting.Uint8Address(0),
-			severity: syslogtesting.Uint8Address(1),
-			version:  10,
-		},
+		(&SyslogMessage{}).SetVersion(10).SetPriority(1),
 	},
-
 	// (fixme) > evaluate non characters for UTF-8 security concerns, eg. \xef\xbf\xbe
+}
+
+func genMessageWithPartialMessage(p uint8, v uint16, m *string) *SyslogMessage {
+	mex := (&SyslogMessage{}).SetVersion(v).SetPriority(p).(*SyslogMessage)
+	mex.Message = m
+	return mex
 }
 
 // genIncompleteTimestampTestCases generates test cases with incomplete timestamp part.
 func genIncompleteTimestampTestCases() []testCase {
 	incompleteTimestamp := []byte("2003-11-02T23:12:46.012345")
 	prefix := []byte("<1>1 ")
-	mex := &SyslogMessage{
-		priority: syslogtesting.Uint8Address(1),
-		severity: syslogtesting.Uint8Address(1),
-		facility: syslogtesting.Uint8Address(0),
-		version:  1,
-	}
+	mex := (&SyslogMessage{}).SetVersion(1).SetPriority(1)
 	tCases := make([]testCase, 0, len(incompleteTimestamp))
 	prev := make([]byte, 0, len(incompleteTimestamp))
 	for i, d := range incompleteTimestamp {
@@ -2693,21 +1628,16 @@ func genPartialMessagesTestCases(data []byte, part int) []testCase {
 
 		input := []byte(fmt.Sprintf(templ, randp, randv, prev))
 
-		mex := &SyslogMessage{
-			priority: syslogtesting.Uint8Address(uint8(randp)),
-			severity: syslogtesting.Uint8Address(uint8(randp % 8)),
-			facility: syslogtesting.Uint8Address(uint8(randp / 8)),
-			version:  uint16(randv),
-		}
+		mex := (&SyslogMessage{}).SetVersion(uint16(randv)).SetPriority(uint8(randp)).(*SyslogMessage)
 		switch part {
 		case 0:
-			mex.hostname = syslogtesting.StringAddress(string(prev))
+			mex.Hostname = syslogtesting.StringAddress(string(prev))
 		case 1:
-			mex.appname = syslogtesting.StringAddress(string(prev))
+			mex.Appname = syslogtesting.StringAddress(string(prev))
 		case 2:
-			mex.procID = syslogtesting.StringAddress(string(prev))
+			mex.ProcID = syslogtesting.StringAddress(string(prev))
 		case 3:
-			mex.msgID = syslogtesting.StringAddress(string(prev))
+			mex.MsgID = syslogtesting.StringAddress(string(prev))
 		}
 
 		t := testCase{
