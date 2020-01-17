@@ -113,14 +113,15 @@ timestamp = (datemmm sp datemday sp hhmmss) >mark %set_timestamp @err(err_timest
 hostname = hostnamerange >mark %set_hostname $err(err_hostname);
 
 # Section 4.1.3
-tag = alnum{1,32} >mark %set_tag @err(err_tag);
+tag = (print - [ :\[]){1,32} >mark %set_tag @err(err_tag); # note(leodido) > alnum{1,32} is too restrictive (no dashes, see https://tools.ietf.org/html/rfc2234#section-2.1)
 
 visible = print | 0x80..0xFF;
 
-# The first not alphanumeric character start the content part of the message part
+# The first not alphanumeric character starts the content part of the message part
 contentval = !alnum @err(err_contentstart) >mark print* %set_content @err(err_content);
 
-content = '[' contentval ']';
+
+content = '[' contentval ']'; # todo(leodido) > support ':' and ' ' too. Also they have to match?
 
 mex = visible+ >mark %set_message;
 
@@ -191,7 +192,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
     %% write exec;
 
     if m.cs < first_final || m.cs == en_fail {
-    	if m.bestEffort && output.valid() {
+    	if m.bestEffort && output.minimal() {
     		// An error occurred but partial parsing is on and partial message is minimally valid
     		return output.export(), m.err
     	}
