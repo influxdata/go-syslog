@@ -1,0 +1,22 @@
+digraph rfc3164 {
+	rankdir=LR;
+	node [ shape = point ];
+	ENTRY;
+	eof_4;
+	node [ shape = circle, height = 0.2 ];
+	node [ fixedsize = true, height = 0.65, shape = doublecircle ];
+	5;
+	node [ shape = circle ];
+	1 -> 2 [ label = "'['" ];
+	2 -> 4 [ label = "'0'..'9', 'A'..'Z', 'a'..'z' / mark" ];
+	2 -> 5 [ label = "']' / mark, set_content" ];
+	2 -> 3 [ label = "DEF / mark" ];
+	3 -> 5 [ label = "']' / set_content" ];
+	3 -> 3 [ label = "DEF" ];
+	4 -> 5 [ label = "']' / set_content" ];
+	4 -> 3 [ label = "DEF" ];
+	5 -> 5 [ label = "']' / set_content" ];
+	5 -> 3 [ label = "DEF" ];
+	ENTRY -> 1 [ label = "IN" ];
+	4 -> eof_4 [ label = "EOF / err_contentstart" ];
+}
