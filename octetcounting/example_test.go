@@ -27,49 +27,55 @@ func Example() {
 	// ([]syslog.Result) (len=3) {
 	//  (syslog.Result) {
 	//   Message: (*rfc5424.SyslogMessage)({
-	//    priority: (*uint8)(1),
-	//    facility: (*uint8)(0),
-	//    severity: (*uint8)(1),
-	//    version: (uint16) 1,
-	//    timestamp: (*time.Time)(2003-10-11 22:14:15.003 +0000 UTC),
-	//    hostname: (*string)((len=10) "host.local"),
-	//    appname: (*string)(<nil>),
-	//    procID: (*string)(<nil>),
-	//    msgID: (*string)(<nil>),
-	//    structuredData: (*map[string]map[string]string)(<nil>),
-	//    message: (*string)(<nil>)
+	//    Base: (syslog.Base) {
+	//     Facility: (*uint8)(0),
+	//     Severity: (*uint8)(1),
+	//     Priority: (*uint8)(1),
+	//     Timestamp: (*time.Time)(2003-10-11 22:14:15.003 +0000 UTC),
+	//     Hostname: (*string)((len=10) "host.local"),
+	//     Appname: (*string)(<nil>),
+	//     ProcID: (*string)(<nil>),
+	//     MsgID: (*string)(<nil>),
+	//     Message: (*string)(<nil>)
+	//    },
+	//    Version: (uint16) 1,
+	//    StructuredData: (*map[string]map[string]string)(<nil>)
 	//   }),
 	//   Error: (error) <nil>
 	//  },
 	//  (syslog.Result) {
 	//   Message: (*rfc5424.SyslogMessage)({
-	//    priority: (*uint8)(3),
-	//    facility: (*uint8)(0),
-	//    severity: (*uint8)(3),
-	//    version: (uint16) 1,
-	//    timestamp: (*time.Time)(<nil>),
-	//    hostname: (*string)((len=10) "host.local"),
-	//    appname: (*string)(<nil>),
-	//    procID: (*string)(<nil>),
-	//    msgID: (*string)(<nil>),
-	//    structuredData: (*map[string]map[string]string)(<nil>),
-	//    message: (*string)(<nil>)
+	//    Base: (syslog.Base) {
+	//     Facility: (*uint8)(0),
+	//     Severity: (*uint8)(3),
+	//     Priority: (*uint8)(3),
+	//     Timestamp: (*time.Time)(<nil>),
+	//     Hostname: (*string)((len=10) "host.local"),
+	//     Appname: (*string)(<nil>),
+	//     ProcID: (*string)(<nil>),
+	//     MsgID: (*string)(<nil>),
+	//     Message: (*string)(<nil>)
+	//    },
+	//    Version: (uint16) 1,
+	//    StructuredData: (*map[string]map[string]string)(<nil>)
 	//   }),
 	//   Error: (error) <nil>
 	//  },
 	//  (syslog.Result) {
 	//   Message: (*rfc5424.SyslogMessage)({
-	//    priority: (*uint8)(2),
-	//    facility: (*uint8)(0),
-	//    severity: (*uint8)(2),
-	//    version: (uint16) 1,
-	//    timestamp: (*time.Time)(<nil>),
-	//    hostname: (*string)((len=10) "host.local"),
-	//    appname: (*string)((len=2) "su"),
-	//    procID: (*string)(<nil>),
-	//    msgID: (*string)(<nil>),
-	//    structuredData: (*map[string]map[string]string)(<nil>),
-	//    message: (*string)((len=11) "κόσμε")
+	//    Base: (syslog.Base) {
+	//     Facility: (*uint8)(0),
+	//     Severity: (*uint8)(2),
+	//     Priority: (*uint8)(2),
+	//     Timestamp: (*time.Time)(<nil>),
+	//     Hostname: (*string)((len=10) "host.local"),
+	//     Appname: (*string)((len=2) "su"),
+	//     ProcID: (*string)(<nil>),
+	//     MsgID: (*string)(<nil>),
+	//     Message: (*string)((len=11) "κόσμε")
+	//    },
+	//    Version: (uint16) 1,
+	//    StructuredData: (*map[string]map[string]string)(<nil>)
 	//   }),
 	//   Error: (error) <nil>
 	//  }
@@ -114,49 +120,55 @@ func Example_channel() {
 	// Output:
 	// (syslog.Result) {
 	//  Message: (*rfc5424.SyslogMessage)({
-	//   priority: (*uint8)(1),
-	//   facility: (*uint8)(0),
-	//   severity: (*uint8)(1),
-	//   version: (uint16) 1,
-	//   timestamp: (*time.Time)(<nil>),
-	//   hostname: (*string)(<nil>),
-	//   appname: (*string)(<nil>),
-	//   procID: (*string)(<nil>),
-	//   msgID: (*string)(<nil>),
-	//   structuredData: (*map[string]map[string]string)(<nil>),
-	//   message: (*string)(<nil>)
+	//   Base: (syslog.Base) {
+	//    Facility: (*uint8)(0),
+	//    Severity: (*uint8)(1),
+	//    Priority: (*uint8)(1),
+	//    Timestamp: (*time.Time)(<nil>),
+	//    Hostname: (*string)(<nil>),
+	//    Appname: (*string)(<nil>),
+	//    ProcID: (*string)(<nil>),
+	//    MsgID: (*string)(<nil>),
+	//    Message: (*string)(<nil>)
+	//   },
+	//   Version: (uint16) 1,
+	//   StructuredData: (*map[string]map[string]string)(<nil>)
 	//  }),
 	//  Error: (error) <nil>
 	// }
 	// (syslog.Result) {
 	//  Message: (*rfc5424.SyslogMessage)({
-	//   priority: (*uint8)(2),
-	//   facility: (*uint8)(0),
-	//   severity: (*uint8)(2),
-	//   version: (uint16) 12,
-	//   timestamp: (*time.Time)(<nil>),
-	//   hostname: (*string)(<nil>),
-	//   appname: (*string)(<nil>),
-	//   procID: (*string)(<nil>),
-	//   msgID: (*string)(<nil>),
-	//   structuredData: (*map[string]map[string]string)(<nil>),
-	//   message: (*string)(<nil>)
+	//   Base: (syslog.Base) {
+	//    Facility: (*uint8)(0),
+	//    Severity: (*uint8)(2),
+	//    Priority: (*uint8)(2),
+	//    Timestamp: (*time.Time)(<nil>),
+	//    Hostname: (*string)(<nil>),
+	//    Appname: (*string)(<nil>),
+	//    ProcID: (*string)(<nil>),
+	//    MsgID: (*string)(<nil>),
+	//    Message: (*string)(<nil>)
+	//   },
+	//   Version: (uint16) 12,
+	//   StructuredData: (*map[string]map[string]string)(<nil>)
 	//  }),
 	//  Error: (*errors.errorString)(expecting a RFC3339MICRO timestamp or a nil value [col 6])
 	// }
 	// (syslog.Result) {
 	//  Message: (*rfc5424.SyslogMessage)({
-	//   priority: (*uint8)(1),
-	//   facility: (*uint8)(0),
-	//   severity: (*uint8)(1),
-	//   version: (uint16) 1,
-	//   timestamp: (*time.Time)(<nil>),
-	//   hostname: (*string)(<nil>),
-	//   appname: (*string)(<nil>),
-	//   procID: (*string)(<nil>),
-	//   msgID: (*string)(<nil>),
-	//   structuredData: (*map[string]map[string]string)(<nil>),
-	//   message: (*string)(<nil>)
+	//   Base: (syslog.Base) {
+	//    Facility: (*uint8)(0),
+	//    Severity: (*uint8)(1),
+	//    Priority: (*uint8)(1),
+	//    Timestamp: (*time.Time)(<nil>),
+	//    Hostname: (*string)(<nil>),
+	//    Appname: (*string)(<nil>),
+	//    ProcID: (*string)(<nil>),
+	//    MsgID: (*string)(<nil>),
+	//    Message: (*string)(<nil>)
+	//   },
+	//   Version: (uint16) 1,
+	//   StructuredData: (*map[string]map[string]string)(<nil>)
 	//  }),
 	//  Error: (*errors.errorString)(parsing error [col 4])
 	// }
