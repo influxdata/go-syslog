@@ -35,6 +35,23 @@ var testCases = []testCase{
 		"",
 		nil,
 	},
+	{
+		[]byte(`<34>Aug  7 06:30:00 xxx aaa: message from 1.2.3.4`),
+		true,
+		&SyslogMessage{
+			Base: syslog.Base{
+				Priority:  syslogtesting.Uint8Address(34),
+				Severity:  syslogtesting.Uint8Address(2),
+				Facility:  syslogtesting.Uint8Address(4),
+				Timestamp: syslogtesting.TimeParse(time.Stamp, "Aug 7 06:30:00"),
+				Hostname:  syslogtesting.StringAddress("xxx"),
+				Appname:   syslogtesting.StringAddress("aaa"),
+				Message:   syslogtesting.StringAddress(`message from 1.2.3.4`),
+			},
+		},
+		"",
+		nil,
+	},
 	// todo > other test cases pleaaaase
 }
 
