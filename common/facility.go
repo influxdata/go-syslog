@@ -1,23 +1,24 @@
 package common
 
 // Facility maps facility numeric codes to facility string messages.
+// As per RFC 5427.
 var Facility = map[uint8]string{
 	0:  "kernel messages",
 	1:  "user-level messages",
-	2:  "mail system",
-	3:  "system daemons",
-	4:  "security/authorization messages",
+	2:  "mail system messages",
+	3:  "system daemons messages",
+	4:  "authorization messages",
 	5:  "messages generated internally by syslogd",
-	6:  "line printer subsystem",
-	7:  "network news subsystem",
-	8:  "UUCP subsystem",
-	9:  "clock daemon",
+	6:  "line printer subsystem messages",
+	7:  "network news subsystem messages",
+	8:  "UUCP subsystem messages",
+	9:  "clock daemon messages",
 	10: "security/authorization messages",
-	11: "FTP daemon",
-	12: "NTP subsystem",
-	13: "log audit",
-	14: "log alert",
-	15: "clock daemon (note 2)", // (todo) > some sources reporting "scheduling daemon"
+	11: "ftp daemon messages",
+	12: "NTP subsystem messages",
+	13: "audit messages",
+	14: "console messages",
+	15: "clock daemon messages",
 	16: "local use 0 (local0)",
 	17: "local use 1 (local1)",
 	18: "local use 2 (local2)",
@@ -29,6 +30,7 @@ var Facility = map[uint8]string{
 }
 
 // FacilityKeywords maps facility numeric codes to facility keywords.
+// As per RFC 5427.
 var FacilityKeywords = map[uint8]string{
 	0:  "kern",
 	1:  "user",
@@ -39,9 +41,13 @@ var FacilityKeywords = map[uint8]string{
 	6:  "lpr",
 	7:  "news",
 	8:  "uucp",
+	9: "cron",
 	10: "authpriv",
 	11: "ftp",
-	15: "cron",
+	12: "ntp",
+	13: "security",
+	14: "console",
+	15: "cron2",
 	16: "local0",
 	17: "local1",
 	18: "local2",
