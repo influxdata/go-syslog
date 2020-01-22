@@ -23,7 +23,10 @@ nonzerodigit = '1'..'9';
 sexagesimal = '0'..'5' . '0'..'9';
 
 # 01..31
-datemday = ('0' . nonzerodigit | '1'..'2' . '0'..'9' | '3' . '0'..'1');
+datemday_2digit = ('0' . nonzerodigit | '1'..'2' . '0'..'9' | '3' . '0'..'1');
+
+#  1 ..  9, 10..31
+datemday = (sp . nonzerodigit | '1'..'2' . '0'..'9' | '3' . '0'..'1');
 
 # 01..12
 datemonth = ('0' . nonzerodigit | '1' . '0'..'2');
@@ -32,7 +35,7 @@ datemmm = ('Jan' | 'Feb' | 'Mar' | 'Apr' | 'May' | 'Jun' | 'Jul' | 'Aug' | 'Sep'
 
 datefullyear = digit{4};
 
-fulldate = datefullyear '-' datemonth '-' datemday;
+fulldate = datefullyear '-' datemonth '-' datemday_2digit;
 
 # 01..23
 timehour = ('0'..'1' . '0'..'9' | '2' . '0'..'3');
