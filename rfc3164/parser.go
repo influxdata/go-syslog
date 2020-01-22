@@ -6,7 +6,7 @@ import (
 	syslog "github.com/influxdata/go-syslog/v2"
 )
 
-// parser represent a RFC3162 parser with mutex capabilities.
+// parser represent a RFC3164 parser with mutex capabilities.
 type parser struct {
 	sync.Mutex
 	*machine
