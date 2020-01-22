@@ -44,8 +44,8 @@ func TestFacilityAndSeverity(t *testing.T) {
 	m.SetPriority(120)
 
 	assert.Equal(t, uint8(15), *m.Facility)
-	assert.Equal(t, "clock daemon (note 2)", *m.FacilityMessage())
-	assert.Equal(t, "cron", *m.FacilityLevel())
+	assert.Equal(t, "clock daemon messages", *m.FacilityMessage())
+	assert.Equal(t, "cron2", *m.FacilityLevel())
 	assert.Equal(t, uint8(0), *m.Severity)
 	assert.Equal(t, "system is unusable", *m.SeverityMessage())
 	assert.Equal(t, "emergency", *m.SeverityLevel())
@@ -54,8 +54,8 @@ func TestFacilityAndSeverity(t *testing.T) {
 	m.SetPriority(99)
 
 	assert.Equal(t, uint8(12), *m.Facility)
-	assert.Equal(t, "NTP subsystem", *m.FacilityMessage())
-	assert.Equal(t, "NTP subsystem", *m.FacilityLevel()) // MUST fallback to message
+	assert.Equal(t, "NTP subsystem messages", *m.FacilityMessage())
+	assert.Equal(t, "ntp", *m.FacilityLevel()) // MUST fallback to message
 	assert.Equal(t, uint8(3), *m.Severity)
 	assert.Equal(t, "error conditions", *m.SeverityMessage())
 	assert.Equal(t, "error", *m.SeverityLevel())
