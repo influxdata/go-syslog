@@ -32,11 +32,16 @@ type machine struct {
 	pb         int
 	err        error
 	bestEffort bool
+	yyyy       int
 }
 
 // NewMachine creates a new FSM able to parse RFC3164 syslog messages.
 func NewMachine(options ...syslog.MachineOption) syslog.Machine {
 	m := &machine{}
+
+	for _, opt := range options {
+		opt(m)
+	}
 
 	return m
 }
@@ -49,6 +54,10 @@ func (m *machine) WithBestEffort() {
 // HasBestEffort tells whether the receiving machine has best effort mode on or off.
 func (m *machine) HasBestEffort() bool {
 	return m.bestEffort
+}
+
+func (m *machine) WithYear(o YearOperator) {
+	m.yyyy = YearOperation{o}.Operate()
 }
 
 // Err returns the error that occurred on the last call to Parse.
@@ -1056,7 +1065,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				goto st343
 			}
 		} else {
-			output.timestamp = t
+			output.timestamp = t.AddDate(m.yyyy, 0, 0)
 			output.timestampSet = true
 		}
 

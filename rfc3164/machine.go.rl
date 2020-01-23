@@ -43,6 +43,7 @@ action set_timestamp {
 		fgoto fail;
 	} else {
 		output.timestamp = t
+		output.timestamp.AddDate(m.yyyy, 0, 0)
 		output.timestampSet = true
 	}
 }
@@ -144,12 +145,17 @@ type machine struct {
 	p, pe, eof   int
 	pb           int
 	err          error
-	bestEffort 	 bool
+	bestEffort   bool
+	yyyy         int
 }
 
 // NewMachine creates a new FSM able to parse RFC3164 syslog messages.
 func NewMachine(options ...syslog.MachineOption) syslog.Machine {
 	m := &machine{}
+
+	for _, opt := range options {
+		opt(m)
+	}
 
 	%% access m.;
 	%% variable p m.p;
@@ -168,6 +174,10 @@ func (m *machine) WithBestEffort() {
 // HasBestEffort tells whether the receiving machine has best effort mode on or off.
 func (m *machine) HasBestEffort() bool {
 	return m.bestEffort
+}
+
+func (m *machine) WithYear(o YearOperator) {
+	m.yyyy = YearOperation{o}.Operate()
 }
 
 // Err returns the error that occurred on the last call to Parse.
