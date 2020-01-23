@@ -109,17 +109,20 @@ pri = ('<' prival >mark %from(set_prival) $err(err_prival) '>') @err(err_pri);
 
 timestamp = (datemmm sp datemday sp hhmmss) >mark %set_timestamp @err(err_timestamp);
 
-# (todo) > RFC3164 says something about its maximum length?
+# note > RFC 3164 says "The Domain Name MUST NOT be included in the HOSTNAME field"
+# note > this could mean that the we may need to create and to use a labelrange = graph{1,63} here if we want the parser to be stricter.
 hostname = hostnamerange >mark %set_hostname $err(err_hostname);
 
 # Section 4.1.3
-tag = (print - [ :\[]){1,32} >mark %set_tag @err(err_tag); # note(leodido) > alnum{1,32} is too restrictive (no dashes, see https://tools.ietf.org/html/rfc2234#section-2.1)
+# note > alnum{1,32} is too restrictive (eg., no dashes)
+# note > see https://tools.ietf.org/html/rfc2234#section-2.1 for an interpretation of "ABNF alphanumeric" as stated by RFC 3164 regarding the tag
+# note > while RFC3164 assumes only ABNF alphanumeric process names, many BSD-syslog contains processe names with additional characters (-, _, .)
+tag = (print - [ :\[]){1,32} >mark %set_tag @err(err_tag);
 
 visible = print | 0x80..0xFF;
 
-# The first not alphanumeric character starts the content part of the message part
+# The first not alphanumeric character starts the content (usually containing a PID) part of the message part
 contentval = !alnum @err(err_contentstart) >mark print* %set_content @err(err_content);
-
 
 content = '[' contentval ']'; # todo(leodido) > support ':' and ' ' too. Also they have to match?
 
