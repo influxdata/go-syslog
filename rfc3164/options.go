@@ -11,3 +11,11 @@ func WithBestEffort() syslog.MachineOption {
 		return m
 	}
 }
+
+// WithYear sets the strategy to decide the year for the Stamp timestamp of RFC 3164.
+func WithYear(o YearOperator) syslog.MachineOption {
+	return func(m syslog.Machine) syslog.Machine {
+		m.(*machine).WithYear(o)
+		return m
+	}
+}
