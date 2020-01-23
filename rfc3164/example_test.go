@@ -51,3 +51,25 @@ func Example_currentyear() {
 	//  }
 	// })
 }
+
+
+func Example_besteffort() {
+	i := []byte(`<13>Dec  2 16:31:03 -`)
+	p := NewParser(WithBestEffort())
+	m, _ := p.Parse(i)
+	output(m)
+	// Output:
+	// (*rfc3164.SyslogMessage)({
+	//  Base: (syslog.Base) {
+	//   Facility: (*uint8)(1),
+	//   Severity: (*uint8)(5),
+	//   Priority: (*uint8)(13),
+	//   Timestamp: (*time.Time)(0000-12-02 16:31:03 +0000 UTC),
+	//   Hostname: (*string)(<nil>),
+	//   Appname: (*string)(<nil>),
+	//   ProcID: (*string)(<nil>),
+	//   MsgID: (*string)(<nil>),
+	//   Message: (*string)(<nil>)
+	//  }
+	// })
+}
