@@ -38,7 +38,7 @@ func (sm *syslogMessage) export() *SyslogMessage {
 		out.Appname = &sm.tag
 	}
 	if sm.content != "-" && sm.content != "" {
-		// Content is usually process name or process ID
+		// Content is usually process ID
 		// See https://tools.ietf.org/html/rfc3164#section-5.3
 		out.ProcID = &sm.content
 	}
