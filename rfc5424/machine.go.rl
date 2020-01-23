@@ -74,13 +74,13 @@ action set_version {
 
 action set_timestamp {
 	if t, e := time.Parse(RFC3339MICRO, string(m.text())); e != nil {
-        m.err = fmt.Errorf("%s [col %d]", e, m.p)
+		m.err = fmt.Errorf("%s [col %d]", e, m.p)
 		fhold;
-    	fgoto fail;
-    } else {
-        output.timestamp = t
+		fgoto fail;
+	} else {
+		output.timestamp = t
 		output.timestampSet = true
-    }
+	}
 }
 
 action set_hostname {
@@ -151,55 +151,55 @@ action set_msg {
 action err_prival {
 	m.err = fmt.Errorf(ErrPrival + ColumnPositionTemplate, m.p)
 	fhold;
-    fgoto fail;
+	fgoto fail;
 }
 
 action err_pri {
 	m.err = fmt.Errorf(ErrPri + ColumnPositionTemplate, m.p)
 	fhold;
-    fgoto fail;
+	fgoto fail;
 }
 
 action err_version {
 	m.err = fmt.Errorf(ErrVersion + ColumnPositionTemplate, m.p)
 	fhold;
-    fgoto fail;
+	fgoto fail;
 }
 
 action err_timestamp {
 	m.err = fmt.Errorf(ErrTimestamp + ColumnPositionTemplate, m.p)
 	fhold;
-    fgoto fail;
+	fgoto fail;
 }
 
 action err_hostname {
 	m.err = fmt.Errorf(ErrHostname + ColumnPositionTemplate, m.p)
 	fhold;
-    fgoto fail;
+	fgoto fail;
 }
 
 action err_appname {
 	m.err = fmt.Errorf(ErrAppname + ColumnPositionTemplate, m.p)
 	fhold;
-    fgoto fail;
+	fgoto fail;
 }
 
 action err_procid {
 	m.err = fmt.Errorf(ErrProcID + ColumnPositionTemplate, m.p)
 	fhold;
-    fgoto fail;
+	fgoto fail;
 }
 
 action err_msgid {
 	m.err = fmt.Errorf(ErrMsgID + ColumnPositionTemplate, m.p)
 	fhold;
-    fgoto fail;
+	fgoto fail;
 }
 
 action err_structureddata {
 	m.err = fmt.Errorf(ErrStructuredData + ColumnPositionTemplate, m.p)
 	fhold;
-    fgoto fail;
+	fgoto fail;
 }
 
 action err_sdid {
@@ -209,7 +209,7 @@ action err_sdid {
 	}
 	m.err = fmt.Errorf(ErrSdID + ColumnPositionTemplate, m.p)
 	fhold;
-    fgoto fail;
+	fgoto fail;
 }
 
 action err_sdparam {
@@ -218,7 +218,7 @@ action err_sdparam {
 	}
 	m.err = fmt.Errorf(ErrSdParam + ColumnPositionTemplate, m.p)
 	fhold;
-    fgoto fail;
+	fgoto fail;
 }
 
 action err_msg {
@@ -230,19 +230,19 @@ action err_msg {
 
 	m.err = fmt.Errorf(ErrMsg + ColumnPositionTemplate, m.p)
 	fhold;
-    fgoto fail;
+	fgoto fail;
 }
 
 action err_escape {
 	m.err = fmt.Errorf(ErrEscape + ColumnPositionTemplate, m.p)
 	fhold;
-    fgoto fail;
+	fgoto fail;
 }
 
 action err_parse {
 	m.err = fmt.Errorf(ErrParse + ColumnPositionTemplate, m.p)
 	fhold;
-    fgoto fail;
+	fgoto fail;
 }
 
 nilvalue = '-';
@@ -361,8 +361,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 	m.err = nil
 	output := &syslogMessage{}
 
-    %% write init;
-    %% write exec;
+	%% write init;
+	%% write exec;
 
 	if m.cs < first_final || m.cs == en_fail {
 		if m.bestEffort && output.minimal() {
