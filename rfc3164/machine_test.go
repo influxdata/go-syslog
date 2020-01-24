@@ -52,6 +52,22 @@ var testCases = []testCase{
 		"",
 		nil,
 	},
+	{
+		input: []byte(`<85>Jan 24 15:50:41 ip-172-31-30-110 sudo[6040]:ec2-user : TTY=pts/0 ; PWD=/var/log ; USER=root ; COMMAND=/bin/tail secure`),
+		valid: true,
+		value: &SyslogMessage{
+			Base: syslog.Base{
+				Priority:  syslogtesting.Uint8Address(85),
+				Facility:  syslogtesting.Uint8Address(10),
+				Severity:  syslogtesting.Uint8Address(5),
+				Timestamp: syslogtesting.TimeParse(time.Stamp, "Jan 24 15:50:41"),
+				Hostname:  syslogtesting.StringAddress("ip-172-31-30-110"),
+				Appname:   syslogtesting.StringAddress("sudo"),
+				ProcID:    syslogtesting.StringAddress("6040"),
+				Message:   syslogtesting.StringAddress(`ec2-user : TTY=pts/0 ; PWD=/var/log ; USER=root ; COMMAND=/bin/tail secure`),
+			},
+		},
+	},
 	// todo > other test cases pleaaaase
 }
 
