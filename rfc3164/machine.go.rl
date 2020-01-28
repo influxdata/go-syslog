@@ -118,7 +118,7 @@ hostname = hostnamerange >mark %set_hostname $err(err_hostname);
 # note > alnum{1,32} is too restrictive (eg., no dashes)
 # note > see https://tools.ietf.org/html/rfc2234#section-2.1 for an interpretation of "ABNF alphanumeric" as stated by RFC 3164 regarding the tag
 # note > while RFC3164 assumes only ABNF alphanumeric process names, many BSD-syslog contains processe names with additional characters (-, _, .)
-tag = (print - [ :\[]){1,32} >mark %set_tag @err(err_tag);
+tag = (print -- [ :\[]){1,32} >mark %set_tag @err(err_tag);
 
 visible = print | 0x80..0xFF;
 
