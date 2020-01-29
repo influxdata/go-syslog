@@ -9,6 +9,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// todo > add support for testing `best effort` mode
+
 type testCase struct {
 	input        []byte
 	valid        bool
@@ -65,6 +67,81 @@ var testCases = []testCase{
 				Appname:   syslogtesting.StringAddress("sudo"),
 				ProcID:    syslogtesting.StringAddress("6040"),
 				Message:   syslogtesting.StringAddress(`ec2-user : TTY=pts/0 ; PWD=/var/log ; USER=root ; COMMAND=/bin/tail secure`),
+			},
+		},
+	},
+	{
+		input: []byte(`<166>Jul  6 20:33:28 ABC-1-234567 Some message here`),
+		valid: true,
+		value: &SyslogMessage{
+			Base: syslog.Base{
+				Priority:  syslogtesting.Uint8Address(166),
+				Facility:  syslogtesting.Uint8Address(20),
+				Severity:  syslogtesting.Uint8Address(6),
+				Timestamp: syslogtesting.TimeParse(time.Stamp, "Jul  6 20:33:28"),
+				Hostname:  syslogtesting.StringAddress("ABC-1-234567"),
+				Message:   syslogtesting.StringAddress("Some message here"),
+			},
+		},
+	},
+	{
+		input: []byte(`<34>Oct 11 22:14:15 mymachine su: 'su root' failed for lonvick on /dev/pts/8`),
+		valid: true,
+		value: &SyslogMessage{
+			Base: syslog.Base{
+				Priority:  syslogtesting.Uint8Address(34),
+				Facility:  syslogtesting.Uint8Address(4),
+				Severity:  syslogtesting.Uint8Address(2),
+				Timestamp: syslogtesting.TimeParse(time.Stamp, "Oct 11 22:14:15"),
+				Hostname:  syslogtesting.StringAddress("mymachine"),
+				Appname:   syslogtesting.StringAddress("su"),
+				Message:   syslogtesting.StringAddress("'su root' failed for lonvick on /dev/pts/8"),
+			},
+		},
+	},
+	{
+		input: []byte(`<13>Feb  5 17:32:18 10.0.0.99 Use the BFG!`),
+		valid: true,
+		value: &SyslogMessage{
+			Base: syslog.Base{
+				Priority:  syslogtesting.Uint8Address(13),
+				Facility:  syslogtesting.Uint8Address(1),
+				Severity:  syslogtesting.Uint8Address(5),
+				Timestamp: syslogtesting.TimeParse(time.Stamp, "Feb  5 17:32:18"),
+				Hostname:  syslogtesting.StringAddress("10.0.0.99"),
+				Message:   syslogtesting.StringAddress("Use the BFG!"),
+			},
+		},
+	},
+	{
+		input: []byte(`<165>Aug 24 05:34:00 mymachine myproc[10]: %% It's time to make the do-nuts.  %%  Ingredients: Mix=OK, Jelly=OK # Devices: Mixer=OK, Jelly_Injector=OK, Frier=OK # Transport: Conveyer1=OK, Conveyer2=OK # %%`),
+		valid: true,
+		value: &SyslogMessage{
+			Base: syslog.Base{
+				Priority:  syslogtesting.Uint8Address(165),
+				Facility:  syslogtesting.Uint8Address(20),
+				Severity:  syslogtesting.Uint8Address(5),
+				Timestamp: syslogtesting.TimeParse(time.Stamp, "Aug 24 05:34:00"),
+				Hostname:  syslogtesting.StringAddress("mymachine"),
+				Appname:   syslogtesting.StringAddress("myproc"),
+				ProcID:    syslogtesting.StringAddress("10"),
+				Message:   syslogtesting.StringAddress(`%% It's time to make the do-nuts.  %%  Ingredients: Mix=OK, Jelly=OK # Devices: Mixer=OK, Jelly_Injector=OK, Frier=OK # Transport: Conveyer1=OK, Conveyer2=OK # %%`),
+			},
+		},
+	},
+	{
+		input: []byte(`<0>Oct 22 10:52:01 10.1.2.3 sched[0]: That's All Folks!`),
+		valid: true,
+		value: &SyslogMessage{
+			Base: syslog.Base{
+				Priority:  syslogtesting.Uint8Address(0),
+				Facility:  syslogtesting.Uint8Address(0),
+				Severity:  syslogtesting.Uint8Address(0),
+				Timestamp: syslogtesting.TimeParse(time.Stamp, "Oct 22 10:52:01"),
+				Hostname:  syslogtesting.StringAddress("10.1.2.3"),
+				Appname:   syslogtesting.StringAddress("sched"),
+				ProcID:    syslogtesting.StringAddress("0"),
+				Message:   syslogtesting.StringAddress(`That's All Folks!`),
 			},
 		},
 	},
