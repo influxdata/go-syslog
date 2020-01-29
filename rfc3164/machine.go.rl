@@ -42,8 +42,7 @@ action set_timestamp {
 		fhold;
 		fgoto fail;
 	} else {
-		output.timestamp = t
-		output.timestamp.AddDate(m.yyyy, 0, 0)
+		output.timestamp = t.AddDate(m.yyyy, 0, 0)
 		output.timestampSet = true
 	}
 }
