@@ -52,7 +52,6 @@ func Example_currentyear() {
 	// })
 }
 
-
 func Example_besteffort() {
 	i := []byte(`<13>Dec  2 16:31:03 -`)
 	p := NewParser(WithBestEffort())

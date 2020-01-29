@@ -53,7 +53,7 @@ var testCases = []testCase{
 		nil,
 	},
 	{
-		input: []byte(`<85>Jan 24 15:50:41 ip-172-31-30-110 sudo[6040]:ec2-user : TTY=pts/0 ; PWD=/var/log ; USER=root ; COMMAND=/bin/tail secure`),
+		input: []byte(`<85>Jan 24 15:50:41 ip-172-31-30-110 sudo[6040]: ec2-user : TTY=pts/0 ; PWD=/var/log ; USER=root ; COMMAND=/bin/tail secure`),
 		valid: true,
 		value: &SyslogMessage{
 			Base: syslog.Base{
