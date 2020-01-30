@@ -1,6 +1,10 @@
 package rfc3164
 
 import (
+	// "time"
+
+	"time"
+
 	"github.com/davecgh/go-spew/spew"
 )
 
@@ -43,6 +47,50 @@ func Example_currentyear() {
 	//   Severity: (*uint8)(5),
 	//   Priority: (*uint8)(13),
 	//   Timestamp: (*time.Time)(2020-12-02 16:31:03 +0000 UTC),
+	//   Hostname: (*string)((len=4) "host"),
+	//   Appname: (*string)((len=3) "app"),
+	//   ProcID: (*string)(<nil>),
+	//   MsgID: (*string)(<nil>),
+	//   Message: (*string)((len=4) "Test")
+	//  }
+	// })
+}
+
+func Example_withtimezone() {
+	cet, _ := time.LoadLocation("CET")
+	i := []byte(`<13>Jan 30 02:08:03 host app: Test`)
+	p := NewParser(WithTimezone(cet))
+	m, _ := p.Parse(i)
+	output(m)
+	// Output:
+	// (*rfc3164.SyslogMessage)({
+	//  Base: (syslog.Base) {
+	//   Facility: (*uint8)(1),
+	//   Severity: (*uint8)(5),
+	//   Priority: (*uint8)(13),
+	//   Timestamp: (*time.Time)(0000-01-30 03:08:03 +0100 CET),
+	//   Hostname: (*string)((len=4) "host"),
+	//   Appname: (*string)((len=3) "app"),
+	//   ProcID: (*string)(<nil>),
+	//   MsgID: (*string)(<nil>),
+	//   Message: (*string)((len=4) "Test")
+	//  }
+	// })
+}
+
+func Example_withtimezone_and_year() {
+	cet, _ := time.LoadLocation("CET")
+	i := []byte(`<13>Jan 30 02:08:03 host app: Test`)
+	p := NewParser(WithTimezone(cet), WithYear(Year{YYYY: 1987}))
+	m, _ := p.Parse(i)
+	output(m)
+	// Output:
+	// (*rfc3164.SyslogMessage)({
+	//  Base: (syslog.Base) {
+	//   Facility: (*uint8)(1),
+	//   Severity: (*uint8)(5),
+	//   Priority: (*uint8)(13),
+	//   Timestamp: (*time.Time)(1987-01-30 03:08:03 +0100 CET),
 	//   Hostname: (*string)((len=4) "host"),
 	//   Appname: (*string)((len=3) "app"),
 	//   ProcID: (*string)(<nil>),
