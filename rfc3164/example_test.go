@@ -79,9 +79,9 @@ func Example_withtimezone() {
 }
 
 func Example_withtimezone_and_year() {
-	cet, _ := time.LoadLocation("CET")
+	est, _ := time.LoadLocation("EST")
 	i := []byte(`<13>Jan 30 02:08:03 host app: Test`)
-	p := NewParser(WithTimezone(cet), WithYear(Year{YYYY: 1987}))
+	p := NewParser(WithTimezone(est), WithYear(Year{YYYY: 1987}))
 	m, _ := p.Parse(i)
 	output(m)
 	// Output:
@@ -90,7 +90,7 @@ func Example_withtimezone_and_year() {
 	//   Facility: (*uint8)(1),
 	//   Severity: (*uint8)(5),
 	//   Priority: (*uint8)(13),
-	//   Timestamp: (*time.Time)(1987-01-30 03:08:03 +0100 CET),
+	//   Timestamp: (*time.Time)(1987-01-29 21:08:03 -0500 EST),
 	//   Hostname: (*string)((len=4) "host"),
 	//   Appname: (*string)((len=3) "app"),
 	//   ProcID: (*string)(<nil>),
@@ -122,7 +122,7 @@ func Example_besteffort() {
 }
 
 func Example_rfc3339timestamp() {
-	i := []byte(`<28>2019-12-02T16:49:23+01:00 host app[23410]: Test`)
+	i := []byte(`<28>2019-12-02T16:49:23+02:00 host app[23410]: Test`)
 	p := NewParser(WithRFC3339())
 	m, _ := p.Parse(i)
 	output(m)
@@ -132,7 +132,7 @@ func Example_rfc3339timestamp() {
 	//   Facility: (*uint8)(3),
 	//   Severity: (*uint8)(4),
 	//   Priority: (*uint8)(28),
-	//   Timestamp: (*time.Time)(2019-12-02 16:49:23 +0100 CET),
+	//   Timestamp: (*time.Time)(2019-12-02 16:49:23 +0200 +0200),
 	//   Hostname: (*string)((len=4) "host"),
 	//   Appname: (*string)((len=3) "app"),
 	//   ProcID: (*string)((len=5) "23410"),
