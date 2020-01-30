@@ -1,6 +1,8 @@
 package rfc3164
 
 import (
+	"time"
+
 	syslog "github.com/influxdata/go-syslog/v2"
 )
 
@@ -21,12 +23,12 @@ func WithYear(o YearOperator) syslog.MachineOption {
 }
 
 // WithTimezone sets the strategy to decide the timezone to apply to the Stamp timestamp of RFC 3164.
-// func WithTimezone(loc time.Location) syslog.MachineOption {
-// 	return func(m syslog.Machine) syslog.Machine {
-// 		m.(*machine).WithTimezone(loc)
-// 		return m
-// 	}
-// }
+func WithTimezone(loc *time.Location) syslog.MachineOption {
+	return func(m syslog.Machine) syslog.Machine {
+		m.(*machine).WithTimezone(loc)
+		return m
+	}
+}
 
 // todo > WithStrictHostname() option - see RFC3164 page 10
 // WithStrictHostname tells the parser to match the hostnames strictly as per RFC 3164 recommentations.

@@ -44,6 +44,9 @@ action set_timestamp {
 		fgoto fail;
 	} else {
 		output.timestamp = t.AddDate(m.yyyy, 0, 0)
+		if m.loc != nil {
+			output.timestamp = output.timestamp.In(m.loc)
+		}
 		output.timestampSet = true
 	}
 }
@@ -167,6 +170,7 @@ type machine struct {
 	bestEffort   bool
 	yyyy         int
 	rfc3339      bool
+	loc          *time.Location
 }
 
 // NewMachine creates a new FSM able to parse RFC3164 syslog messages.
@@ -196,10 +200,19 @@ func (m *machine) HasBestEffort() bool {
 	return m.bestEffort
 }
 
+// WithYear sets the year for the Stamp timestamp of the RFC 3164 syslog message.
 func (m *machine) WithYear(o YearOperator) {
 	m.yyyy = YearOperation{o}.Operate()
 }
 
+// WithTimezone sets the time zone for the Stamp timestamp of the RFC 3164 syslog message.
+func (m *machine) WithTimezone(loc *time.Location) {
+	m.loc = loc
+}
+
+// WithRFC3339 enables ability to ALSO match RFC3339 timestamps.
+//
+// Notice this does not disable the default and correct timestamps - ie., Stamp timestamps.
 func (m *machine) WithRFC3339() {
 	m.rfc3339 = true
 }
