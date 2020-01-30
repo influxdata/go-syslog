@@ -26,3 +26,13 @@ type CurrentYear struct{}
 func (CurrentYear) Apply() int {
 	return time.Now().Year()
 }
+
+// Year is a strategy to obtain the specified year in the RFC 3164 syslog messages.
+type Year struct {
+	YYYY int
+}
+
+// Apply gets the specified year
+func (y Year) Apply() int {
+	return y.YYYY
+}
