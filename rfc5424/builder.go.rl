@@ -5,7 +5,7 @@ import (
     "sort"
     "fmt"
 
-    "github.com/influxdata/go-syslog/v2/common"
+    "github.com/influxdata/go-syslog/v3/common"
 )
 
 // todo(leodido) > support best effort for builder ?

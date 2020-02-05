@@ -3,8 +3,8 @@ package rfc3164
 import (
 	"time"
 
-	"github.com/influxdata/go-syslog/v2"
-	"github.com/influxdata/go-syslog/v2/common"
+	"github.com/influxdata/go-syslog/v3"
+	"github.com/influxdata/go-syslog/v3/common"
 )
 
 type syslogMessage struct {
