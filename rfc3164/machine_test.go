@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/influxdata/go-syslog/v2"
-	syslogtesting "github.com/influxdata/go-syslog/v2/testing"
+	"github.com/influxdata/go-syslog/v3"
+	syslogtesting "github.com/influxdata/go-syslog/v3/testing"
 	"github.com/stretchr/testify/assert"
 )
 
