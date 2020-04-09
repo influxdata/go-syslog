@@ -29,6 +29,13 @@ func WithTimezone(loc *time.Location) syslog.MachineOption {
 		return m
 	}
 }
+// WithLocaleTimezone sets the strategy to decide the timezone to apply to the Stamp timestamp of RFC 3164.
+func WithLocaleTimezone(loc *time.Location) syslog.MachineOption {
+        return func(m syslog.Machine) syslog.Machine {
+                m.(*machine).WithLocaleTimezone(loc)
+                return m
+        }
+}
 
 // todo > WithStrictHostname() option - see RFC3164 page 10
 // WithStrictHostname tells the parser to match the hostnames strictly as per RFC 3164 recommentations.

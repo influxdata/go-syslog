@@ -36,6 +36,7 @@ type machine struct {
 	yyyy       int
 	rfc3339    bool
 	loc        *time.Location
+	timezone   *time.Location
 }
 
 // NewMachine creates a new FSM able to parse RFC3164 syslog messages.
@@ -69,6 +70,10 @@ func (m *machine) WithTimezone(loc *time.Location) {
 	m.loc = loc
 }
 
+// WithLocaleTimezone sets the locale time zone for the Stamp timestamp of the RFC 3164 syslog message.
+func (m *machine) WithLocaleTimezone(loc *time.Location) {
+        m.timezone = loc
+}
 // WithRFC3339 enables ability to ALSO match RFC3339 timestamps.
 //
 // Notice this does not disable the default and correct timestamps - ie., Stamp timestamps.
@@ -1162,6 +1167,9 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				goto st373
 			}
 		} else {
+			if m.timezone != nil {
+				t, _ = time.ParseInLocation(time.Stamp, string(m.text()), m.timezone)
+			}
 			output.timestamp = t.AddDate(m.yyyy, 0, 0)
 			if m.loc != nil {
 				output.timestamp = output.timestamp.In(m.loc)
