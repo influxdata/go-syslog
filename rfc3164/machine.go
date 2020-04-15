@@ -72,8 +72,9 @@ func (m *machine) WithTimezone(loc *time.Location) {
 
 // WithLocaleTimezone sets the locale time zone for the Stamp timestamp of the RFC 3164 syslog message.
 func (m *machine) WithLocaleTimezone(loc *time.Location) {
-        m.timezone = loc
+	m.timezone = loc
 }
+
 // WithRFC3339 enables ability to ALSO match RFC3339 timestamps.
 //
 // Notice this does not disable the default and correct timestamps - ie., Stamp timestamps.
