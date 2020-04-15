@@ -91,7 +91,7 @@ digraph rfc3164 {
 	3 -> err_3 [ label = "DEF / err_timestamp" ];
 	4 -> 5 [ label = "SP" ];
 	4 -> err_4 [ label = "DEF / err_timestamp" ];
-	5 -> 6 [ label = "'0'" ];
+	5 -> 6 [ label = "SP" ];
 	5 -> 17 [ label = "'1'..'2'" ];
 	5 -> 18 [ label = "'3'" ];
 	5 -> err_5 [ label = "DEF / err_timestamp" ];
