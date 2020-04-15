@@ -78,6 +78,28 @@ func Example_withtimezone() {
 	// })
 }
 
+func Example_withlocaletimezone() {
+	pst, _ := time.LoadLocation("PST")
+	i := []byte(`<13>Nov 22 17:09:42 xxx kernel: [118479565.921459] EXT4-fs warning (device sda8): ext4_dx_add_entry:2006: Directory index full!`)
+	p := NewParser(WithLocaleTimezone(pst))
+	m, _ := p.Parse(i)
+	output(m)
+	// Output:
+	// (*rfc3164.SyslogMessage)({
+	//  Base: (syslog.Base) {
+	//   Facility: (*uint8)(1),
+	//   Severity: (*uint8)(5),
+	//   Priority: (*uint8)(13),
+	//   Timestamp: (*time.Time)(0000-11-22 17:09:42 +0000 UTC),
+	//   Hostname: (*string)((len=3) "xxx"),
+	//   Appname: (*string)((len=6) "kernel"),
+	//   ProcID: (*string)(<nil>),
+	//   MsgID: (*string)(<nil>),
+	//   Message: (*string)((len=95) "[118479565.921459] EXT4-fs warning (device sda8): ext4_dx_add_entry:2006: Directory index full!")
+	//  }
+	// })
+}
+
 func Example_withtimezone_and_year() {
 	est, _ := time.LoadLocation("EST")
 	i := []byte(`<13>Jan 30 02:08:03 host app: Test`)
