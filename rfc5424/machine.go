@@ -38,6 +38,8 @@ const (
 	ErrSdParam = "expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters; key cannot contain `=`, ` `, `]`, and `\"`, while value cannot contain `]`, backslash, and `\"` unless escaped)"
 	// ErrMsg represents an error in the MESSAGE part of the RFC5424 syslog message.
 	ErrMsg = "expecting a free-form optional message in UTF-8 (starting with or without BOM)"
+	// ErrMsgNonUTF8 represents an error in the MESSAGE part of the RFC5424 syslog message if AllowNonUTF8InMessage is enabled.
+	ErrMsgNonUTF8 = ErrMsg + " or a free-form optional message in any encoding (starting without BOM)"
 	// ErrEscape represents the error for a RFC5424 syslog message occurring when a STRUCTURED DATA PARAM value contains '"', '\', or ']' not escaped.
 	ErrEscape = "expecting chars `]`, `\"`, and `\\` to be escaped within param value"
 	// ErrParse represents a general parsing error for a RFC5424 syslog message.
@@ -50,20 +52,21 @@ const RFC3339MICRO = "2006-01-02T15:04:05.999999Z07:00"
 const start int = 1
 const firstFinal int = 603
 
-const enFail int = 607
+const enFail int = 618
 const enMain int = 1
 
 type machine struct {
-	data         []byte
-	cs           int
-	p, pe, eof   int
-	pb           int
-	err          error
-	currentelem  string
-	currentparam string
-	msgat        int
-	backslashat  []int
-	bestEffort   bool
+	data                  []byte
+	cs                    int
+	p, pe, eof            int
+	pb                    int
+	err                   error
+	currentelem           string
+	currentparam          string
+	msgat                 int
+	backslashat           []int
+	bestEffort            bool
+	allowNonUTF8InMessage bool
 }
 
 // NewMachine creates a new FSM able to parse RFC5424 syslog messages.
@@ -121,6 +124,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 	}
 
 	{
+		var _widec int16
 		if (m.p) == (m.pe) {
 			goto _testEof
 		}
@@ -179,6 +183,28 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			goto stCase22
 		case 23:
 			goto stCase23
+		case 606:
+			goto stCase606
+		case 607:
+			goto stCase607
+		case 608:
+			goto stCase608
+		case 609:
+			goto stCase609
+		case 610:
+			goto stCase610
+		case 611:
+			goto stCase611
+		case 612:
+			goto stCase612
+		case 613:
+			goto stCase613
+		case 614:
+			goto stCase614
+		case 615:
+			goto stCase615
+		case 616:
+			goto stCase616
 		case 24:
 			goto stCase24
 		case 25:
@@ -257,8 +283,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			goto stCase61
 		case 62:
 			goto stCase62
-		case 606:
-			goto stCase606
+		case 617:
+			goto stCase617
 		case 63:
 			goto stCase63
 		case 64:
@@ -1339,8 +1365,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			goto stCase601
 		case 602:
 			goto stCase602
-		case 607:
-			goto stCase607
+		case 618:
+			goto stCase618
 		}
 		goto stOut
 	stCase1:
@@ -1354,7 +1380,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		goto st0
@@ -1364,21 +1390,21 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		m.err = fmt.Errorf(ErrPri+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		goto st0
@@ -1388,14 +1414,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		goto st0
@@ -1405,7 +1431,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		goto st0
@@ -1415,14 +1441,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		goto st0
@@ -1432,14 +1458,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		goto st0
@@ -1449,14 +1475,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		goto st0
@@ -1466,14 +1492,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		goto st0
@@ -1483,14 +1509,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		goto st0
@@ -1500,7 +1526,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		goto st0
@@ -1510,7 +1536,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		goto st0
@@ -1522,18 +1548,23 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			output.message = string(m.data[m.msgat:m.p])
 		}
 
-		m.err = fmt.Errorf(ErrMsg+ColumnPositionTemplate, m.p)
+		if m.allowNonUTF8InMessage {
+			m.err = fmt.Errorf(ErrMsgNonUTF8+ColumnPositionTemplate, m.p)
+		} else {
+			m.err = fmt.Errorf(ErrMsg+ColumnPositionTemplate, m.p)
+		}
+
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		goto st0
@@ -1547,14 +1578,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		goto st0
@@ -1566,7 +1597,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			(m.p)--
 
 			{
-				goto st607
+				goto st618
 			}
 		} else {
 			id := string(m.text())
@@ -1583,14 +1614,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		goto st0
@@ -1603,14 +1634,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		goto st0
@@ -1620,7 +1651,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		if len(output.structuredData) > 0 {
@@ -1630,14 +1661,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		goto st0
@@ -1648,7 +1679,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			(m.p)--
 
 			{
-				goto st607
+				goto st618
 			}
 		} else {
 			output.timestamp = t
@@ -1659,24 +1690,24 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		goto st0
-	tr645:
+	tr665:
 
 		m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st607
+			goto st618
 		}
 
 		goto st0
@@ -1774,7 +1805,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			(m.p)--
 
 			{
-				goto st607
+				goto st618
 			}
 		} else {
 			output.timestamp = t
@@ -1932,39 +1963,94 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			goto _testEof604
 		}
 	stCase604:
-		switch (m.data)[(m.p)] {
-		case 224:
-			goto tr634
-		case 237:
-			goto tr636
-		case 240:
-			goto tr637
-		case 244:
-			goto tr639
-		}
+		_widec = int16((m.data)[(m.p)])
 		switch {
-		case (m.data)[(m.p)] < 225:
-			switch {
-			case (m.data)[(m.p)] > 193:
-				if 194 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 223 {
-					goto tr633
+		case (m.data)[(m.p)] < 239:
+			if (m.data)[(m.p)] <= 238 {
+				_widec = 256 + (int16((m.data)[(m.p)]) - 0)
+				if m.allowNonUTF8InMessage {
+					_widec += 256
 				}
-			case (m.data)[(m.p)] >= 128:
-				goto tr36
 			}
 		case (m.data)[(m.p)] > 239:
-			switch {
-			case (m.data)[(m.p)] > 243:
-				if 245 <= (m.data)[(m.p)] {
-					goto tr36
+			if 240 <= (m.data)[(m.p)] {
+				_widec = 256 + (int16((m.data)[(m.p)]) - 0)
+				if m.allowNonUTF8InMessage {
+					_widec += 256
 				}
-			case (m.data)[(m.p)] >= 241:
-				goto tr638
 			}
 		default:
-			goto tr635
+			_widec = 256 + (int16((m.data)[(m.p)]) - 0)
+			if m.allowNonUTF8InMessage {
+				_widec += 256
+			}
 		}
-		goto tr632
+		switch _widec {
+		case 480:
+			goto tr634
+		case 493:
+			goto tr636
+		case 496:
+			goto tr637
+		case 500:
+			goto tr639
+		case 736:
+			goto tr643
+		case 749:
+			goto tr645
+		case 751:
+			goto tr646
+		case 752:
+			goto tr647
+		case 756:
+			goto tr649
+		}
+		switch {
+		case _widec < 512:
+			switch {
+			case _widec < 450:
+				if 256 <= _widec && _widec <= 383 {
+					goto tr632
+				}
+			case _widec > 479:
+				switch {
+				case _widec > 495:
+					if 497 <= _widec && _widec <= 499 {
+						goto tr638
+					}
+				case _widec >= 481:
+					goto tr635
+				}
+			default:
+				goto tr633
+			}
+		case _widec > 639:
+			switch {
+			case _widec < 737:
+				switch {
+				case _widec > 705:
+					if 706 <= _widec && _widec <= 735 {
+						goto tr642
+					}
+				case _widec >= 640:
+					goto tr641
+				}
+			case _widec > 750:
+				switch {
+				case _widec > 755:
+					if 757 <= _widec && _widec <= 767 {
+						goto tr641
+					}
+				case _widec >= 753:
+					goto tr648
+				}
+			default:
+				goto tr644
+			}
+		default:
+			goto tr640
+		}
+		goto tr36
 	tr632:
 
 		m.pb = m.p
@@ -2122,6 +2208,449 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			goto st19
 		}
 		goto tr36
+	tr640:
+
+		m.pb = m.p
+
+		m.msgat = m.p
+
+		goto st606
+	st606:
+		if (m.p)++; (m.p) == (m.pe) {
+			goto _testEof606
+		}
+	stCase606:
+		_widec = int16((m.data)[(m.p)])
+		_widec = 256 + (int16((m.data)[(m.p)]) - 0)
+		if m.allowNonUTF8InMessage {
+			_widec += 256
+		}
+		switch _widec {
+		case 480:
+			goto st18
+		case 493:
+			goto st20
+		case 496:
+			goto st21
+		case 500:
+			goto st23
+		case 736:
+			goto st609
+		case 749:
+			goto st611
+		case 752:
+			goto st612
+		case 756:
+			goto st614
+		}
+		switch {
+		case _widec < 512:
+			switch {
+			case _widec < 450:
+				if 256 <= _widec && _widec <= 383 {
+					goto st605
+				}
+			case _widec > 479:
+				switch {
+				case _widec > 495:
+					if 497 <= _widec && _widec <= 499 {
+						goto st22
+					}
+				case _widec >= 481:
+					goto st19
+				}
+			default:
+				goto st17
+			}
+		case _widec > 639:
+			switch {
+			case _widec < 737:
+				switch {
+				case _widec > 705:
+					if 706 <= _widec && _widec <= 735 {
+						goto st608
+					}
+				case _widec >= 640:
+					goto st607
+				}
+			case _widec > 751:
+				switch {
+				case _widec > 755:
+					if 757 <= _widec && _widec <= 767 {
+						goto st607
+					}
+				case _widec >= 753:
+					goto st613
+				}
+			default:
+				goto st610
+			}
+		default:
+			goto st606
+		}
+		goto tr36
+	tr641:
+
+		m.pb = m.p
+
+		m.msgat = m.p
+
+		goto st607
+	st607:
+		if (m.p)++; (m.p) == (m.pe) {
+			goto _testEof607
+		}
+	stCase607:
+		_widec = int16((m.data)[(m.p)])
+		_widec = 256 + (int16((m.data)[(m.p)]) - 0)
+		if m.allowNonUTF8InMessage {
+			_widec += 256
+		}
+		if 512 <= _widec && _widec <= 767 {
+			goto st607
+		}
+		goto tr36
+	tr642:
+
+		m.pb = m.p
+
+		m.msgat = m.p
+
+		goto st608
+	st608:
+		if (m.p)++; (m.p) == (m.pe) {
+			goto _testEof608
+		}
+	stCase608:
+		_widec = int16((m.data)[(m.p)])
+		_widec = 256 + (int16((m.data)[(m.p)]) - 0)
+		if m.allowNonUTF8InMessage {
+			_widec += 256
+		}
+		switch {
+		case _widec < 512:
+			if 384 <= _widec && _widec <= 447 {
+				goto st605
+			}
+		case _widec > 639:
+			switch {
+			case _widec > 703:
+				if 704 <= _widec && _widec <= 767 {
+					goto st607
+				}
+			case _widec >= 640:
+				goto st606
+			}
+		default:
+			goto st607
+		}
+		goto tr36
+	tr643:
+
+		m.pb = m.p
+
+		m.msgat = m.p
+
+		goto st609
+	st609:
+		if (m.p)++; (m.p) == (m.pe) {
+			goto _testEof609
+		}
+	stCase609:
+		_widec = int16((m.data)[(m.p)])
+		_widec = 256 + (int16((m.data)[(m.p)]) - 0)
+		if m.allowNonUTF8InMessage {
+			_widec += 256
+		}
+		switch {
+		case _widec < 512:
+			if 416 <= _widec && _widec <= 447 {
+				goto st17
+			}
+		case _widec > 671:
+			switch {
+			case _widec > 703:
+				if 704 <= _widec && _widec <= 767 {
+					goto st607
+				}
+			case _widec >= 672:
+				goto st608
+			}
+		default:
+			goto st607
+		}
+		goto tr36
+	tr644:
+
+		m.pb = m.p
+
+		m.msgat = m.p
+
+		goto st610
+	st610:
+		if (m.p)++; (m.p) == (m.pe) {
+			goto _testEof610
+		}
+	stCase610:
+		_widec = int16((m.data)[(m.p)])
+		_widec = 256 + (int16((m.data)[(m.p)]) - 0)
+		if m.allowNonUTF8InMessage {
+			_widec += 256
+		}
+		switch {
+		case _widec < 512:
+			if 384 <= _widec && _widec <= 447 {
+				goto st17
+			}
+		case _widec > 639:
+			switch {
+			case _widec > 703:
+				if 704 <= _widec && _widec <= 767 {
+					goto st607
+				}
+			case _widec >= 640:
+				goto st608
+			}
+		default:
+			goto st607
+		}
+		goto tr36
+	tr645:
+
+		m.pb = m.p
+
+		m.msgat = m.p
+
+		goto st611
+	st611:
+		if (m.p)++; (m.p) == (m.pe) {
+			goto _testEof611
+		}
+	stCase611:
+		_widec = int16((m.data)[(m.p)])
+		_widec = 256 + (int16((m.data)[(m.p)]) - 0)
+		if m.allowNonUTF8InMessage {
+			_widec += 256
+		}
+		switch {
+		case _widec < 512:
+			if 384 <= _widec && _widec <= 415 {
+				goto st17
+			}
+		case _widec > 639:
+			switch {
+			case _widec > 671:
+				if 672 <= _widec && _widec <= 767 {
+					goto st607
+				}
+			case _widec >= 640:
+				goto st608
+			}
+		default:
+			goto st607
+		}
+		goto tr36
+	tr647:
+
+		m.pb = m.p
+
+		m.msgat = m.p
+
+		goto st612
+	st612:
+		if (m.p)++; (m.p) == (m.pe) {
+			goto _testEof612
+		}
+	stCase612:
+		_widec = int16((m.data)[(m.p)])
+		_widec = 256 + (int16((m.data)[(m.p)]) - 0)
+		if m.allowNonUTF8InMessage {
+			_widec += 256
+		}
+		switch {
+		case _widec < 512:
+			if 400 <= _widec && _widec <= 447 {
+				goto st19
+			}
+		case _widec > 655:
+			switch {
+			case _widec > 703:
+				if 704 <= _widec && _widec <= 767 {
+					goto st607
+				}
+			case _widec >= 656:
+				goto st610
+			}
+		default:
+			goto st607
+		}
+		goto tr36
+	tr648:
+
+		m.pb = m.p
+
+		m.msgat = m.p
+
+		goto st613
+	st613:
+		if (m.p)++; (m.p) == (m.pe) {
+			goto _testEof613
+		}
+	stCase613:
+		_widec = int16((m.data)[(m.p)])
+		_widec = 256 + (int16((m.data)[(m.p)]) - 0)
+		if m.allowNonUTF8InMessage {
+			_widec += 256
+		}
+		switch {
+		case _widec < 512:
+			if 384 <= _widec && _widec <= 447 {
+				goto st19
+			}
+		case _widec > 639:
+			switch {
+			case _widec > 703:
+				if 704 <= _widec && _widec <= 767 {
+					goto st607
+				}
+			case _widec >= 640:
+				goto st610
+			}
+		default:
+			goto st607
+		}
+		goto tr36
+	tr649:
+
+		m.pb = m.p
+
+		m.msgat = m.p
+
+		goto st614
+	st614:
+		if (m.p)++; (m.p) == (m.pe) {
+			goto _testEof614
+		}
+	stCase614:
+		_widec = int16((m.data)[(m.p)])
+		_widec = 256 + (int16((m.data)[(m.p)]) - 0)
+		if m.allowNonUTF8InMessage {
+			_widec += 256
+		}
+		switch {
+		case _widec < 512:
+			if 384 <= _widec && _widec <= 399 {
+				goto st19
+			}
+		case _widec > 639:
+			switch {
+			case _widec > 655:
+				if 656 <= _widec && _widec <= 767 {
+					goto st607
+				}
+			case _widec >= 640:
+				goto st610
+			}
+		default:
+			goto st607
+		}
+		goto tr36
+	tr646:
+
+		m.pb = m.p
+
+		m.msgat = m.p
+
+		goto st615
+	st615:
+		if (m.p)++; (m.p) == (m.pe) {
+			goto _testEof615
+		}
+	stCase615:
+		_widec = int16((m.data)[(m.p)])
+		switch {
+		case (m.data)[(m.p)] < 187:
+			if (m.data)[(m.p)] <= 186 {
+				_widec = 256 + (int16((m.data)[(m.p)]) - 0)
+				if m.allowNonUTF8InMessage {
+					_widec += 256
+				}
+			}
+		case (m.data)[(m.p)] > 187:
+			if 188 <= (m.data)[(m.p)] {
+				_widec = 256 + (int16((m.data)[(m.p)]) - 0)
+				if m.allowNonUTF8InMessage {
+					_widec += 256
+				}
+			}
+		default:
+			_widec = 256 + (int16((m.data)[(m.p)]) - 0)
+			if m.allowNonUTF8InMessage {
+				_widec += 256
+			}
+		}
+		if _widec == 699 {
+			goto st616
+		}
+		switch {
+		case _widec < 512:
+			if 384 <= _widec && _widec <= 447 {
+				goto st17
+			}
+		case _widec > 639:
+			switch {
+			case _widec > 703:
+				if 704 <= _widec && _widec <= 767 {
+					goto st607
+				}
+			case _widec >= 640:
+				goto st608
+			}
+		default:
+			goto st607
+		}
+		goto tr36
+	st616:
+		if (m.p)++; (m.p) == (m.pe) {
+			goto _testEof616
+		}
+	stCase616:
+		_widec = int16((m.data)[(m.p)])
+		switch {
+		case (m.data)[(m.p)] > 190:
+			if 192 <= (m.data)[(m.p)] {
+				_widec = 256 + (int16((m.data)[(m.p)]) - 0)
+				if m.allowNonUTF8InMessage {
+					_widec += 256
+				}
+			}
+		default:
+			_widec = 256 + (int16((m.data)[(m.p)]) - 0)
+			if m.allowNonUTF8InMessage {
+				_widec += 256
+			}
+		}
+		if _widec == 191 {
+			goto st605
+		}
+		switch {
+		case _widec < 512:
+			if 384 <= _widec && _widec <= 446 {
+				goto st605
+			}
+		case _widec > 639:
+			switch {
+			case _widec > 702:
+				if 704 <= _widec && _widec <= 767 {
+					goto st607
+				}
+			case _widec >= 640:
+				goto st606
+			}
+		default:
+			goto st607
+		}
+		goto tr36
 	tr35:
 
 		output.structuredData = map[string]map[string]string{}
@@ -2183,7 +2712,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			(m.p)--
 
 			{
-				goto st607
+				goto st618
 			}
 		} else {
 			id := string(m.text())
@@ -3000,7 +3529,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		case 32:
 			goto st26
 		case 93:
-			goto st606
+			goto st617
 		}
 		goto tr46
 	tr45:
@@ -3011,7 +3540,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			(m.p)--
 
 			{
-				goto st607
+				goto st618
 			}
 		} else {
 			id := string(m.text())
@@ -3020,19 +3549,19 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			m.currentelem = id
 		}
 
-		goto st606
-	st606:
+		goto st617
+	st617:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof606
+			goto _testEof617
 		}
-	stCase606:
+	stCase617:
 		switch (m.data)[(m.p)] {
 		case 32:
 			goto st604
 		case 91:
 			goto st24
 		}
-		goto tr645
+		goto tr665
 	tr83:
 
 		m.pb = m.p
@@ -9816,18 +10345,18 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			goto st3
 		}
 		goto tr2
-	st607:
+	st618:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof607
+			goto _testEof618
 		}
-	stCase607:
+	stCase618:
 		switch (m.data)[(m.p)] {
 		case 10:
 			goto st0
 		case 13:
 			goto st0
 		}
-		goto st607
+		goto st618
 	stOut:
 	_testEof2:
 		m.cs = 2
@@ -9903,6 +10432,39 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		goto _testEof
 	_testEof23:
 		m.cs = 23
+		goto _testEof
+	_testEof606:
+		m.cs = 606
+		goto _testEof
+	_testEof607:
+		m.cs = 607
+		goto _testEof
+	_testEof608:
+		m.cs = 608
+		goto _testEof
+	_testEof609:
+		m.cs = 609
+		goto _testEof
+	_testEof610:
+		m.cs = 610
+		goto _testEof
+	_testEof611:
+		m.cs = 611
+		goto _testEof
+	_testEof612:
+		m.cs = 612
+		goto _testEof
+	_testEof613:
+		m.cs = 613
+		goto _testEof
+	_testEof614:
+		m.cs = 614
+		goto _testEof
+	_testEof615:
+		m.cs = 615
+		goto _testEof
+	_testEof616:
+		m.cs = 616
 		goto _testEof
 	_testEof24:
 		m.cs = 24
@@ -10021,8 +10583,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 	_testEof62:
 		m.cs = 62
 		goto _testEof
-	_testEof606:
-		m.cs = 606
+	_testEof617:
+		m.cs = 617
 		goto _testEof
 	_testEof63:
 		m.cs = 63
@@ -11644,8 +12206,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 	_testEof602:
 		m.cs = 602
 		goto _testEof
-	_testEof607:
-		m.cs = 607
+	_testEof618:
+		m.cs = 618
 		goto _testEof
 
 	_testEof:
@@ -11653,7 +12215,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 		if (m.p) == (m.eof) {
 			switch m.cs {
-			case 605:
+			case 605, 606, 607, 608, 609, 610, 611, 612, 613, 614, 615, 616:
 
 				output.message = string(m.text())
 
@@ -11663,7 +12225,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 			case 15, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132:
@@ -11672,7 +12234,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 			case 16:
@@ -11681,7 +12243,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 			case 7:
@@ -11690,7 +12252,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 			case 5:
@@ -11701,7 +12263,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 			case 585:
@@ -11711,7 +12273,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 					(m.p)--
 
 					{
-						goto st607
+						goto st618
 					}
 				} else {
 					output.timestamp = t
@@ -11722,7 +12284,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 			case 4:
@@ -11731,14 +12293,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 			case 6, 561, 562, 563, 564, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 580, 581, 582, 583, 584, 586, 587, 588, 589, 590, 591, 592, 593, 594, 595, 596, 597:
@@ -11747,14 +12309,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 			case 8, 9, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545, 546, 547, 548, 549, 550, 551, 552, 553, 554, 555, 556, 557, 558, 559, 560:
@@ -11763,14 +12325,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 			case 10, 11, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306:
@@ -11779,14 +12341,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 			case 12, 13, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259:
@@ -11795,14 +12357,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 			case 14:
@@ -11811,14 +12373,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 			case 24:
@@ -11831,14 +12393,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 				m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 			case 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 62, 64, 65, 66, 67, 68, 69, 70:
@@ -11850,14 +12412,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 				m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 			case 17, 18, 19, 20, 21, 22, 23:
@@ -11868,18 +12430,23 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 					output.message = string(m.data[m.msgat:m.p])
 				}
 
-				m.err = fmt.Errorf(ErrMsg+ColumnPositionTemplate, m.p)
+				if m.allowNonUTF8InMessage {
+					m.err = fmt.Errorf(ErrMsgNonUTF8+ColumnPositionTemplate, m.p)
+				} else {
+					m.err = fmt.Errorf(ErrMsg+ColumnPositionTemplate, m.p)
+				}
+
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 			case 604:
@@ -11898,7 +12465,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 					(m.p)--
 
 					{
-						goto st607
+						goto st618
 					}
 				} else {
 					id := string(m.text())
@@ -11915,14 +12482,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 				m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 			case 2, 3, 600, 601, 602:
@@ -11931,21 +12498,21 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 				m.err = fmt.Errorf(ErrPri+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 			case 598, 599:
@@ -11954,7 +12521,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 				output.version = uint16(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
@@ -11963,7 +12530,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 			case 60, 61, 63:
@@ -11972,7 +12539,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 				if len(output.structuredData) > 0 {
@@ -11982,14 +12549,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 				m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st607
+					goto st618
 				}
 
 			}

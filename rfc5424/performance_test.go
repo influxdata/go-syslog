@@ -102,3 +102,15 @@ func BenchmarkParse(b *testing.B) {
 		})
 	}
 }
+
+// // TODO: Not comparable to BenchmarkParse since initalizing the AllowNonUTF8InMessage option takes a good chunk of time
+// func BenchmarkParseAllowNonUTF8InMessage(b *testing.B) {
+// 	for _, tc := range benchCases {
+// 		tc := tc
+// 		b.Run(syslogtesting.RightPad(tc.label, 50), func(b *testing.B) {
+// 			for i := 0; i < b.N; i++ {
+// 				benchParseResult, _ = NewMachine(WithBestEffort(), AllowNonUTF8InMessage()).Parse(tc.input)
+// 			}
+// 		})
+// 	}
+// }

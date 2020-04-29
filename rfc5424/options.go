@@ -11,3 +11,11 @@ func WithBestEffort() syslog.MachineOption {
 		return m
 	}
 }
+
+// AllowNonUTF8InMessage allows non utf8 characters in the message part.
+func AllowNonUTF8InMessage() syslog.MachineOption {
+	return func(m syslog.Machine) syslog.Machine {
+		m.(*machine).allowNonUTF8InMessage = true
+		return m
+	}
+}
