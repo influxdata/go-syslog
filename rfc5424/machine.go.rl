@@ -38,6 +38,8 @@ const (
 	ErrSdParam        = "expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters; key cannot contain `=`, ` `, `]`, and `\"`, while value cannot contain `]`, backslash, and `\"` unless escaped)"
 	// ErrMsg represents an error in the MESSAGE part of the RFC5424 syslog message.
 	ErrMsg            = "expecting a free-form optional message in UTF-8 (starting with or without BOM)"
+	// ErrMsgNonUTF8 represents an error in the MESSAGE part of the RFC5424 syslog message if AllowNonUTF8InMessage is enabled.
+	ErrMsgNonUTF8     = ErrMsg + " or a free-form optional message in any encoding (starting without BOM)"
 	// ErrEscape represents the error for a RFC5424 syslog message occurring when a STRUCTURED DATA PARAM value contains '"', '\', or ']' not escaped.
 	ErrEscape         = "expecting chars `]`, `\"`, and `\\` to be escaped within param value"
 	// ErrParse represents a general parsing error for a RFC5424 syslog message.
@@ -148,6 +150,8 @@ action set_msg {
 	output.message = string(m.text())
 }
 
+action test_nonutf8allowed { m.allowNonUTF8InMessage }
+
 action err_prival {
 	m.err = fmt.Errorf(ErrPrival + ColumnPositionTemplate, m.p)
 	fhold;
@@ -228,7 +232,12 @@ action err_msg {
 		output.message = string(m.data[m.msgat:m.p])
 	}
 
-	m.err = fmt.Errorf(ErrMsg + ColumnPositionTemplate, m.p)
+	if m.allowNonUTF8InMessage {
+		m.err = fmt.Errorf(ErrMsgNonUTF8 + ColumnPositionTemplate, m.p)
+	} else {
+		m.err = fmt.Errorf(ErrMsg + ColumnPositionTemplate, m.p)
+	}
+
 	fhold;
 	fgoto fail;
 }
@@ -282,7 +291,12 @@ sdelement = ('[' sdid (sp sdparam)* ']');
 
 structureddata = nilvalue | sdelement+ >ini_elements $err(err_structureddata);
 
-msg = (bom? utf8octets) >mark >markmsg %set_msg $err(err_msg);
+msgutf8 = (bom? utf8octets);
+
+# MSG-ANY = *OCTET ; not starting with BOM
+msgany = (any* - (bom any*));
+
+msg = (msgutf8 | msgany when test_nonutf8allowed) >mark >markmsg %set_msg $err(err_msg) ;
 
 fail := (any - [\n\r])* @err{ fgoto main; };
 
@@ -303,6 +317,7 @@ type machine struct {
 	msgat        int
 	backslashat  []int
 	bestEffort 	 bool
+	allowNonUTF8InMessage bool
 }
 
 // NewMachine creates a new FSM able to parse RFC5424 syslog messages.

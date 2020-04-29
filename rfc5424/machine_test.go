@@ -4,11 +4,14 @@ import (
 	"fmt"
 	"math/rand"
 	"testing"
+	"unicode/utf8"
 
 	"github.com/influxdata/go-syslog/v3"
 	syslogtesting "github.com/influxdata/go-syslog/v3/testing"
 	"github.com/stretchr/testify/assert"
 )
+
+const BOM = "\xEF\xBB\xBF"
 
 type testCase struct {
 	input        []byte
@@ -1670,13 +1673,31 @@ func TestMachineBestEffortOption(t *testing.T) {
 }
 
 func TestMachineParse(t *testing.T) {
+	runTestCases(t, func(tc testCase) bool {
+		return true
+	})
+}
+
+func TestMachineParseAllowNonUTF8InMessageWithValidUTF8(t *testing.T) {
+	runTestCases(t, func(tc testCase) bool {
+		return utf8.Valid(tc.input)
+	}, AllowNonUTF8InMessage())
+}
+
+func runTestCases(t *testing.T, filter func(testCase) bool, machineOpts ...syslog.MachineOption) {
+	t.Helper()
+
 	for _, tc := range testCases {
 		tc := tc
+		if !filter(tc) {
+			continue
+		}
+
 		t.Run(syslogtesting.RightPad(string(tc.input), 50), func(t *testing.T) {
 			t.Parallel()
 
-			message, merr := NewMachine().Parse(tc.input)
-			partial, perr := NewMachine(WithBestEffort()).Parse(tc.input)
+			message, merr := NewMachine(machineOpts...).Parse(tc.input)
+			partial, perr := NewMachine(append(machineOpts, WithBestEffort())...).Parse(tc.input)
 
 			if !tc.valid {
 				assert.Nil(t, message)
@@ -1696,4 +1717,34 @@ func TestMachineParse(t *testing.T) {
 			assert.Equal(t, tc.value, message)
 		})
 	}
+}
+
+func TestMachineParseAllowNonUTF8InMessage(t *testing.T) {
+	latin1 := isoLatin1String(t)
+	subject := []byte("<1>1 - - - - - - " + latin1)
+	expected := genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(latin1))
+
+	message, merr := NewMachine(AllowNonUTF8InMessage()).Parse(subject)
+	assert.NoError(t, merr)
+	assert.Equal(t, expected, message)
+}
+
+func TestMachineParseAllowNonUTF8InMessageWithBOM(t *testing.T) {
+	latin1 := isoLatin1String(t)
+	subject := []byte("<1>1 - - - - - - " + BOM + latin1)
+
+	message, merr := NewMachine(AllowNonUTF8InMessage()).Parse(subject)
+	partial, perr := NewMachine(WithBestEffort(), AllowNonUTF8InMessage()).Parse(subject)
+
+	assert.Nil(t, message)
+	assert.EqualErrorf(t, merr, fmt.Sprintf(ErrMsgNonUTF8+ColumnPositionTemplate, 23), "message must be valid UTF8 if starting with BOM")
+	assert.Equal(t, partial, genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM+"ch\xE4")))
+	assert.EqualErrorf(t, perr, fmt.Sprintf(ErrMsgNonUTF8+ColumnPositionTemplate, 23), "message must be valid UTF8 if starting with BOM")
+}
+
+func isoLatin1String(t *testing.T) string {
+	// iso-latin-1 (ISO8859-1) encoded "chääs"; swiss german for cheese
+	latin1 := "ch\xE4\xE4s"
+	assert.False(t, utf8.ValidString(latin1))
+	return latin1
 }
