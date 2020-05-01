@@ -7,6 +7,6 @@ digraph rfc5424 {
 	1;
 	2;
 	node [ shape = circle ];
-	1 -> 2 [ label = "DEF / choose_msg_encoding" ];
+	1 -> 2 [ label = "DEF / select_msg_mode" ];
 	ENTRY -> 1 [ label = "IN" ];
 }
