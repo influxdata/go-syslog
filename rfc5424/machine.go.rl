@@ -65,6 +65,15 @@ action markmsg {
 	m.msgat = m.p
 }
 
+action choose_msg_encoding {
+	fhold;
+
+	if m.allowNonUTF8InMessage {
+		fgoto msg_any;
+	}
+	fgoto msg_utf8;
+}
+
 action set_prival {
 	output.priority = uint8(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
 	output.prioritySet = true
@@ -291,12 +300,14 @@ sdelement = ('[' sdid (sp sdparam)* ']');
 
 structureddata = nilvalue | sdelement+ >ini_elements $err(err_structureddata);
 
-msgutf8 = (bom? utf8octets);
+msg_utf8 := (bom? utf8octets)
+	>mark >markmsg %set_msg $err(err_msg);
 
 # MSG-ANY = *OCTET ; not starting with BOM
-msgany = (any* - (bom any*));
+msg_any := ((bom utf8octets) | (any* - (bom any*)))
+	>mark >markmsg %set_msg $err(err_msg);
 
-msg = (msgutf8 | msgany when test_nonutf8allowed) >mark >markmsg %set_msg $err(err_msg) ;
+msg = any? @choose_msg_encoding;
 
 fail := (any - [\n\r])* @err{ fgoto main; };
 

@@ -112,6 +112,18 @@ docs/rfc5424_msg.dot: rfc5424/machine.go.rl common/common.rl
 docs/rfc5424_msg.png: docs/rfc5424_msg.dot
 	dot $< -Tpng -o $@
 
+docs/rfc5424_msg_any.dot: rfc5424/machine.go.rl common/common.rl
+	$(RAGEL) -Z -Vp -M msg_any $< -o $@
+
+docs/rfc5424_msg_any.png: docs/rfc5424_msg_any.dot
+	dot $< -Tpng -o $@
+
+docs/rfc5424_msg_utf8.dot: rfc5424/machine.go.rl common/common.rl
+	$(RAGEL) -Z -Vp -M msg_utf8 $< -o $@
+
+docs/rfc5424_msg_utf8.png: docs/rfc5424_msg_utf8.dot
+	dot $< -Tpng -o $@
+
 docs/rfc3164.dot: rfc3164/machine.go.rl common/common.rl
 	$(RAGEL) -Z -Vp $< -o $@
 
