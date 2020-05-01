@@ -3072,7 +3072,7 @@ digraph rfc5424 {
 	609 -> err_609 [ label = "DEF / err_msg" ];
 	610 -> 611 [ label = "SP" ];
 	610 -> err_610 [ label = "DEF / err_parse" ];
-	611 -> 612 [ label = "DEF / choose_msg_encoding" ];
+	611 -> 612 [ label = "DEF / select_msg_mode" ];
 	612 -> err_612 [ label = "DEF / err_parse" ];
 	613 -> 611 [ label = "SP" ];
 	613 -> 17 [ label = "'['" ];
