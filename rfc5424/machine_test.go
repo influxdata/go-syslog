@@ -1678,10 +1678,10 @@ func TestMachineParse(t *testing.T) {
 	})
 }
 
-func TestMachineParseAllowNonUTF8InMessageWithValidUTF8(t *testing.T) {
+func TestMachineParseWithCompliantMsgWhenValidUTF8(t *testing.T) {
 	runTestCases(t, func(tc testCase) bool {
 		return utf8.Valid(tc.input)
-	}, AllowNonUTF8InMessage())
+	}, WithCompliantMsg())
 }
 
 func runTestCases(t *testing.T, filter func(testCase) bool, machineOpts ...syslog.MachineOption) {
@@ -1719,36 +1719,36 @@ func runTestCases(t *testing.T, filter func(testCase) bool, machineOpts ...syslo
 	}
 }
 
-func TestMachineParseAllowNonUTF8InMessage(t *testing.T) {
+func TestMachineParseWithCompliantMsg(t *testing.T) {
 	latin1 := isoLatin1String(t)
 	subject := []byte("<1>1 - - - - - - " + latin1)
 	expected := genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(latin1))
 
-	message, merr := NewMachine(AllowNonUTF8InMessage()).Parse(subject)
+	message, merr := NewMachine(WithCompliantMsg()).Parse(subject)
 	assert.NoError(t, merr)
 	assert.Equal(t, expected, message)
 }
 
-func TestMachineParseAllowNonUTF8InMessageWithBOM(t *testing.T) {
+func TestMachineParseWithCompliantMsgWhenMessageStartsWithBOM(t *testing.T) {
 	latin1 := isoLatin1String(t)
 	subject := []byte("<1>1 - - - - - - " + BOM + latin1)
 
-	message, merr := NewMachine(AllowNonUTF8InMessage()).Parse(subject)
-	partial, perr := NewMachine(WithBestEffort(), AllowNonUTF8InMessage()).Parse(subject)
+	message, merr := NewMachine(WithCompliantMsg()).Parse(subject)
+	partial, perr := NewMachine(WithBestEffort(), WithCompliantMsg()).Parse(subject)
 
 	assert.Nil(t, message)
-	assert.EqualErrorf(t, merr, fmt.Sprintf(ErrMsgNonUTF8+ColumnPositionTemplate, 23), "message must be valid UTF8 if starting with BOM")
+	assert.EqualErrorf(t, merr, fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 23), "message must be valid UTF8 if starting with BOM")
 	assert.Equal(t, partial, genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM+"ch\xE4")))
-	assert.EqualErrorf(t, perr, fmt.Sprintf(ErrMsgNonUTF8+ColumnPositionTemplate, 23), "message must be valid UTF8 if starting with BOM")
+	assert.EqualErrorf(t, perr, fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 23), "message must be valid UTF8 if starting with BOM")
 }
 
-func TestMachineParseAllowNonUTF8InMessageWithBOMNotAtTheStart(t *testing.T) {
+func TestMachineParseWithCompliantMsgWhenMessageContainsBOM(t *testing.T) {
 	latin1 := isoLatin1String(t)
 	msg := "not starting with " + BOM + latin1
 	subject := []byte("<1>1 - - - - - - " + msg)
 
-	message, merr := NewMachine(AllowNonUTF8InMessage()).Parse(subject)
-	partial, perr := NewMachine(WithBestEffort(), AllowNonUTF8InMessage()).Parse(subject)
+	message, merr := NewMachine(WithCompliantMsg()).Parse(subject)
+	partial, perr := NewMachine(WithBestEffort(), WithCompliantMsg()).Parse(subject)
 
 	assert.Equal(t, message, genMessageWithPartialMessage(1, 1, &msg))
 	assert.Equal(t, partial, genMessageWithPartialMessage(1, 1, &msg))
