@@ -38,8 +38,8 @@ const (
 	ErrSdParam = "expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters; key cannot contain `=`, ` `, `]`, and `\"`, while value cannot contain `]`, backslash, and `\"` unless escaped)"
 	// ErrMsg represents an error in the MESSAGE part of the RFC5424 syslog message.
 	ErrMsg = "expecting a free-form optional message in UTF-8 (starting with or without BOM)"
-	// ErrMsgNonUTF8 represents an error in the MESSAGE part of the RFC5424 syslog message if AllowNonUTF8InMessage is enabled.
-	ErrMsgNonUTF8 = ErrMsg + " or a free-form optional message in any encoding (starting without BOM)"
+	// ErrMsgNotCompliant represents an error in the MESSAGE part of the RFC5424 syslog message if WithCompliatMsg option is on.
+	ErrMsgNotCompliant = ErrMsg + " or a free-form optional message in any encoding (starting without BOM)"
 	// ErrEscape represents the error for a RFC5424 syslog message occurring when a STRUCTURED DATA PARAM value contains '"', '\', or ']' not escaped.
 	ErrEscape = "expecting chars `]`, `\"`, and `\\` to be escaped within param value"
 	// ErrParse represents a general parsing error for a RFC5424 syslog message.
@@ -58,17 +58,17 @@ const enFail int = 621
 const enMain int = 1
 
 type machine struct {
-	data                  []byte
-	cs                    int
-	p, pe, eof            int
-	pb                    int
-	err                   error
-	currentelem           string
-	currentparam          string
-	msgat                 int
-	backslashat           []int
-	bestEffort            bool
-	allowNonUTF8InMessage bool
+	data         []byte
+	cs           int
+	p, pe, eof   int
+	pb           int
+	err          error
+	currentelem  string
+	currentparam string
+	msgat        int
+	backslashat  []int
+	bestEffort   bool
+	compliantMsg bool
 }
 
 // NewMachine creates a new FSM able to parse RFC5424 syslog messages.
@@ -1681,8 +1681,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			output.message = string(m.data[m.msgat:m.p])
 		}
 
-		if m.allowNonUTF8InMessage {
-			m.err = fmt.Errorf(ErrMsgNonUTF8+ColumnPositionTemplate, m.p)
+		if m.compliantMsg {
+			m.err = fmt.Errorf(ErrMsgNotCompliant+ColumnPositionTemplate, m.p)
 		} else {
 			m.err = fmt.Errorf(ErrMsg+ColumnPositionTemplate, m.p)
 		}
@@ -1968,7 +1968,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 
 		(m.p)--
 
-		if m.allowNonUTF8InMessage {
+		if m.compliantMsg {
 			{
 				goto st616
 			}
@@ -11939,8 +11939,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 					output.message = string(m.data[m.msgat:m.p])
 				}
 
-				if m.allowNonUTF8InMessage {
-					m.err = fmt.Errorf(ErrMsgNonUTF8+ColumnPositionTemplate, m.p)
+				if m.compliantMsg {
+					m.err = fmt.Errorf(ErrMsgNotCompliant+ColumnPositionTemplate, m.p)
 				} else {
 					m.err = fmt.Errorf(ErrMsg+ColumnPositionTemplate, m.p)
 				}
