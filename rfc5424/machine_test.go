@@ -1742,6 +1742,20 @@ func TestMachineParseAllowNonUTF8InMessageWithBOM(t *testing.T) {
 	assert.EqualErrorf(t, perr, fmt.Sprintf(ErrMsgNonUTF8+ColumnPositionTemplate, 23), "message must be valid UTF8 if starting with BOM")
 }
 
+func TestMachineParseAllowNonUTF8InMessageWithBOMNotAtTheStart(t *testing.T) {
+	latin1 := isoLatin1String(t)
+	msg := "not starting with " + BOM + latin1
+	subject := []byte("<1>1 - - - - - - " + msg)
+
+	message, merr := NewMachine(AllowNonUTF8InMessage()).Parse(subject)
+	partial, perr := NewMachine(WithBestEffort(), AllowNonUTF8InMessage()).Parse(subject)
+
+	assert.Equal(t, message, genMessageWithPartialMessage(1, 1, &msg))
+	assert.Equal(t, partial, genMessageWithPartialMessage(1, 1, &msg))
+	assert.Nil(t, merr)
+	assert.Nil(t, perr)
+}
+
 func isoLatin1String(t *testing.T) string {
 	// iso-latin-1 (ISO8859-1) encoded "chääs"; swiss german for cheese
 	latin1 := "ch\xE4\xE4s"

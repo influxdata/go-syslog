@@ -159,8 +159,6 @@ action set_msg {
 	output.message = string(m.text())
 }
 
-action test_nonutf8allowed { m.allowNonUTF8InMessage }
-
 action err_prival {
 	m.err = fmt.Errorf(ErrPrival + ColumnPositionTemplate, m.p)
 	fhold;
@@ -300,12 +298,12 @@ sdelement = ('[' sdid (sp sdparam)* ']');
 
 structureddata = nilvalue | sdelement+ >ini_elements $err(err_structureddata);
 
-msg_utf8 := (bom? utf8octets)
-	>mark >markmsg %set_msg $err(err_msg);
+msg_utf8 := (bom? utf8octets) >mark >markmsg %set_msg $err(err_msg);
 
 # MSG-ANY = *OCTET ; not starting with BOM
-msg_any := ((bom utf8octets) | (any* - (bom any*)))
-	>mark >markmsg %set_msg $err(err_msg);
+# MSG-UTF8 = BOM *OCTECT ; UTF-8 string as specified in RFC 3629
+# MSG = MSG-ANY | MSG-UTF8
+msg_any := ((bom utf8octets) | (any* - (bom any*))) >mark >markmsg %set_msg $err(err_msg);
 
 msg = any? @choose_msg_encoding;
 
