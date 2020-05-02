@@ -50,11 +50,11 @@ const (
 const RFC3339MICRO = "2006-01-02T15:04:05.999999Z07:00"
 
 const start int = 1
-const firstFinal int = 610
+const firstFinal int = 603
 
-const enMsgUtf8 int = 614
-const enMsgAny int = 616
-const enFail int = 621
+const enMsgAny int = 607
+const enMsgCompliant int = 609
+const enFail int = 614
 const enMain int = 1
 
 type machine struct {
@@ -164,12 +164,12 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			goto stCase15
 		case 16:
 			goto stCase16
-		case 610:
-			goto stCase610
-		case 611:
-			goto stCase611
-		case 612:
-			goto stCase612
+		case 603:
+			goto stCase603
+		case 604:
+			goto stCase604
+		case 605:
+			goto stCase605
 		case 17:
 			goto stCase17
 		case 18:
@@ -248,8 +248,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			goto stCase54
 		case 55:
 			goto stCase55
-		case 613:
-			goto stCase613
+		case 606:
+			goto stCase606
 		case 56:
 			goto stCase56
 		case 57:
@@ -1330,10 +1330,20 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			goto stCase594
 		case 595:
 			goto stCase595
-		case 614:
-			goto stCase614
-		case 615:
-			goto stCase615
+		case 607:
+			goto stCase607
+		case 608:
+			goto stCase608
+		case 609:
+			goto stCase609
+		case 610:
+			goto stCase610
+		case 611:
+			goto stCase611
+		case 612:
+			goto stCase612
+		case 613:
+			goto stCase613
 		case 596:
 			goto stCase596
 		case 597:
@@ -1348,32 +1358,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			goto stCase601
 		case 602:
 			goto stCase602
-		case 616:
-			goto stCase616
-		case 617:
-			goto stCase617
-		case 618:
-			goto stCase618
-		case 619:
-			goto stCase619
-		case 620:
-			goto stCase620
-		case 603:
-			goto stCase603
-		case 604:
-			goto stCase604
-		case 605:
-			goto stCase605
-		case 606:
-			goto stCase606
-		case 607:
-			goto stCase607
-		case 608:
-			goto stCase608
-		case 609:
-			goto stCase609
-		case 621:
-			goto stCase621
+		case 614:
+			goto stCase614
 		}
 		goto stOut
 	stCase1:
@@ -1387,7 +1373,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		goto st0
@@ -1397,21 +1383,21 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		m.err = fmt.Errorf(ErrPri+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		goto st0
@@ -1421,14 +1407,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		goto st0
@@ -1438,7 +1424,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		goto st0
@@ -1448,14 +1434,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		goto st0
@@ -1465,14 +1451,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		goto st0
@@ -1482,14 +1468,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		goto st0
@@ -1499,14 +1485,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		goto st0
@@ -1516,14 +1502,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		goto st0
@@ -1533,7 +1519,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		goto st0
@@ -1543,7 +1529,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		goto st0
@@ -1557,14 +1543,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		goto st0
@@ -1576,7 +1562,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			(m.p)--
 
 			{
-				goto st621
+				goto st614
 			}
 		} else {
 			id := string(m.text())
@@ -1593,14 +1579,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		goto st0
@@ -1613,14 +1599,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		goto st0
@@ -1630,7 +1616,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		if len(output.structuredData) > 0 {
@@ -1640,14 +1626,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		goto st0
@@ -1658,7 +1644,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			(m.p)--
 
 			{
-				goto st621
+				goto st614
 			}
 		} else {
 			output.timestamp = t
@@ -1669,7 +1655,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		goto st0
@@ -1690,24 +1676,24 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		goto st0
-	tr636:
+	tr633:
 
 		m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 		(m.p)--
 
 		{
-			goto st621
+			goto st614
 		}
 
 		goto st0
@@ -1805,7 +1791,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			(m.p)--
 
 			{
-				goto st621
+				goto st614
 			}
 		} else {
 			output.timestamp = t
@@ -1944,45 +1930,45 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 	stCase16:
 		switch (m.data)[(m.p)] {
 		case 45:
-			goto st610
+			goto st603
 		case 91:
 			goto tr35
 		}
 		goto tr33
-	st610:
+	st603:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof610
+			goto _testEof603
 		}
-	stCase610:
+	stCase603:
 		if (m.data)[(m.p)] == 32 {
-			goto st611
+			goto st604
 		}
 		goto tr9
-	st611:
+	st604:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof611
+			goto _testEof604
 		}
-	stCase611:
-		goto tr635
-	tr635:
+	stCase604:
+		goto tr632
+	tr632:
 
 		(m.p)--
 
 		if m.compliantMsg {
 			{
-				goto st616
+				goto st609
 			}
 		}
 		{
-			goto st614
+			goto st607
 		}
 
-		goto st612
-	st612:
+		goto st605
+	st605:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof612
+			goto _testEof605
 		}
-	stCase612:
+	stCase605:
 		goto tr9
 	tr35:
 
@@ -2045,7 +2031,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			(m.p)--
 
 			{
-				goto st621
+				goto st614
 			}
 		} else {
 			id := string(m.text())
@@ -2862,7 +2848,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		case 32:
 			goto st19
 		case 93:
-			goto st613
+			goto st606
 		}
 		goto tr42
 	tr41:
@@ -2873,7 +2859,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			(m.p)--
 
 			{
-				goto st621
+				goto st614
 			}
 		} else {
 			id := string(m.text())
@@ -2882,19 +2868,19 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			m.currentelem = id
 		}
 
-		goto st613
-	st613:
+		goto st606
+	st606:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof613
+			goto _testEof606
 		}
-	stCase613:
+	stCase606:
 		switch (m.data)[(m.p)] {
 		case 32:
-			goto st611
+			goto st604
 		case 91:
 			goto st17
 		}
-		goto tr636
+		goto tr633
 	tr79:
 
 		m.pb = m.p
@@ -9678,56 +9664,77 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			goto st3
 		}
 		goto tr2
-	st614:
+	st607:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof614
+			goto _testEof607
 		}
-	stCase614:
-		switch (m.data)[(m.p)] {
-		case 224:
-			goto tr640
-		case 237:
-			goto tr642
-		case 240:
-			goto tr643
-		case 244:
-			goto tr645
+	stCase607:
+		goto tr635
+	tr635:
+
+		m.pb = m.p
+
+		m.msgat = m.p
+
+		goto st608
+	st608:
+		if (m.p)++; (m.p) == (m.pe) {
+			goto _testEof608
 		}
-		switch {
-		case (m.data)[(m.p)] < 225:
-			switch {
-			case (m.data)[(m.p)] > 193:
-				if 194 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 223 {
-					goto tr639
-				}
-			case (m.data)[(m.p)] >= 128:
-				goto tr627
-			}
-		case (m.data)[(m.p)] > 239:
-			switch {
-			case (m.data)[(m.p)] > 243:
-				if 245 <= (m.data)[(m.p)] {
-					goto tr627
-				}
-			case (m.data)[(m.p)] >= 241:
-				goto tr644
-			}
-		default:
-			goto tr641
+	stCase608:
+		goto st608
+	st609:
+		if (m.p)++; (m.p) == (m.pe) {
+			goto _testEof609
 		}
-		goto tr638
+	stCase609:
+		if (m.data)[(m.p)] == 239 {
+			goto tr638
+		}
+		goto tr637
+	tr637:
+
+		m.pb = m.p
+
+		m.msgat = m.p
+
+		goto st610
+	st610:
+		if (m.p)++; (m.p) == (m.pe) {
+			goto _testEof610
+		}
+	stCase610:
+		goto st610
 	tr638:
 
 		m.pb = m.p
 
 		m.msgat = m.p
 
-		goto st615
-	st615:
+		goto st611
+	st611:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof615
+			goto _testEof611
 		}
-	stCase615:
+	stCase611:
+		if (m.data)[(m.p)] == 187 {
+			goto st612
+		}
+		goto st610
+	st612:
+		if (m.p)++; (m.p) == (m.pe) {
+			goto _testEof612
+		}
+	stCase612:
+		if (m.data)[(m.p)] == 191 {
+			goto st613
+		}
+		goto st610
+	st613:
+		if (m.p)++; (m.p) == (m.pe) {
+			goto _testEof613
+		}
+	stCase613:
 		switch (m.data)[(m.p)] {
 		case 224:
 			goto st597
@@ -9760,30 +9767,16 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		default:
 			goto st598
 		}
-		goto st615
-	tr639:
-
-		m.pb = m.p
-
-		m.msgat = m.p
-
-		goto st596
+		goto st613
 	st596:
 		if (m.p)++; (m.p) == (m.pe) {
 			goto _testEof596
 		}
 	stCase596:
 		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
-			goto st615
+			goto st613
 		}
 		goto tr627
-	tr640:
-
-		m.pb = m.p
-
-		m.msgat = m.p
-
-		goto st597
 	st597:
 		if (m.p)++; (m.p) == (m.pe) {
 			goto _testEof597
@@ -9793,13 +9786,6 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			goto st596
 		}
 		goto tr627
-	tr641:
-
-		m.pb = m.p
-
-		m.msgat = m.p
-
-		goto st598
 	st598:
 		if (m.p)++; (m.p) == (m.pe) {
 			goto _testEof598
@@ -9809,13 +9795,6 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			goto st596
 		}
 		goto tr627
-	tr642:
-
-		m.pb = m.p
-
-		m.msgat = m.p
-
-		goto st599
 	st599:
 		if (m.p)++; (m.p) == (m.pe) {
 			goto _testEof599
@@ -9825,13 +9804,6 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			goto st596
 		}
 		goto tr627
-	tr643:
-
-		m.pb = m.p
-
-		m.msgat = m.p
-
-		goto st600
 	st600:
 		if (m.p)++; (m.p) == (m.pe) {
 			goto _testEof600
@@ -9841,13 +9813,6 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			goto st598
 		}
 		goto tr627
-	tr644:
-
-		m.pb = m.p
-
-		m.msgat = m.p
-
-		goto st601
 	st601:
 		if (m.p)++; (m.p) == (m.pe) {
 			goto _testEof601
@@ -9857,13 +9822,6 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			goto st598
 		}
 		goto tr627
-	tr645:
-
-		m.pb = m.p
-
-		m.msgat = m.p
-
-		goto st602
 	st602:
 		if (m.p)++; (m.p) == (m.pe) {
 			goto _testEof602
@@ -9873,166 +9831,18 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 			goto st598
 		}
 		goto tr627
-	st616:
+	st614:
 		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof616
+			goto _testEof614
 		}
-	stCase616:
-		if (m.data)[(m.p)] == 239 {
-			goto tr652
-		}
-		goto tr651
-	tr651:
-
-		m.pb = m.p
-
-		m.msgat = m.p
-
-		goto st617
-	st617:
-		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof617
-		}
-	stCase617:
-		goto st617
-	tr652:
-
-		m.pb = m.p
-
-		m.msgat = m.p
-
-		goto st618
-	st618:
-		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof618
-		}
-	stCase618:
-		if (m.data)[(m.p)] == 187 {
-			goto st619
-		}
-		goto st617
-	st619:
-		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof619
-		}
-	stCase619:
-		if (m.data)[(m.p)] == 191 {
-			goto st620
-		}
-		goto st617
-	st620:
-		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof620
-		}
-	stCase620:
-		switch (m.data)[(m.p)] {
-		case 224:
-			goto st604
-		case 237:
-			goto st606
-		case 240:
-			goto st607
-		case 244:
-			goto st609
-		}
-		switch {
-		case (m.data)[(m.p)] < 225:
-			switch {
-			case (m.data)[(m.p)] > 193:
-				if 194 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 223 {
-					goto st603
-				}
-			case (m.data)[(m.p)] >= 128:
-				goto tr627
-			}
-		case (m.data)[(m.p)] > 239:
-			switch {
-			case (m.data)[(m.p)] > 243:
-				if 245 <= (m.data)[(m.p)] {
-					goto tr627
-				}
-			case (m.data)[(m.p)] >= 241:
-				goto st608
-			}
-		default:
-			goto st605
-		}
-		goto st620
-	st603:
-		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof603
-		}
-	stCase603:
-		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
-			goto st620
-		}
-		goto tr627
-	st604:
-		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof604
-		}
-	stCase604:
-		if 160 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
-			goto st603
-		}
-		goto tr627
-	st605:
-		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof605
-		}
-	stCase605:
-		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
-			goto st603
-		}
-		goto tr627
-	st606:
-		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof606
-		}
-	stCase606:
-		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 159 {
-			goto st603
-		}
-		goto tr627
-	st607:
-		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof607
-		}
-	stCase607:
-		if 144 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
-			goto st605
-		}
-		goto tr627
-	st608:
-		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof608
-		}
-	stCase608:
-		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 191 {
-			goto st605
-		}
-		goto tr627
-	st609:
-		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof609
-		}
-	stCase609:
-		if 128 <= (m.data)[(m.p)] && (m.data)[(m.p)] <= 143 {
-			goto st605
-		}
-		goto tr627
-	st621:
-		if (m.p)++; (m.p) == (m.pe) {
-			goto _testEof621
-		}
-	stCase621:
+	stCase614:
 		switch (m.data)[(m.p)] {
 		case 10:
 			goto st0
 		case 13:
 			goto st0
 		}
-		goto st621
+		goto st614
 	stOut:
 	_testEof2:
 		m.cs = 2
@@ -10079,14 +9889,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 	_testEof16:
 		m.cs = 16
 		goto _testEof
-	_testEof610:
-		m.cs = 610
+	_testEof603:
+		m.cs = 603
 		goto _testEof
-	_testEof611:
-		m.cs = 611
+	_testEof604:
+		m.cs = 604
 		goto _testEof
-	_testEof612:
-		m.cs = 612
+	_testEof605:
+		m.cs = 605
 		goto _testEof
 	_testEof17:
 		m.cs = 17
@@ -10205,8 +10015,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 	_testEof55:
 		m.cs = 55
 		goto _testEof
-	_testEof613:
-		m.cs = 613
+	_testEof606:
+		m.cs = 606
 		goto _testEof
 	_testEof56:
 		m.cs = 56
@@ -11828,11 +11638,26 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 	_testEof595:
 		m.cs = 595
 		goto _testEof
-	_testEof614:
-		m.cs = 614
+	_testEof607:
+		m.cs = 607
 		goto _testEof
-	_testEof615:
-		m.cs = 615
+	_testEof608:
+		m.cs = 608
+		goto _testEof
+	_testEof609:
+		m.cs = 609
+		goto _testEof
+	_testEof610:
+		m.cs = 610
+		goto _testEof
+	_testEof611:
+		m.cs = 611
+		goto _testEof
+	_testEof612:
+		m.cs = 612
+		goto _testEof
+	_testEof613:
+		m.cs = 613
 		goto _testEof
 	_testEof596:
 		m.cs = 596
@@ -11855,44 +11680,8 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 	_testEof602:
 		m.cs = 602
 		goto _testEof
-	_testEof616:
-		m.cs = 616
-		goto _testEof
-	_testEof617:
-		m.cs = 617
-		goto _testEof
-	_testEof618:
-		m.cs = 618
-		goto _testEof
-	_testEof619:
-		m.cs = 619
-		goto _testEof
-	_testEof620:
-		m.cs = 620
-		goto _testEof
-	_testEof603:
-		m.cs = 603
-		goto _testEof
-	_testEof604:
-		m.cs = 604
-		goto _testEof
-	_testEof605:
-		m.cs = 605
-		goto _testEof
-	_testEof606:
-		m.cs = 606
-		goto _testEof
-	_testEof607:
-		m.cs = 607
-		goto _testEof
-	_testEof608:
-		m.cs = 608
-		goto _testEof
-	_testEof609:
-		m.cs = 609
-		goto _testEof
-	_testEof621:
-		m.cs = 621
+	_testEof614:
+		m.cs = 614
 		goto _testEof
 
 	_testEof:
@@ -11900,7 +11689,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 		}
 		if (m.p) == (m.eof) {
 			switch m.cs {
-			case 615, 617, 618, 619, 620:
+			case 608, 610, 611, 612, 613:
 
 				output.message = string(m.text())
 
@@ -11910,7 +11699,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 			case 15, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125:
@@ -11919,7 +11708,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 			case 16:
@@ -11928,10 +11717,10 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
-			case 596, 597, 598, 599, 600, 601, 602, 603, 604, 605, 606, 607, 608, 609:
+			case 596, 597, 598, 599, 600, 601, 602:
 
 				// If error encountered within the message rule ...
 				if m.msgat > 0 {
@@ -11948,7 +11737,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 			case 7:
@@ -11957,7 +11746,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 			case 5:
@@ -11968,7 +11757,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 			case 578:
@@ -11978,7 +11767,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 					(m.p)--
 
 					{
-						goto st621
+						goto st614
 					}
 				} else {
 					output.timestamp = t
@@ -11989,7 +11778,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 			case 4:
@@ -11998,14 +11787,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 			case 6, 554, 555, 556, 557, 558, 559, 560, 561, 562, 563, 564, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 579, 580, 581, 582, 583, 584, 585, 586, 587, 588, 589, 590:
@@ -12014,14 +11803,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 			case 8, 9, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545, 546, 547, 548, 549, 550, 551, 552, 553:
@@ -12030,14 +11819,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 			case 10, 11, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299:
@@ -12046,14 +11835,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 			case 12, 13, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252:
@@ -12062,14 +11851,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 			case 14:
@@ -12078,14 +11867,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 			case 17:
@@ -12098,14 +11887,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 				m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 			case 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 55, 57, 58, 59, 60, 61, 62, 63:
@@ -12117,17 +11906,17 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 				m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
-			case 614, 616:
+			case 607, 609:
 
 				m.pb = m.p
 
@@ -12143,7 +11932,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 					(m.p)--
 
 					{
-						goto st621
+						goto st614
 					}
 				} else {
 					id := string(m.text())
@@ -12160,14 +11949,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 				m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 			case 2, 3, 593, 594, 595:
@@ -12176,21 +11965,21 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 				m.err = fmt.Errorf(ErrPri+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 				m.err = fmt.Errorf(ErrParse+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 			case 591, 592:
@@ -12199,7 +11988,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 				output.version = uint16(common.UnsafeUTF8DecimalCodePointsToInt(m.text()))
@@ -12208,7 +11997,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 			case 53, 54, 56:
@@ -12217,7 +12006,7 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 				if len(output.structuredData) > 0 {
@@ -12227,14 +12016,14 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 				m.err = fmt.Errorf(ErrStructuredData+ColumnPositionTemplate, m.p)
 				(m.p)--
 
 				{
-					goto st621
+					goto st614
 				}
 
 			}
