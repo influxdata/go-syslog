@@ -69,9 +69,9 @@ action select_msg_mode {
 	fhold;
 
 	if m.compliantMsg {
-		fgoto msg_any;
+		fgoto msg_compliant;
 	}
-	fgoto msg_utf8;
+	fgoto msg_any;
 }
 
 action set_prival {
@@ -298,12 +298,12 @@ sdelement = ('[' sdid (sp sdparam)* ']');
 
 structureddata = nilvalue | sdelement+ >ini_elements $err(err_structureddata);
 
-msg_utf8 := (bom? utf8octets) >mark >markmsg %set_msg $err(err_msg);
+msg_any := any* >mark >markmsg %set_msg $err(err_msg);
 
 # MSG-ANY = *OCTET ; not starting with BOM
 # MSG-UTF8 = BOM *OCTECT ; UTF-8 string as specified in RFC 3629
 # MSG = MSG-ANY | MSG-UTF8
-msg_any := ((bom utf8octets) | (any* - (bom any*))) >mark >markmsg %set_msg $err(err_msg);
+msg_compliant := ((bom utf8octets) | (any* - (bom any*))) >mark >markmsg %set_msg $err(err_msg);
 
 msg = any? @select_msg_mode;
 
