@@ -9,6 +9,7 @@ import (
 	"github.com/influxdata/go-syslog/v3"
 	syslogtesting "github.com/influxdata/go-syslog/v3/testing"
 	"github.com/stretchr/testify/assert"
+	"golang.org/x/text/encoding/charmap"
 )
 
 const BOM = "\xEF\xBB\xBF"
@@ -1104,7 +1105,7 @@ var testCases = []testCase{
 	},
 	// Valid, message starting with byte order mark (BOM, \uFEFF)
 	{
-		[]byte("<1>8 - - - - - - \xEF\xBB\xBF"),
+		[]byte("<1>8 - - - - - - " + BOM),
 		true,
 		(&SyslogMessage{}).SetVersion(8).SetMessage("\ufeff").SetPriority(1),
 		"",
@@ -1112,168 +1113,220 @@ var testCases = []testCase{
 	},
 	// Valid, greek
 	{
-		[]byte("<1>1 - - - - - - κόσμε"),
+		[]byte("<1>1 - - - - - - " + BOM + "κόσμε"),
 		true,
-		(&SyslogMessage{}).SetVersion(1).SetMessage("κόσμε").SetPriority(1),
+		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "κόσμε").SetPriority(1),
 		"",
 		nil,
 	},
 	// Valid, 2 octet sequence
 	{
-		[]byte("<1>1 - - - - - - "),
+		[]byte("<1>1 - - - - - - " + BOM + ""),
 		true,
-		(&SyslogMessage{}).SetVersion(1).SetMessage("").SetPriority(1),
+		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "").SetPriority(1),
 		"",
 		nil,
 	},
 	// Valid, spanish (2 octet sequence)
 	{
-		[]byte("<1>1 - - - - - - \xc3\xb1"),
+		[]byte("<1>1 - - - - - - " + BOM + "\xc3\xb1"),
 		true,
-		(&SyslogMessage{}).SetVersion(1).SetMessage("ñ").SetPriority(1),
+		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "ñ").SetPriority(1),
 		"",
 		nil,
 	},
 	// Valid, colon currency sign (3 octet sequence)
 	{
-		[]byte("<1>1 - - - - - - \xe2\x82\xa1"),
+		[]byte("<1>1 - - - - - - " + BOM + "\xe2\x82\xa1"),
 		true,
-		(&SyslogMessage{}).SetVersion(1).SetMessage("₡").SetPriority(1),
+		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "₡").SetPriority(1),
 		"",
 		nil,
 	},
 	// Valid, gothic letter (4 octet sequence)
 	{
-		[]byte("<3>1 - - - - - - \xEF\xBB\xBF \xf0\x90\x8c\xbc"),
+		[]byte("<3>1 - - - - - - " + BOM + " \xf0\x90\x8c\xbc"),
 		true,
-		(&SyslogMessage{}).SetVersion(1).SetMessage("\ufeff 𐌼").SetPriority(3),
+		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + " 𐌼").SetPriority(3),
 		"",
 		nil,
 	},
 	// Valid, 5 octet sequence
 	{
-		[]byte("<1>1 - - - - - - \xC8\x80\x30\x30\x30"),
+		[]byte("<1>1 - - - - - - " + BOM + "\xC8\x80\x30\x30\x30"),
 		true,
-		(&SyslogMessage{}).SetVersion(1).SetMessage("Ȁ000").SetPriority(1),
+		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "Ȁ000").SetPriority(1),
 		"",
 		nil,
 	},
 	// Valid, 6 octet sequence
 	{
-		[]byte("<1>1 - - - - - - \xE4\x80\x80\x30\x30\x30"),
+		[]byte("<1>1 - - - - - - " + BOM + "\xE4\x80\x80\x30\x30\x30"),
 		true,
-		(&SyslogMessage{}).SetVersion(1).SetMessage("䀀000").SetPriority(1),
+		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "䀀000").SetPriority(1),
 		"",
 		nil,
 	},
 	// Valid, UTF-8 boundary conditions
 	{
-		[]byte("<1>1 - - - - - - \xC4\x90\x30\x30\x30"),
+		[]byte("<1>1 - - - - - - " + BOM + "\xC4\x90\x30\x30\x30"),
 		true,
-		(&SyslogMessage{}).SetVersion(1).SetMessage("Đ000").SetPriority(1),
+		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "Đ000").SetPriority(1),
 		"",
 		nil,
 	},
 	{
-		[]byte("<1>1 - - - - - - \x0D\x37\x46\x46"),
+		[]byte("<1>1 - - - - - - " + BOM + "\x0D\x37\x46\x46"),
 		true,
-		(&SyslogMessage{}).SetVersion(1).SetMessage("\r7FF").SetPriority(1),
+		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "\r7FF").SetPriority(1),
 		"",
 		nil,
 	},
 	// Valid, Tamil poetry of Subramaniya Bharathiyar
 	{
-		[]byte("<1>1 - - - - - - யாமறிந்த மொழிகளிலே தமிழ்மொழி போல் இனிதாவது எங்கும் காணோம், பாமரராய் விலங்குகளாய், உலகனைத்தும் இகழ்ச்சிசொலப் பான்மை கெட்டு, நாமமது தமிழரெனக் கொண்டு இங்கு வாழ்ந்திடுதல் நன்றோ? சொல்லீர்! தேமதுரத் தமிழோசை உலகமெலாம் பரவும்வகை செய்தல் வேண்டும்."),
+		[]byte("<1>1 - - - - - - " + BOM + "யாமறிந்த மொழிகளிலே தமிழ்மொழி போல் இனிதாவது எங்கும் காணோம், பாமரராய் விலங்குகளாய், உலகனைத்தும் இகழ்ச்சிசொலப் பான்மை கெட்டு, நாமமது தமிழரெனக் கொண்டு இங்கு வாழ்ந்திடுதல் நன்றோ? சொல்லீர்! தேமதுரத் தமிழோசை உலகமெலாம் பரவும்வகை செய்தல் வேண்டும்."),
 		true,
-		(&SyslogMessage{}).SetVersion(1).SetMessage("யாமறிந்த மொழிகளிலே தமிழ்மொழி போல் இனிதாவது எங்கும் காணோம், பாமரராய் விலங்குகளாய், உலகனைத்தும் இகழ்ச்சிசொலப் பான்மை கெட்டு, நாமமது தமிழரெனக் கொண்டு இங்கு வாழ்ந்திடுதல் நன்றோ? சொல்லீர்! தேமதுரத் தமிழோசை உலகமெலாம் பரவும்வகை செய்தல் வேண்டும்.").SetPriority(1),
+		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "யாமறிந்த மொழிகளிலே தமிழ்மொழி போல் இனிதாவது எங்கும் காணோம், பாமரராய் விலங்குகளாய், உலகனைத்தும் இகழ்ச்சிசொலப் பான்மை கெட்டு, நாமமது தமிழரெனக் கொண்டு இங்கு வாழ்ந்திடுதல் நன்றோ? சொல்லீர்! தேமதுரத் தமிழோசை உலகமெலாம் பரவும்வகை செய்தல் வேண்டும்.").SetPriority(1),
 		"",
 		nil,
 	},
 	// Valid, I Can Eat Glass (Milanese)
 	{
-		[]byte("<1>1 - - - - - - Sôn bôn de magnà el véder, el me fa minga mal."),
+		[]byte("<1>1 - - - - - - " + BOM + "Sôn bôn de magnà el véder, el me fa minga mal."),
 		true,
-		(&SyslogMessage{}).SetVersion(1).SetMessage("Sôn bôn de magnà el véder, el me fa minga mal.").SetPriority(1),
+		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "Sôn bôn de magnà el véder, el me fa minga mal.").SetPriority(1),
 		"",
 		nil,
 	},
 	// Valid, I Can Eat Glass (Romano)
 	{
-		[]byte("<1>1 - - - - - - Me posso magna' er vetro, e nun me fa male."),
+		[]byte("<1>1 - - - - - - " + BOM + "Me posso magna' er vetro, e nun me fa male."),
 		true,
-		(&SyslogMessage{}).SetVersion(1).SetMessage("Me posso magna' er vetro, e nun me fa male.").SetPriority(1),
+		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "Me posso magna' er vetro, e nun me fa male.").SetPriority(1),
 		"",
 		nil,
 	},
 	// Valid, I Can Eat Glass (Braille)
 	{
-		[]byte("<1>1 - - - - - - ⠊⠀⠉⠁⠝⠀⠑⠁⠞⠀⠛⠇⠁⠎⠎⠀⠁⠝⠙⠀⠊⠞⠀⠙⠕⠑⠎⠝⠞⠀⠓⠥⠗⠞⠀⠍⠑"),
+		[]byte("<1>1 - - - - - - " + BOM + "⠊⠀⠉⠁⠝⠀⠑⠁⠞⠀⠛⠇⠁⠎⠎⠀⠁⠝⠙⠀⠊⠞⠀⠙⠕⠑⠎⠝⠞⠀⠓⠥⠗⠞⠀⠍⠑"),
 		true,
-		(&SyslogMessage{}).SetVersion(1).SetMessage("⠊⠀⠉⠁⠝⠀⠑⠁⠞⠀⠛⠇⠁⠎⠎⠀⠁⠝⠙⠀⠊⠞⠀⠙⠕⠑⠎⠝⠞⠀⠓⠥⠗⠞⠀⠍⠑").SetPriority(1),
+		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "⠊⠀⠉⠁⠝⠀⠑⠁⠞⠀⠛⠇⠁⠎⠎⠀⠁⠝⠙⠀⠊⠞⠀⠙⠕⠑⠎⠝⠞⠀⠓⠥⠗⠞⠀⠍⠑").SetPriority(1),
 		"",
 		nil,
 	},
 	// Valid, I Can Eat Glass (Sanskrit)
 	{
-		[]byte("<1>1 - - - - - - काचं शक्नोम्यत्तुम् । नोपहिनस्ति माम् ॥"),
+		[]byte("<1>1 - - - - - - " + BOM + "काचं शक्नोम्यत्तुम् । नोपहिनस्ति माम् ॥"),
 		true,
-		(&SyslogMessage{}).SetVersion(1).SetMessage("काचं शक्नोम्यत्तुम् । नोपहिनस्ति माम् ॥").SetPriority(1),
+		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "काचं शक्नोम्यत्तुम् । नोपहिनस्ति माम् ॥").SetPriority(1),
 		"",
 		nil,
 	},
 	// Valid, I Can Eat Glass (Urdu)
 	{
-		[]byte("<1>1 - - - - - - میں کانچ کھا سکتا ہوں اور مجھے تکلیف نہیں ہوتی ۔"),
+		[]byte("<1>1 - - - - - - " + BOM + "میں کانچ کھا سکتا ہوں اور مجھے تکلیف نہیں ہوتی ۔"),
 		true,
-		(&SyslogMessage{}).SetVersion(1).SetMessage("میں کانچ کھا سکتا ہوں اور مجھے تکلیف نہیں ہوتی ۔").SetPriority(1),
+		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "میں کانچ کھا سکتا ہوں اور مجھے تکلیف نہیں ہوتی ۔").SetPriority(1),
 		"",
 		nil,
 	},
 	// Valid, I Can Eat Glass (Yiddish)
 	{
-		[]byte("<1>1 - - - - - - איך קען עסן גלאָז און עס טוט מיר נישט װײ."),
+		[]byte("<1>1 - - - - - - " + BOM + "איך קען עסן גלאָז און עס טוט מיר נישט װײ."),
 		true,
-		(&SyslogMessage{}).SetVersion(1).SetMessage("איך קען עסן גלאָז און עס טוט מיר נישט װײ.").SetPriority(1),
+		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "איך קען עסן גלאָז און עס טוט מיר נישט װײ.").SetPriority(1),
 		"",
 		nil,
 	},
 	// Valid, I Can Eat Glass (Polish)
 	{
-		[]byte("<1>1 - - - - - - Mogę jeść szkło, i mi nie szkodzi."),
+		[]byte("<1>1 - - - - - - " + BOM + "Mogę jeść szkło, i mi nie szkodzi."),
 		true,
-		(&SyslogMessage{}).SetVersion(1).SetMessage("Mogę jeść szkło, i mi nie szkodzi.").SetPriority(1),
+		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "Mogę jeść szkło, i mi nie szkodzi.").SetPriority(1),
 		"",
 		nil,
 	},
 	// Valid, I Can Eat Glass (Japanese)
 	{
-		[]byte("<1>1 - - - - - - 私はガラスを食べられます。それは私を傷つけません。"),
+		[]byte("<1>1 - - - - - - " + BOM + "私はガラスを食べられます。それは私を傷つけません。"),
 		true,
-		(&SyslogMessage{}).SetVersion(1).SetMessage("私はガラスを食べられます。それは私を傷つけません。").SetPriority(1),
+		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "私はガラスを食べられます。それは私を傷つけません。").SetPriority(1),
 		"",
 		nil,
 	},
 	// Valid, I Can Eat Glass (Arabic)
 	{
-		[]byte("<1>1 - - - - - - أنا قادر على أكل الزجاج و هذا لا يؤلمني."),
+		[]byte("<1>1 - - - - - - " + BOM + "أنا قادر على أكل الزجاج و هذا لا يؤلمني."),
 		true,
-		(&SyslogMessage{}).SetVersion(1).SetMessage("أنا قادر على أكل الزجاج و هذا لا يؤلمني.").SetPriority(1),
+		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "أنا قادر على أكل الزجاج و هذا لا يؤلمني.").SetPriority(1),
 		"",
 		nil,
 	},
 	// Valid, russian alphabet
 	{
-		[]byte("<1>1 - - - - - - абвгдеёжзийклмнопрстуфхцчшщъыьэюя"),
+		[]byte("<1>1 - - - - - - " + BOM + "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"),
 		true,
-		(&SyslogMessage{}).SetVersion(1).SetMessage("абвгдеёжзийклмнопрстуфхцчшщъыьэюя").SetPriority(1),
+		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "абвгдеёжзийклмнопрстуфхцчшщъыьэюя").SetPriority(1),
 		"",
 		nil,
 	},
 	// Valid, armenian letters
 	{
-		[]byte("<1>1 - - - - - - ԰ԱԲԳԴԵԶԷԸԹԺԻԼԽԾԿՀՁՂՃՄՅՆՇՈՉՊՋՌՍՎՏՐՑՒՓՔՕՖ՗՘ՙ՚՛՜՝՞՟աբգդեզէըթիլխծկհձղճմյնշոչպջռսվտրցւփքօֆևֈ։֊֋֌֍֎֏"),
+		[]byte("<1>1 - - - - - - " + BOM + "԰ԱԲԳԴԵԶԷԸԹԺԻԼԽԾԿՀՁՂՃՄՅՆՇՈՉՊՋՌՍՎՏՐՑՒՓՔՕՖ՗՘ՙ՚՛՜՝՞՟աբգդեզէըթիլխծկհձղճմյնշոչպջռսվտրցւփքօֆևֈ։֊֋֌֍֎֏"),
 		true,
-		(&SyslogMessage{}).SetVersion(1).SetMessage("\u0530ԱԲԳԴԵԶԷԸԹԺԻԼԽԾԿՀՁՂՃՄՅՆՇՈՉՊՋՌՍՎՏՐՑՒՓՔՕՖ\u0557\u0558ՙ՚՛՜՝՞՟աբգդեզէըթիլխծկհձղճմյնշոչպջռսվտրցւփքօֆև\u0588։֊\u058b\u058c֍֎֏").SetPriority(1),
+		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "\u0530ԱԲԳԴԵԶԷԸԹԺԻԼԽԾԿՀՁՂՃՄՅՆՇՈՉՊՋՌՍՎՏՐՑՒՓՔՕՖ\u0557\u0558ՙ՚՛՜՝՞՟աբգդեզէըթիլխծկհձղճմյնշոչպջռսվտրցւփքօֆև\u0588։֊\u058b\u058c֍֎֏").SetPriority(1),
+		"",
+		nil,
+	},
+	// Valid and compliant, characters in any encoding are allowed as long as MSG does not start with BOM
+	// fondue requires a lot of cheese (swiss german)
+	{
+		[]byte("<1>1 - - - - - - " + isoLatin1String("fondü bruucht vell chääs")),
+		true,
+		(&SyslogMessage{}).SetVersion(1).SetMessage(isoLatin1String("fondü bruucht vell chääs")).SetPriority(1),
+		"",
+		nil,
+	},
+	{
+		[]byte("<1>1 - - - - - - not starting with" + BOM + isoLatin1String("fondü bruucht vell chääs")),
+		true,
+		(&SyslogMessage{}).SetVersion(1).SetMessage("not starting with" + BOM + isoLatin1String("fondü bruucht vell chääs")).SetPriority(1),
+		"",
+		nil,
+	},
+	// Valid and compliant iso-latin-1
+	{
+		[]byte("<1>1 - - - - - - " + isoLatin1String("ö")),
+		true,
+		(&SyslogMessage{}).SetVersion(1).SetMessage(isoLatin1String("ö")).SetPriority(1),
+		"",
+		nil,
+	},
+	{
+		[]byte("<1>1 - - - - - - " + isoLatin1String("öö")),
+		true,
+		(&SyslogMessage{}).SetVersion(1).SetMessage(isoLatin1String("öö")).SetPriority(1),
+		"",
+		nil,
+	},
+	{
+		[]byte("<1>1 - - - - - - " + isoLatin1String("ööö")),
+		true,
+		(&SyslogMessage{}).SetVersion(1).SetMessage(isoLatin1String("ööö")).SetPriority(1),
+		"",
+		nil,
+	},
+	{
+		[]byte("<1>1 - - - - - - " + isoLatin1String("öööö")),
+		true,
+		(&SyslogMessage{}).SetVersion(1).SetMessage(isoLatin1String("öööö")).SetPriority(1),
+		"",
+		nil,
+	},
+	{
+		[]byte("<1>1 - - - - - - " + isoLatin1String("ööööö")),
+		true,
+		(&SyslogMessage{}).SetVersion(1).SetMessage(isoLatin1String("ööööö")).SetPriority(1),
 		"",
 		nil,
 	},
@@ -1293,286 +1346,6 @@ y`),
 		"",
 		nil,
 	},
-	// Invalid, out of range code within message
-	{
-		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xC1"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 20),
-		(&SyslogMessage{}).SetVersion(1).SetMessage("\xEF\xBB\xBF").SetPriority(1),
-	},
-	{
-		[]byte("<1>2 - - - - - - \xC1"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
-		(&SyslogMessage{}).SetVersion(2).SetPriority(1),
-	},
-	{
-		[]byte("<1>4 - - - - - - \xEF\xBB\xBF\xc3\x28"), // invalid 2 octet sequence
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 21),
-		genMessageWithPartialMessage(1, 4, syslogtesting.StringAddress("\xEF\xBB\xBF\xc3")),
-	},
-	{
-		[]byte("<1>1 - - - - - - \xc3\x28"), // invalid 2 octet sequence
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xc3")),
-	},
-	{
-		[]byte("<7>1 - - - - - - \xEF\xBB\xBF\xa0\xa1"), // invalid sequence identifier
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 20),
-		genMessageWithPartialMessage(7, 1, syslogtesting.StringAddress("\xEF\xBB\xBF")),
-	},
-	{
-		[]byte("<1>1 - - - - - - \xa0\xa1"), // invalid sequence identifier
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
-		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
-	},
-	{
-		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xe2\x28\xa1"), // invalid 3 octet sequence (2nd octet)
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 21),
-		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xEF\xBB\xBF\xe2")),
-	},
-	{
-		[]byte("<5>1 - - - - - - \xe2\x28\xa1"), // invalid 3 octet sequence (2nd octet)
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		genMessageWithPartialMessage(5, 1, syslogtesting.StringAddress("\xe2")),
-	},
-	{
-		[]byte("<6>1 - - - - - - \xEF\xBB\xBF\xe2\x82\x28"), // invalid 3 octet sequence (3nd octet)
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 22),
-		genMessageWithPartialMessage(6, 1, syslogtesting.StringAddress("\xEF\xBB\xBF\xe2\x82")),
-	},
-	{
-		[]byte("<1>9 - - - - - - \xe2\x82\x28"), // invalid 3 octet sequence (3nd octet)
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 19),
-		genMessageWithPartialMessage(1, 9, syslogtesting.StringAddress("\xe2\x82")),
-	},
-	{
-		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xf0\x28\x8c\xbc"), // invalid 4 octet sequence (2nd octet)
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 21),
-		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xEF\xBB\xBF\xf0")),
-	},
-	{
-		[]byte("<1>10 - - - - - - \xf0\x28\x8c\xbc"), // invalid 4 octet sequence (2nd octet)
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 19),
-		genMessageWithPartialMessage(1, 10, syslogtesting.StringAddress("\xf0")),
-	},
-	{
-		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xf0\x90\x28\xbc"), // invalid 4 octet sequence (3nd octet)
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 22),
-		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xEF\xBB\xBF\xf0\x90")),
-	},
-	{
-		[]byte("<1>1 - - - - - - \xf0\x90\x28\xbc"), // invalid 4 octet sequence (3nd octet)
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 19),
-		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xf0\x90")),
-	},
-	{
-		[]byte("<1>1 - - - - - - \xEF\xBB\xBF\xf0\x28\x8c\x28"), // invalid 4 octet sequence (4nd octet)
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 21),
-		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xEF\xBB\xBF\xf0")),
-	},
-	{
-		[]byte("<1>1 - - - - - - \xf0\x28\x8c\x28"), // invalid 4 octet sequence (4nd octet)
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xf0")),
-	},
-	// Invalid, impossible bytes
-	{
-		[]byte("<1>1 - - - - - - \xfe\xfe\xff\xff"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
-		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
-	},
-	{
-		[]byte("<1>1 - - - - - - \xfe"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
-		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
-	},
-	{
-		[]byte("<1>1 - - - - - - \xff"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
-		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
-	},
-	// Invalid, overlong sequences
-	{
-		[]byte("<1>1 - - - - - - \xfc\x80\x80\x80\x80\xaf"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
-		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
-	},
-	{
-		[]byte("<1>1 - - - - - - \xf8\x80\x80\x80\xaf"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
-		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
-	},
-	{
-		[]byte("<1>3 - - - - - - \xf0\x80\x80\xaf"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		genMessageWithPartialMessage(1, 3, syslogtesting.StringAddress("\xf0")),
-	},
-	{
-		[]byte("<1>3 - - - - - - \xe0\x80\xaf"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		genMessageWithPartialMessage(1, 3, syslogtesting.StringAddress("\xe0")),
-	},
-	{
-		[]byte("<1>1 - - - - - - \xc0\xaf"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
-		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
-	},
-	// Invalid, maximum overlong sequences
-	{
-		[]byte("<1>1 - - - - - - \xfc\x83\xbf\xbf\xbf\xbf"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
-		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
-	},
-	{
-		[]byte("<1>1 - - - - - - \xf8\x87\xbf\xbf\xbf"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
-		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
-	},
-	{
-		[]byte("<1>1 - - - - - - \xf0\x8f\xbf\xbf"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xf0")),
-	},
-	{
-		[]byte("<1>1 - - - - - - \xe0\x9f\xbf"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xe0")),
-	},
-	{
-		[]byte("<1>1 - - - - - - \xc1\xbf"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 17),
-		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
-	},
-	// Invalid, illegal code positions, single utf-16 surrogates
-	{
-		[]byte("<1>1 - - - - - - \xed\xa0\x80"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xed")),
-	},
-	{
-		[]byte("<1>1 - - - - - - \xed\xa0\x80"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xed")),
-	},
-	{
-		[]byte("<1>1 - - - - - - \xed\xad\xbf"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xed")),
-	},
-	{
-		[]byte("<1>1 - - - - - - \xed\xae\x80"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xed")),
-	},
-	{
-		[]byte("<22>23 - - - - - - \xed\xaf\xbf"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 20),
-		genMessageWithPartialMessage(22, 23, syslogtesting.StringAddress("\xed")),
-	},
-	{
-		[]byte("<1>1 - - - - - - \xed\xb0\x80"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xed")),
-	},
-	{
-		[]byte("<1>1 - - - - - - \xed\xbe\x80"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xed")),
-	},
-	{
-		[]byte("<1>1 - - - - - - \xed\xbf\xbf"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xed")),
-	},
-	// Invalid, illegal code positions, paired utf-16 surrogates
-	{
-		[]byte("<1>1 - - - - - - \xed\xa0\x80\xed\xb0\x80"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 18),
-		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("\xed")),
-	},
-	// Invalid, out of range code within message after valid string
-	{
-		[]byte("<1>1 - - - - - - valid\xEF\xBB\xBF\xC1"),
-		false,
-		nil,
-		fmt.Sprintf(ErrMsg+ColumnPositionTemplate, 25),
-		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress("valid\ufeff")),
-	},
 	// Invalid, missing whitespace after nil timestamp
 	{
 		[]byte("<1>10 -- - - - -"),
@@ -1580,6 +1353,225 @@ y`),
 		nil,
 		fmt.Sprintf(ErrParse+ColumnPositionTemplate, 7),
 		(&SyslogMessage{}).SetVersion(10).SetPriority(1),
+	},
+}
+
+var nonCompliantMsgTestCases = []testCase{
+	// Invalid, out of range code within message
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xC1"),
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 20),
+		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM).SetPriority(1),
+	},
+	{
+		[]byte("<1>4 - - - - - - " + BOM + "\xc3\x28"), // invalid 2 octet sequence
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
+		genMessageWithPartialMessage(1, 4, syslogtesting.StringAddress(BOM+"\xc3")),
+	},
+	{
+		[]byte("<7>1 - - - - - - " + BOM + "\xa0\xa1"), // invalid sequence identifier
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 20),
+		genMessageWithPartialMessage(7, 1, syslogtesting.StringAddress(BOM)),
+	},
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xe2\x28\xa1"), // invalid 3 octet sequence (2nd octet)
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM+"\xe2")),
+	},
+	{
+		[]byte("<6>1 - - - - - - " + BOM + "\xe2\x82\x28"), // invalid 3 octet sequence (3nd octet)
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 22),
+		genMessageWithPartialMessage(6, 1, syslogtesting.StringAddress(BOM+"\xe2\x82")),
+	},
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xf0\x28\x8c\xbc"), // invalid 4 octet sequence (2nd octet)
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM+"\xf0")),
+	},
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xf0\x90\x28\xbc"), // invalid 4 octet sequence (3nd octet)
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 22),
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM+"\xf0\x90")),
+	},
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xf0\x28\x8c\x28"), // invalid 4 octet sequence (4nd octet)
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM+"\xf0")),
+	},
+	// Invalid, impossible bytes
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xfe\xfe\xff\xff"),
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 20),
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM)),
+	},
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xfe"),
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 20),
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM)),
+	},
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xff"),
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 20),
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM)),
+	},
+	// Invalid, overlong sequences
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xfc\x80\x80\x80\x80\xaf"),
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 20),
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM)),
+	},
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xf8\x80\x80\x80\xaf"),
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 20),
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM)),
+	},
+	{
+		[]byte("<1>3 - - - - - - " + BOM + "\xf0\x80\x80\xaf"),
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
+		genMessageWithPartialMessage(1, 3, syslogtesting.StringAddress(BOM+"\xf0")),
+	},
+	{
+		[]byte("<1>3 - - - - - - " + BOM + "\xe0\x80\xaf"),
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
+		genMessageWithPartialMessage(1, 3, syslogtesting.StringAddress(BOM+"\xe0")),
+	},
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xc0\xaf"),
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 20),
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM)),
+	},
+	// Invalid, maximum overlong sequences
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xfc\x83\xbf\xbf\xbf\xbf"),
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 20),
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM)),
+	},
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xf8\x87\xbf\xbf\xbf"),
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 20),
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM)),
+	},
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xf0\x8f\xbf\xbf"),
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM+"\xf0")),
+	},
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xe0\x9f\xbf"),
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM+"\xe0")),
+	},
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xc1\xbf"),
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 20),
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM)),
+	},
+	// Invalid, illegal code positions, single utf-16 surrogates
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xed\xa0\x80"),
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM+"\xed")),
+	},
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xed\xa0\x80"),
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM+"\xed")),
+	},
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xed\xad\xbf"),
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM+"\xed")),
+	},
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xed\xae\x80"),
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM+"\xed")),
+	},
+	{
+		[]byte("<22>23 - - - - - - " + BOM + "\xed\xaf\xbf"),
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 23),
+		genMessageWithPartialMessage(22, 23, syslogtesting.StringAddress(BOM+"\xed")),
+	},
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xed\xb0\x80"),
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM+"\xed")),
+	},
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xed\xbe\x80"),
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM+"\xed")),
+	},
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xed\xbf\xbf"),
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM+"\xed")),
+	},
+	// Invalid, illegal code positions, paired utf-16 surrogates
+	{
+		[]byte("<1>1 - - - - - - " + BOM + "\xed\xa0\x80\xed\xb0\x80"),
+		false,
+		nil,
+		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
+		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM+"\xed")),
 	},
 	// (fixme) > evaluate non characters for UTF-8 security concerns, eg. \xef\xbf\xbe
 }
@@ -1673,25 +1665,31 @@ func TestMachineBestEffortOption(t *testing.T) {
 }
 
 func TestMachineParse(t *testing.T) {
-	runTestCases(t, func(tc testCase) bool {
-		return true
-	})
+	runTestCases(t, append(testCases))
 }
 
-func TestMachineParseWithCompliantMsgWhenValidUTF8(t *testing.T) {
-	runTestCases(t, func(tc testCase) bool {
-		return utf8.Valid(tc.input)
-	}, WithCompliantMsg())
+func TestMachineParseWithCompliantMsgOn(t *testing.T) {
+	runTestCases(t, append(testCases, nonCompliantMsgTestCases...), WithCompliantMsg())
 }
 
-func runTestCases(t *testing.T, filter func(testCase) bool, machineOpts ...syslog.MachineOption) {
+func TestMachineParseWithCompliantMsgOff(t *testing.T) {
+	// non compliant messages become valid when option is off
+	for _, tc := range nonCompliantMsgTestCases {
+		message, merr := NewMachine().Parse(tc.input)
+		partial, perr := NewMachine(WithBestEffort()).Parse(tc.input)
+
+		assert.NotEmpty(t, message)
+		assert.Nil(t, merr)
+		assert.NotEmpty(t, partial)
+		assert.Nil(t, perr)
+	}
+}
+
+func runTestCases(t *testing.T, tcs []testCase, machineOpts ...syslog.MachineOption) {
 	t.Helper()
 
-	for _, tc := range testCases {
+	for _, tc := range tcs {
 		tc := tc
-		if !filter(tc) {
-			continue
-		}
 
 		t.Run(syslogtesting.RightPad(string(tc.input), 50), func(t *testing.T) {
 			t.Parallel()
@@ -1719,18 +1717,8 @@ func runTestCases(t *testing.T, filter func(testCase) bool, machineOpts ...syslo
 	}
 }
 
-func TestMachineParseWithCompliantMsg(t *testing.T) {
-	latin1 := isoLatin1String(t)
-	subject := []byte("<1>1 - - - - - - " + latin1)
-	expected := genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(latin1))
-
-	message, merr := NewMachine(WithCompliantMsg()).Parse(subject)
-	assert.NoError(t, merr)
-	assert.Equal(t, expected, message)
-}
-
 func TestMachineParseWithCompliantMsgWhenMessageStartsWithBOM(t *testing.T) {
-	latin1 := isoLatin1String(t)
+	latin1 := isoLatin1String("chääs")
 	subject := []byte("<1>1 - - - - - - " + BOM + latin1)
 
 	message, merr := NewMachine(WithCompliantMsg()).Parse(subject)
@@ -1742,23 +1730,14 @@ func TestMachineParseWithCompliantMsgWhenMessageStartsWithBOM(t *testing.T) {
 	assert.EqualErrorf(t, perr, fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 23), "message must be valid UTF8 if starting with BOM")
 }
 
-func TestMachineParseWithCompliantMsgWhenMessageContainsBOM(t *testing.T) {
-	latin1 := isoLatin1String(t)
-	msg := "not starting with " + BOM + latin1
-	subject := []byte("<1>1 - - - - - - " + msg)
+func isoLatin1String(s string) string {
+	latin1, err := charmap.ISO8859_1.NewEncoder().String(s)
+	if err != nil {
+		panic(fmt.Errorf("error while encoding string as latin-1: %w", err))
+	}
+	if utf8.ValidString(latin1) {
+		panic(fmt.Errorf("latin-1 string must not be valid utf8: %s", latin1))
+	}
 
-	message, merr := NewMachine(WithCompliantMsg()).Parse(subject)
-	partial, perr := NewMachine(WithBestEffort(), WithCompliantMsg()).Parse(subject)
-
-	assert.Equal(t, message, genMessageWithPartialMessage(1, 1, &msg))
-	assert.Equal(t, partial, genMessageWithPartialMessage(1, 1, &msg))
-	assert.Nil(t, merr)
-	assert.Nil(t, perr)
-}
-
-func isoLatin1String(t *testing.T) string {
-	// iso-latin-1 (ISO8859-1) encoded "chääs"; swiss german for cheese
-	latin1 := "ch\xE4\xE4s"
-	assert.False(t, utf8.ValidString(latin1))
 	return latin1
 }
