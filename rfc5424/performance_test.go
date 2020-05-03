@@ -68,11 +68,15 @@ var benchCases = []benchCase{
 	},
 	{
 		label: "[ok] w/o procid, w/o structured data, with message starting with BOM",
-		input: []byte("<34>1 2003-10-11T22:14:15.003Z mymachine.example.com su - ID47 - \xEF\xBB\xBF'su root' failed for lonvick on /dev/pts/8"),
+		input: []byte("<34>1 2003-10-11T22:14:15.003Z mymachine.example.com su - ID47 - " + BOM + "'su root' failed for lonvick on /dev/pts/8"),
 	},
 	{
 		label: "[ok] minimal with UTF-8 message",
 		input: []byte("<0>1 - - - - - - ⠊⠀⠉⠁⠝⠀⠑⠁⠞⠀⠛⠇⠁⠎⠎⠀⠁⠝⠙⠀⠊⠞⠀⠙⠕⠑⠎⠝⠞⠀⠓⠥⠗⠞⠀⠍⠑"),
+	},
+	{
+		label: "[ok] minimal with UTF-8 message starting with BOM",
+		input: []byte("<0>1 - - - - - - " + BOM + "⠊⠀⠉⠁⠝⠀⠑⠁⠞⠀⠛⠇⠁⠎⠎⠀⠁⠝⠙⠀⠊⠞⠀⠙⠕⠑⠎⠝⠞⠀⠓⠥⠗⠞⠀⠍⠑"),
 	},
 	{
 		label: "[ok] with structured data id, w/o structured data params",
