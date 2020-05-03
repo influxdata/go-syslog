@@ -1733,7 +1733,7 @@ func TestMachineParseWithCompliantMsgWhenMessageStartsWithBOM(t *testing.T) {
 func isoLatin1String(s string) string {
 	latin1, err := charmap.ISO8859_1.NewEncoder().String(s)
 	if err != nil {
-		panic(fmt.Errorf("error while encoding string as latin-1: %w", err))
+		panic(fmt.Errorf("error while encoding string as latin-1: %s", err.Error()))
 	}
 	if utf8.ValidString(latin1) {
 		panic(fmt.Errorf("latin-1 string must not be valid utf8: %s", latin1))
