@@ -107,7 +107,7 @@ escapes = (bs >markslash toescape);
 
 sdpv := (utf8charwodelims* escapes*)+ >mark %set_sdpv;
 
-msg := (bom? utf8octets) >mark %set_msg;
+msg := any* >mark %set_msg;
 
 write data noerror nofinal;
 }%%
