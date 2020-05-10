@@ -168,10 +168,10 @@ docs:
 
 .PHONY: dots
 dots: docs
-	$(MAKE) -s docs/nontransparent.dot docs/rfc5424.dot docs/rfc5424_pri.dot docs/rfc5424_version.dot docs/rfc5424_timestamp.dot docs/rfc5424_hostname.dot docs/rfc5424_appname.dot docs/rfc5424_procid.dot docs/rfc5424_msgid.dot docs/rfc5424_structureddata.dot docs/rfc5424_msg.dot docs/rfc5424_msg_any.dot docs/rfc5424_msg_utf8.dot docs/rfc3164.dot docs/rfc3164_pri.dot docs/rfc3164_timestamp.dot docs/rfc3164_hostname.dot docs/rfc3164_tag.dot docs/rfc3164_content.dot docs/rfc3164_msg.dot
+	$(MAKE) -s docs/nontransparent.dot docs/rfc5424.dot docs/rfc5424_pri.dot docs/rfc5424_version.dot docs/rfc5424_timestamp.dot docs/rfc5424_hostname.dot docs/rfc5424_appname.dot docs/rfc5424_procid.dot docs/rfc5424_msgid.dot docs/rfc5424_structureddata.dot docs/rfc5424_msg.dot docs/rfc5424_msg_any.dot docs/rfc5424_msg_compliant.dot docs/rfc3164.dot docs/rfc3164_pri.dot docs/rfc3164_timestamp.dot docs/rfc3164_hostname.dot docs/rfc3164_tag.dot docs/rfc3164_content.dot docs/rfc3164_msg.dot
 
 .PHONY: imgs
-imgs: dots docs/nontransparent.png docs/rfc5424_pri.png docs/rfc5424_version.png docs/rfc5424_timestamp.png docs/rfc5424_hostname.png docs/rfc5424_appname.png docs/rfc5424_procid.png docs/rfc5424_msgid.png docs/rfc5424_structureddata.png docs/rfc5424_msg.png docs/rfc5424_msg_any.png docs/rfc5424_msg_utf8.png docs/rfc3164_pri.png docs/rfc3164_timestamp.png docs/rfc3164_hostname.png docs/rfc3164_tag.png docs/rfc3164_content.png docs/rfc3164_msg.png
+imgs: dots docs/nontransparent.png docs/rfc5424_pri.png docs/rfc5424_version.png docs/rfc5424_timestamp.png docs/rfc5424_hostname.png docs/rfc5424_appname.png docs/rfc5424_procid.png docs/rfc5424_msgid.png docs/rfc5424_structureddata.png docs/rfc5424_msg.png docs/rfc5424_msg_any.png docs/rfc5424_msg_compliant.png docs/rfc3164_pri.png docs/rfc3164_timestamp.png docs/rfc3164_hostname.png docs/rfc3164_tag.png docs/rfc3164_content.png docs/rfc3164_msg.png
 
 .PHONY: clean
 clean: rfc5424/machine.go rfc5424/builder.go nontransparent/parser.go rfc3164/machine.go
