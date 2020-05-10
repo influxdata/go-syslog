@@ -13,37 +13,37 @@ var ColumnPositionTemplate = " [col %d]"
 
 const (
 	// ErrPrival represents an error in the priority value (PRIVAL) inside the PRI part of the RFC5424 syslog message.
-	ErrPrival         = "expecting a priority value in the range 1-191 or equal to 0"
+	ErrPrival          = "expecting a priority value in the range 1-191 or equal to 0"
 	// ErrPri represents an error in the PRI part of the RFC5424 syslog message.
-	ErrPri            = "expecting a priority value within angle brackets"
+	ErrPri             = "expecting a priority value within angle brackets"
 	// ErrVersion represents an error in the VERSION part of the RFC5424 syslog message.
-	ErrVersion        = "expecting a version value in the range 1-999"
+	ErrVersion         = "expecting a version value in the range 1-999"
 	// ErrTimestamp represents an error in the TIMESTAMP part of the RFC5424 syslog message.
-	ErrTimestamp      = "expecting a RFC3339MICRO timestamp or a nil value"
+	ErrTimestamp       = "expecting a RFC3339MICRO timestamp or a nil value"
 	// ErrHostname represents an error in the HOSTNAME part of the RFC5424 syslog message.
-	ErrHostname       = "expecting an hostname (from 1 to max 255 US-ASCII characters) or a nil value"
+	ErrHostname        = "expecting an hostname (from 1 to max 255 US-ASCII characters) or a nil value"
 	// ErrAppname represents an error in the APP-NAME part of the RFC5424 syslog message.
-	ErrAppname        = "expecting an app-name (from 1 to max 48 US-ASCII characters) or a nil value"
+	ErrAppname         = "expecting an app-name (from 1 to max 48 US-ASCII characters) or a nil value"
 	// ErrProcID represents an error in the PROCID part of the RFC5424 syslog message.
-	ErrProcID         = "expecting a procid (from 1 to max 128 US-ASCII characters) or a nil value"
+	ErrProcID          = "expecting a procid (from 1 to max 128 US-ASCII characters) or a nil value"
 	// ErrMsgID represents an error in the MSGID part of the RFC5424 syslog message.
-	ErrMsgID          = "expecting a msgid (from 1 to max 32 US-ASCII characters) or a nil value"
+	ErrMsgID           = "expecting a msgid (from 1 to max 32 US-ASCII characters) or a nil value"
 	// ErrStructuredData represents an error in the STRUCTURED DATA part of the RFC5424 syslog message.
-	ErrStructuredData = "expecting a structured data section containing one or more elements (`[id( key=\"value\")*]+`) or a nil value"
+	ErrStructuredData  = "expecting a structured data section containing one or more elements (`[id( key=\"value\")*]+`) or a nil value"
 	// ErrSdID represents an error regarding the ID of a STRUCTURED DATA element of the RFC5424 syslog message.
-	ErrSdID           = "expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"`"
+	ErrSdID            = "expecting a structured data element id (from 1 to max 32 US-ASCII characters; except `=`, ` `, `]`, and `\"`"
 	// ErrSdIDDuplicated represents an error occurring when two STRUCTURED DATA elementes have the same ID in a RFC5424 syslog message.
-	ErrSdIDDuplicated = "duplicate structured data element id"
+	ErrSdIDDuplicated  = "duplicate structured data element id"
 	// ErrSdParam represents an error regarding a STRUCTURED DATA PARAM of the RFC5424 syslog message.
-	ErrSdParam        = "expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters; key cannot contain `=`, ` `, `]`, and `\"`, while value cannot contain `]`, backslash, and `\"` unless escaped)"
+	ErrSdParam         = "expecting a structured data parameter (`key=\"value\"`, both part from 1 to max 32 US-ASCII characters; key cannot contain `=`, ` `, `]`, and `\"`, while value cannot contain `]`, backslash, and `\"` unless escaped)"
 	// ErrMsg represents an error in the MESSAGE part of the RFC5424 syslog message.
-	ErrMsg            = "expecting a free-form optional message in UTF-8 (starting with or without BOM)"
+	ErrMsg             = "expecting a free-form optional message in UTF-8 (starting with or without BOM)"
 	// ErrMsgNotCompliant represents an error in the MESSAGE part of the RFC5424 syslog message if WithCompliatMsg option is on.
-	ErrMsgNotCompliant     = ErrMsg + " or a free-form optional message in any encoding (starting without BOM)"
+	ErrMsgNotCompliant = ErrMsg + " or a free-form optional message in any encoding (starting without BOM)"
 	// ErrEscape represents the error for a RFC5424 syslog message occurring when a STRUCTURED DATA PARAM value contains '"', '\', or ']' not escaped.
-	ErrEscape         = "expecting chars `]`, `\"`, and `\\` to be escaped within param value"
+	ErrEscape          = "expecting chars `]`, `\"`, and `\\` to be escaped within param value"
 	// ErrParse represents a general parsing error for a RFC5424 syslog message.
-	ErrParse          = "parsing error"
+	ErrParse           = "parsing error"
 )
 
 // RFC3339MICRO represents the timestamp format that RFC5424 mandates.
