@@ -9380,7 +9380,7 @@ func (sm *SyslogMessage) String() (string, error) {
 	if sm.StructuredData != nil {
 		// Sort element identifiers
 		identifiers := make([]string, 0)
-		for k, _ := range *sm.StructuredData {
+		for k := range *sm.StructuredData {
 			identifiers = append(identifiers, k)
 		}
 		sort.Strings(identifiers)
@@ -9392,7 +9392,7 @@ func (sm *SyslogMessage) String() (string, error) {
 			// Sort parameter names
 			params := (*sm.StructuredData)[id]
 			names := make([]string, 0)
-			for n, _ := range params {
+			for n := range params {
 				names = append(names, n)
 			}
 			sort.Strings(names)
