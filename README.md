@@ -1,8 +1,8 @@
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](LICENSE)
 
-**A parser for syslog messages and transports**.
+**A parser for Syslog messages and transports**.
 
-> [Blazing fast](#Performances) syslog parsers
+> [Blazing fast](#Performances) Syslog parsers
 
 To wrap up, this package provides:
 
@@ -11,7 +11,7 @@ To wrap up, this package provides:
 - a parser which works on streams for syslog with [octet counting](https://tools.ietf.org/html/rfc5425#section-4.3) framing technique, see [octetcounting](/cotentcounting)
 - a parser which works on streams for syslog with [non-transparent](https://tools.ietf.org/html/rfc6587#section-3.4.2) framing technique, see [nontransparent](/nontransparent)
 
-This library provides the pieces to parse syslog messages transported following various RFCs.
+This library provides the pieces to parse Syslog messages transported following various RFCs.
 
 For example:
 
@@ -67,7 +67,7 @@ This results in `m` being equal to:
 // })
 ```
 
-And `e` being equal to `nil`, since the `i` byte slice contains a perfectly valid RFC5424 message.
+And `e` being equal to `nil` since the `i` byte slice contains a perfectly valid RFC5424 message.
 
 ### Best effort mode
 
@@ -167,9 +167,9 @@ This library provide stream parsers for both.
 
 ### Octet counting
 
-In short, [RFC5425](https://tools.ietf.org/html/rfc5425#section-4.3) and [RFC6587](https://tools.ietf.org/html/rfc6587), aside from the protocol considerations, describe a **transparent framing** technique for syslog messages that uses the **octect counting** technique - ie., the message lenght of the incoming message.
+In short, [RFC5425](https://tools.ietf.org/html/rfc5425#section-4.3) and [RFC6587](https://tools.ietf.org/html/rfc6587), aside from the protocol considerations, describe a **transparent framing** technique for Syslog messages that uses the **octect counting** technique - ie., the message length of the incoming message.
 
-Each syslog message is sent with a prefix representing the number of bytes it is made of.
+Each Syslog message is sent with a prefix representing the number of bytes it is made of.
 
 The [octecounting package](./octetcounting) parses messages stream following such rule.
 
@@ -188,7 +188,7 @@ To quickly understand how to use it please have a look at the [example file](./n
 Things we do not support:
 
 - trailers other than `LF` or `NUL`
-- trailer which length is greater than 1 byte
+- trailers which length is greater than 1 byte
 - trailer change on a frame-by-frame basis
 
 ## Performances
@@ -202,38 +202,39 @@ make bench
 On my machine<sup>[1](#mymachine)</sup> this are the results obtained paring RFC5424 syslog messages with best effort mode on.
 
 ```
-[no]_empty_input__________________________________-4	30000000       253 ns/op     224 B/op       3 allocs/op
-[no]_multiple_syslog_messages_on_multiple_lines___-4	20000000       433 ns/op     304 B/op      12 allocs/op
-[no]_impossible_timestamp_________________________-4	10000000      1080 ns/op     528 B/op      11 allocs/op
-[no]_malformed_structured_data____________________-4	20000000       552 ns/op     400 B/op      12 allocs/op
-[no]_with_duplicated_structured_data_id___________-4	 5000000      1246 ns/op     688 B/op      17 allocs/op
-[ok]_minimal______________________________________-4	30000000       264 ns/op     247 B/op       9 allocs/op
-[ok]_average_message______________________________-4	 5000000      1984 ns/op    1536 B/op      26 allocs/op
-[ok]_complicated_message__________________________-4	 5000000      1644 ns/op    1280 B/op      25 allocs/op
-[ok]_very_long_message____________________________-4	 2000000      3826 ns/op    2464 B/op      28 allocs/op
-[ok]_all_max_length_and_complete__________________-4	 3000000      2792 ns/op    1888 B/op      28 allocs/op
-[ok]_all_max_length_except_structured_data_and_mes-4	 5000000      1830 ns/op     883 B/op      13 allocs/op
-[ok]_minimal_with_message_containing_newline______-4	20000000       294 ns/op     250 B/op      10 allocs/op
-[ok]_w/o_procid,_w/o_structured_data,_with_message-4	10000000       956 ns/op     364 B/op      11 allocs/op
-[ok]_minimal_with_UTF-8_message___________________-4	20000000       586 ns/op     359 B/op      10 allocs/op
-[ok]_with_structured_data_id,_w/o_structured_data_-4	10000000       998 ns/op     592 B/op      14 allocs/op
-[ok]_with_multiple_structured_data________________-4	 5000000      1538 ns/op    1232 B/op      22 allocs/op
-[ok]_with_escaped_backslash_within_structured_data-4	 5000000      1316 ns/op     920 B/op      20 allocs/op
-[ok]_with_UTF-8_structured_data_param_value,_with_-4	 5000000      1580 ns/op    1050 B/op      21 allocs/op
+[no]_empty_input__________________________________  4524100        274 ns/op      272 B/op        4 allocs/op
+[no]_multiple_syslog_messages_on_multiple_lines___  3039513        361 ns/op      288 B/op        8 allocs/op
+[no]_impossible_timestamp_________________________  1244562        951 ns/op      512 B/op       11 allocs/op
+[no]_malformed_structured_data____________________  2389249        512 ns/op      512 B/op        9 allocs/op
+[no]_with_duplicated_structured_data_id___________  1000000       1183 ns/op      712 B/op       17 allocs/op
+[ok]_minimal______________________________________  6876235        178 ns/op      227 B/op        5 allocs/op
+[ok]_average_message______________________________   730473       1653 ns/op     1520 B/op       24 allocs/op
+[ok]_complicated_message__________________________   908776       1344 ns/op     1264 B/op       24 allocs/op
+[ok]_very_long_message____________________________   392737       3114 ns/op     2448 B/op       25 allocs/op
+[ok]_all_max_length_and_complete__________________   510740       2431 ns/op     1872 B/op       28 allocs/op
+[ok]_all_max_length_except_structured_data_and_mes   755124       1593 ns/op      867 B/op       13 allocs/op
+[ok]_minimal_with_message_containing_newline______  6142984        199 ns/op      230 B/op        6 allocs/op
+[ok]_w/o_procid,_w/o_structured_data,_with_message  1670286        732 ns/op      348 B/op       10 allocs/op
+[ok]_minimal_with_UTF-8_message___________________  3013480        407 ns/op      339 B/op        6 allocs/op
+[ok]_minimal_with_UTF-8_message_starting_with_BOM_  2926410        423 ns/op      355 B/op        6 allocs/op
+[ok]_with_structured_data_id,_w/o_structured_data_  1558971        814 ns/op      570 B/op       11 allocs/op
+[ok]_with_multiple_structured_data________________  1000000       1243 ns/op     1205 B/op       16 allocs/op
+[ok]_with_escaped_backslash_within_structured_data  1000000       1025 ns/op      896 B/op       17 allocs/op
+[ok]_with_UTF-8_structured_data_param_value,_with_  1000000       1241 ns/op     1034 B/op       19 allocs/op
 ```
 
 As you can see it takes:
 
 * ~250ns to parse the smallest legal message
 
-* ~2µs to parse an average legal message
+* less than 2µs to parse an average legal message
 
-* ~4µs to parse a very long legal message
+* ~3µs to parse a very long legal message
 
 Other RFC5424 implementations, like this [one](https://github.com/roguelazer/rust-syslog-rfc5424) in Rust, spend 8µs to parse an average legal message.
 
-_TBD: comparation against other golang parsers_.
+_TBD: comparison against other Go parsers_.
 
 ---
 
-* <a name="mymachine">[1]</a>: Intel Core i7-7600U CPU @ 2.80GHz
+* <a name="mymachine">[1]</a>: Intel Core i7-8850H CPU @ 2.60GHz
