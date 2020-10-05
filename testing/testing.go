@@ -57,6 +57,8 @@ var (
 	MaxMsgID = RandomBytes(32)
 	// MaxMessage is a maximum length message that a RFC5424 syslog message can contain when all other fields are at their maximum length.
 	MaxMessage = RandomBytes(7681)
+	// LongerMaxMessage is a maximum length message that a RFC5424 syslog message can contain when all other fields are at their maximum length.
+	LongerMaxMessage = RandomBytes(65018)
 )
 
 // RightPad pads a string with spaces until the given limit, or it cuts the string to the given limit.

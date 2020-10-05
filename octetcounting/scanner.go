@@ -7,9 +7,6 @@ import (
 	"strconv"
 )
 
-// size as per RFC5425#section-4.3.1
-var size = 8192
-
 // eof represents a marker byte for the end of the reader
 var eof = byte(0)
 
@@ -37,9 +34,9 @@ type Scanner struct {
 }
 
 // NewScanner returns a pointer to a new instance of Scanner.
-func NewScanner(r io.Reader) *Scanner {
+func NewScanner(r io.Reader, maxLength int) *Scanner {
 	return &Scanner{
-		r: bufio.NewReaderSize(r, size+5), // "8192 " has length 5
+		r: bufio.NewReaderSize(r, maxLength+20), // max uint64 is 19 characters + a space
 	}
 }
 
