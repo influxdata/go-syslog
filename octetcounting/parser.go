@@ -86,6 +86,13 @@ func (p *parser) run() {
 			break
 		}
 
+		if int(p.s.msglen) > p.maxMessageLength {
+			p.emit(&syslog.Result{
+				Error: fmt.Errorf("message too long to parse. was size %d, max length %d", p.s.msglen, p.maxMessageLength),
+			})
+			break
+		}
+
 		// Next we MUST see a WS
 		if tok = p.scan(); tok.typ != WS {
 			p.emit(&syslog.Result{

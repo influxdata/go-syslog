@@ -565,69 +565,15 @@ func getTestCases() []testCase {
 			},
 		},
 		{
-			descr: "1st ml//maxlen gt 8192", // maxlength greather than the buffer size
-			input: fmt.Sprintf(
-				"8193 <%d>%d %s %s %s %s %s - %s",
-				syslogtesting.MaxPriority,
-				syslogtesting.MaxVersion,
-				syslogtesting.MaxRFC3339MicroTimestamp,
-				string(syslogtesting.MaxHostname),
-				string(syslogtesting.MaxAppname),
-				string(syslogtesting.MaxProcID),
-				string(syslogtesting.MaxMsgID),
-				string(syslogtesting.MaxMessage),
-			),
-			// results w/o best effort
+			descr: "MSGLEN gt max message length",
+			input: "16 <1>1 - - - - - -",
 			results: []syslog.Result{
-				{
-					Error: fmt.Errorf(
-						"found %s after \"%s\", expecting a %s containing %d octets",
-						EOF,
-						fmt.Sprintf(
-							"<%d>%d %s %s %s %s %s - %s", syslogtesting.MaxPriority,
-							syslogtesting.MaxVersion,
-							syslogtesting.MaxRFC3339MicroTimestamp,
-							string(syslogtesting.MaxHostname),
-							string(syslogtesting.MaxAppname),
-							string(syslogtesting.MaxProcID),
-							string(syslogtesting.MaxMsgID),
-							string(syslogtesting.MaxMessage),
-						),
-						SYSLOGMSG,
-						8193,
-					),
-				},
+				{Error: fmt.Errorf("message too long to parse. was size %d, max length %d", 16, 10)},
 			},
-			// results with best effort
 			bestEffortResults: []syslog.Result{
-				{
-					Message: (&rfc5424.SyslogMessage{}).
-						SetPriority(syslogtesting.MaxPriority).
-						SetVersion(syslogtesting.MaxVersion).
-						SetTimestamp(syslogtesting.MaxRFC3339MicroTimestamp).
-						SetHostname(string(syslogtesting.MaxHostname)).
-						SetAppname(string(syslogtesting.MaxAppname)).
-						SetProcID(string(syslogtesting.MaxProcID)).
-						SetMsgID(string(syslogtesting.MaxMsgID)).
-						SetMessage(string(syslogtesting.MaxMessage)),
-					Error: fmt.Errorf(
-						"found %s after \"%s\", expecting a %s containing %d octets",
-						EOF,
-						fmt.Sprintf(
-							"<%d>%d %s %s %s %s %s - %s", syslogtesting.MaxPriority,
-							syslogtesting.MaxVersion,
-							syslogtesting.MaxRFC3339MicroTimestamp,
-							string(syslogtesting.MaxHostname),
-							string(syslogtesting.MaxAppname),
-							string(syslogtesting.MaxProcID),
-							string(syslogtesting.MaxMsgID),
-							string(syslogtesting.MaxMessage),
-						),
-						SYSLOGMSG,
-						8193,
-					),
-				},
+				{Error: fmt.Errorf("message too long to parse. was size %d, max length %d", 16, 10)},
 			},
+			maxMessageLength: 10,
 		},
 		{
 			descr: "1st uf/2nd ok//incomplete SYSLOGMSG/notdetectable",
