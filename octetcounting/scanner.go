@@ -113,9 +113,6 @@ func (s *Scanner) scanMsgLen() Token {
 	msglen := buf.String()
 	s.msglen, _ = strconv.ParseUint(msglen, 10, 64)
 
-	// (todo) > return ILLEGAL if s.msglen > size (8192)
-	// (todo) > only when NOT in besteffort mode or always?
-
 	return Token{
 		typ: MSGLEN,
 		lit: buf.Bytes(),
