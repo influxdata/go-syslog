@@ -4,6 +4,8 @@
 
 > [Blazing fast](#Performances) Syslog parsers
 
+_By [@leodido](https://github.com/leodido)_.
+
 To wrap up, this package provides:
 
 - a [RFC5424-compliant parser and builder](/rfc5424)
