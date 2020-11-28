@@ -201,7 +201,7 @@ To run the benchmark execute the following command.
 make bench
 ```
 
-On my machine<sup>[1](#mymachine)</sup> this are the results obtained paring RFC5424 syslog messages with best effort mode on.
+On my machine<sup>[1](#mymachine)</sup> these are the results obtained paring RFC5424 syslog messages with best effort mode on.
 
 ```
 [no]_empty_input__________________________________  4524100        274 ns/op      272 B/op        4 allocs/op
