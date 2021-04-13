@@ -17,6 +17,10 @@ func Example() {
 	p := NewParser()
 	m, _ := p.Parse(i)
 	output(m)
+	msg := m.(*SyslogMessage)
+	fmt.Println(*msg.Message)
+	fmt.Println(*msg.Hostname)
+	output(*msg.StructuredData)
 	// Output:
 	// (*rfc5424.SyslogMessage)({
 	//  Base: (syslog.Base) {
@@ -37,6 +41,13 @@ func Example() {
 	//   }
 	//  })
 	// })
+	// An application event log entry...
+	// mymach.it
+	// (map[string]map[string]string) (len=1) {
+	//  (string) (len=8) "ex@32473": (map[string]string) (len=1) {
+	//   (string) (len=3) "iut": (string) (len=1) "3"
+	//  }
+	// }
 }
 
 func Example_besteffort() {
