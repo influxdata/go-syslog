@@ -164,7 +164,7 @@ func TestParse(t *testing.T) {
 		var inputWithLF = tc.input
 		if tc.substitute {
 			lf, _ := LF.Value()
-			inputWithLF = fmt.Sprintf(tc.input, string(lf))
+			inputWithLF = fmt.Sprintf(tc.input, string(rune(lf)))
 		}
 		t.Run(fmt.Sprintf("strict/LF/%s", tc.descr), func(t *testing.T) {
 			t.Parallel()
@@ -193,7 +193,7 @@ func TestParse(t *testing.T) {
 		inputWithNUL := tc.input
 		if tc.substitute {
 			nul, _ := NUL.Value()
-			inputWithNUL = fmt.Sprintf(tc.input, string(nul))
+			inputWithNUL = fmt.Sprintf(tc.input, string(rune(nul)))
 		}
 		t.Run(fmt.Sprintf("strict/NL/%s", tc.descr), func(t *testing.T) {
 			t.Parallel()
