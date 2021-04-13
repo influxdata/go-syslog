@@ -46,7 +46,7 @@ func Example_currentyear() {
 	//   Facility: (*uint8)(1),
 	//   Severity: (*uint8)(5),
 	//   Priority: (*uint8)(13),
-	//   Timestamp: (*time.Time)(2020-12-02 16:31:03 +0000 UTC),
+	//   Timestamp: (*time.Time)(2021-12-02 16:31:03 +0000 UTC),
 	//   Hostname: (*string)((len=4) "host"),
 	//   Appname: (*string)((len=3) "app"),
 	//   ProcID: (*string)(<nil>),
