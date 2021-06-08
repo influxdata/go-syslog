@@ -184,3 +184,45 @@ func Example_stamp_also_when_rfc3339() {
 	//  }
 	// })
 }
+
+func Example_custom_stamp1() {
+	i := []byte(`<134>Jul 16 2020 02:15:13 an 200050021 id=OS time="2020-7-16 02:15:13"`)
+	p := NewParser()
+	m, _ := p.Parse(i)
+	output(m)
+	// Output:
+	// (*rfc3164.SyslogMessage)({
+	//  Base: (syslog.Base) {
+	//   Facility: (*uint8)(16),
+	//   Severity: (*uint8)(6),
+	//   Priority: (*uint8)(134),
+	//   Timestamp: (*time.Time)(2020-07-16 02:15:13 +0000 UTC),
+	//   Hostname: (*string)((len=2) "an"),
+	//   Appname: (*string)(<nil>),
+	//   ProcID: (*string)(<nil>),
+	//   MsgID: (*string)(<nil>),
+	//   Message: (*string)((len=43) "200050021 id=OS time=\"2020-7-16 02:15:13\"")
+	//  }
+	// })
+}
+
+func Example_custom_stamp2() {
+	i := []byte(`<134>2020 Jul 16 02:15:13 an 200050021 id=OS time="2020-7-16 02:15:13"`)
+	p := NewParser()
+	m, _ := p.Parse(i)
+	output(m)
+	// Output:
+	// (*rfc3164.SyslogMessage)({
+	//  Base: (syslog.Base) {
+	//   Facility: (*uint8)(16),
+	//   Severity: (*uint8)(6),
+	//   Priority: (*uint8)(134),
+	//   Timestamp: (*time.Time)(2020-07-16 02:15:13 +0000 UTC),
+	//   Hostname: (*string)((len=2) "an"),
+	//   Appname: (*string)(<nil>),
+	//   ProcID: (*string)(<nil>),
+	//   MsgID: (*string)(<nil>),
+	//   Message: (*string)((len=43) "200050021 id=OS time=\"2020-7-16 02:15:13\"")
+	//  }
+	// })
+}
