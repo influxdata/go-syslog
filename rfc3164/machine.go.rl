@@ -148,9 +148,9 @@ tag = (print -- [ :\[]){1,32} >mark %set_tag @err(err_tag);
 visible = print | 0x80..0xFF;
 
 # The first not alphanumeric character starts the content (usually containing a PID) part of the message part
-contentval = !alnum @err(err_contentstart) >mark print* %set_content @err(err_content);
+contentval = (print -- [ \[\]])* >mark %set_content @err(err_content);
 
-content = '[' contentval ']'; # todo(leodido) > support ':' and ' ' too. Also they have to match?
+content = '[' contentval ']' @err(err_contentstart); # todo(leodido) > support ':' and ' ' too. Also they have to match?
 
 mex = visible+ >mark %set_message;
 

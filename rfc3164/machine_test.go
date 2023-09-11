@@ -145,6 +145,22 @@ var testCases = []testCase{
 			},
 		},
 	},
+	{
+		input: []byte(`<0>Sep 17 04:05:37 host.domain.tld monit[2340:0]: subsvc[12345]: Message with [square brackets]`),
+		valid: true,
+		value: &SyslogMessage{
+			Base: syslog.Base{
+				Priority:  syslogtesting.Uint8Address(0),
+				Facility:  syslogtesting.Uint8Address(0),
+				Severity:  syslogtesting.Uint8Address(0),
+				Timestamp: syslogtesting.TimeParse(time.Stamp, "Sep 17 04:05:37"),
+				Hostname:  syslogtesting.StringAddress("host.domain.tld"),
+				Appname:   syslogtesting.StringAddress("monit"),
+				ProcID:    syslogtesting.StringAddress("2340:0"),
+				Message:   syslogtesting.StringAddress(`subsvc[12345]: Message with [square brackets]`),
+			},
+		},
+	},
 	// todo > other test cases pleaaaase
 }
 
