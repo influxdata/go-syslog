@@ -112,6 +112,8 @@ msg := any* >mark %set_msg;
 write data noerror nofinal;
 }%%
 
+const emptyString string = ""
+
 type entrypoint int
 
 const (
@@ -151,10 +153,12 @@ func (e entrypoint) translate() int {
     }
 }
 
-var currentid string
-var currentparamname string
-
 func (sm *SyslogMessage) set(from entrypoint, value string) *SyslogMessage {
+	return sm.setWithOptions(from, value, emptyString, emptyString)
+}
+
+// currentid and currentparamname are optional
+func (sm *SyslogMessage) setWithOptions(from entrypoint, value string, currentid string, currentparamname string) *SyslogMessage {
     data := []byte(value)
     p := 0
     pb := 0
@@ -233,12 +237,10 @@ func (sm *SyslogMessage) SetParameter(id string, name string, value string) Buil
     if sm.StructuredData != nil {
         elements := *sm.StructuredData
         if _, ok := elements[id]; ok {
-            currentid = id
-            sm.set(sdpn, name)
+            sm.setWithOptions(sdpn, name, id, emptyString)
             // We can assign parameter value iff the given parameter key exists
             if _, ok := elements[id][name]; ok {
-                currentparamname = name
-                sm.set(sdpv, value)
+                sm.setWithOptions(sdpv, value, id, name)
             }
         }
     }
