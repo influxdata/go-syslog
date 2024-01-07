@@ -6,6 +6,14 @@ import (
 	syslog "github.com/influxdata/go-syslog/v3"
 )
 
+// WithNoPri sets the skip PRI flag to allow messages without PRI header.
+func WithAllowSkipPri() syslog.MachineOption {
+	return func(m syslog.Machine) syslog.Machine {
+		m.(*machine).WithAllowSkipPri()
+		return m
+	}
+}
+
 // WithBestEffort enables the best effort mode.
 func WithBestEffort() syslog.MachineOption {
 	return func(m syslog.Machine) syslog.Machine {
