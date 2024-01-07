@@ -166,9 +166,14 @@ action err_prival {
 }
 
 action err_pri {
-	m.err = fmt.Errorf(ErrPri + ColumnPositionTemplate, m.p)
-	fhold;
-	fgoto fail;
+	if(!m.allowSkipPri) {
+		m.err = fmt.Errorf(ErrPri + ColumnPositionTemplate, m.p)
+		fhold;
+		fgoto fail;
+	} else {
+		fhold;
+		fgoto STATE_NO_PRI;
+	}	
 }
 
 action err_version {
@@ -277,7 +282,6 @@ procid = procidrange >mark %set_procid $err(err_procid);
 
 msgid = msgidrange >mark %set_msgid $err(err_msgid);
 
-header = (pri version sp timestamp sp hostname sp appname sp procid sp msgid) <>err(err_parse);
 
 # \", \], \\
 escapes = (bs >add_slash toescape) $err(err_escape);
@@ -309,7 +313,15 @@ msg = any? @select_msg_mode;
 
 fail := (any - [\n\r])* @err{ fgoto main; };
 
-main := header sp structureddata (sp msg)? $err(err_parse);
+headerwithnopri = ((version sp timestamp sp hostname sp appname sp procid sp msgid) <>err(err_parse)) sp structureddata (sp msg)? $err(err_parse);
+
+header = pri headerwithnopri;
+
+myfsm := (
+	STATE_NO_PRI: headerwithnopri             
+);
+
+main := header;
 
 }%%
 
@@ -327,6 +339,7 @@ type machine struct {
 	backslashat  []int
 	bestEffort 	 bool
 	compliantMsg bool
+	allowSkipPri bool
 }
 
 // NewMachine creates a new FSM able to parse RFC5424 syslog messages.
@@ -344,6 +357,11 @@ func NewMachine(options ...syslog.MachineOption) syslog.Machine {
 	%% variable data m.data;
 
 	return m
+}
+
+// WithNoPri sets the skip PRI flag to allow messages without PRI header.
+func (m *machine) WithAllowSkipPri() {
+	m.allowSkipPri = true
 }
 
 // WithBestEffort enables best effort mode.

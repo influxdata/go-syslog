@@ -15,17 +15,19 @@ import (
 const BOM = "\xEF\xBB\xBF"
 
 type testCase struct {
-	input        []byte
-	valid        bool
-	value        syslog.Message
-	errorString  string
-	partialValue syslog.Message
+	input         []byte
+	valid         bool
+	shouldSkipPri bool
+	value         syslog.Message
+	errorString   string
+	partialValue  syslog.Message
 }
 
 var testCases = []testCase{
 	// Invalid, empty input
 	{
 		[]byte(""),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrPri+ColumnPositionTemplate, 0),
@@ -36,6 +38,7 @@ var testCases = []testCase{
 		[]byte(`<1>1 - - - - - -
 		<2>1 - - - - - -`),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrParse+ColumnPositionTemplate, 16),
 		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
@@ -44,12 +47,14 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - \nhostname - - - -"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrHostname+ColumnPositionTemplate, 7),
 		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 - host\x0Aname - - - -"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrHostname+ColumnPositionTemplate, 11),
@@ -58,12 +63,14 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - \nan - - -"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrAppname+ColumnPositionTemplate, 9),
 		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 - - a\x0An - - -"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrAppname+ColumnPositionTemplate, 10),
@@ -72,12 +79,14 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - \npid - -"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrProcID+ColumnPositionTemplate, 11),
 		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 - - - p\x0Aid - -"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrProcID+ColumnPositionTemplate, 12),
@@ -86,12 +95,14 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - \nmid -"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrMsgID+ColumnPositionTemplate, 13),
 		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 - - - - m\x0Aid -"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrMsgID+ColumnPositionTemplate, 14),
@@ -101,6 +112,7 @@ var testCases = []testCase{
 	{
 		[]byte("(190>122 2018-11-22"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrPri+ColumnPositionTemplate, 0),
 		nil,
@@ -108,6 +120,7 @@ var testCases = []testCase{
 	// Malformed pri outputs wrong error
 	{
 		[]byte("<87]123 -"),
+		false,
 		false,
 		nil,
 		// (note) > machine can only understand that the ] char is not in the reachable states (just as any number would be in this situation), so it gives the error about the priority val submachine, not about the pri submachine (ie., <prival>)
@@ -118,6 +131,7 @@ var testCases = []testCase{
 	{
 		[]byte("122 - - - - - -"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrPri+ColumnPositionTemplate, 0),
 		nil,
@@ -125,6 +139,7 @@ var testCases = []testCase{
 	// Invalid, missing prival
 	{
 		[]byte("<>122 2018-11-22"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrPrival+ColumnPositionTemplate, 1),
@@ -134,6 +149,7 @@ var testCases = []testCase{
 	{
 		[]byte("<19000021>122 2018-11-22"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrPrival+ColumnPositionTemplate, 4),
 		nil, // no valid partial message since was not able to reach and extract version (which is mandatory for a valid message)
@@ -141,6 +157,7 @@ var testCases = []testCase{
 	// Invalid, prival too high
 	{
 		[]byte("<192>122 2018-11-22"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrPrival+ColumnPositionTemplate, 3),
@@ -150,6 +167,7 @@ var testCases = []testCase{
 	{
 		[]byte("<002>122 2018-11-22"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrPrival+ColumnPositionTemplate, 2),
 		nil,
@@ -157,6 +175,7 @@ var testCases = []testCase{
 	// Invalid, non numeric prival
 	{
 		[]byte("<aaa>122 2018-11-22"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrPrival+ColumnPositionTemplate, 1),
@@ -166,6 +185,7 @@ var testCases = []testCase{
 	{
 		[]byte("<100> 2018-11-22"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrVersion+ColumnPositionTemplate, 5),
 		nil,
@@ -173,6 +193,7 @@ var testCases = []testCase{
 	// Invalid, 0 version
 	{
 		[]byte("<103>0 2018-11-22"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrVersion+ColumnPositionTemplate, 5),
@@ -182,6 +203,7 @@ var testCases = []testCase{
 	{
 		[]byte("<101>1000 2018-11-22"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrVersion+ColumnPositionTemplate, 8),
 		(&SyslogMessage{}).SetVersion(100).SetPriority(101),
@@ -190,6 +212,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>2 "),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 5),
 		(&SyslogMessage{}).SetVersion(2).SetPriority(1),
@@ -197,6 +220,7 @@ var testCases = []testCase{
 	// Invalid, truncated after version
 	{
 		[]byte("<1>1"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrParse+ColumnPositionTemplate, 4),
@@ -214,6 +238,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>3a"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrParse+ColumnPositionTemplate, 4),
 		(&SyslogMessage{}).SetVersion(3).SetPriority(1),
@@ -221,12 +246,14 @@ var testCases = []testCase{
 	{
 		[]byte("<1>4a "),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrParse+ColumnPositionTemplate, 4),
 		(&SyslogMessage{}).SetVersion(4).SetPriority(1),
 	},
 	{
 		[]byte("<102>abc 2018-11-22"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrVersion+ColumnPositionTemplate, 5),
@@ -236,6 +263,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>5 A"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 5),
 		(&SyslogMessage{}).SetVersion(5).SetPriority(1),
@@ -244,12 +272,14 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>1 2006-01-02t15:04:05Z - - - - -`),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 16),
 		(&SyslogMessage{}).SetVersion(1).SetPriority(29),
 	},
 	{
 		[]byte(`<29>2 2006-01-02T15:04:05z - - - - -`),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 25),
@@ -259,12 +289,14 @@ var testCases = []testCase{
 	{
 		[]byte("<101>123 2"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 10),
 		(&SyslogMessage{}).SetVersion(123).SetPriority(101),
 	},
 	{
 		[]byte("<101>124 20"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 11),
@@ -273,12 +305,14 @@ var testCases = []testCase{
 	{
 		[]byte("<101>125 201"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 12),
 		(&SyslogMessage{}).SetVersion(125).SetPriority(101),
 	},
 	{
 		[]byte("<101>125 2013"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 13),
@@ -287,6 +321,7 @@ var testCases = []testCase{
 	{
 		[]byte("<101>126 2013-"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 14),
 		(&SyslogMessage{}).SetVersion(126).SetPriority(101),
@@ -294,12 +329,14 @@ var testCases = []testCase{
 	{
 		[]byte("<101>122 201-11-22"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 12),
 		(&SyslogMessage{}).SetVersion(122).SetPriority(101),
 	},
 	{
 		[]byte("<101>189 0-11-22"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 10),
@@ -309,6 +346,7 @@ var testCases = []testCase{
 	{
 		[]byte("<101>121 2018-112-22"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 16),
 		(&SyslogMessage{}).SetVersion(121).SetPriority(101),
@@ -316,6 +354,7 @@ var testCases = []testCase{
 	// Invalid, wrong day
 	{
 		[]byte("<101>123 2018-02-32"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 18),
@@ -325,6 +364,7 @@ var testCases = []testCase{
 	{
 		[]byte("<101>124 2018-02-01:25:15Z"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 19),
 		(&SyslogMessage{}).SetVersion(124).SetPriority(101),
@@ -332,6 +372,7 @@ var testCases = []testCase{
 	// Invalid, wrong minutes
 	{
 		[]byte("<101>125 2003-09-29T22:99:16Z"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 23),
@@ -341,6 +382,7 @@ var testCases = []testCase{
 	{
 		[]byte("<101>126 2003-09-29T22:09:99Z"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 26),
 		(&SyslogMessage{}).SetVersion(126).SetPriority(101),
@@ -349,6 +391,7 @@ var testCases = []testCase{
 	{
 		[]byte("<101>127 2003-09-29T22:09:01.000000000009Z"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 35),
 		(&SyslogMessage{}).SetVersion(127).SetPriority(101),
@@ -356,12 +399,14 @@ var testCases = []testCase{
 	{
 		[]byte("<101>128 2003-09-29T22:09:01.Z"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 29),
 		(&SyslogMessage{}).SetVersion(128).SetPriority(101),
 	},
 	{
 		[]byte("<101>28 2003-09-29T22:09:01."),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 28),
@@ -371,12 +416,14 @@ var testCases = []testCase{
 	{
 		[]byte("<101>129 2003-09-29T22:09:01A"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 28),
 		(&SyslogMessage{}).SetVersion(129).SetPriority(101),
 	},
 	{
 		[]byte("<101>130 2003-08-24T05:14:15.000003-24:00"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 37),
@@ -385,6 +432,7 @@ var testCases = []testCase{
 	{
 		[]byte("<101>131 2003-08-24T05:14:15.000003-60:00"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 36),
 		(&SyslogMessage{}).SetVersion(131).SetPriority(101),
@@ -392,12 +440,14 @@ var testCases = []testCase{
 	{
 		[]byte("<101>132 2003-08-24T05:14:15.000003-07:61"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrTimestamp+ColumnPositionTemplate, 39),
 		(&SyslogMessage{}).SetVersion(132).SetPriority(101),
 	},
 	{
 		[]byte(`<29>1 2006-01-02T15:04:05Z+07:00 - - - - -`),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrParse+ColumnPositionTemplate, 26), // after the Z (valid and complete timestamp) it searches for a whitespace
@@ -407,6 +457,7 @@ var testCases = []testCase{
 	{
 		[]byte("<101>11 2003-09-31T22:14:15.003Z"),
 		false,
+		false,
 		nil,
 		"parsing time \"2003-09-31T22:14:15.003Z\": day out of range [col 32]",
 		(&SyslogMessage{}).SetVersion(11).SetPriority(101),
@@ -414,12 +465,14 @@ var testCases = []testCase{
 	{
 		[]byte("<101>12 2003-09-31T22:14:16Z"),
 		false,
+		false,
 		nil,
 		"parsing time \"2003-09-31T22:14:16Z\": day out of range [col 28]",
 		(&SyslogMessage{}).SetVersion(12).SetPriority(101),
 	},
 	{
 		[]byte("<101>12 2018-02-29T22:14:16+01:00"),
+		false,
 		false,
 		nil,
 		"parsing time \"2018-02-29T22:14:16+01:00\": day out of range [col 33]",
@@ -429,12 +482,14 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcX - - - -"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrHostname+ColumnPositionTemplate, 262),
 		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 2003-09-29T22:14:16Z abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcX - - - -"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrHostname+ColumnPositionTemplate, 281),
@@ -444,12 +499,14 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefX - - -"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrAppname+ColumnPositionTemplate, 57),
 		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 2003-09-29T22:14:16Z - abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefX - - -"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrAppname+ColumnPositionTemplate, 76),
@@ -458,12 +515,14 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - host abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefX - - -"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrAppname+ColumnPositionTemplate, 60),
 		(&SyslogMessage{}).SetVersion(1).SetHostname("host").SetPriority(1),
 	},
 	{
 		[]byte("<1>1 2004-09-29T22:14:16Z host abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefX - - -"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrAppname+ColumnPositionTemplate, 79),
@@ -473,6 +532,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabX - -"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrProcID+ColumnPositionTemplate, 139),
 		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
@@ -480,6 +540,7 @@ var testCases = []testCase{
 	// Invalid, msgid too long
 	{
 		[]byte("<1>1 - - - - abcdefghilmnopqrstuvzabcdefghilmX -"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrMsgID+ColumnPositionTemplate, 45),
@@ -489,12 +550,14 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 -   - - - -"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrHostname+ColumnPositionTemplate, 7),
 		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 - -   - - -"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrAppname+ColumnPositionTemplate, 9),
@@ -503,12 +566,14 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - -   - -"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrProcID+ColumnPositionTemplate, 11),
 		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
 	},
 	{
 		[]byte("<1>1 - - - -   -"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrMsgID+ColumnPositionTemplate, 13),
@@ -518,6 +583,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - X"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrStructuredData+ColumnPositionTemplate, 15),
 		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
@@ -525,6 +591,7 @@ var testCases = []testCase{
 	// Invalid, with empty structured data
 	{
 		[]byte("<1>1 - - - - - []"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrSdID+ColumnPositionTemplate, 16),
@@ -534,6 +601,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - [ ]"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrSdID+ColumnPositionTemplate, 16),
 		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
@@ -541,6 +609,7 @@ var testCases = []testCase{
 	// Invalid, with structured data id containing =
 	{
 		[]byte("<1>1 - - - - - [=]"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrSdID+ColumnPositionTemplate, 16),
@@ -550,6 +619,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - []]"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrSdID+ColumnPositionTemplate, 16),
 		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
@@ -557,6 +627,7 @@ var testCases = []testCase{
 	// Invalid, with structured data id containing "
 	{
 		[]byte(`<6>1 - - - - - ["]`),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrSdID+ColumnPositionTemplate, 16),
@@ -566,6 +637,7 @@ var testCases = []testCase{
 	{
 		[]byte(`<1>1 - - - - - [abcdefghilmnopqrstuvzabcdefghilmX]`),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrSdID+ColumnPositionTemplate, 48),
 		(&SyslogMessage{}).SetVersion(1).SetPriority(1),
@@ -573,6 +645,7 @@ var testCases = []testCase{
 	// Invalid, too long structured data param key
 	{
 		[]byte(`<1>1 - - - - - [id abcdefghilmnopqrstuvzabcdefghilmX="val"]`),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrSdParam+ColumnPositionTemplate, 51),
@@ -582,6 +655,7 @@ var testCases = []testCase{
 	{
 		[]byte("<10>1 - - - - - -"),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetPriority(10),
 		"",
 		nil,
@@ -589,6 +663,7 @@ var testCases = []testCase{
 	{
 		[]byte("<0>1 - - - - - -"),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetPriority(0),
 		"",
 		nil,
@@ -597,6 +672,7 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>1 2016-02-21T04:32:57+00:00 web1 someservice - - [origin x-service="someservice"][meta sequenceId="14125553"] 127.0.0.1 - - 1456029177 "GET /v1/ok HTTP/1.1" 200 145 "-" "hacheck 0.9.0" 24306 127.0.0.1:40124 575`),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(1).
 			SetHostname("web1").
@@ -613,6 +689,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>100 - host-name - - - -"),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(100).SetHostname("host-name").SetPriority(1),
 		"",
 		nil,
@@ -620,6 +697,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>101 - host-name app-name - - -"),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(101).SetHostname("host-name").SetAppname("app-name").SetPriority(1),
 		"",
 		nil,
@@ -627,6 +705,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>102 - host-name app-name proc-id - -"),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(102).
 			SetHostname("host-name").
@@ -639,6 +718,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>103 - host-name app-name proc-id msg-id -"),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(103).
 			SetHostname("host-name").
@@ -653,6 +733,7 @@ var testCases = []testCase{
 	{
 		[]byte("<191>999 2018-12-31T23:59:59.999999-23:59 abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabc abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdef abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzab abcdefghilmnopqrstuvzabcdefghilm -"),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(999).
 			SetHostname("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabc").
@@ -668,6 +749,7 @@ var testCases = []testCase{
 	{
 		[]byte(`<191>999 2018-12-31T23:59:59.999999-23:59 abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabc abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdef abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzab abcdefghilmnopqrstuvzabcdefghilm [an@id key1="val1" key2="val2"][another@id key1="val1"] Some message "GET"`),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(999).
 			SetHostname("abcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabcdefghilmnopqrstuvzabc").
@@ -687,6 +769,7 @@ var testCases = []testCase{
 	{
 		[]byte("<34>1 2003-10-11T22:14:15.003Z mymachine.example.com su - ID47 - BOM'su root' failed for lonvick on /dev/pts/8"),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(1).
 			SetHostname("mymachine.example.com").
@@ -702,6 +785,7 @@ var testCases = []testCase{
 	{
 		[]byte("<187>222 - mymachine.example.com su - ID47 - 'su root' failed for lonvick on /dev/pts/8"),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(222).
 			SetHostname("mymachine.example.com").
@@ -716,6 +800,7 @@ var testCases = []testCase{
 	{
 		[]byte("<165>1 2003-08-24T05:14:15.000003-07:00 192.0.2.1 myproc 8710 - - %% Time to make the do-nuts."),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(1).
 			SetHostname("192.0.2.1").
@@ -731,6 +816,7 @@ var testCases = []testCase{
 	{
 		[]byte("<165>2 2003-08-24T05:14:15.000003-07:00 - - - - -"),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(2).
 			SetTimestamp("2003-08-24T05:14:15.000003-07:00").
@@ -742,6 +828,7 @@ var testCases = []testCase{
 	{
 		[]byte("<165>222 2003-08-24T05:14:15.000002-01:00 - - - - - "),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(222).
 			SetTimestamp("2003-08-24T05:14:15.000002-01:00").
@@ -753,6 +840,7 @@ var testCases = []testCase{
 	{
 		[]byte("<78>5 2016-01-15T00:04:01+00:00 host1 CROND 10391 - [sdid] some_message"),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(5).
 			SetHostname("host1").
@@ -769,6 +857,7 @@ var testCases = []testCase{
 	{
 		[]byte(`<78>1 2016-01-15T00:04:01+00:00 host1 CROND 10391 - [sdid x="⌘"] some_message`),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(1).
 			SetHostname("host1").
@@ -785,6 +874,7 @@ var testCases = []testCase{
 	{
 		[]byte(`<78>2 2016-01-15T00:04:01+00:00 host1 CROND 10391 - [sdid x="hey \\u2318 hey"] some_message`),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(2).
 			SetHostname("host1").
@@ -801,6 +891,7 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>50 2016-01-15T01:00:43Z hn S - - [meta es="\\valid"] 127.0.0.1 - - 1452819643 "GET"`),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(50).
 			SetHostname("hn").
@@ -815,6 +906,7 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>52 2016-01-15T01:00:43Z hn S - - [meta one="\\one" two="\\two"] 127.0.0.1 - - 1452819643 "GET"`),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(52).
 			SetHostname("hn").
@@ -830,6 +922,7 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>53 2016-01-15T01:00:43Z hn S - - [meta one="\\one"][other two="\\two" double="\\a\\b"] 127.0.0.1 - - 1452819643 "GET"`),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(53).
 			SetTimestamp("2016-01-15T01:00:43Z").
@@ -846,6 +939,7 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>51 2016-01-15T01:00:43Z hn S - - [meta es="\\double\\slash"] 127.0.0.1 - - 1452819643 "GET"`),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(51).
 			SetTimestamp("2016-01-15T01:00:43Z").
@@ -860,6 +954,7 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>54 2016-01-15T01:00:43Z hn S - - [meta es="in \\middle of the string"] 127.0.0.1 - - 1452819643 "GET"`),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(54).
 			SetTimestamp("2016-01-15T01:00:43Z").
@@ -874,6 +969,7 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>55 2016-01-15T01:00:43Z hn S - - [meta es="at the \\end"] 127.0.0.1 - - 1452819643 "GET"`),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(55).
 			SetTimestamp("2016-01-15T01:00:43Z").
@@ -889,6 +985,7 @@ var testCases = []testCase{
 	{
 		[]byte("<29>50 2016-01-15T01:00:43Z hn S - - [meta es=\"\t5Ὂg̀9!℃ᾭGa b\"] 127.0.0.1 - - 1452819643 \"GET\""),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(50).
 			SetTimestamp("2016-01-15T01:00:43Z").
@@ -904,6 +1001,7 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>50 2016-01-15T01:00:43Z hn S - - [meta gr="κόσμε" es="ñ"][beta pr="₡"] 𐌼 "GET"`),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(50).
 			SetTimestamp("2016-01-15T01:00:43Z").
@@ -921,6 +1019,7 @@ var testCases = []testCase{
 	{
 		[]byte("<165>3 2003-10-11T22:14:15.003Z example.com evnts - ID27 [exampleSDID@32473 iut=\"3\" eventSource=\"Application\" eventID=\"1011\"][examplePriority@32473 class=\"high\"]"),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(3).
 			SetTimestamp("2003-10-11T22:14:15.003Z").
@@ -939,6 +1038,7 @@ var testCases = []testCase{
 	{
 		[]byte("<165>3 2003-10-11T22:14:15.003Z example.com evnts - ID27 [id1][id1]"),
 		false,
+		false,
 		nil,
 		"duplicate structured data element id [col 66]",
 		(&SyslogMessage{}).
@@ -953,6 +1053,7 @@ var testCases = []testCase{
 	// Invalid, with duplicated structured data id
 	{
 		[]byte("<165>3 2003-10-12T22:14:15.003Z example.com evnts - ID27 [dupe e=\"1\"][id1][dupe class=\"l\"]"),
+		false,
 		false,
 		nil,
 		"duplicate structured data element id [col 79]",
@@ -970,6 +1071,7 @@ var testCases = []testCase{
 	{
 		[]byte(`<165>4 2003-10-11T22:14:15.003Z mymachine.it e - 1 [ex@32473 iut="3" eventSource="A"] An application event log entry...`),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(4).
 			SetMessage("An application event log entry...").
@@ -987,6 +1089,7 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>1 2016-01-15T01:00:43Z some-host-name SEKRETPROGRAM prg - [origin x-service="svcname"][meta sequenceId="1"] 127.0.0.1 - - 1452819643 "GET"`),
 		true,
+		false,
 		(&SyslogMessage{}).
 			SetVersion(1).
 			SetMessage("127.0.0.1 - - 1452819643 \"GET\"").
@@ -1004,6 +1107,7 @@ var testCases = []testCase{
 	{
 		[]byte(`<1>1 - - - - - [id pk=""]`),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetParameter("id", "pk", "").SetPriority(1),
 		"",
 		nil,
@@ -1012,6 +1116,7 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>2 2016-01-15T01:00:44Z some-host-name SEKRETPROGRAM prg - [meta escape="\]"] some "mex"`),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(2).SetMessage(`some "mex"`).SetTimestamp("2016-01-15T01:00:44Z").SetHostname("some-host-name").SetAppname("SEKRETPROGRAM").SetProcID("prg").SetParameter("meta", "escape", `\]`).SetPriority(29),
 		"",
 		nil,
@@ -1019,6 +1124,7 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>2 2016-01-15T01:00:43Z some-host-name SEKRETPROGRAM prg - [meta escape="\\"]`),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(2).SetTimestamp("2016-01-15T01:00:43Z").SetHostname("some-host-name").SetAppname("SEKRETPROGRAM").SetProcID("prg").SetParameter("meta", "escape", `\\`).SetPriority(29),
 		"",
 		nil,
@@ -1026,6 +1132,7 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>2 2016-01-15T01:00:43Z some-host-name SEKRETPROGRAM prg - [meta escape="\""]`),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(2).SetTimestamp("2016-01-15T01:00:43Z").SetHostname("some-host-name").SetAppname("SEKRETPROGRAM").SetProcID("prg").SetParameter("meta", "escape", `\"`).SetPriority(29),
 		"",
 		nil,
@@ -1033,6 +1140,7 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>2 2016-01-15T01:00:43Z some-host-name SEKRETPROGRAM prg - [meta escape="\]\"\\\\\]\""]`),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(2).SetTimestamp("2016-01-15T01:00:43Z").SetHostname("some-host-name").SetAppname("SEKRETPROGRAM").SetProcID("prg").SetParameter("meta", "escape", `\]\"\\\\\]\"`).SetPriority(29),
 		"",
 		nil,
@@ -1041,6 +1149,7 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>3 2016-01-15T01:00:43Z hn S - - [meta escape="]"] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrEscape+ColumnPositionTemplate, 50),
 		(&SyslogMessage{}).SetVersion(3).SetTimestamp("2016-01-15T01:00:43Z").SetHostname("hn").SetAppname("S").SetElementID("meta").SetPriority(29),
@@ -1048,12 +1157,14 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>5 2016-01-15T01:00:43Z hn S - - [meta escape="]q"] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrEscape+ColumnPositionTemplate, 50),
 		(&SyslogMessage{}).SetVersion(5).SetTimestamp("2016-01-15T01:00:43Z").SetHostname("hn").SetAppname("S").SetElementID("meta").SetPriority(29),
 	},
 	{
 		[]byte(`<29>4 2016-01-15T01:00:43Z hn S - - [meta escape="p]"] 127.0.0.1 - - 1452819643 "GET"`),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrEscape+ColumnPositionTemplate, 51),
@@ -1063,6 +1174,7 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>4 2017-01-15T01:00:43Z hn S - - [meta escape="""] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrSdParam+ColumnPositionTemplate, 51),
 		(&SyslogMessage{}).SetVersion(4).SetTimestamp("2017-01-15T01:00:43Z").SetHostname("hn").SetAppname("S").SetElementID("meta").SetPriority(29),
@@ -1070,12 +1182,14 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>6 2016-01-15T01:00:43Z hn S - - [meta escape="a""] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrSdParam+ColumnPositionTemplate, 52),
 		(&SyslogMessage{}).SetVersion(6).SetTimestamp("2016-01-15T01:00:43Z").SetHostname("hn").SetAppname("S").SetElementID("meta").SetPriority(29),
 	},
 	{
 		[]byte(`<29>4 2018-01-15T01:00:43Z hn S - - [meta escape=""b"] 127.0.0.1 - - 1452819643 "GET"`),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrSdParam+ColumnPositionTemplate, 51),
@@ -1085,6 +1199,7 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>5 2019-01-15T01:00:43Z hn S - - [meta escape="\"] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrEscape+ColumnPositionTemplate, 52),
 		(&SyslogMessage{}).SetVersion(5).SetTimestamp("2019-01-15T01:00:43Z").SetHostname("hn").SetAppname("S").SetElementID("meta").SetPriority(29),
@@ -1092,12 +1207,14 @@ var testCases = []testCase{
 	{
 		[]byte(`<29>7 2019-01-15T01:00:43Z hn S - - [meta escape="a\"] 127.0.0.1 - - 1452819643 "GET"`),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrEscape+ColumnPositionTemplate, 53),
 		(&SyslogMessage{}).SetVersion(7).SetTimestamp("2016-01-15T01:00:43Z").SetHostname("hn").SetTimestamp("2019-01-15T01:00:43Z").SetAppname("S").SetElementID("meta").SetPriority(29),
 	},
 	{
 		[]byte(`<29>8 2016-01-15T01:00:43Z hn S - - [meta escape="\n"] 127.0.0.1 - - 1452819643 "GET"`),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrEscape+ColumnPositionTemplate, 51),
@@ -1107,6 +1224,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>8 - - - - - - " + BOM),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(8).SetMessage("\ufeff").SetPriority(1),
 		"",
 		nil,
@@ -1115,6 +1233,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "κόσμε"),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "κόσμε").SetPriority(1),
 		"",
 		nil,
@@ -1123,6 +1242,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + ""),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "").SetPriority(1),
 		"",
 		nil,
@@ -1131,6 +1251,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xc3\xb1"),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "ñ").SetPriority(1),
 		"",
 		nil,
@@ -1139,6 +1260,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xe2\x82\xa1"),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "₡").SetPriority(1),
 		"",
 		nil,
@@ -1147,6 +1269,7 @@ var testCases = []testCase{
 	{
 		[]byte("<3>1 - - - - - - " + BOM + " \xf0\x90\x8c\xbc"),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + " 𐌼").SetPriority(3),
 		"",
 		nil,
@@ -1155,6 +1278,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xC8\x80\x30\x30\x30"),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "Ȁ000").SetPriority(1),
 		"",
 		nil,
@@ -1163,6 +1287,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xE4\x80\x80\x30\x30\x30"),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "䀀000").SetPriority(1),
 		"",
 		nil,
@@ -1171,6 +1296,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xC4\x90\x30\x30\x30"),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "Đ000").SetPriority(1),
 		"",
 		nil,
@@ -1178,6 +1304,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\x0D\x37\x46\x46"),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "\r7FF").SetPriority(1),
 		"",
 		nil,
@@ -1186,6 +1313,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "யாமறிந்த மொழிகளிலே தமிழ்மொழி போல் இனிதாவது எங்கும் காணோம், பாமரராய் விலங்குகளாய், உலகனைத்தும் இகழ்ச்சிசொலப் பான்மை கெட்டு, நாமமது தமிழரெனக் கொண்டு இங்கு வாழ்ந்திடுதல் நன்றோ? சொல்லீர்! தேமதுரத் தமிழோசை உலகமெலாம் பரவும்வகை செய்தல் வேண்டும்."),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "யாமறிந்த மொழிகளிலே தமிழ்மொழி போல் இனிதாவது எங்கும் காணோம், பாமரராய் விலங்குகளாய், உலகனைத்தும் இகழ்ச்சிசொலப் பான்மை கெட்டு, நாமமது தமிழரெனக் கொண்டு இங்கு வாழ்ந்திடுதல் நன்றோ? சொல்லீர்! தேமதுரத் தமிழோசை உலகமெலாம் பரவும்வகை செய்தல் வேண்டும்.").SetPriority(1),
 		"",
 		nil,
@@ -1194,6 +1322,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "Sôn bôn de magnà el véder, el me fa minga mal."),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "Sôn bôn de magnà el véder, el me fa minga mal.").SetPriority(1),
 		"",
 		nil,
@@ -1202,6 +1331,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "Me posso magna' er vetro, e nun me fa male."),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "Me posso magna' er vetro, e nun me fa male.").SetPriority(1),
 		"",
 		nil,
@@ -1210,6 +1340,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "⠊⠀⠉⠁⠝⠀⠑⠁⠞⠀⠛⠇⠁⠎⠎⠀⠁⠝⠙⠀⠊⠞⠀⠙⠕⠑⠎⠝⠞⠀⠓⠥⠗⠞⠀⠍⠑"),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "⠊⠀⠉⠁⠝⠀⠑⠁⠞⠀⠛⠇⠁⠎⠎⠀⠁⠝⠙⠀⠊⠞⠀⠙⠕⠑⠎⠝⠞⠀⠓⠥⠗⠞⠀⠍⠑").SetPriority(1),
 		"",
 		nil,
@@ -1218,6 +1349,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "काचं शक्नोम्यत्तुम् । नोपहिनस्ति माम् ॥"),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "काचं शक्नोम्यत्तुम् । नोपहिनस्ति माम् ॥").SetPriority(1),
 		"",
 		nil,
@@ -1226,6 +1358,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "میں کانچ کھا سکتا ہوں اور مجھے تکلیف نہیں ہوتی ۔"),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "میں کانچ کھا سکتا ہوں اور مجھے تکلیف نہیں ہوتی ۔").SetPriority(1),
 		"",
 		nil,
@@ -1234,6 +1367,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "איך קען עסן גלאָז און עס טוט מיר נישט װײ."),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "איך קען עסן גלאָז און עס טוט מיר נישט װײ.").SetPriority(1),
 		"",
 		nil,
@@ -1242,6 +1376,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "Mogę jeść szkło, i mi nie szkodzi."),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "Mogę jeść szkło, i mi nie szkodzi.").SetPriority(1),
 		"",
 		nil,
@@ -1250,6 +1385,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "私はガラスを食べられます。それは私を傷つけません。"),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "私はガラスを食べられます。それは私を傷つけません。").SetPriority(1),
 		"",
 		nil,
@@ -1258,6 +1394,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "أنا قادر على أكل الزجاج و هذا لا يؤلمني."),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "أنا قادر على أكل الزجاج و هذا لا يؤلمني.").SetPriority(1),
 		"",
 		nil,
@@ -1266,6 +1403,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "абвгдеёжзийклмнопрстуфхцчшщъыьэюя").SetPriority(1),
 		"",
 		nil,
@@ -1274,6 +1412,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "԰ԱԲԳԴԵԶԷԸԹԺԻԼԽԾԿՀՁՂՃՄՅՆՇՈՉՊՋՌՍՎՏՐՑՒՓՔՕՖ՗՘ՙ՚՛՜՝՞՟աբգդեզէըթիլխծկհձղճմյնշոչպջռսվտրցւփքօֆևֈ։֊֋֌֍֎֏"),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM + "\u0530ԱԲԳԴԵԶԷԸԹԺԻԼԽԾԿՀՁՂՃՄՅՆՇՈՉՊՋՌՍՎՏՐՑՒՓՔՕՖ\u0557\u0558ՙ՚՛՜՝՞՟աբգդեզէըթիլխծկհձղճմյնշոչպջռսվտրցւփքօֆև\u0588։֊\u058b\u058c֍֎֏").SetPriority(1),
 		"",
 		nil,
@@ -1283,6 +1422,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + isoLatin1String("fondü bruucht vell chääs")),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(isoLatin1String("fondü bruucht vell chääs")).SetPriority(1),
 		"",
 		nil,
@@ -1290,6 +1430,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - not starting with" + BOM + isoLatin1String("fondü bruucht vell chääs")),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage("not starting with" + BOM + isoLatin1String("fondü bruucht vell chääs")).SetPriority(1),
 		"",
 		nil,
@@ -1298,6 +1439,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + isoLatin1String("ö")),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(isoLatin1String("ö")).SetPriority(1),
 		"",
 		nil,
@@ -1305,6 +1447,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + isoLatin1String("öö")),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(isoLatin1String("öö")).SetPriority(1),
 		"",
 		nil,
@@ -1312,6 +1455,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + isoLatin1String("ööö")),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(isoLatin1String("ööö")).SetPriority(1),
 		"",
 		nil,
@@ -1319,6 +1463,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + isoLatin1String("öööö")),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(isoLatin1String("öööö")).SetPriority(1),
 		"",
 		nil,
@@ -1326,6 +1471,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + isoLatin1String("ööööö")),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage(isoLatin1String("ööööö")).SetPriority(1),
 		"",
 		nil,
@@ -1334,6 +1480,7 @@ var testCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - x\x0Ay"),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(1).SetMessage("x\ny").SetPriority(1),
 		"",
 		nil,
@@ -1342,6 +1489,7 @@ var testCases = []testCase{
 		[]byte(`<1>3 - - - - - - x
 y`),
 		true,
+		false,
 		(&SyslogMessage{}).SetVersion(3).SetMessage("x\ny").SetPriority(1),
 		"",
 		nil,
@@ -1350,9 +1498,33 @@ y`),
 	{
 		[]byte("<1>10 -- - - - -"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrParse+ColumnPositionTemplate, 7),
 		(&SyslogMessage{}).SetVersion(10).SetPriority(1),
+	},
+	{
+		[]byte("1 2003-10-11T22:14:15.003Z mymachine.example.com su - ID47 - BOM'su root' failed for lonvick on /dev/pts/8"),
+		true,
+		true,
+		(&SyslogMessage{}).
+			SetVersion(1).
+			SetHostname("mymachine.example.com").
+			SetAppname("su").
+			SetTimestamp("2003-10-11T22:14:15.003Z").
+			SetMsgID("ID47").
+			SetMessage("BOM'su root' failed for lonvick on /dev/pts/8").
+			SetPriority(0),
+		"",
+		nil,
+	},
+	{
+		[]byte("1 2003-10-11T22:14:15.003Z mymachine.example.com su - ID47 - BOM'su root' failed for lonvick on /dev/pts/8"),
+		false,
+		false,
+		nil,
+		"expecting a priority value within angle brackets [col 0]",
+		nil,
 	},
 }
 
@@ -1361,12 +1533,14 @@ var nonCompliantMsgTestCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xC1"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 20),
 		(&SyslogMessage{}).SetVersion(1).SetMessage(BOM).SetPriority(1),
 	},
 	{
 		[]byte("<1>4 - - - - - - " + BOM + "\xc3\x28"), // invalid 2 octet sequence
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
@@ -1375,12 +1549,14 @@ var nonCompliantMsgTestCases = []testCase{
 	{
 		[]byte("<7>1 - - - - - - " + BOM + "\xa0\xa1"), // invalid sequence identifier
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 20),
 		genMessageWithPartialMessage(7, 1, syslogtesting.StringAddress(BOM)),
 	},
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xe2\x28\xa1"), // invalid 3 octet sequence (2nd octet)
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
@@ -1389,12 +1565,14 @@ var nonCompliantMsgTestCases = []testCase{
 	{
 		[]byte("<6>1 - - - - - - " + BOM + "\xe2\x82\x28"), // invalid 3 octet sequence (3nd octet)
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 22),
 		genMessageWithPartialMessage(6, 1, syslogtesting.StringAddress(BOM+"\xe2\x82")),
 	},
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xf0\x28\x8c\xbc"), // invalid 4 octet sequence (2nd octet)
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
@@ -1403,12 +1581,14 @@ var nonCompliantMsgTestCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xf0\x90\x28\xbc"), // invalid 4 octet sequence (3nd octet)
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 22),
 		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM+"\xf0\x90")),
 	},
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xf0\x28\x8c\x28"), // invalid 4 octet sequence (4nd octet)
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
@@ -1418,6 +1598,7 @@ var nonCompliantMsgTestCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xfe\xfe\xff\xff"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 20),
 		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM)),
@@ -1425,12 +1606,14 @@ var nonCompliantMsgTestCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xfe"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 20),
 		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM)),
 	},
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xff"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 20),
@@ -1440,12 +1623,14 @@ var nonCompliantMsgTestCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xfc\x80\x80\x80\x80\xaf"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 20),
 		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM)),
 	},
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xf8\x80\x80\x80\xaf"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 20),
@@ -1454,6 +1639,7 @@ var nonCompliantMsgTestCases = []testCase{
 	{
 		[]byte("<1>3 - - - - - - " + BOM + "\xf0\x80\x80\xaf"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
 		genMessageWithPartialMessage(1, 3, syslogtesting.StringAddress(BOM+"\xf0")),
@@ -1461,12 +1647,14 @@ var nonCompliantMsgTestCases = []testCase{
 	{
 		[]byte("<1>3 - - - - - - " + BOM + "\xe0\x80\xaf"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
 		genMessageWithPartialMessage(1, 3, syslogtesting.StringAddress(BOM+"\xe0")),
 	},
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xc0\xaf"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 20),
@@ -1476,12 +1664,14 @@ var nonCompliantMsgTestCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xfc\x83\xbf\xbf\xbf\xbf"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 20),
 		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM)),
 	},
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xf8\x87\xbf\xbf\xbf"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 20),
@@ -1490,6 +1680,7 @@ var nonCompliantMsgTestCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xf0\x8f\xbf\xbf"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
 		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM+"\xf0")),
@@ -1497,12 +1688,14 @@ var nonCompliantMsgTestCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xe0\x9f\xbf"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
 		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM+"\xe0")),
 	},
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xc1\xbf"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 20),
@@ -1512,12 +1705,14 @@ var nonCompliantMsgTestCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xed\xa0\x80"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
 		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM+"\xed")),
 	},
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xed\xa0\x80"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
@@ -1526,12 +1721,14 @@ var nonCompliantMsgTestCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xed\xad\xbf"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
 		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM+"\xed")),
 	},
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xed\xae\x80"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
@@ -1540,12 +1737,14 @@ var nonCompliantMsgTestCases = []testCase{
 	{
 		[]byte("<22>23 - - - - - - " + BOM + "\xed\xaf\xbf"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 23),
 		genMessageWithPartialMessage(22, 23, syslogtesting.StringAddress(BOM+"\xed")),
 	},
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xed\xb0\x80"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
@@ -1554,12 +1753,14 @@ var nonCompliantMsgTestCases = []testCase{
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xed\xbe\x80"),
 		false,
+		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
 		genMessageWithPartialMessage(1, 1, syslogtesting.StringAddress(BOM+"\xed")),
 	},
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xed\xbf\xbf"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
@@ -1568,6 +1769,7 @@ var nonCompliantMsgTestCases = []testCase{
 	// Invalid, illegal code positions, paired utf-16 surrogates
 	{
 		[]byte("<1>1 - - - - - - " + BOM + "\xed\xa0\x80\xed\xb0\x80"),
+		false,
 		false,
 		nil,
 		fmt.Sprintf(ErrMsgNotCompliant+ColumnPositionTemplate, 21),
@@ -1638,6 +1840,7 @@ func genPartialMessagesTestCases(data []byte, part int) []testCase {
 		t := testCase{
 			input,
 			true,
+			false,
 			mex,
 			"",
 			nil,
@@ -1694,6 +1897,9 @@ func runTestCases(t *testing.T, tcs []testCase, machineOpts ...syslog.MachineOpt
 		t.Run(syslogtesting.RightPad(string(tc.input), 50), func(t *testing.T) {
 			t.Parallel()
 
+			if tc.shouldSkipPri {
+				machineOpts = append(machineOpts, WithAllowSkipPri())
+			}
 			message, merr := NewMachine(machineOpts...).Parse(tc.input)
 			partial, perr := NewMachine(append(machineOpts, WithBestEffort())...).Parse(tc.input)
 
@@ -1713,6 +1919,10 @@ func runTestCases(t *testing.T, tcs []testCase, machineOpts ...syslog.MachineOpt
 			}
 
 			assert.Equal(t, tc.value, message)
+
+			if tc.shouldSkipPri {
+				machineOpts = machineOpts[:len(machineOpts)-1]
+			}
 		})
 	}
 }
