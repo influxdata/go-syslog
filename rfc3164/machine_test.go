@@ -12,12 +12,12 @@ import (
 // todo > add support for testing `best effort` mode
 
 type testCase struct {
-	input        []byte
-	valid        bool
-	shouldSkip   bool
-	value        syslog.Message
-	errorString  string
-	partialValue syslog.Message
+	input         []byte
+	valid         bool
+	shouldSkipPri bool
+	value         syslog.Message
+	errorString   string
+	partialValue  syslog.Message
 }
 
 var testCases = []testCase{
@@ -58,9 +58,9 @@ var testCases = []testCase{
 		nil,
 	},
 	{
-		input:      []byte(`<85>Jan 24 15:50:41 ip-172-31-30-110 sudo[6040]: ec2-user : TTY=pts/0 ; PWD=/var/log ; USER=root ; COMMAND=/bin/tail secure`),
-		valid:      true,
-		shouldSkip: false,
+		input:         []byte(`<85>Jan 24 15:50:41 ip-172-31-30-110 sudo[6040]: ec2-user : TTY=pts/0 ; PWD=/var/log ; USER=root ; COMMAND=/bin/tail secure`),
+		valid:         true,
+		shouldSkipPri: false,
 		value: &SyslogMessage{
 			Base: syslog.Base{
 				Priority:  syslogtesting.Uint8Address(85),
@@ -75,9 +75,9 @@ var testCases = []testCase{
 		},
 	},
 	{
-		input:      []byte(`<166>Jul  6 20:33:28 ABC-1-234567 Some message here`),
-		valid:      true,
-		shouldSkip: false,
+		input:         []byte(`<166>Jul  6 20:33:28 ABC-1-234567 Some message here`),
+		valid:         true,
+		shouldSkipPri: false,
 		value: &SyslogMessage{
 			Base: syslog.Base{
 				Priority:  syslogtesting.Uint8Address(166),
@@ -90,9 +90,9 @@ var testCases = []testCase{
 		},
 	},
 	{
-		input:      []byte(`<34>Oct 11 22:14:15 mymachine su: 'su root' failed for lonvick on /dev/pts/8`),
-		valid:      true,
-		shouldSkip: false,
+		input:         []byte(`<34>Oct 11 22:14:15 mymachine su: 'su root' failed for lonvick on /dev/pts/8`),
+		valid:         true,
+		shouldSkipPri: false,
 		value: &SyslogMessage{
 			Base: syslog.Base{
 				Priority:  syslogtesting.Uint8Address(34),
@@ -106,9 +106,9 @@ var testCases = []testCase{
 		},
 	},
 	{
-		input:      []byte(`<13>Feb  5 17:32:18 10.0.0.99 Use the BFG!`),
-		valid:      true,
-		shouldSkip: false,
+		input:         []byte(`<13>Feb  5 17:32:18 10.0.0.99 Use the BFG!`),
+		valid:         true,
+		shouldSkipPri: false,
 		value: &SyslogMessage{
 			Base: syslog.Base{
 				Priority:  syslogtesting.Uint8Address(13),
@@ -121,9 +121,9 @@ var testCases = []testCase{
 		},
 	},
 	{
-		input:      []byte(`<165>Aug 24 05:34:00 mymachine myproc[10]: %% It's time to make the do-nuts.  %%  Ingredients: Mix=OK, Jelly=OK # Devices: Mixer=OK, Jelly_Injector=OK, Frier=OK # Transport: Conveyer1=OK, Conveyer2=OK # %%`),
-		valid:      true,
-		shouldSkip: false,
+		input:         []byte(`<165>Aug 24 05:34:00 mymachine myproc[10]: %% It's time to make the do-nuts.  %%  Ingredients: Mix=OK, Jelly=OK # Devices: Mixer=OK, Jelly_Injector=OK, Frier=OK # Transport: Conveyer1=OK, Conveyer2=OK # %%`),
+		valid:         true,
+		shouldSkipPri: false,
 		value: &SyslogMessage{
 			Base: syslog.Base{
 				Priority:  syslogtesting.Uint8Address(165),
@@ -138,9 +138,9 @@ var testCases = []testCase{
 		},
 	},
 	{
-		input:      []byte(`<0>Oct 22 10:52:01 10.1.2.3 sched[0]: That's All Folks!`),
-		valid:      true,
-		shouldSkip: false,
+		input:         []byte(`<0>Oct 22 10:52:01 10.1.2.3 sched[0]: That's All Folks!`),
+		valid:         true,
+		shouldSkipPri: false,
 		value: &SyslogMessage{
 			Base: syslog.Base{
 				Priority:  syslogtesting.Uint8Address(0),
@@ -155,9 +155,9 @@ var testCases = []testCase{
 		},
 	},
 	{
-		input:      []byte(`Oct 22 10:52:01 10.1.2.3 sched[0]: That's All Folks!`),
-		valid:      true,
-		shouldSkip: true,
+		input:         []byte(`Oct 22 10:52:01 10.1.2.3 sched[0]: That's All Folks!`),
+		valid:         true,
+		shouldSkipPri: true,
 		value: &SyslogMessage{
 			Base: syslog.Base{
 				Priority:  syslogtesting.Uint8Address(0),
@@ -172,11 +172,11 @@ var testCases = []testCase{
 		},
 	},
 	{
-		input:       []byte(`Oct 22 10:52:01 10.1.2.3 sched[0]: That's All Folks!`),
-		valid:       false,
-		shouldSkip:  false,
-		value:       nil,
-		errorString: "expecting a priority value within angle brackets [col 0]",
+		input:         []byte(`Oct 22 10:52:01 10.1.2.3 sched[0]: That's All Folks!`),
+		valid:         false,
+		shouldSkipPri: false,
+		value:         nil,
+		errorString:   "expecting a priority value within angle brackets [col 0]",
 	},
 	// todo > other test cases pleaaaase
 }
@@ -189,7 +189,7 @@ func TestMachineParse(t *testing.T) {
 			var merr, perr error
 			var message, partial syslog.Message
 
-			if tc.shouldSkip {
+			if tc.shouldSkipPri {
 				message, merr = NewMachine(WithAllowSkipPri()).Parse(tc.input)
 				partial, perr = NewMachine(WithBestEffort(), WithAllowSkipPri()).Parse(tc.input)
 			} else {
