@@ -88,9 +88,14 @@ action err_prival {
 }
 
 action err_pri {
-	m.err = fmt.Errorf(errPri, m.p)
-	fhold;
-	fgoto fail;
+	if(!m.allowSkipPri) {
+		m.err = fmt.Errorf(errPri, m.p)
+		fhold;
+		fgoto fail;
+	} else {
+		fhold;
+		fgoto STATE_NO_PRI;
+	}	
 }
 
 action err_timestamp {
@@ -158,23 +163,30 @@ msg = (tag content? ':' sp)? mex;
 
 fail := (any - [\n\r])* @err{ fgoto main; };
 
-main := pri (timestamp | (rfc3339 when { m.rfc3339 })) sp hostname sp msg;
+sysmessage = (timestamp | (rfc3339 when { m.rfc3339 })) sp hostname sp msg;
+
+myfsm := (
+	STATE_NO_PRI: sysmessage             
+);
+
+main := pri sysmessage;
 
 }%%
 
 %% write data noerror noprefix;
 
 type machine struct {
-	data         []byte
-	cs           int
-	p, pe, eof   int
-	pb           int
-	err          error
-	bestEffort   bool
-	yyyy         int
-	rfc3339      bool
-	loc          *time.Location
-	timezone     *time.Location
+	data           []byte
+	cs             int
+	p, pe, eof     int
+	pb             int
+	err            error
+	bestEffort     bool
+	yyyy           int
+	rfc3339        bool
+	allowSkipPri   bool
+	loc            *time.Location
+	timezone       *time.Location
 }
 
 // NewMachine creates a new FSM able to parse RFC3164 syslog messages.
@@ -192,6 +204,11 @@ func NewMachine(options ...syslog.MachineOption) syslog.Machine {
 	%% variable data m.data;
 
 	return m
+}
+
+// WithNoPri sets the skip PRI flag to allow messages without PRI header.
+func (m *machine) WithAllowSkipPri() {
+	m.allowSkipPri = true
 }
 
 // WithBestEffort enables best effort mode.
@@ -260,4 +277,3 @@ func (m *machine) Parse(input []byte) (syslog.Message, error) {
 
 	return output.export(), nil
 }
-

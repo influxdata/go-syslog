@@ -10,6 +10,10 @@ import (
 )
 
 // BestEfforter is an interface that wraps the HasBestEffort method.
+type AllowPriSkiper interface {
+	WithAllowSkipPri()
+}
+
 type BestEfforter interface {
 	WithBestEffort()
 	HasBestEffort() bool
@@ -24,6 +28,7 @@ type MaxMessager interface {
 type Machine interface {
 	Parse(input []byte) (Message, error)
 	BestEfforter
+	AllowPriSkiper
 }
 
 // MachineOption represents the type of option setters for Machine instances.
