@@ -1505,6 +1505,17 @@ y`),
 	},
 	{
 		[]byte("1 2003-10-11T22:14:15.003Z mymachine.example.com su - ID47 - BOM'su root' failed for lonvick on /dev/pts/8"),
+		false,
+		false,
+		nil,
+		"expecting a priority value within angle brackets [col 0]",
+		nil,
+	},
+}
+
+var withSkipPriMsgTestCases = []testCase{
+	{
+		[]byte("1 2003-10-11T22:14:15.003Z mymachine.example.com su - ID47 - BOM'su root' failed for lonvick on /dev/pts/8"),
 		true,
 		true,
 		(&SyslogMessage{}).
@@ -1516,14 +1527,6 @@ y`),
 			SetMessage("BOM'su root' failed for lonvick on /dev/pts/8").
 			SetPriority(0),
 		"",
-		nil,
-	},
-	{
-		[]byte("1 2003-10-11T22:14:15.003Z mymachine.example.com su - ID47 - BOM'su root' failed for lonvick on /dev/pts/8"),
-		false,
-		false,
-		nil,
-		"expecting a priority value within angle brackets [col 0]",
 		nil,
 	},
 }
@@ -1869,6 +1872,10 @@ func TestMachineBestEffortOption(t *testing.T) {
 
 func TestMachineParse(t *testing.T) {
 	runTestCases(t, append(testCases))
+}
+
+func TestMachineParseWithSkipPri(t *testing.T) {
+	runTestCases(t, append(testCases, withSkipPriMsgTestCases...))
 }
 
 func TestMachineParseWithCompliantMsgOn(t *testing.T) {
